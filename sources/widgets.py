@@ -1,0 +1,160 @@
+from django_select2.forms import ModelSelect2Widget, ModelSelect2MultipleWidget
+from .models import Famine,Collection,PublishingOutlet,Available,Rated
+from .models import Keyword,Commissioner,Person,MusicType,Language,Music
+from .models import Film,Image,PictureStory,Text,Infographic,Publisher
+from .models import InfographicType, TextType, FilmType,PictureStoryType,ImageType
+from .models import RequestUsePermission, FilmCompany
+from .models import Location, TargetAudience
+
+class SimpleBaseWidget(ModelSelect2Widget):
+	search_fields = ['name__icontains']
+	def label_from_instance(self,obj):
+		return obj.name
+
+class SimpleBasesWidget(ModelSelect2MultipleWidget):
+	search_fields = ['name__icontains']
+	def label_from_instance(self,obj):
+		return obj.name
+
+class BaseWidget(ModelSelect2Widget):
+	search_fields = ['title_english__icontains']
+	def label_from_instance(self,obj):
+		return obj.title_english
+
+class MusicWidget(BaseWidget):
+	model = Music
+	def get_queryset(self):
+		return Music.objects.all().order_by('title_english')
+
+class FilmWidget(BaseWidget):
+	model = Film
+	def get_queryset(self):
+		return Film.objects.all().order_by('title_english')
+
+class ImageWidget(BaseWidget):
+	model = Image 
+	def get_queryset(self):
+		return Image.objects.all().order_by('title_english')
+
+class PictureStoryWidget(BaseWidget):
+	model = PictureStory
+	def get_queryset(self):
+		return PictureStory.objects.all().order_by('title_english')
+
+class TextWidget(BaseWidget):
+	model = Text 
+	def get_queryset(self):
+		return Text.objects.all().order_by('title_english')
+
+class InfographicWidget(BaseWidget):
+	model = Infographic
+	def get_queryset(self):
+		return Infographic.objects.all().order_by('title_english')
+
+
+class LocationsWidget(SimpleBasesWidget):
+	model = Location
+	def get_queryset(self):
+		return Location.objects.all().order_by('name')
+
+class LanguagesWidget(SimpleBasesWidget):
+	model = Language
+	def get_queryset(self):
+		return Language.objects.all().order_by('name')
+
+class PersonsWidget(SimpleBasesWidget):
+	model = Person
+	def get_queryset(self):
+		return Person.objects.all().order_by('name')
+
+class FaminesWidget(SimpleBasesWidget):
+	model = Famine
+	def get_queryset(self):
+		return Famine.objects.all().order_by('name')
+
+class KeywordsWidget(SimpleBasesWidget):
+	model = Keyword
+	def get_queryset(self):
+		return Keyword.objects.all().order_by('name')
+
+
+
+class TargetAudienceWidget(SimpleBaseWidget):
+	model = TargetAudience
+	def get_queryset(self):
+		return TargetAudience.objects.all().order_by('name')
+
+
+class InfographicTypeWidget(SimpleBaseWidget):
+	model = InfographicType
+	def get_queryset(self):
+		return InfographicType.objects.all().order_by('name')
+
+class MusicTypeWidget(SimpleBaseWidget):
+	model = MusicType
+	def get_queryset(self):
+		return MusicType.objects.all().order_by('name')
+
+class TextTypeWidget(SimpleBaseWidget):
+	model = TextType
+	def get_queryset(self):
+		return TextType.objects.all().order_by('name')
+
+class FilmTypeWidget(SimpleBaseWidget):
+	model = FilmType
+	def get_queryset(self):
+		return FilmType.objects.all().order_by('name')
+
+class PictureStoryTypeWidget(SimpleBaseWidget):
+	model = PictureStoryType
+	def get_queryset(self):
+		return PictureStoryType.objects.all().order_by('name')
+
+class ImageTypeWidget(SimpleBaseWidget):
+	model = ImageType
+	def get_queryset(self):
+		return ImageType.objects.all().order_by('name')
+
+
+class AvailableWidget(SimpleBaseWidget):
+	model = Available
+	def get_queryset(self):
+		return Available.objects.all().order_by('name')
+
+class RequestUsePermissionWidget(SimpleBaseWidget):
+	model = RequestUsePermission
+	def get_queryset(self):
+		return RequestUsePermission.objects.all().order_by('name')
+
+class RatedWidget(SimpleBaseWidget):
+	model = Rated
+	def get_queryset(self):
+		return Rated.objects.all().order_by('name')
+
+class CommissionerWidget(SimpleBaseWidget):
+	model = Commissioner
+	def get_queryset(self):
+		return Commissioner.objects.all().order_by('name')
+
+class CollectionWidget(SimpleBaseWidget):
+	model = Collection
+	def get_queryset(self):
+		return Collection.objects.all().order_by('name')
+
+class PublisherWidget(SimpleBaseWidget):
+	model = Publisher 
+	def get_queryset(self):
+		return Publisher.objects.all().order_by('name')
+
+class PublishingOutletWidget(SimpleBaseWidget):
+	model = PublishingOutlet
+	def get_queryset(self):
+		return PublishingOutlet.objects.all().order_by('name')
+
+class FilmCompanyWidget(SimpleBaseWidget):
+	model =FilmCompany 
+	def get_queryset(self):
+		return FilmCompany.objects.all().order_by('name')
+
+
+

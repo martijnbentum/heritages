@@ -1,0 +1,136 @@
+{% extends "utilities/base.html" %}
+
+{% block head %}
+	{{form.media.css}}
+	<title>{{page_name}}</title>
+{% endblock %}
+
+{% block content %}
+<form method="post">
+	{% csrf_token %}
+	<div class="col-md-12 d-flex">
+	<h4 class="col-3">{{page_name}}</h4>
+	</div>
+	<hr>
+
+
+
+	<table class="table table-borderless table-sm">
+	<tr class="d-flex">
+		<td class="col-2">Title english</th>
+		<td class="col-9">{{form.title_english}} {{form.title_english.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Title original</th>
+		<td class="col-9">{{form.title_original}} {{form.title_original.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Film type</th>
+		<td class="col-9">{{form.film_type}} {{form.film_type.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_film_type' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Writers</th>
+		<td class="col-9">{{form.writers}} {{form.writers.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_person' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Directors</th>
+		<td class="col-9">{{form.directors}} {{form.directors.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_person' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Film company</th>
+		<td class="col-9">{{form.film_company}} {{form.film_company.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_film_company' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Locations shot</th>
+		<td class="col-9">{{form.locations_shot}} {{form.locations_shot.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_location' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Locations released</th>
+		<td class="col-9">{{form.locations_released}} {{form.locations_released.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_location' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Target audience</th>
+		<td class="col-9">{{form.target_audience}} {{form.target_audience.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_target_audience' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Source link</th>
+		<td class="col-9">{{form.source_link}} {{form.source_link.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Languages original</th>
+		<td class="col-9">{{form.languages_original}} {{form.languages_original.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_language' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Languages subtitle</th>
+		<td class="col-9">{{form.languages_subtitle}} {{form.languages_subtitle.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_language' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Famines</th>
+		<td class="col-9">{{form.famines}} {{form.famines.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_keyword' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Keywords</th>
+		<td class="col-9">{{form.keywords}} {{form.keywords.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_keyword' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Collection</th>
+		<td class="col-9">{{form.collection}} {{form.collection.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_keyword' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Available</th>
+		<td class="col-3">{{form.available}} {{form.available.error}}</td>
+		<td class="col-3">Request use permission</th>
+		<td class="col-3">{{form.request_use_permission}} 
+			{{form.request_use_permission.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Description</th>
+		<td class="col-9">{{form.description}} {{form.description.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Comments</th>
+		<td class="col-9">{{form.comments}} {{form.comments.error}}</td>
+	</tr>
+
+	</table>
+		<button type="submit" name="save" value="save" class ="btn btn-dark">Save</button>
+</form>
+<br>
+{{form.media.js}}
+{% endblock %}
