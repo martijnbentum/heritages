@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang='en'>
+    <head>
+        <meta charset="utf-8">
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+	<style>
+		body {overflow-x:hidden;}
+	</style>
+	{% block head %}
+	{% endblock %}
+    </head>
+    <body>
+    {% block navbar %}
+	{% if view == "inline" %}
+	{% else %}
+        {% include 'utilities/navbar.html' %}
+	{% endif %}
+    {% endblock %}
+
+	{% block messages %}
+		{% if messages %}
+			{% for message in messages %}
+			<div class="alert {{ message.tags }} alert-dismissible mb-0" role="alert"
+			style="height:0;line-height:0">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"> 
+				</button>
+				<p class= "mb-0 mt-0"><small>{{ message | safe }}</small></p>
+			</div>
+			{% endfor %}
+		{% else %}
+			<div class="alert alert-light mb-0" role="alert" style="height:0;line-height:0">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"> 
+				</button>
+				<p class= "mb-0 mt-0"><small></small></p>
+			</div>
+		{% endif %}
+    {% endblock %}
+
+    {% block login %}
+    {% endblock %}
+
+
+	{% if user.username == '' %}
+	{% else %}
+		<div class="row">
+		<div class="col-1">
+			{% block left %}
+
+
+			{% endblock %}
+		</div>
+
+		<div class="col-10">
+			{% block content %}
+
+			{% endblock %}
+		</div>
+
+		<div class="col-1">
+			{% block right %}
+			{% endblock %}
+		</div>
+		</div>
+
+		</body>
+		{% block afterbody%}
+		{% endblock %}
+	
+	{% endif %}
+
+<script>
+    $(document).ready(function(){
+		window.setTimeout(function() {
+		  $(".alert").fadeTo(500, 0)
+		}, 3000);
+})
+</script>
+
+<footer>
+	<!-- <p>made by: humanities lab, radboud university</p> -->
+</footer>
+</html>
