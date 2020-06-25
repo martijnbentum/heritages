@@ -28,41 +28,22 @@
 		<td class="col-9">{{form.title_original}} {{form.title_original.error}}</td>
 	</tr>
 	<tr class="d-flex">
-		<td class="col-2">Music type</th>
-		<td class="col-9">{{form.music_type}} {{form.music_type.error}}</td>
+		<td class="col-2">Image type</th>
+		<td class="col-9">{{form.image_type}} {{form.image_type.error}}</td>
 		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
-			href = "{% url 'sources:add_music_type' %}"
+			href = "{% url 'sources:add_image_type' %}"
 			role="button"><i class="fa fa-plus"></i></a></td>
 	</tr>
 	<tr class="d-flex">
-		<td class="col-2">Composers</th>
-		<td class="col-9">{{form.composers}} {{form.composers.error}}</td>
+		<td class="col-2">Creators</th>
+		<td class="col-9">{{form.creators}} {{form.creators.error}}</td>
 		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
 			href = "{% url 'sources:add_person' %}"
 			role="button"><i class="fa fa-plus"></i></a></td>
 	</tr>
 	<tr class="d-flex">
-		<td class="col-2">Performing Artists</th>
-		<td class="col-9">{{form.performing_artists}} {{form.performing_artists.error}}</td>
-	</tr>
-	<tr class="d-flex">
-		<td class="col-2">Music video link</th>
-		<td class="col-9">{{form.music_video_link}} {{form.music_video_link.error}}</td>
-	</tr>
-	<tr class="d-flex">
-		<td class="col-2">Lyrics</th>
-		<td class="col-9">{{form.lyrics}} {{form.lyrics.error}}</td>
-	</tr>
-	<tr class="d-flex">
 		<td class="col-2">Source link</th>
 		<td class="col-9">{{form.source_link}} {{form.source_link.error}}</td>
-	</tr>
-	<tr class="d-flex">
-		<td class="col-2">Languages</th>
-		<td class="col-9">{{form.languages}} {{form.languages.error}}</td>
-		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
-			href = "{% url 'sources:add_language' %}"
-			role="button"><i class="fa fa-plus"></i></a></td>
 	</tr>
 	{% include 'utilities/add_source.html' %}
 	</table>

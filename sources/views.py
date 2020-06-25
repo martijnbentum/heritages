@@ -1,28 +1,38 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from utilities.views import edit_model, add_simple_model
-from .forms import MusicForm, MusicTypeForm, FilmForm
+from .forms import MusicForm, MusicTypeForm, FilmTypeForm, FilmForm, TargetAudienceForm
+from .forms import FilmCompanyForm, CollectionForm, TextForm, TextTypeForm
+from .forms import InfographicForm, InfographicTypeForm, ImageForm, ImageTypeForm
+from .forms import PictureStoryForm, PictureStoryTypeForm, PublisherForm
+from .forms import PersonForm, LocationForm, LanguageForm, KeywordForm
 
 def index(request):
 	return HttpResponse('hello world')
 
+def add_text_type(request):
+	return add_simple_model(request,__name__,'TextType','sources','add text type')
+
 def add_music_type(request):
 	return add_simple_model(request,__name__,'MusicType','sources','add music type')
+
+def add_image_type(request):
+	return add_simple_model(request,__name__,'ImageType','sources','add image type')
 
 def add_film_type(request):
 	return add_simple_model(request,__name__,'FilmType','sources','add film type')
 
-def add_person(request):
-	return add_simple_model(request,__name__,'Person','sources','add person')
+def add_infographic_type(request):
+	return add_simple_model(request,__name__,'InfographicType','sources','add infographic type')
 
-def add_language(request):
-	return add_simple_model(request,__name__,'Language','sources','add language')
+def add_picture_story_type(request):
+	return add_simple_model(request,__name__,'PictureStoryType','sources','add picture story type')
 
-def add_famine(request):
-	return add_simple_model(request,__name__,'Famine','sources','add famine')
+def add_film_company(request):
+	return add_simple_model(request,__name__,'FilmCompany','sources','add film company')
 
-def add_keyword(request):
-	return add_simple_model(request,__name__,'Keyword','sources','add keyword')
+def add_publisher(request):
+	return add_simple_model(request,__name__,'Publisher','sources','add publisher')
 
 def add_collection(request):
 	return add_simple_model(request,__name__,'Collection','sources','add collection')
@@ -34,12 +44,42 @@ def music_list(request):
 	return HttpResponse('hello music list')
 
 
+
+
 def edit_music(request,pk=None,focus='',view='complete'):
 	return edit_model(request,__name__,'Music','sources',pk,focus=focus,view=view)
 
 def edit_film(request,pk=None,focus='',view='complete'):
 	return edit_model(request,__name__,'Film','sources',pk,focus=focus,view=view)
+
+def edit_text(request,pk=None,focus='',view='complete'):
+	return edit_model(request,__name__,'Text','sources',pk,focus=focus,view=view)
+
+def edit_infographic(request,pk=None,focus='',view='complete'):
+	return edit_model(request,__name__,'Infographic','sources',pk,focus=focus,view=view)
+
+def edit_image(request,pk=None,focus='',view='complete'):
+	return edit_model(request,__name__,'Image','sources',pk,focus=focus,view=view)
+
+def edit_picture_story(request,pk=None,focus='',view='complete'):
+	return edit_model(request,__name__,'PictureStory','sources',pk,focus=focus,view=view)
 # Create your views here.
+
+
+
+
 
 def add_location(request):
 	return add_simple_model(request,__name__,'Location','sources','add location')
+
+def add_language(request):
+	return add_simple_model(request,__name__,'Language','sources','add language')
+
+def add_famine(request):
+	return add_simple_model(request,__name__,'Famine','sources','add famine')
+
+def add_keyword(request):
+	return add_simple_model(request,__name__,'Keyword','sources','add keyword')
+
+def add_person(request):
+	return add_simple_model(request,__name__,'Person','sources','add person')

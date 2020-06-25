@@ -116,6 +116,7 @@ class ImageTypeWidget(SimpleBaseWidget):
 		return ImageType.objects.all().order_by('name')
 
 
+
 class AvailableWidget(SimpleBaseWidget):
 	model = Available
 	def get_queryset(self):

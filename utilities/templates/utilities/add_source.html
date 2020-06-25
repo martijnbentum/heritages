@@ -1,0 +1,36 @@
+	<tr class="d-flex">
+		<td class="col-2">Famines</th>
+		<td class="col-9">{{form.famines}} {{form.famines.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_keyword' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Keywords</th>
+		<td class="col-9">{{form.keywords}} {{form.keywords.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_keyword' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Collection</th>
+		<td class="col-9">{{form.collection}} {{form.collection.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_keyword' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Available</th>
+		<td class="col-3">{{form.available}} {{form.available.error}}</td>
+		<td class="col-3">Request use permission</th>
+		<td class="col-3">{{form.request_use_permission}} 
+			{{form.request_use_permission.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Description</th>
+		<td class="col-9">{{form.description}} {{form.description.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Comments</th>
+		<td class="col-9">{{form.comments}} {{form.comments.error}}</td>
+	</tr>

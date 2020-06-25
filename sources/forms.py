@@ -1,13 +1,14 @@
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, modelform_factory
 from .models import Source, SimpleModel
 from .models import Famine,Collection,PublishingOutlet,Available,Rated
-from .models import Keyword,Commissioner,Person,MusicType,Language,Music
-from .models import RequestUsePermission, FilmCompany, FilmType, Film
-from .models import Location, TargetAudience
-from .widgets import CollectionWidget,PublishingOutletWidget,AvailableWidget
+from .models import Keyword,Commissioner,Person,MusicType,Language,Music, Infographic
+from .models import RequestUsePermission, FilmCompany, FilmType, Film, Text, Image
+from .models import Location, TargetAudience, TextType, InfographicType, ImageType
+from .models import Publisher, PictureStoryType
+from .widgets import CollectionWidget,PublishingOutletWidget,AvailableWidget, TextTypeWidget
 from .widgets import RatedWidget,CommissionerWidget,MusicTypeWidget, FilmCompanyWidget
-from .widgets import FilmTypeWidget
+from .widgets import ImageTypeWidget, InfographicTypeWidget,FilmTypeWidget, PublisherWidget
 from .widgets import RequestUsePermissionWidget
 from .widgets import FaminesWidget
 from .widgets import PersonsWidget
@@ -16,26 +17,43 @@ from .widgets import KeywordsWidget
 from .widgets import LocationsWidget
 from .widgets import TargetAudienceWidget
 
-
+#setting default kwargs for to clean up form definition
 dattr = {'attrs':{'style':'width:100%'}}
-dchar = {'widget':forms.TextInput(**dattr)}
+dchar = {'widget':forms.TextInput(**dattr),'required':False}
+dchar_required = {'widget':forms.TextInput(**dattr),'required':True}
 dtext = {'widget':forms.Textarea(attrs={'style':'width:100%','rows':3})}
 dselect2 = {'attrs':{'data-placeholder':'Select by name...','style':'width:100%',
 	'class':'searching'}}
+mft = {'fields':('name',),'widgets':{'name':forms.TextInput(dattr)}}
 
-class SimpleForm(ModelForm):
-	name = forms.CharField(**dchar)
-	class Meta:
-		model = SimpleModel
-		fields = ['name']
+def create_simple_form(name):
+	'''Create a simple model form based on the Model name. 
+	Form is appended to model name
+	Assumes the form only has a name field.
+	'''
+	exec(name + 'Form = modelform_factory('+name+',**mft)',globals())
 
+#create simple forms for the following models
+names = 'TextType,ImageType,MusicType,PictureStoryType,FilmType,InfographicType'
+names += ',FilmCompany,TargetAudience,Collection,Publisher,Person,Location,Language'
+names += ',Keyword'
+for name in names.split(','):
+	create_simple_form(name)
+#----
+
+
+# set the field names for the parent source form, these fields need to be
+# set in the children forms Meta class as well (I think)
+source_fields = 'famines,title_english,title_original,collection,publishing_outlet'
+source_fields += ',available,request_use_permission,rated,keywords,description'
+source_fields += ',comments,commissioned_by,source_link'
 
 class SourceForm(ModelForm):
 	famines = forms.ModelMultipleChoiceField(
 		queryset=Famine.objects.all(),
 		widget=FaminesWidget(**dselect2),
 		required=False)
-	title_english = forms.CharField(**dchar)
+	title_english = forms.CharField(**dchar_required)
 	title_original = forms.CharField(**dchar)
 	collection = forms.ModelChoiceField(
 		queryset=Collection.objects.all(),
@@ -73,11 +91,8 @@ class SourceForm(ModelForm):
 
 	class Meta:
 		model = Source
-		fields = 'famines,title_english,title_original,collection,publishing_outlet'
-		fields += ',available,request_use_permission,rated,keywords,description'
-		fields += ',comments,commissioned_by,source_link'
 		#fields += ',date_created,date_released'
-		fields = fields.split(',')
+		fields = source_fields.split(',')
 
 class MusicForm(SourceForm):
 	lyrics = forms.CharField(**dtext)
@@ -98,15 +113,11 @@ class MusicForm(SourceForm):
 
 	class Meta:
 		model = Music
-		fields = 'lyrics,music_video_link,performing_artists,composers,music_type'
+		fields = source_fields
+		fields += ',lyrics,music_video_link,performing_artists,composers,music_type'
 		fields += ',languages'
 		#fields += ',date_created,date_released'
 		fields = fields.split(',')
-
-class MusicTypeForm(SimpleForm):
-	class Meta:
-		model = MusicType
-		fields = ['name']
 
 
 class FilmForm(SourceForm):
@@ -149,10 +160,104 @@ class FilmForm(SourceForm):
 
 	class Meta:
 		model = Film
-		fields = 'languages_original,languages_subtitle,writers,directors,film_company'
+		fields = source_fields
+		fields += ',languages_original,languages_subtitle,writers,directors,film_company'
 		fields += ',locations_shot,locations_released,target_audience,film_type'
 		#fields += ',date_created,date_released'
 		fields = fields.split(',')
+
+
+class TextForm(SourceForm):
+	text_type= forms.ModelChoiceField(
+		queryset=TextType.objects.all(),
+		widget = TextTypeWidget(**dselect2),
+		required=False)
+	authors= forms.ModelMultipleChoiceField(
+		queryset=Person.objects.all(),
+		widget = PersonsWidget(**dselect2),
+		required=False)
+	editors= forms.ModelMultipleChoiceField(
+		queryset=Person.objects.all(),
+		widget = PersonsWidget(**dselect2),
+		required=False)
+	translators= forms.ModelMultipleChoiceField(
+		queryset=Person.objects.all(),
+		widget = PersonsWidget(**dselect2),
+		required=False)
+	text = forms.CharField(**dtext)
+	excerpt = forms.CharField(**dtext)
+	
+	class Meta:
+		model = Text
+		fields = source_fields
+		fields += ',text_type,authors,editors,translators,text,excerpt'
+		fields = fields.split(',')
+	
+class InfographicForm(SourceForm):
+	infographic_type= forms.ModelChoiceField(
+		queryset=InfographicType.objects.all(),
+		widget = InfographicTypeWidget(**dselect2),
+		required=False)
+	creators = forms.ModelMultipleChoiceField(
+		queryset=Person.objects.all(),
+		widget = PersonsWidget(**dselect2),
+		required=False)
+	
+	class Meta:
+		model = Infographic
+		fields = source_fields
+		fields += ',infographic_type,creators'
+		fields = fields.split(',')
+
+
+class ImageForm(SourceForm):
+	image_type= forms.ModelChoiceField(
+		queryset=ImageType.objects.all(),
+		widget = ImageTypeWidget(**dselect2),
+		required=False)
+	creators = forms.ModelMultipleChoiceField(
+		queryset=Person.objects.all(),
+		widget = PersonsWidget(**dselect2),
+		required=False)
+	locations = forms.ModelMultipleChoiceField(
+		queryset=Location.objects.all(),
+		widget = LocationsWidget(**dselect2),
+		required=False)
+	
+	class Meta:
+		model = Image
+		fields = source_fields
+		fields += ',image_type,creators'
+		fields = fields.split(',')
+
+
+class PictureStoryForm(SourceForm):
+	picture_story_type= forms.ModelChoiceField(
+		queryset=ImageType.objects.all(),
+		widget = ImageTypeWidget(**dselect2),
+		required=False)
+	authors = forms.ModelMultipleChoiceField(
+		queryset=Person.objects.all(),
+		widget = PersonsWidget(**dselect2),
+		required=False)
+	artists = forms.ModelMultipleChoiceField(
+		queryset=Person.objects.all(),
+		widget = PersonsWidget(**dselect2),
+		required=False)
+	publisher= forms.ModelMultipleChoiceField(
+		queryset=Publisher.objects.all(),
+		widget = PublisherWidget(**dselect2),
+		required=False)
+	text = forms.CharField(**dtext)
+	excerpt = forms.CharField(**dtext)
+	
+	class Meta:
+		model = Image
+		fields = source_fields
+		fields += ',picture_story_type,authors,artists,publisher,text,excerpt'
+		fields = fields.split(',')
+
+
 
 
 

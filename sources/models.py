@@ -117,22 +117,22 @@ class Image(Source):
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	language_original = models.ForeignKey(Language,**dargs,related_name='image_language_original')
 	image_type = models.ForeignKey(ImageType,**dargs)
-	location = models.ForeignKey(Location,**dargs)
-	creator = models.ForeignKey(Person,**dargs)
+	locations = models.ManyToManyField(Location,blank=True, related_name='image_locations')
+	creators = models.ManyToManyField(Person,blank=True, related_name='image_creators')
 	
 class Infographic(Source):
 	'''Meta data for infographics related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	infographic_type = models.ForeignKey(InfographicType,**dargs)
-	creator = models.ForeignKey(Person,**dargs)
+	creators = models.ManyToManyField(Person,blank=True, related_name='infographic_creators')
 
 class PictureStory(Source):
 	'''Meta data for picturestories (comics / graphic novels) related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	picture_story_type = models.ForeignKey(PictureStoryType,**dargs)
-	author = models.ForeignKey(Person,**dargs,related_name='picture_story_author')
-	artist = models.ForeignKey(Person,**dargs,related_name='picture_story_artist')
-	translator = models.ForeignKey(Person,**dargs,related_name='picture_story_translator')
+	authors = models.ManyToManyField(Person,blank=True, related_name='picture_story_author')
+	artists = models.ManyToManyField(Person,blank=True, related_name='picture_story_artist')
+	translators= models.ManyToManyField(Person,blank=True, related_name='picture_story_translator')
 	publisher = models.ForeignKey(Publisher,**dargs)
 	text = models.TextField(default='')
 	excerpt = models.CharField(max_length=3000,default='')
