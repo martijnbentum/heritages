@@ -41,7 +41,6 @@ for name in names.split(','):
 	create_simple_form(name)
 #----
 
-
 # set the field names for the parent source form, these fields need to be
 # set in the children forms Meta class as well (I think)
 source_fields = 'famines,title_english,title_original,collection,publishing_outlet'
@@ -75,7 +74,7 @@ class SourceForm(ModelForm):
 		queryset=Rated.objects.all(),
 		widget= RatedWidget(**dselect2),
 		required=False)
-	keywords = forms.ModelChoiceField(
+	keywords = forms.ModelMultipleChoiceField(
 		queryset=Keyword.objects.all(),
 		widget=KeywordsWidget(**dselect2),
 		required=False)

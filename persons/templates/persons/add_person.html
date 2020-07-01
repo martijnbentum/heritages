@@ -1,0 +1,93 @@
+{% extends "utilities/base.html" %}
+
+{% block head %}
+	{{form.media.css}}
+	<title>{{page_name}}</title>
+{% endblock %}
+
+{% block content %}
+<form method="post">
+	{% csrf_token %}
+	<div class="col-md-12 d-flex">
+	<h4 class="col-2 ml-0 pl-0">{{page_name}}</h4>
+		<button type="submit" name="save" value="save" class ="btn btn-dark">Save</button>
+		<button type="submit" name="save" value="add_another" 
+			class ="btn btn-secondary ml-1">Save | add another</button>
+	</div>
+	<hr>
+
+
+
+	<table class="table table-borderless table-sm">
+	<tr class="d-flex">
+		<td class="col-2">Name</th>
+		<td class="col-9">{{form.name}} {{form.name.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Gender</th>
+		<td class="col-9">{{form.gender}} {{form.gender.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'persons:add_gender' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Nationality</th>
+		<td class="col-9">{{form.nationality}} {{form.nationality.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'persons:add_nationality' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Location of birth</th>
+		<td class="col-9">{{form.location_of_birth}} {{form.location_of_birth.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_location' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Location of death</th>
+		<td class="col-9">{{form.location_of_death}} {{form.location_of_death.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_location' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Occupation</th>
+		<td class="col-9">{{form.occupation}} {{form.occupation.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'persons:add_occupation' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Affiliation</th>
+		<td class="col-9">{{form.affiliation}} {{form.affiliation.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'persons:add_affiliation' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Biography link</th>
+		<td class="col-9">{{form.biography_link}} {{form.biography_link.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Comments</th>
+		<td class="col-9">{{form.comments}} {{form.comments.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Keywords</th>
+		<td class="col-9">{{form.keywords}} {{form.keywords.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_keyword' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	</table>
+		<div class="col-md-12 d-flex">
+		<div class="col-2"></div>
+		<button type="submit" name="save" value="save" class ="btn btn-dark">Save</button>
+		<button type="submit" name="save" value="add_another" 
+			class ="btn btn-secondary ml-1">Save | add another</button>
+		</div>
+</form>
+<br>
+{{form.media.js}}
+{% endblock %}

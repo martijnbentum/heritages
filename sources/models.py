@@ -1,69 +1,18 @@
 from django.db import models
+from persons.models import Person
+from utilities.models import SimpleModel
 
-class SimpleModel(models.Model):
-	name = models.CharField(max_length=300,default='')
-	class Meta:
-		abstract=True
 
-class Person(SimpleModel):
-	pass
+def make_simple_model(name):
+	exec('class '+name + '(SimpleModel):\n\tpass',globals())
 
-class MusicType(SimpleModel):
-	pass
+names = 'MusicType,Language,Famine,Collection,Rated,Commissioner,Location,Keyword'
+names += ',FilmCompany,FilmType,TargetAudience,PublishingOutlet,Available,ImageType'
+names += ',InfographicType,PictureStoryType,TextType,Publisher,RequestUsePermission'
+names = names.split(',')
 
-class Language(SimpleModel):
-	pass
-
-class Famine(SimpleModel):
-	pass
-
-class Collection(SimpleModel):
-	pass
-
-class Rated(SimpleModel):
-	pass
-
-class Keyword(SimpleModel):
-	pass
-
-class Commissioner(SimpleModel):
-	pass
-
-class FilmCompany(SimpleModel):
-	pass
-
-class FilmType(SimpleModel):
-	pass
-
-class TargetAudience(SimpleModel):
-	pass
-
-class PublishingOutlet(SimpleModel):
-	pass
-
-class Location(SimpleModel):
-	pass
-
-class Available(SimpleModel):
-	pass
-
-class ImageType(SimpleModel):
-	pass
-
-class InfographicType(SimpleModel):
-	pass
-
-class PictureStoryType(SimpleModel):
-	pass
-
-class TextType(SimpleModel):
-	pass
-
-class Publisher(SimpleModel):
-	pass
-
-class RequestUsePermission(SimpleModel):
-	pass
+for name in names:
+	make_simple_model(name)
 
 class Source(models.Model):
 	'''abstract base class for music,film,image,text,infographic,picturestory.'''
@@ -76,7 +25,7 @@ class Source(models.Model):
 	available = models.ForeignKey(Available,**dargs)
 	request_use_permission = models.ForeignKey(RequestUsePermission,**dargs)
 	rated = models.ForeignKey(Rated, **dargs)
-	keywords = models.ForeignKey(Keyword, **dargs)
+	keywords= models.ManyToManyField(Keyword,blank=True)
 	description = models.TextField(default='')
 	comments = models.TextField(default='')
 	date_created = 1

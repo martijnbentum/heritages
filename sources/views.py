@@ -10,6 +10,28 @@ from .forms import PersonForm, LocationForm, LanguageForm, KeywordForm
 def index(request):
 	return HttpResponse('hello world')
 
+def make_fname(name):
+	o = name[0]
+	for c in name[1:]:
+		if c.isupper(): o += '_' + c
+		else: o += c
+	return o.lower()
+
+def create_simple_view(name):
+	'''Create a simple view based on the Model name. 
+	Assumes the form only has a name field.
+	'''
+	c = 'def add_'+make_fname(name)+'(request):\n'
+	c += '\treturn add_simple_model(request,__name__,"'+name+'","sources","add '+name+'")'
+	return exec(c,globals())
+
+#create simple forms for the following models
+names = 'TextType,MusicType,ImageType,FilmType,InfographicType,PictureStoryType'
+names += ',FilmCompany,Publisher,Collection,TargetAudience'
+for name in names.split(','):
+	create_simple_view(name)
+
+'''
 def add_text_type(request):
 	return add_simple_model(request,__name__,'TextType','sources','add text type')
 
@@ -39,10 +61,10 @@ def add_collection(request):
 
 def add_target_audience(request):
 	return add_simple_model(request,__name__,'TargetAudience','sources','add target audience')
+'''
 
 def music_list(request):
 	return HttpResponse('hello music list')
-
 
 
 
