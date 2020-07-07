@@ -1,7 +1,7 @@
-django==2.2.10
+django==2.2.13
 django_select2
 Pillow>=6.2.2
 python-decouple
 django-easy-audit
 django-redis
-/var/www/redefregion/partial_date/dist/partial-date-0.1.tar.gz
+#/var/www/redefregion/partial_date/dist/partial-date-0.1.tar.gz
