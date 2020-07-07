@@ -4,5 +4,8 @@ __pycache__
 *.swp
 __init__.py
 sources/migrations/
-persons/migrations
+persons/migrations/
+utilities/migrations/
 .env
+requirements.txt
+.gitignore
