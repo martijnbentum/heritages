@@ -143,5 +143,5 @@ STATIC_URL = '/static/'
 
 SELECT2_CACHE_BACKEND = 'select2'
 
-LOGIN_REDIRECT_URL = '/sources/music_list/'
-LOGOUT_REDIRECT_URL = '/sources/music_list/'
+LOGIN_REDIRECT_URL = '/sources/add_film/'
+LOGOUT_REDIRECT_URL = '/sources/add_film/'
