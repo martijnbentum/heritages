@@ -3,3 +3,6 @@ __pycache__
 .env
 *.swp
 __init__.py
+sources/migrations/
+persons/migrations
+.env
