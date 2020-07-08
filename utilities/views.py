@@ -43,6 +43,7 @@ def edit_model(request, name_space, model_name, app_name, instance_id = None,
 		if form.is_valid():
 			print('form is valid: ',form.cleaned_data,type(form))
 			instance = form.save()
+			print(instance)
 			if view == 'complete':
 				ffm = FormsetFactoryManager(name_space,names,request,instance)
 				valid = ffm.save()

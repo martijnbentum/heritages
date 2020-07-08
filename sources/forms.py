@@ -5,11 +5,11 @@ from .models import Famine,Collection,PublishingOutlet,Available,Rated
 from .models import Keyword,Commissioner,Person,MusicType,Language,Music, Infographic
 from .models import RequestUsePermission, FilmCompany, FilmType, Film, Text, Image
 from .models import Location, TargetAudience, TextType, InfographicType, ImageType
-from .models import Publisher, PictureStoryType
+from .models import Publisher, PictureStoryType, PictureStory
 from .widgets import CollectionWidget,PublishingOutletWidget,AvailableWidget, TextTypeWidget
 from .widgets import RatedWidget,CommissionerWidget,MusicTypeWidget, FilmCompanyWidget
 from .widgets import ImageTypeWidget, InfographicTypeWidget,FilmTypeWidget, PublisherWidget
-from .widgets import RequestUsePermissionWidget
+from .widgets import RequestUsePermissionWidget, PublishersWidget
 from .widgets import FaminesWidget
 from .widgets import PersonsWidget
 from .widgets import LanguagesWidget
@@ -21,7 +21,7 @@ from .widgets import TargetAudienceWidget
 dattr = {'attrs':{'style':'width:100%'}}
 dchar = {'widget':forms.TextInput(**dattr),'required':False}
 dchar_required = {'widget':forms.TextInput(**dattr),'required':True}
-dtext = {'widget':forms.Textarea(attrs={'style':'width:100%','rows':3})}
+dtext = {'widget':forms.Textarea(attrs={'style':'width:100%','rows':3}),'required':False}
 dselect2 = {'attrs':{'data-placeholder':'Select by name...','style':'width:100%',
 	'class':'searching'}}
 mft = {'fields':('name',),'widgets':{'name':forms.TextInput(dattr)}}
@@ -156,6 +156,7 @@ class FilmForm(SourceForm):
 		queryset=FilmType.objects.all(),
 		widget = FilmTypeWidget(**dselect2),
 		required=False)
+	video_link = forms.CharField(**dchar)
 
 	class Meta:
 		model = Film
@@ -183,13 +184,15 @@ class TextForm(SourceForm):
 		queryset=Person.objects.all(),
 		widget = PersonsWidget(**dselect2),
 		required=False)
-	text = forms.CharField(**dtext)
-	excerpt = forms.CharField(**dtext)
+	publishers= forms.ModelMultipleChoiceField(
+		queryset=Publisher.objects.all(),
+		widget = PublishersWidget(**dselect2),
+		required=False)
 	
 	class Meta:
 		model = Text
 		fields = source_fields
-		fields += ',text_type,authors,editors,translators,text,excerpt'
+		fields += ',text_type,authors,editors,translators,publishers,text_file,excerpt_file'
 		fields = fields.split(',')
 	
 class InfographicForm(SourceForm):
@@ -205,7 +208,7 @@ class InfographicForm(SourceForm):
 	class Meta:
 		model = Infographic
 		fields = source_fields
-		fields += ',infographic_type,creators'
+		fields += ',infographic_type,creators,image_file'
 		fields = fields.split(',')
 
 
@@ -226,7 +229,7 @@ class ImageForm(SourceForm):
 	class Meta:
 		model = Image
 		fields = source_fields
-		fields += ',image_type,creators'
+		fields += ',image_type,creators,image_file'
 		fields = fields.split(',')
 
 
@@ -243,17 +246,15 @@ class PictureStoryForm(SourceForm):
 		queryset=Person.objects.all(),
 		widget = PersonsWidget(**dselect2),
 		required=False)
-	publisher= forms.ModelMultipleChoiceField(
+	publishers= forms.ModelMultipleChoiceField(
 		queryset=Publisher.objects.all(),
-		widget = PublisherWidget(**dselect2),
+		widget = PublishersWidget(**dselect2),
 		required=False)
-	text = forms.CharField(**dtext)
-	excerpt = forms.CharField(**dtext)
 	
 	class Meta:
-		model = Image
+		model = PictureStory
 		fields = source_fields
-		fields += ',picture_story_type,authors,artists,publisher,text,excerpt'
+		fields += ',picture_story_type,authors,artists,publishers,image_file,excerpt_file'
 		fields = fields.split(',')
 
 

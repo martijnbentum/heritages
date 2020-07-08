@@ -45,6 +45,7 @@ class Music(Source):
 	composers = models.ManyToManyField(Person,blank=True,related_name='music_composer')
 	music_type = models.ForeignKey(MusicType,**dargs)
 	languages = models.ManyToManyField(Language, blank=True)
+	music_file = models.FileField(upload_to='data/',blank=True,null=True)
 
 
 class Film(Source):
@@ -59,6 +60,7 @@ class Film(Source):
 	locations_released= models.ManyToManyField(Location,blank=True, related_name='film_location_released')
 	target_audience = models.ForeignKey(TargetAudience,**dargs)
 	film_type = models.ForeignKey(FilmType,**dargs)
+	video_link = models.CharField(max_length=1000,default='')
 	
 
 class Image(Source):
@@ -68,12 +70,14 @@ class Image(Source):
 	image_type = models.ForeignKey(ImageType,**dargs)
 	locations = models.ManyToManyField(Location,blank=True, related_name='image_locations')
 	creators = models.ManyToManyField(Person,blank=True, related_name='image_creators')
+	image_file = models.ImageField(upload_to='data/',blank=True,null=True)
 	
 class Infographic(Source):
 	'''Meta data for infographics related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	infographic_type = models.ForeignKey(InfographicType,**dargs)
 	creators = models.ManyToManyField(Person,blank=True, related_name='infographic_creators')
+	image_file = models.ImageField(upload_to='data/',blank=True,null=True)
 
 class PictureStory(Source):
 	'''Meta data for picturestories (comics / graphic novels) related to famines.'''
@@ -82,9 +86,9 @@ class PictureStory(Source):
 	authors = models.ManyToManyField(Person,blank=True, related_name='picture_story_author')
 	artists = models.ManyToManyField(Person,blank=True, related_name='picture_story_artist')
 	translators= models.ManyToManyField(Person,blank=True, related_name='picture_story_translator')
-	publisher = models.ForeignKey(Publisher,**dargs)
-	text = models.TextField(default='')
-	excerpt = models.CharField(max_length=3000,default='')
+	publishers = models.ManyToManyField(Publisher,blank=True,related_name='picture_story_publisher')
+	image_file = models.ImageField(upload_to='data/',blank=True,null=True)
+	excerpt_file = models.FileField(upload_to='data/',blank=True,null=True)
 	
 class Text(Source):
 	'''Meta data for texts related to famines.'''
@@ -93,8 +97,9 @@ class Text(Source):
 	author = models.ForeignKey(Person,**dargs,related_name='text_author')
 	editor = models.ForeignKey(Person,**dargs,related_name='text_editor')
 	translator = models.ForeignKey(Person,**dargs,related_name='text_translator')
-	text = models.TextField(default='')
-	excerpt = models.CharField(max_length=3000,default='')
+	publishers = models.ManyToManyField(Publisher,blank=True,related_name='text_publisher')
+	text_file = models.FileField(upload_to='data/',blank=True,null=True)
+	excerpt_file = models.FileField(upload_to='data/',blank=True,null=True)
 	
 
 

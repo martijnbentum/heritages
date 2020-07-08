@@ -53,16 +53,23 @@
 			role="button"><i class="fa fa-plus"></i></a></td>
 	</tr>
 	<tr class="d-flex">
-		<td class="col-2">Text</th>
-		<td class="col-9">{{form.text}} {{form.text.error}}</td>
-	</tr>
-	<tr class="d-flex">
-		<td class="col-2">Excerpt</th>
-		<td class="col-9">{{form.excerpt}} {{form.excerpt.error}}</td>
+		<td class="col-2">Publishers</th>
+		<td class="col-9">{{form.publishers}} {{form.publishers.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_publisher' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
 	</tr>
 	<tr class="d-flex">
 		<td class="col-2">Source link</th>
 		<td class="col-9">{{form.source_link}} {{form.source_link.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Text file</th>
+		<td class="col-9">{{form.text_file}} {{form.text_file.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Excerpt</th>
+		<td class="col-9">{{form.excerpt_file}} {{form.excerpt_file.error}}</td>
 	</tr>
 	{% include 'utilities/add_source.html' %}
 	</table>

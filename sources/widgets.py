@@ -147,6 +147,11 @@ class PublisherWidget(SimpleBaseWidget):
 	def get_queryset(self):
 		return Publisher.objects.all().order_by('name')
 
+class PublishersWidget(SimpleBasesWidget):
+	model = Publisher 
+	def get_queryset(self):
+		return Publisher.objects.all().order_by('name')
+
 class PublishingOutletWidget(SimpleBaseWidget):
 	model = PublishingOutlet
 	def get_queryset(self):
