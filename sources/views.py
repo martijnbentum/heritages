@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from utilities.views import edit_model, add_simple_model
+from utilities.views import edit_model, add_simple_model, list_view, delete_model
 from .forms import MusicForm, MusicTypeForm, FilmTypeForm, FilmForm, TargetAudienceForm
 from .forms import FilmCompanyForm, CollectionForm, TextForm, TextTypeForm
 from .forms import InfographicForm, InfographicTypeForm, ImageForm, ImageTypeForm
 from .forms import PictureStoryForm, PictureStoryTypeForm, PublisherForm
-from .forms import PersonForm, LocationForm, LanguageForm, KeywordForm
+from .forms import LocationForm, LanguageForm, KeywordForm
+from persons.forms import PersonForm
 
 def index(request):
 	return HttpResponse('hello world')
@@ -31,40 +32,9 @@ names += ',FilmCompany,Publisher,Collection,TargetAudience'
 for name in names.split(','):
 	create_simple_view(name)
 
-'''
-def add_text_type(request):
-	return add_simple_model(request,__name__,'TextType','sources','add text type')
+def view_list(request,name):
+	return list_view(request, name,'sources')
 
-def add_music_type(request):
-	return add_simple_model(request,__name__,'MusicType','sources','add music type')
-
-def add_image_type(request):
-	return add_simple_model(request,__name__,'ImageType','sources','add image type')
-
-def add_film_type(request):
-	return add_simple_model(request,__name__,'FilmType','sources','add film type')
-
-def add_infographic_type(request):
-	return add_simple_model(request,__name__,'InfographicType','sources','add infographic type')
-
-def add_picture_story_type(request):
-	return add_simple_model(request,__name__,'PictureStoryType','sources','add picture story type')
-
-def add_film_company(request):
-	return add_simple_model(request,__name__,'FilmCompany','sources','add film company')
-
-def add_publisher(request):
-	return add_simple_model(request,__name__,'Publisher','sources','add publisher')
-
-def add_collection(request):
-	return add_simple_model(request,__name__,'Collection','sources','add collection')
-
-def add_target_audience(request):
-	return add_simple_model(request,__name__,'TargetAudience','sources','add target audience')
-'''
-
-def music_list(request):
-	return HttpResponse('hello music list')
 
 
 
@@ -103,5 +73,7 @@ def add_famine(request):
 def add_keyword(request):
 	return add_simple_model(request,__name__,'Keyword','sources','add keyword')
 
-def add_person(request):
-	return add_simple_model(request,__name__,'Person','sources','add person')
+
+def delete(request, pk, model_name):
+	return delete_model(request, __name__, model_name,'sources',pk)
+

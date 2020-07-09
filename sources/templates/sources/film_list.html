@@ -8,40 +8,40 @@
 {% block content %}
 {% include 'utilities/list_search_bar.html' %} 
 
-{% if music_list %}
+{% if film_list %}
 
 <div class="d-flex">
 <table class="table table-hover">
 	<tr>
 	<th><a class="text-dark" href="?order_by=title_english,{{order}},{{direction}},{{query}}"
 		style="text-decoration:none;">Title</a></th>
-	<th><a class="text-dark" href="?order_by=music_type,{{order}},{{direction}},{{query}}"
-		style="text-decoration:none;">Music type</a></th>
+	<th><a class="text-dark" href="?order_by=film_type,{{order}},{{direction}},{{query}}"
+		style="text-decoration:none;">Film type</a></th>
 	<th></th>
 	</tr>
-	{% for music in music_list %}
+	{% for film in film_list %}
 	<tr>
-		<td>{{music.title_english}}</td>
-		<td>{{music.music_type}}</td>
+		<td>{{film.title_english}}</td>
+		<td>{{film.film_type}}</td>
 		<td style="white-space:nowrap;"><a class="btn btn-link btn-sm ml-auto"
-		href = "{% url 'sources:delete' music.pk 'Music' %}"
+		href = "{% url 'sources:delete' film.pk 'Film' %}"
 		role="button"><i class="fa fa-trash text-secondary"></i></a>
 		<td style="white-space:nowrap;"><a class="btn btn-link btn-sm ml-auto"
-		href = "{% url 'sources:edit_film' music.pk %}"
+		href = "{% url 'sources:edit_film' film.pk %}"
 		role="button"><i class="far fa-edit text-secondary"></i></a>
 	</tr>
 	{% endfor %}
 </table>
 
-<a class ="btn btn-link ml-auto" href="{% url 'sources:add_music' %}"
-role="button">Add music</a>
+<a class ="btn btn-link ml-auto" href="{% url 'sources:add_film' %}"
+role="button">Add film</a>
 		
 
 	
 </div>
 
 {% else %}
-	<p>no music available</p>
+	<p>no films are available</p>
 {% endif %}
 
 {% endblock %}

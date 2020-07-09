@@ -10,9 +10,7 @@
 	{% csrf_token %}
 	<div class="col-md-12 d-flex">
 	<h4 class="col-2 ml-0 pl-0">{{page_name}}</h4>
-		<button type="submit" name="save" value="save" class ="btn btn-dark">Save</button>
-		<button type="submit" name="save" value="add_another" 
-			class ="btn btn-secondary ml-1">Save | add another</button>
+	{% include 'utilities/save.html' %}
 	</div>
 	<hr>
 
@@ -83,9 +81,7 @@
 	</table>
 		<div class="col-md-12 d-flex">
 		<div class="col-2"></div>
-		<button type="submit" name="save" value="save" class ="btn btn-dark">Save</button>
-		<button type="submit" name="save" value="add_another" 
-			class ="btn btn-secondary ml-1">Save | add another</button>
+		{% include 'utilities/save.html' %}
 		</div>
 </form>
 <br>

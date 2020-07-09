@@ -9,14 +9,10 @@
 <form method="post">
 	{% csrf_token %}
 	<div class="col-md-12 d-flex">
-	<h4 class="col-2 ml-0 pl-0">{{page_name}}</h4>
-		<button type="submit" name="save" value="save" class ="btn btn-dark">Save</button>
-		<button type="submit" name="save" value="add_another" 
-			class ="btn btn-secondary ml-1">Save | add another</button>
+		<h4 class="col-2 ml-0 pl-0">{{page_name}}</h4>
+		{% include 'utilities/save.html' %}
 	</div>
 	<hr>
-
-
 
 	<table class="table table-borderless table-sm">
 	<tr class="d-flex">
@@ -38,7 +34,7 @@
 		<td class="col-2">Writers</th>
 		<td class="col-9">{{form.writers}} {{form.writers.error}}</td>
 		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
-			href = "{% url 'persons:add_person' %}"
+			href = "{% url 'persons:add_person' 'inline'%}"
 			role="button"><i class="fa fa-plus"></i></a></td>
 	</tr>
 	<tr class="d-flex">
@@ -101,10 +97,8 @@
 	{% include 'utilities/add_source.html' %}
 	</table>
 		<div class="col-md-12 d-flex">
-		<div class="col-2"></div>
-		<button type="submit" name="save" value="save" class ="btn btn-dark">Save</button>
-		<button type="submit" name="save" value="add_another" 
-			class ="btn btn-secondary ml-1">Save | add another</button>
+			<div class="col-2"></div>
+			{% include 'utilities/save.html' %}
 		</div>
 </form>
 <br>

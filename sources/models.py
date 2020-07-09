@@ -1,6 +1,7 @@
 from django.db import models
 from persons.models import Person
 from utilities.models import SimpleModel
+from utils.model_util import info
 
 
 def make_simple_model(name):
@@ -36,7 +37,7 @@ class Source(models.Model):
 	class Meta:
 		abstract = True
 
-class Music(Source):
+class Music(Source,info):
 	'''Meta data for songs related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	lyrics = models.TextField(default='')
@@ -48,7 +49,7 @@ class Music(Source):
 	music_file = models.FileField(upload_to='data/',blank=True,null=True)
 
 
-class Film(Source):
+class Film(Source, info):
 	'''Meta data for movies related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	language_original = models.ForeignKey(Language,**dargs,related_name='film_language_original')

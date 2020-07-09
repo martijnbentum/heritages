@@ -23,6 +23,11 @@ class LocationWidget(SimpleBaseWidget):
 	def get_queryset(self):
 		return Location.objects.all().order_by('name')
 
+class PersonWidget(SimpleBaseWidget):
+	model = Person
+	def get_queryset(self):
+		return Person.objects.all().order_by('name')
+
 class PersonsWidget(SimpleBasesWidget):
 	model = Person
 	def get_queryset(self):

@@ -9,16 +9,34 @@ from utils.view_util import Crud, Cruds, make_tabs, FormsetFactoryManager
 from .models import copy_complete
 from utilities.search import Search
 
-def list_view(request, model_name, app_name):
+def _handle_fieldnames(field_names):
+	fields = field_names.split(',')
+	field_dict = {}
+	for f in fields:
+		name,hname = f.split('$')
+		if not hname: hname = name
+		field_dict[name] = hname
+	return field_dict
+	
+
+def list_view(request, model_name, app_name,html_name='',field_names = ''):
 	'''list view of a model.'''
+	if field_names: html_name = 'utilities/general_list.html'
+	elif not html_name:html_name = 'utilities/source_list.html'
+	else: html_name = app_name + '/' + html_name
 	s = Search(request,model_name,app_name)
 	instances= s.filter()
 	if model_name == 'UserLoc': model_name = 'location'
-	var = {model_name.lower() +'_list':instances,'page_name':model_name,
+	name = model_name.lower()
+	field_dict = _handle_fieldnames(field_names) if field_names else {}
+	var = {name +'_list':instances,'page_name':model_name,
 		'order':s.order.order_by,'direction':s.order.direction,
-		'query':s.query.query,'nentries':s.nentries}
+		'query':s.query.query,'nentries':s.nentries, 'list':instances,'name':name,
+		'type_name':name+'_type','app_name':app_name,'fields':field_dict.items()}
 	print(s.notes,000)
-	return render(request, app_name+'/'+model_name.lower()+'_list.html',var)
+	print(field_names, field_dict.items())
+	# return render(request, app_name+'/'+model_name.lower()+'_list.html',var)
+	return render(request, html_name.replace('$','/'),var)
 
 
 @permission_required('utilities.add_generic')
@@ -43,7 +61,6 @@ def edit_model(request, name_space, model_name, app_name, instance_id = None,
 		if form.is_valid():
 			print('form is valid: ',form.cleaned_data,type(form))
 			instance = form.save()
-			print(instance)
 			if view == 'complete':
 				ffm = FormsetFactoryManager(name_space,names,request,instance)
 				valid = ffm.save()

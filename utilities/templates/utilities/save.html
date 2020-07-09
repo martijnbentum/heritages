@@ -1,0 +1,8 @@
+<button type="submit" name="save" value="save" class ="btn btn-dark">Save</button>
+{% if view == "inline" %} 
+	 <a type="reset" value="Cancel" class ="btn btn-light"
+	 href="{% url 'utilities:close' %}">Cancel</a>
+{% else %}
+	<button type="submit" name="save" value="add_another" 
+	class ="btn btn-secondary ml-1">Save | add another</button>
+{% endif %}

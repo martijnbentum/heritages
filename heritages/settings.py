@@ -146,3 +146,5 @@ SELECT2_CACHE_BACKEND = 'select2'
 
 LOGIN_REDIRECT_URL = '/sources/add_film/'
 LOGOUT_REDIRECT_URL = '/sources/add_film/'
+
+TEMPLATE_STRING_IF_INVALID = ''

@@ -1,0 +1,54 @@
+{% extends "utilities/base.html" %}
+
+{% block head %}
+	<title>{{page_name}}</title>
+{% endblock %}
+
+
+{% block content %}
+{% include 'utilities/list_search_bar.html' %} 
+
+{% if list %}
+
+<div class="d-flex">
+<table class="table table-hover">
+	<tr>
+	<th><a class="text-dark" href="?order_by=title_english,{{order}},{{direction}},{{query}}"
+		style="text-decoration:none;">Title</a></th>
+	<th><a class="text-dark" href="?order_by={{name}}_type,{{order}},{{direction}},{{query}}"
+		style="text-decoration:none;">{{name|title}} type</a></th>
+	<th></th>
+	</tr>
+	{% for item in list %}
+	<tr>
+		<td>{{item.title_english}}</td>
+		{% load getattribute %}
+		<td>{{item|getattribute:type_name}}</td>
+
+		<td style="white-space:nowrap;"><a class="btn btn-link btn-sm ml-auto"
+		href = "{% url 'sources:delete' item.pk name|title %}"
+		role="button"><i class="fa fa-trash text-secondary"></i></a></td>
+
+		{% with app_name|add:":edit_"|add:name as edit %}
+		<td style="white-space:nowrap;"><a class="btn btn-link btn-sm ml-auto"
+		href = "{% url edit  item.pk %}"
+		role="button"><i class="far fa-edit text-secondary"></i></a></td>
+		{% endwith %}
+	</tr>
+	{% endfor %}
+</table>
+
+{% with app_name|add:":add_"|add:name as add_instance%}
+<a class ="btn btn-link ml-auto" href="{% url add_instance  %}"
+role="button">Add {{name}}</a>
+{% endwith %}
+		
+
+	
+</div>
+
+{% else %}
+	<p>no {{name}} available</p>
+{% endif %}
+
+{% endblock %}

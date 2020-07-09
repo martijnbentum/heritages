@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm, modelform_factory
 from .models import Source, SimpleModel
 from .models import Famine,Collection,PublishingOutlet,Available,Rated
-from .models import Keyword,Commissioner,Person,MusicType,Language,Music, Infographic
+from .models import Keyword,Commissioner,MusicType,Language,Music, Infographic
 from .models import RequestUsePermission, FilmCompany, FilmType, Film, Text, Image
 from .models import Location, TargetAudience, TextType, InfographicType, ImageType
 from .models import Publisher, PictureStoryType, PictureStory
@@ -11,11 +11,12 @@ from .widgets import RatedWidget,CommissionerWidget,MusicTypeWidget, FilmCompany
 from .widgets import ImageTypeWidget, InfographicTypeWidget,FilmTypeWidget, PublisherWidget
 from .widgets import RequestUsePermissionWidget, PublishersWidget
 from .widgets import FaminesWidget
-from .widgets import PersonsWidget
 from .widgets import LanguagesWidget
 from .widgets import KeywordsWidget
 from .widgets import LocationsWidget
 from .widgets import TargetAudienceWidget
+from persons.models import Person
+from persons.widgets import PersonWidget, PersonsWidget
 
 #setting default kwargs for to clean up form definition
 dattr = {'attrs':{'style':'width:100%'}}
@@ -35,7 +36,7 @@ def create_simple_form(name):
 
 #create simple forms for the following models
 names = 'TextType,ImageType,MusicType,PictureStoryType,FilmType,InfographicType'
-names += ',FilmCompany,TargetAudience,Collection,Publisher,Person,Location,Language'
+names += ',FilmCompany,TargetAudience,Collection,Publisher,Location,Language'
 names += ',Keyword'
 for name in names.split(','):
 	create_simple_form(name)

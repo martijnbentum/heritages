@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-md navbar-light bg-light">
-  <a class="navbar-brand" href={% url 'sources:music_list' %}>Heritages of Hunger</a>
+  <a class="navbar-brand" href={% url 'sources:music' %}>Heritages of Hunger</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -13,10 +13,21 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href=
-			"{% url 'sources:music_list' %}">music</a>
+			"{% url 'sources:music' %}">music</a>
+          <a class="dropdown-item" href=
+			"{% url 'sources:film' %}">film</a>
+          <a class="dropdown-item" href=
+			"{% url 'sources:image' %}">image</a>
+          <a class="dropdown-item" href=
+			"{% url 'sources:text' %}">text</a>
+          <a class="dropdown-item" href=
+			"{% url 'sources:infographic' %}">infographic</a>
+          <a class="dropdown-item" href=
+			"{% url 'sources:picturestory' %}">picturestory</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href=
-			"{% url 'sources:add_music' %}">map</a>
+			"{% url 'utilities:list_view_general' 'Person' 'persons' 'name$,gender$,location_of_birth$born'%}">person</a>
+			
         </div>
       </li>
 
