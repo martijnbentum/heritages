@@ -26,7 +26,11 @@
 			"{% url 'sources:picturestory' %}">picturestory</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href=
-			"{% url 'utilities:list_view_general' 'Person' 'persons' 'name$,gender$,location_of_birth$born'%}">person</a>
+			"{% url 'utilities:list_view' 'Person' 'persons' %}">person</a>
+          <a class="dropdown-item" href=
+			"{% url 'utilities:list_view' 'Famine' 'misc' %}">famine</a>
+          <a class="dropdown-item" href=
+			"{% url 'utilities:list_view' 'Location' 'locations' %}">location</a>
 			
         </div>
       </li>
@@ -51,6 +55,10 @@
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href=
 			"{% url 'persons:add_person' %}">person</a>
+          <a class="dropdown-item" href=
+			"{% url 'misc:add_famine' %}">famine</a>
+          <a class="dropdown-item" href=
+			"{% url 'locations:add_location' %}">location</a>
         </div>
       </li>
 

@@ -9,21 +9,33 @@ from utils.view_util import Crud, Cruds, make_tabs, FormsetFactoryManager
 from .models import copy_complete
 from utilities.search import Search
 
+te = 'title_english'
+field_names_dict = {'person':'name,gender,location_of_birth',
+	'music':te+',music_type','film':te+',film_type',
+	'text':te+',text_type', 'infographic':te+',infographic_type',
+	'image':te+',image_type','picturestory':te+',picture_story_type',
+	'famine':'names_str$names,locations_str$locations',
+	'location':'name,country,region,location_type$type'}
+
+
 def _handle_fieldnames(field_names):
 	fields = field_names.split(',')
 	field_dict = {}
 	for f in fields:
-		name,hname = f.split('$')
-		if not hname: hname = name
+		if '$' in f:
+			name,hname = f.split('$')
+			if not hname: hname = name
+		else: name,hname = f,f.replace('_',' ')
 		field_dict[name] = hname
 	return field_dict
 	
 
 def list_view(request, model_name, app_name,html_name='',field_names = ''):
 	'''list view of a model.'''
-	if field_names: html_name = 'utilities/general_list.html'
-	elif not html_name:html_name = 'utilities/source_list.html'
-	else: html_name = app_name + '/' + html_name
+	print(field_names)
+	if field_names == '': field_names = field_names_dict[model_name.lower()]
+	print(field_names)
+	if html_name == '': html_name = 'utilities/general_list.html'
 	s = Search(request,model_name,app_name)
 	instances= s.filter()
 	if model_name == 'UserLoc': model_name = 'location'
@@ -52,6 +64,7 @@ def edit_model(request, name_space, model_name, app_name, instance_id = None,
 	instance= model.objects.get(pk=instance_id) if instance_id else None
 	crud = Crud(instance) if instance else None
 	ffm, form = None, None
+	print(model,modelform,model_name,app_name,98765)
 	if request.method == 'POST':
 		focus, button = getfocus(request), getbutton(request)
 		if button in 'delete,cancel,confirm_delete': 
@@ -73,6 +86,7 @@ def edit_model(request, name_space, model_name, app_name, instance_id = None,
 						kwargs={'pk':instance.pk,'focus':focus}))
 				else: print('ERROR',ffm.errors)
 			else: return HttpResponseRedirect('/utilities/close/')
+		else: print(form,'not valid')
 	if not form: form = modelform(instance=instance)
 	if not ffm: ffm = FormsetFactoryManager(name_space,names,instance=instance)
 	tabs = make_tabs(model_name.lower(), focus_names = focus)
@@ -122,7 +136,7 @@ def delete_model(request, name_space, model_name, app_name, pk):
 		if button == 'confirm_delete':
 			instance.delete()
 			show_messages(request,button, model_name)
-			return HttpResponseRedirect('/'+app_name+'/'+model_name.lower())
+			return HttpResponseRedirect('/utilities/list_view/'+model_name.lower()+'/'+app_name+'/')
 	info = instance.info
 	print(1,info,instance,pk)
 	var = {'info':info,'page_name':'Delete '+model_name.lower()}

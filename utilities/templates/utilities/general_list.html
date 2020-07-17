@@ -23,12 +23,14 @@
 	<tr>
 		{% load getattribute %}
 		{% for key, value in fields %}
-			<td>{{item|getattribute:key}}</td>
+			<td>{{item|getattribute:key|default_if_none:""}}</td>
 		{% endfor %}
 
 		<td style="white-space:nowrap;"><a class="btn btn-link btn-sm ml-auto"
-		href = "{% url 'sources:delete' item.pk name|title %}"
+		{% with app_name|add:":delete" as delete %}
+		href = "{% url delete item.pk name|title %}"
 		role="button"><i class="fa fa-trash text-secondary"></i></a></td>
+		{% endwith %}
 
 		{% with app_name|add:":edit_"|add:name as edit %}
 		<td style="white-space:nowrap;"><a class="btn btn-link btn-sm ml-auto"
