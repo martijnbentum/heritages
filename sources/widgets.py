@@ -21,6 +21,8 @@ class BaseWidget(ModelSelect2Widget):
 	def label_from_instance(self,obj):
 		return obj.title_english
 
+# Main model widgets
+
 class MusicWidget(BaseWidget):
 	model = Music
 	def get_queryset(self):
@@ -52,32 +54,7 @@ class InfographicWidget(BaseWidget):
 		return Infographic.objects.all().order_by('title_english')
 
 
-class LocationsWidget(SimpleBasesWidget):
-	model = Location
-	def get_queryset(self):
-		return Location.objects.all().order_by('name')
-
-class LanguagesWidget(SimpleBasesWidget):
-	model = Language
-	def get_queryset(self):
-		return Language.objects.all().order_by('name')
-
-class PersonsWidget(SimpleBasesWidget):
-	model = Person
-	def get_queryset(self):
-		return Person.objects.all().order_by('name')
-
-class FaminesWidget(SimpleBasesWidget):
-	model = Famine
-	def get_queryset(self):
-		return Famine.objects.all().order_by('name')
-
-class KeywordsWidget(SimpleBasesWidget):
-	model = Keyword
-	def get_queryset(self):
-		return Keyword.objects.all().order_by('name')
-
-
+#helper widgets
 
 class TargetAudienceWidget(SimpleBaseWidget):
 	model = TargetAudience
@@ -114,8 +91,6 @@ class ImageTypeWidget(SimpleBaseWidget):
 	model = ImageType
 	def get_queryset(self):
 		return ImageType.objects.all().order_by('name')
-
-
 
 class AvailableWidget(SimpleBaseWidget):
 	model = Available

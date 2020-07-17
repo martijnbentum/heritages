@@ -1,20 +1,20 @@
 from django import forms
 from django.forms import ModelForm, modelform_factory
 from .models import Source, SimpleModel
-from .models import Famine,Collection,PublishingOutlet,Available,Rated
-from .models import Keyword,Commissioner,MusicType,Language,Music, Infographic
+from .models import Collection,PublishingOutlet,Available,Rated
+from .models import Commissioner,MusicType,Music, Infographic
 from .models import RequestUsePermission, FilmCompany, FilmType, Film, Text, Image
-from .models import Location, TargetAudience, TextType, InfographicType, ImageType
+from .models import TargetAudience, TextType, InfographicType, ImageType
 from .models import Publisher, PictureStoryType, PictureStory
 from .widgets import CollectionWidget,PublishingOutletWidget,AvailableWidget, TextTypeWidget
 from .widgets import RatedWidget,CommissionerWidget,MusicTypeWidget, FilmCompanyWidget
 from .widgets import ImageTypeWidget, InfographicTypeWidget,FilmTypeWidget, PublisherWidget
 from .widgets import RequestUsePermissionWidget, PublishersWidget
-from .widgets import FaminesWidget
-from .widgets import LanguagesWidget
-from .widgets import KeywordsWidget
-from .widgets import LocationsWidget
 from .widgets import TargetAudienceWidget
+from locations.models import Location
+from locations.widgets import LocationWidget, LocationsWidget
+from misc.models import Famine, Language, Keyword
+from misc.widgets import FaminesWidget, LanguagesWidget, KeywordsWidget
 from persons.models import Person
 from persons.widgets import PersonWidget, PersonsWidget
 
@@ -189,11 +189,16 @@ class TextForm(SourceForm):
 		queryset=Publisher.objects.all(),
 		widget = PublishersWidget(**dselect2),
 		required=False)
+	languages = forms.ModelMultipleChoiceField(
+		queryset=Language.objects.all(),
+		widget= LanguagesWidget(**dselect2),
+		required=False)
 	
 	class Meta:
 		model = Text
 		fields = source_fields
 		fields += ',text_type,authors,editors,translators,publishers,text_file,excerpt_file'
+		fields += ',languages'
 		fields = fields.split(',')
 	
 class InfographicForm(SourceForm):
@@ -205,11 +210,15 @@ class InfographicForm(SourceForm):
 		queryset=Person.objects.all(),
 		widget = PersonsWidget(**dselect2),
 		required=False)
+	languages = forms.ModelMultipleChoiceField(
+		queryset=Language.objects.all(),
+		widget= LanguagesWidget(**dselect2),
+		required=False)
 	
 	class Meta:
 		model = Infographic
 		fields = source_fields
-		fields += ',infographic_type,creators,image_file'
+		fields += ',infographic_type,creators,image_file,languages'
 		fields = fields.split(',')
 
 
@@ -251,11 +260,16 @@ class PictureStoryForm(SourceForm):
 		queryset=Publisher.objects.all(),
 		widget = PublishersWidget(**dselect2),
 		required=False)
+	languages = forms.ModelMultipleChoiceField(
+		queryset=Language.objects.all(),
+		widget= LanguagesWidget(**dselect2),
+		required=False)
 	
 	class Meta:
 		model = PictureStory
 		fields = source_fields
 		fields += ',picture_story_type,authors,artists,publishers,image_file,excerpt_file'
+		fields += ',languages'
 		fields = fields.split(',')
 
 
