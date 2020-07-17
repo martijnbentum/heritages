@@ -1,6 +1,5 @@
 from django_select2.forms import ModelSelect2Widget, ModelSelect2MultipleWidget
-from .models import Person,Gender,Nationality,Occupation,Affiliation,Location,Keyword
-from .models import Location 
+from .models import Person,Gender,Nationality,Occupation,Affiliation
 
 class SimpleBaseWidget(ModelSelect2Widget):
 	search_fields = ['name__icontains']
@@ -13,15 +12,6 @@ class SimpleBasesWidget(ModelSelect2MultipleWidget):
 		return obj.name
 
 
-class LocationsWidget(SimpleBasesWidget):
-	model = Location
-	def get_queryset(self):
-		return Location.objects.all().order_by('name')
-
-class LocationWidget(SimpleBaseWidget):
-	model = Location
-	def get_queryset(self):
-		return Location.objects.all().order_by('name')
 
 class PersonWidget(SimpleBaseWidget):
 	model = Person
@@ -33,10 +23,6 @@ class PersonsWidget(SimpleBasesWidget):
 	def get_queryset(self):
 		return Person.objects.all().order_by('name')
 
-class KeywordsWidget(SimpleBasesWidget):
-	model = Keyword
-	def get_queryset(self):
-		return Keyword.objects.all().order_by('name')
 
 class GenderWidget(SimpleBaseWidget):
 	model = Gender

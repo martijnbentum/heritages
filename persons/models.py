@@ -1,8 +1,6 @@
 from django.db import models
 from utilities.models import SimpleModel
-
-class MusicType(SimpleModel):
-	pass
+from utils.model_util import info
 
 
 def make_simple_model(name):
@@ -14,7 +12,7 @@ names = names.split(',')
 for name in names:
 	make_simple_model(name)
 
-class Person(models.Model):
+class Person(models.Model, info):
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	name = models.CharField(max_length=1000,default='')
 	gender= models.ForeignKey(Gender,**dargs)

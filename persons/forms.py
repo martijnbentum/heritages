@@ -1,8 +1,13 @@
 from django import forms
 from django.forms import ModelForm, modelform_factory
-from .models import Person,Gender,Nationality,Occupation,Affiliation,Location,Keyword
-from .widgets import GenderWidget, LocationWidget, OccupationWidget 
-from .widgets import AffiliationWidget, NationalityWidget, KeywordsWidget
+from .models import Person,Gender,Nationality,Occupation,Affiliation
+from .widgets import GenderWidget, OccupationWidget 
+from .widgets import AffiliationWidget, NationalityWidget 
+
+from locations.models import Location
+from locations.widgets import LocationWidget, LocationsWidget
+from misc.models import Famine, Language, Keyword
+from misc.widgets import FaminesWidget, LanguagesWidget, KeywordsWidget
 
 dattr = {'attrs':{'style':'width:100%'}}
 dchar = {'widget':forms.TextInput(**dattr),'required':False}

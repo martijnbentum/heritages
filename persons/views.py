@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .forms import PersonForm,GenderForm,NationalityForm,OccupationForm
 from .forms import AffiliationForm,LocationForm,KeywordForm
-from utilities.views import edit_model, add_simple_model, list_view
+from utilities.views import edit_model, add_simple_model, list_view, delete_model
 
 
 
@@ -18,7 +18,7 @@ def create_simple_view(name):
 	c += '\treturn add_simple_model(request,__name__,"'+name+'","persons","add '+name+'")'
 	return exec(c,globals())
 
-#create simple forms for the following models
+#create simple views for the following models
 names = 'Gender,Nationality,Occupation,Affiliation,Location,Keyword'
 for name in names.split(','):
 	create_simple_view(name)
@@ -38,6 +38,6 @@ def add_keyword(request):
 '''
 
 def delete(request, pk, model_name):
-	return delete_model(request, __name__, model_name,'sources',pk)
+	return delete_model(request, __name__, model_name,'persons',pk)
 
 # Create your views here.
