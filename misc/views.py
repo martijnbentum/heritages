@@ -1,0 +1,40 @@
+from django.shortcuts import render
+from .forms import FamineForm,FamineNameForm,LanguageForm
+from .forms import CausalTriggerForm,KeywordForm
+from utilities.views import edit_model, add_simple_model, list_view
+
+
+def create_simple_view(name):
+	'''Create a simple view based on the Model name. 
+	Assumes the form only has a name field.
+	'''
+	c = 'def add_'+name.lower()+'(request):\n'
+	c += '\treturn add_simple_model(request,__name__,"'+name+'","misc","add_'+name+'")'
+	return exec(c,globals())
+
+#create simple views for the following models
+names = 'CausalTrigger,FamineName,Keyword,Location,Language'
+for name in names.split(','):
+	create_simple_view(name)
+
+
+
+def edit_famine(request,pk=None,focus='',view='complete'):
+	print(pk,focus,view,123456,request)
+	return edit_model(request,__name__,'Famine','misc',pk,focus=focus,view=view)
+
+
+'''
+def add_location(request):
+	return add_simple_model(request,__name__,'Location','sources','add location')
+
+def add_keyword(request):
+	return add_simple_model(request,__name__,'Keyword','sources','add keyword')
+'''
+
+def delete(request, pk, model_name):
+	return delete_model(request, __name__, model_name,'misc',pk)
+
+# Create your views here.
+
+# Create your views here.
