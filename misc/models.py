@@ -45,5 +45,22 @@ class Language(models.Model, info):
 		return self.name
 		
 	
+
+class KeywordRelation(models.Model, info):
+	'''defines a hierarchy of keywords, e.g. women is a member of people.'''
+	container = models.ForeignKey('Keyword', related_name='container',
+									on_delete=models.CASCADE, default=None)
+	contained = models.ForeignKey('Keyword', related_name='contained',
+									on_delete=models.CASCADE, default=None)
+
+	def __str__(self):
+		'''deleting a Location can resultin an error due to the easy audit app.
+		it needed the string representation of this model, while the Location instance
+		did not exist anymore '''
+		try:return self.contained.name + ' is a member of: ' + self.container.name
+		except:return ''
+
+	class Meta:
+		unique_together = ('container','contained')
 	
 # Create your models here.

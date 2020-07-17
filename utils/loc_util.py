@@ -78,7 +78,7 @@ class country_info(info):
 		self.location = Location(
 			geonameid = self.geonameid,
 			name = self.country,
-			location_type = LocationType.objects.get(name='city'),
+			location_type = LocationType.objects.get(name='country'),
 			location_status = LocationStatus.objects.get(name='non-fiction'),
 			location_precision= LocationPrecision.objects.get(name='exact'),
 			information = str(self.__dict__),
@@ -296,12 +296,14 @@ def make_locations(countries='default', min_size_cities = 5000, save = True):
 
 def make_locationrelations():
 	glr = [] 
-	country_locations = Location.objects.filter(location_type='country')
-	city_locations = Location.objects.filter(location_type='city')
+	city_id = LocationType.objects.get(name='city').id
+	country_id = LocationType.objects.get(name='country').id
+	country_locations = Location.objects.filter(location_type=country_id)
+	city_locations = Location.objects.filter(location_type=city_id)
 	for country in country_locations:
 		cloc = []
 		for c in city_locations:
-			try: ccountry = eval(c.info)['country']
+			try: ccountry = eval(c.information)['country']
 			except: continue
 			if country.name == ccountry: cloc.append(c)
 		glr.extend([LocationRelation(container=country,contained=city)
