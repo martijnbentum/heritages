@@ -43,6 +43,8 @@ INSTALLED_APPS = [
 	'easyaudit',
 	'django_select2',
 	'accounts.apps.AccountsConfig',
+	'locations.apps.LocationsConfig',
+	'misc.apps.MiscConfig',
 	'persons.apps.PersonsConfig',
 	'sources.apps.SourcesConfig',
 	'utilities.apps.UtilitiesConfig',

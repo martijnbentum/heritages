@@ -21,8 +21,10 @@ urlpatterns = [
 	path('',include('sources.urls')),
 	path('accounts/',include('accounts.urls')),
 	path('accounts/',include('django.contrib.auth.urls')),
-	path('sources/',include('sources.urls')),
+	path('locations/',include('locations.urls')),
+	path('misc/',include('misc.urls')),
 	path('persons/',include('persons.urls')),
+	path('sources/',include('sources.urls')),
 	path('utilities/',include('utilities.urls')),
 	re_path(r'^select2/',include('django_select2.urls'))
 ]
