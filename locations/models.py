@@ -85,12 +85,12 @@ class Location(models.Model, info):
 
 	@property
 	def contained_by_country(self):
-		if self.location_type == 'COUNTRY' or self.location_type == 'CONTINENT':
+		if self.location_type.name == 'country' or self.location_type.name == 'continent':
 			return ''
 		output = []
 		for location in self.contained.all():
 			container= location.container
-			if container.location_type == 'COUNTRY': output.append(container.name)
+			if container.location_type.name == 'country': output.append(container.name)
 		return ','.join(list(set(output)))
 
 	@property
