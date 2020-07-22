@@ -6,6 +6,8 @@ __init__.py
 sources/migrations/
 persons/migrations/
 utilities/migrations/
+misc/migrations/
+locations/migrations/
 .env
 requirements.txt
 .gitignore
