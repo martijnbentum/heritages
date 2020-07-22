@@ -18,12 +18,11 @@ class FamineWidget(SimpleBaseWidget):
 	def get_queryset(self):
 		return Famine.objects.all().order_by('name')
 
-class FaminesWidget(ModelSelect2MultipleWidget):
+class FaminesWidget(SimpleBasesWidget):
 	model = Famine
-	search_fields = ['name__icontains']
 
 	def label_from_instance(self,obj):
-		return obj.name
+		return ', '.join([n.name for n in obj.names.all()])
 
 	def get_queryset(self):
 		return Famine.objects.all().order_by('names')
@@ -51,6 +50,13 @@ class CausalTriggersWidget(SimpleBasesWidget):
 
 class KeywordsWidget(SimpleBasesWidget):
 	model = Keyword
+	
+	def label_from_instance(self,obj):
+		relations = obj.contained.all()
+		if relations:
+			return obj.name + ' | ' + ', '.join([r.container.name for r in relations])
+		else: return obj.name
+
 	def get_queryset(self):
 		return Keyword.objects.all().order_by('name')
 
