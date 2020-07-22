@@ -3,18 +3,17 @@ from django.forms import ModelForm, modelform_factory
 from .models import Person,Gender,Nationality,Occupation,Affiliation
 from .widgets import GenderWidget, OccupationWidget 
 from .widgets import AffiliationWidget, NationalityWidget 
-
 from locations.models import Location
 from locations.widgets import LocationWidget, LocationsWidget
 from misc.models import Famine, Language, Keyword
 from misc.widgets import FaminesWidget, LanguagesWidget, KeywordsWidget
+from utilities.forms import make_select2_attr
 
 dattr = {'attrs':{'style':'width:100%'}}
 dchar = {'widget':forms.TextInput(**dattr),'required':False}
 dchar_required = {'widget':forms.TextInput(**dattr),'required':True}
 dtext = {'widget':forms.Textarea(attrs={'style':'width:100%','rows':3}),'required':False}
-dselect2 = {'attrs':{'data-placeholder':'Select by name...','style':'width:100%',
-	'class':'searching'}}
+dselect2 = make_select2_attr(input_length = 0)
 mft = {'fields':('name',),'widgets':{'name':forms.TextInput(dattr)}}
 
 

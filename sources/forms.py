@@ -17,15 +17,17 @@ from misc.models import Famine, Language, Keyword
 from misc.widgets import FaminesWidget, LanguagesWidget, KeywordsWidget
 from persons.models import Person
 from persons.widgets import PersonWidget, PersonsWidget
+from utilities.forms import make_select2_attr
+
 
 #setting default kwargs for to clean up form definition
 dattr = {'attrs':{'style':'width:100%'}}
 dchar = {'widget':forms.TextInput(**dattr),'required':False}
 dchar_required = {'widget':forms.TextInput(**dattr),'required':True}
 dtext = {'widget':forms.Textarea(attrs={'style':'width:100%','rows':3}),'required':False}
-dselect2 = {'attrs':{'data-placeholder':'Select by name...','style':'width:100%',
-	'class':'searching'}}
+dselect2 = make_select2_attr(input_length = 0)
 mft = {'fields':('name',),'widgets':{'name':forms.TextInput(dattr)}}
+
 
 def create_simple_form(name):
 	'''Create a simple model form based on the Model name. 
