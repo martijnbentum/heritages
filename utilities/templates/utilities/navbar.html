@@ -13,24 +13,24 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href=
-			"{% url 'sources:music' %}">music</a>
-          <a class="dropdown-item" href=
-			"{% url 'sources:film' %}">film</a>
-          <a class="dropdown-item" href=
 			"{% url 'sources:image' %}">image</a>
-          <a class="dropdown-item" href=
-			"{% url 'sources:text' %}">text</a>
           <a class="dropdown-item" href=
 			"{% url 'sources:infographic' %}">infographic</a>
           <a class="dropdown-item" href=
-			"{% url 'sources:picturestory' %}">picturestory</a>
-          <div class="dropdown-divider"></div>
+			"{% url 'sources:film' %}">film</a>
           <a class="dropdown-item" href=
-			"{% url 'utilities:list_view' 'Person' 'persons' %}">person</a>
+			"{% url 'sources:music' %}">music</a>
+          <a class="dropdown-item" href=
+			"{% url 'sources:picturestory' %}">picturestory</a>
+          <a class="dropdown-item" href=
+			"{% url 'sources:text' %}">text</a>
+          <div class="dropdown-divider"></div>
           <a class="dropdown-item" href=
 			"{% url 'utilities:list_view' 'Famine' 'misc' %}">famine</a>
           <a class="dropdown-item" href=
 			"{% url 'utilities:list_view' 'Location' 'locations' %}">location</a>
+          <a class="dropdown-item" href=
+			"{% url 'utilities:list_view' 'Person' 'persons' %}">person</a>
 			
         </div>
       </li>
@@ -41,24 +41,24 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href=
-			"{% url 'sources:add_infographic' %}">infographic</a>
-          <a class="dropdown-item" href=
-			"{% url 'sources:add_picture_story' %}">picture story</a>
-          <a class="dropdown-item" href=
 			"{% url 'sources:add_image' %}">image</a>
           <a class="dropdown-item" href=
-			"{% url 'sources:add_text' %}">text</a>
+			"{% url 'sources:add_infographic' %}">infographic</a>
+          <a class="dropdown-item" href=
+			"{% url 'sources:add_film' %}">film</a>
           <a class="dropdown-item" href=
 			"{% url 'sources:add_music' %}">music</a>
           <a class="dropdown-item" href=
-			"{% url 'sources:add_film' %}">film</a>
-          <div class="dropdown-divider"></div>
+			"{% url 'sources:add_picture_story' %}">picture story</a>
           <a class="dropdown-item" href=
-			"{% url 'persons:add_person' %}">person</a>
+			"{% url 'sources:add_text' %}">text</a>
+          <div class="dropdown-divider"></div>
           <a class="dropdown-item" href=
 			"{% url 'misc:add_famine' %}">famine</a>
           <a class="dropdown-item" href=
 			"{% url 'locations:add_location' %}">location</a>
+          <a class="dropdown-item" href=
+			"{% url 'persons:add_person' %}">person</a>
         </div>
       </li>
 
