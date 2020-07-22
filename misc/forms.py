@@ -5,13 +5,13 @@ from locations.models import Location
 from .widgets import FamineNameWidget,FamineNamesWidget, FamineWidget, CausalTriggerWidget 
 from .widgets import CausalTriggersWidget, KeywordsWidget
 from locations.widgets import LocationsWidget
+from utilities.forms import make_select2_attr
 
 dattr = {'attrs':{'style':'width:100%'}}
 dchar = {'widget':forms.TextInput(**dattr),'required':False}
 dchar_required = {'widget':forms.TextInput(**dattr),'required':True}
 dtext = {'widget':forms.Textarea(attrs={'style':'width:100%','rows':3}),'required':False}
-dselect2 = {'attrs':{'data-placeholder':'Select by name...','style':'width:100%',
-	'class':'searching'}}
+dselect2 = make_select2_attr(input_length=0)
 mft = {'fields':('name',),'widgets':{'name':forms.TextInput(dattr)}}
 
 
@@ -34,7 +34,7 @@ class FamineForm(ModelForm):
 		required=False)
 	locations= forms.ModelMultipleChoiceField(
 		queryset=Location.objects.all(),
-		widget = LocationsWidget(**dselect2),
+		widget = LocationsWidget(**make_select2_attr(input_length=2)),
 		required=False)
 	causal_triggers= forms.ModelMultipleChoiceField(
 		queryset=CausalTrigger.objects.all(),
@@ -51,5 +51,6 @@ class FamineForm(ModelForm):
 	class Meta:
 		model = Famine
 		fields = 'names,locations,estimated_excess_mortality,causal_triggers,description,comments'
+		fields += ',keywords'
 		fields = fields.split(',')
 
