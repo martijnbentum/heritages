@@ -2,12 +2,14 @@ from django.db import models
 from persons.models import Person
 from utilities.models import SimpleModel
 from utils.model_util import info
+from misc.models import Keyword, Language
+from locations.models import Location
 
 
 def make_simple_model(name):
 	exec('class '+name + '(SimpleModel):\n\tpass',globals())
 
-names = 'MusicType,Language,Famine,Collection,Rated,Commissioner,Location,Keyword'
+names = 'MusicType,Famine,Collection,Rated,Commissioner'
 names += ',FilmCompany,FilmType,TargetAudience,PublishingOutlet,Available,ImageType'
 names += ',InfographicType,PictureStoryType,TextType,Publisher,RequestUsePermission'
 names = names.split(',')

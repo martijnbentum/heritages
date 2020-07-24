@@ -1,13 +1,14 @@
 from django.db import models
 from utilities.models import SimpleModel
 from utils.model_util import info
-from misc.models import Location
+from misc.models import Keyword
+from locations.models import Location
 
 
 def make_simple_model(name):
 	exec('class '+name + '(SimpleModel):\n\tpass',globals())
 
-names = 'Gender,Nationality,Occupation,Affiliation,Keyword'
+names = 'Gender,Nationality,Occupation,Affiliation'
 names = names.split(',')
 
 for name in names:
