@@ -57,8 +57,8 @@ class LocationsWidget(ModelSelect2MultipleWidget):
 			m = obj.name + ' | ' + obj.country
 			if obj.region != '':
 				m += ' | ' +obj.region
-		else: m = obj.name
-		m += ' | ' + obj.gps
+		else: m = obj.name + ' | ' + obj.gps
+		
 		return m
 
 	def get_queryset(self):
