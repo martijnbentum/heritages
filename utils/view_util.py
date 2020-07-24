@@ -2,6 +2,15 @@ from django.apps import apps
 import inspect
 import sys
 from easyaudit.models import CRUDEvent
+from django.db.models.signals import pre_save,post_save,m2m_changed
+from django.dispatch import receiver
+import datetime
+from utils import signal_util
+
+
+
+# model2m2mreceiver('Famine','misc')
+# make_m2mreceiver('Famine.locations.through','famine','locations')
 
 def get_modelform(namespace,modelform_name):
 	temp = sys.modules[namespace]
@@ -104,7 +113,12 @@ class Crud:
 	def get_crud_events(self):
 		events= CRUDEvent.objects.filter(
 			content_type__model=self.model_name,object_id=self.instance.pk)
-		self.events = [Event(e) for e in events]
+		o = []
+		for e in events:
+			if not e.changed_fields: e.delete()
+			else: o.append(e)
+		self.events = [Event(e) for e in o]
+		
 
 	def __lt__(self,other):
 		if len(self.events) == 0: return True
@@ -139,7 +153,7 @@ class Crud:
 
 	@property
 	def updates(self):
-		return [e for e in self.events if e.type =='Update']
+		return [e for e in self.events]
 
 
 	@property
