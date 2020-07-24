@@ -13,6 +13,11 @@
 		{% include 'utilities/save.html' %}
 	</div>
 	<hr>
+	{% if 'Edit' in page_name and 'unknown' not in crud.last_update %}
+		{% include 'utilities/change_log.html' %}
+		{% else %} <p class="mb-4"></p>
+	{% endif %}
+
 	<table class="table table-borderless table-sm">
 	<tr class="d-flex">
 		<td class="col-2">Title English</th>
