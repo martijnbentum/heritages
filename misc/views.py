@@ -35,6 +35,4 @@ def add_keyword(request):
 def delete(request, pk, model_name):
 	return delete_model(request, __name__, model_name,'misc',pk)
 
-# Create your views here.
 
-# Create your views here.
