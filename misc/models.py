@@ -27,6 +27,9 @@ class Famine(models.Model, info):
 	comments = models.TextField(default='')
 	keywords= models.ManyToManyField(Keyword,blank=True)
 
+	def __str__(self):
+		return self.names_str
+
 	@property
 	def names_str(self):
 		return expose_m2m(self,'names','name')
@@ -34,6 +37,7 @@ class Famine(models.Model, info):
 	@property
 	def locations_str(self):
 		return expose_m2m(self,'locations','name')
+
 
 
 		
