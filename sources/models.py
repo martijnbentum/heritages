@@ -35,6 +35,7 @@ class Source(models.Model):
 	date_released = 1
 	commissioned_by = models.ForeignKey(Commissioner,**dargs)
 	source_link = models.CharField(max_length=1000,default='')
+	flag = models.BooleanField(default = False)
 
 	class Meta:
 		abstract = True

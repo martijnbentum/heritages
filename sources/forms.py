@@ -48,7 +48,7 @@ for name in names.split(','):
 # set in the children forms Meta class as well (I think)
 source_fields = 'famines,title_english,title_original,collection,publishing_outlet'
 source_fields += ',available,request_use_permission,rated,keywords,description'
-source_fields += ',comments,commissioned_by,source_link'
+source_fields += ',comments,commissioned_by,source_link,flag'
 
 class SourceForm(ModelForm):
 	famines = forms.ModelMultipleChoiceField(
