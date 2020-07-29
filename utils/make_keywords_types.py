@@ -73,7 +73,7 @@ def make_simple_models():
 	available = 'sources','Available','available on site,available through link,unavailable'
 	gender = 'persons','Gender','male,female,unknown,other'
 	request_use_permission = 'sources','RequestUsePermission','yes,no'
-	target_audience = 'sources','TargetAudience','national,internation,both'
+	target_audience = 'sources','TargetAudience','national,international,both'
 	rated = 'sources','Rated','general,<14,14+'
 	o = []
 	for sm in [available,gender,request_use_permission,target_audience,rated]:
