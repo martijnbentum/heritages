@@ -1,0 +1,55 @@
+{% if form.flag.value == True %}
+<a class="btn btn-link btn-sm ml-auto" id="flag" style="color:#ff4940" onclick="toggleFlag()">
+{% else %}
+<a class="btn btn-link btn-sm ml-auto" id="flag" style="color:#cad2de" onclick="toggleFlag()">
+{%endif%}
+<i class="fa fa-flag"></i></a>
+
+<div style="display:none;">{{form.flag}}</div>
+
+<script>
+	function setFlagOld() {
+		var muted = '#cad2de'
+		var strong = '#ff4940'
+		var x = document.getElementById("flag");
+		color = RGBToHex(x.style.color);
+		if (color == strong) {
+			x.style.color = muted;}
+		else {
+			x.style.color = strong;}
+		flag = document.getElementById("id_flag");
+		console.log(flag.checked);
+	}
+	
+
+	function toggleFlag() {
+		var muted = '#cad2de'
+		var strong = '#ff4940'
+		var flag = document.getElementById("id_flag");
+		var x = document.getElementById("flag");
+		if (flag.checked == true) {
+			flag.checked = false;
+			x.style.color = muted;}
+		else {
+			flag.checked = true;
+			x.style.color = strong;}
+		}
+
+function RGBToHex(color) {
+	var r,g,b;
+	[r,g,b] = color.substring(4,color.length-1).split(',');
+  r = parseInt(r).toString(16);
+  g = parseInt(g).toString(16);
+  b = parseInt(b).toString(16);
+
+  if (r.length == 1)
+    r = "0" + r;
+  if (g.length == 1)
+    g = "0" + g;
+  if (b.length == 1)
+    b = "0" + b;
+
+  return "#" + r + g + b;
+}
+
+</script>

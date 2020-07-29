@@ -5,6 +5,7 @@ from . import views
 
 app_name = 'locations'
 urlpatterns = [
+	path('map/',views.map, name='map'),
 	path('add_location/',views.edit_location, name='add_location'),
 	path('add_location/<str:view>', views.edit_location, 
 		name='add_location'),

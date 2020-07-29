@@ -39,6 +39,10 @@ def location_list(request):
 	'''list view of locations.'''
 	return list_view(request, 'Location', 'locations')
 
+def map(request):
+	args = {'page_name':'map'}
+	return render(request,'locations/map.html',args)
+
 
 def edit_location(request, pk=None, focus = '', view='complete'):
 	print(view)
