@@ -66,6 +66,7 @@ def queryset2maplist(qs,roles = [],perturbe= False,combine =False):
 	'''Create a list of lists with information to create leaflet popups from a queryset.'''
 	o = []
 	for i,instance in enumerate(qs):
+		if not instance.latlng: continue
 		for latlng in instance.latlng:
 			name = instance2name(instance).lower()
 			popup = instance.pop_up
