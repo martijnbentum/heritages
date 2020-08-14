@@ -1,0 +1,51 @@
+<script>
+var bookIcon = L.divIcon({
+	className:'book',
+	html:'<a style="color:#1d3c45;"><i class="fa fa-book" aria-hidden="true"></i></a>' 
+	})
+var comicIcon = L.divIcon({
+	className:'dot',
+	html:'<a style="color:#30a1c2;"><i class="fa fa-star" aria-hidden="true"></i></a>'
+	})
+var dotIcon = L.divIcon({
+	className:'dot',
+	html:'<a style="color:black;"><i class="fa fa-circle" aria-hidden="true"></i></a>'
+	})
+var dotIcon = L.divIcon({
+	className:'dot',
+	html:'<a style="color:black;"><i class="fas fa-map-marker-alt"></i></i></a>'
+	})
+var imageIcon = L.divIcon({
+	className:'image',
+	html:'<a style="color:#1d3c45;"><i class="fa fa-picture-o" aria-hidden="true"></i></a>' 
+	})
+var infographicIcon = L.divIcon({
+	className:'image',
+	html:'<a style="color:#1d3c45;"><i class="fa fa-bar-chart" aria-hidden="true"></i></a>' 
+	})
+var famineIcon = L.divIcon({
+	className:'famine',
+	html:'<a style="color:#1d3c45;"><i class="fas fa-exclamation" aria-hidden="true"></i></a>' 
+	})
+var filmIcon = L.divIcon({
+	className:'film',
+	html:'<a style="color:#1d3c45;"><i class="fa fa-video-camera" aria-hidden="true"></i></a>' 
+	})
+var musicIcon = L.divIcon({
+	className:'music',
+	html:'<a style="color:#1d3c45;"><i class="fa fa-music" aria-hidden="true"></i></a>' 
+	})
+var personIcon = L.divIcon({
+	className:'image',
+	html:'<a style="color:#1d3c45;"><i class="fa fa-male" aria-hidden="true"></i></a>' 
+	})
+
+var iconDict = {};
+var names = 'book,comic,dot,image,infographic,famine,film,music,person'.split(',');
+var values = [bookIcon,comicIcon,dotIcon,imageIcon,infographicIcon,famineIcon,filmIcon,musicIcon,personIcon];
+for (i = 0; i<names.length; i++) {
+	iconDict[names[i]] = values[i]}
+console.log(iconDict);
+console.log(iconDict['book']);
+console.log(bookIcon);
+</script>
