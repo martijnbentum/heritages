@@ -106,8 +106,8 @@ class Film(Source, info):
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	language_original = models.ForeignKey(Language,**dargs,related_name='film_language_original')
 	language_subtitle = models.ForeignKey(Language,**dargs,related_name='film_language_subtitle')
-	writers = models.ManyToManyField(Person,blank=True, related_name='film_writers')
-	directors = models.ManyToManyField(Person,blank=True, related_name='film_directors')
+	writers = models.ManyToManyField(Person,blank=True, related_name='film_writers_set')
+	directors = models.ManyToManyField(Person,blank=True, related_name='film_directors_set')
 	film_company = models.ForeignKey(FilmCompany,**dargs)
 	locations_shot = models.ManyToManyField(Location,blank=True, related_name='film_location_shot')
 	locations_released= models.ManyToManyField(Location,blank=True, 
