@@ -40,3 +40,5 @@ def id_generator(id_type= 'letters', length = 9):
 		return ''.join(random.sample(string.ascii_letters*length,length))
 	if id_type == 'numbers':
 		return int(''.join(random.sample('123456789'*length,length)))
+
+

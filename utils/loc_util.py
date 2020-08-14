@@ -341,6 +341,7 @@ def make_database_defaults():
 	make_locationstatus()
 	make_locationprecision()
 	make_locations()
+	make_locationrelations()
 	make_database_languages()
 
 def add_geoloactions_country(country):
