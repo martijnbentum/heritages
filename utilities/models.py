@@ -77,7 +77,7 @@ def instance2map_buttons(instance):
 	app_name,model_name= instance2names(instance)
 	m = ''
 	m += '<a class = "btn btn-link btn-sm mt-1 pl-0 text-dark" href='
-	m += '/edit_' + model_name.lower()+'/' + str(instance.pk) +'/'
+	m += '/'+app_name+'/edit_' + model_name.lower()+'/' + str(instance.pk) +'/'
 	m += ' role="button"><i class="far fa-edit"></i></a>'
 	m += '<a class = "btn btn-link btn-sm mt-1 pl-0 text-dark" href='
 	m += '/locations/show_links/'+app_name+'/'+ model_name.lower()+'/' + str(instance.pk) +'/'
@@ -86,7 +86,7 @@ def instance2map_buttons(instance):
 
 
 names = 'text,picturestory,dot,image,infographic,famine,film,music,person'.split(',');
-colors = '#55b7d4,#5aa5c4,black,#3845f5b,#e04eed,#ed4c72,#1e662a,#db2528,#e39817'.split(',')
+colors = '#0fba62,#5aa5c4,black,#345beb,#e04eed,#ed4c72,#1e662a,#c92f04,#e39817'.split(',')
 icons ='fa fa-book,fa fa-star,fa fa-circle,fa fa-picture-o'
 icons +=',fa fa-bar-chart,fas fa-exclamation,fa fa-video-camera,fa fa-music,fa fa-male'
 icons = ['<i class="'+icon+' fa-lg mt-2" aria-hidden="true"></i>' for icon in icons.split(',')]
