@@ -1,0 +1,170 @@
+{% extends "utilities/base.html" %}
+
+{% load getattribute %}
+
+{% block head %}
+	<title>{{page_name}}</title>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+	integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+	crossorigin=""/>
+	<!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+   integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+   crossorigin=""></script>
+	<style>
+		#mapid {height: 900px;}
+	</style>
+{% endblock %}
+
+{% block content %}
+{% include 'locations/icons.html' %}
+{{l.0}}hallo
+{{l}}
+{{a}}
+<p>{{a|get_value_from_dict:'a'|default_if_none:""}}</p>
+<div id="mapid" class="mt-0"></div>
+
+
+<script>
+	var mymap = L.map('mapid').setView([52.0055328,5.7565177],7);
+
+	const attribution = 
+		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors &copy; <a href="https://carto.com/attribution">CARTO</a>'
+	const tileUrl = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
+	
+
+
+	
+	const tiles = L.tileLayer(tileUrl,{attribution});
+	tiles.addTo(mymap);
+
+	var marker = L.marker([52.0055328,5.7565177],{icon:bookIcon})
+	marker.addTo(mymap);
+	marker.bindPopup('text iconsleifjs;laiejae fjl;seijf ;lsejfl seijf sleijfselifjsl ;e ijfsel;jfsleijf selijfs leij fs;eli jfsl;ei fjsl;ei jfslk jfskdvdxlkvnslvjewvslnvd;lkv;lsdkvsi eisj fsej slkvz;ldkvxl kfnvl;zisjvoisv l;kszv;lszijv lz;skdvl ;kszfl;kszdv;ldsv;lsijf  osieajflksdvl;k dsfjlksj f;wejf ;laskj fesijfwea;ljfsl e;fj lsk;aejflseaj gejflskeajf <h4>saekjf s;ale</h4>');
+
+	var marker = L.marker([50.0055328,4.7565177],{icon:musicIcon})
+	marker.addTo(mymap);
+	marker.bindPopup('music icon');
+
+
+	var marker = L.marker([50.0055328,4.3565177],{icon:imageIcon})
+	marker.addTo(mymap);
+	marker.bindPopup('image icon');
+
+	var marker = L.marker([50.0055328,4.1565177],{icon:infographicIcon})
+	marker.addTo(mymap);
+	marker.bindPopup('infographic icon');
+
+	var marker = L.marker([50.0055328,4.0065177],{icon:comicIcon})
+	marker.addTo(mymap);
+	marker.bindPopup('comic icon');
+
+	var marker = L.marker([50.0055328,3.8065177],{icon:personIcon})
+	marker.addTo(mymap);
+	marker.bindPopup('person icon');
+
+	var marker= L.marker([50.601,3.72],{icon:famineIcon})
+	marker.addTo(mymap);
+	marker.bindPopup('famine icon');
+
+	var marker= L.marker([13.01,14.2],{icon:dotIcon})
+	marker.addTo(mymap);
+	marker.bindPopup('book-alt icon');
+
+	marker.bindTooltip("my tooltip text").openTooltip()
+
+	var circle = L.circle([13.0055328,14.7565177], {
+		color: 'blue',
+		fillColor: 'red',
+		fillOpacity: 0.3,
+		radius: 1120}
+	)
+	circle.addTo(mymap);
+
+	var circleMarker = L.circle([13.5055328,15.7565177], {
+		color: 'purple',
+		fillColor: 'green',
+		fillOpacity: 0.7,
+		radius: 2200}
+	)
+	circleMarker.addTo(mymap);
+
+	var latlngs = [
+		[50.51, 4.68],
+		[37.77, 122.43],
+		[13.04, 14.2]
+	];
+	var polyline = L.polyline(latlngs, {
+		color: 'red',
+		dashArray:'4 6',
+		weight:2}
+		).addTo(mymap);
+
+	var popup = L.popup()
+		.setLatLng([52.8055328,5.0565177])
+		.setContent('hallo hallo hallo')
+		.openOn(mymap);
+
+	var marker = L.marker([50.0055328,4.5565177],{icon:filmIcon, className:'film{{film.pk}}'})
+	marker.on('click',ondbClick);
+	marker.addTo(mymap);
+	marker.bindPopup('{{film.pop_up|safe}}',{maxWidth:200,closeButton:false});
+
+	function ondbClick(e) {console.log(e);
+	var s = this.options.className;
+	console.log(s)
+	var a = '{{fdict|get_value_from_dict:"film2"|getattribute:"pop_up"|safe}}' 
+	console.log(a)
+	<!-- var b = JSON.parse(document.getElementById('film_dict').textContent); -->
+	console.log(this.options.icon.options.className);
+	console.log(this.options.className)} 
+
+	function onMapClick(e) {
+		<!-- alert("You clicked the map at "+e.latlng); -->
+		console.log(e.latlng);
+		console.log(e);
+		mymap.fitBounds(polygon.getBounds());
+		}
+
+	var latlngs = [
+	  [ // first polygon
+		[[37, -109.05],[41, -109.03],[41, -102.05],[37, -102.04]], // outer ring
+		[[37.29, -108.58],[40.71, -108.58],[40.71, -102.50],[37.29, -102.50]] // hole
+	  ],
+	  [ // second polygon
+		[[41, -111.03],[45, -111.04],[45, -104.05],[41, -104.05]]
+	  ]
+	];
+
+	var polygon = L.polygon(latlngs, {color: 'red'}).addTo(mymap);
+
+	var svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+	svgElement.setAttribute('xmlns', "http://www.w3.org/2000/svg");
+	svgElement.setAttribute('viewBox', "0 0 200 200");
+	svgElement.innerHTML = '<rect width="200" height="200"/><rect x="75" y="23" width="50" height="50" style="fill:red"/><rect x="75" y="123" width="50" height="50" style="fill:#0013ff"/>';
+	var svgElementBounds = [ [ 32, -130 ], [ 13, -100 ] ];
+	L.svgOverlay(svgElement, svgElementBounds).addTo(mymap);
+
+	mymap.on('click',onMapClick);
+	mymap.on('keypress',onMapClick);
+	<!-- mymap.flyTo([13,14],9); -->
+	
+</script>
+ 
+<style>
+/* css to customize Leaflet default styles  */
+.leaflet-popup-tip,
+.leaflet-popup-content-wrapper {
+    background: #e0e0e0;
+    color: #234c5e;
+	text-align:center;
+	padding:6px;
+}
+.leaflet-popup-content {
+	margin:0px;
+	padding:0px;
+}
+
+</style>
+{% endblock %}
+

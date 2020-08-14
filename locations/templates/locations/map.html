@@ -87,6 +87,7 @@ for (i = 0; i<linklist.length; i++) {
 		var polyline = L.polyline([start,end], {color:colorDict[name],
 		weight:2,opacity:0.3,className:role});
 		polyline.bindTooltip(role,{sticky:true, interactive:true});
+		console.log(polyline);
 		layerDict[name].push(polyline)
 	}
 	marker.bindTooltip(role,{sticky:true, interactive:true});
@@ -101,10 +102,12 @@ var overlayMarkers= {};
 for (const [key, value] of Object.entries(layerDict)) {
 	var color = colorDict[key]
 	var layername = '<span style="color:'+color+';">'+key+'</span>'
+	console.log(layername);
 	if ( value.length > 0) {overlayMarkers[layername]=L.layerGroup(value).addTo(mymap)};
 }
 L.control.layers({},overlayMarkers,{collapsed:false}).addTo(mymap);
 
+console.log(colorDict['image']);
 
 </script>
  
