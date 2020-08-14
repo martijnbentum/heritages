@@ -40,7 +40,7 @@ urlpatterns = [
 	path('edit_infographic/<int:pk>/<str:focus>/',views.edit_infographic, name='edit_infographic'),
 	path('edit_picture_story/<int:pk>/',views.edit_picture_story, name='edit_picture_story'),
 	path('edit_picture_story/<int:pk>/<str:focus>/',views.edit_picture_story,name='edit_picture_story'),
-	path('edit_picture_story/<int:pk>/',views.edit_picture_story, name='edit_picturestory'),
+	path('edit_picturestory/<int:pk>/',views.edit_picture_story, name='edit_picturestory'),
 	path('edit_picture_story/<int:pk>/<str:focus>/',views.edit_picture_story, name='edit_picturestory'),
 	path('delete/<int:pk>/<str:model_name>',views.delete,name='delete'),
 ]
