@@ -39,8 +39,8 @@ class Person(models.Model, info):
 	def latlng(self):
 		if self.location_field:
 			locations = field2locations(self,self.location_field)
-			return [location.gps for location in locations]
-		else: return None
+			if locations:return [location.gps for location in locations]
+		return None
 
 	@property
 	def pop_up(self):
