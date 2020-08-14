@@ -1,15 +1,18 @@
-from django.shortcuts import render
+from django.apps import apps
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views import generic
-from django.views.generic.edit import CreateView, UpdateView
+from django.shortcuts import render
 from django.urls import reverse
 from .models import Location, LocationType, LocationRelation
 from .forms import LocationForm, FastLocForm ,location_relation_formset 
 from .forms import LocationRelationForm, LocationTypeForm,LocationStatusForm,LocationPrecisionForm
-from django.forms import inlineformset_factory
 import json
 from utils.view_util import make_tabs,FormsetFactoryManager
+from utils.map_util import instance2related_locations,queryset2maplist
 from utilities.views import getfocus, list_view, delete_model, edit_model, add_simple_model
+
+from sources.models import Film, Music, Text, Image, PictureStory, Infographic
+from persons.models import Person
+from misc.models import Famine
 
 
 def make_fname(name):
@@ -39,13 +42,24 @@ def location_list(request):
 	'''list view of locations.'''
 	return list_view(request, 'Location', 'locations')
 
+
 def map(request):
-	args = {'page_name':'map'}
+	# l,fn = instance2related_locations(f)
+	maplist = queryset2maplist(get_querysets())
+	args = {'page_name':'map','maplist':maplist}
 	return render(request,'locations/map.html',args)
+
+def show_links(request,app_name,model_name,pk):
+	instance = apps.get_model(app_name,model_name).objects.get(pk=pk)
+	l, fn= instance2related_locations(instance)
+	roles = ['main']+[line[0] for line in l]
+	link_list = queryset2maplist([instance] + [i[-1] for i in l],roles)
+	args = {'page_name':'links','link_list':link_list}
+	return render(request,'locations/map.html',args)
+	
 
 
 def edit_location(request, pk=None, focus = '', view='complete'):
-	print(view)
 	return edit_model(request, __name__,'Location','locations',pk, 
 		focus = focus, view=view)
 
@@ -53,3 +67,21 @@ def edit_location(request, pk=None, focus = '', view='complete'):
 def delete(request, pk, model_name):
 	return delete_model(request, __name__,model_name,'locations',pk)
 
+
+def get_querysets(names = None):
+	'''load all queryset based on model names in names.
+	names can be list or comma seprated string 
+	each item should follow this format: app_name$model_name
+	'''
+	if not names: 
+		names = 'Film,Music,Image,Text,PictureStory,Infographic'.split(',')
+		names = ['sources$'+name for name in names]
+		names.extend('persons$Person,misc$Famine'.split(','))
+	if type(names) == str: names = names.split(',')
+	qs = []
+	for name in names:
+		app_name,model_name = name.split('$')
+		model = apps.get_model(app_name,model_name)
+		qs.extend(model.objects.all())
+	return qs
+		
