@@ -111,12 +111,14 @@ class Crud:
 		self.get_crud_events()
 
 	def get_crud_events(self):
+		'''easy audit creates events for all changes, load changes for a particular instance'''
 		events= CRUDEvent.objects.filter(
 			content_type__model=self.model_name,object_id=self.instance.pk)
 		o = []
 		for e in events:
-			if not e.changed_fields: e.delete()
-			else: o.append(e)
+			if e.get_event_type_display() == 'Create':o.append(e)
+			elif not e.changed_fields: e.delete() 
+			else: o.append(e) #store 
 		self.events = [Event(e) for e in o]
 		
 
