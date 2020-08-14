@@ -48,7 +48,7 @@ for name in names.split(','):
 # set in the children forms Meta class as well (I think)
 source_fields = 'famines,title_english,title_original,collection,publishing_outlet'
 source_fields += ',available,request_use_permission,rated,keywords,description'
-source_fields += ',comments,commissioned_by,source_link,flag'
+source_fields += ',comments,commissioned_by,source_link,flag,thumbnail'
 
 class SourceForm(ModelForm):
 	famines = forms.ModelMultipleChoiceField(
@@ -112,12 +112,16 @@ class MusicForm(SourceForm):
 		queryset=Language.objects.all(),
 		widget= LanguagesWidget(**dselect2),
 		required=False)
+	locations = forms.ModelMultipleChoiceField(
+		queryset=Location.objects.all(),
+		widget= LocationsWidget(**dselect2),
+		required=False)
 
 	class Meta:
 		model = Music
 		fields = source_fields
 		fields += ',lyrics,music_video_link,performing_artists,composers,music_type'
-		fields += ',languages'
+		fields += ',languages,locations'
 		#fields += ',date_created,date_released'
 		fields = fields.split(',')
 
@@ -165,7 +169,7 @@ class FilmForm(SourceForm):
 		model = Film
 		fields = source_fields
 		fields += ',languages_original,languages_subtitle,writers,directors,film_company'
-		fields += ',locations_shot,locations_released,target_audience,film_type'
+		fields += ',locations_shot,locations_released,target_audience,film_type,video_link'
 		#fields += ',date_created,date_released'
 		fields = fields.split(',')
 
@@ -195,12 +199,16 @@ class TextForm(SourceForm):
 		queryset=Language.objects.all(),
 		widget= LanguagesWidget(**dselect2),
 		required=False)
+	locations = forms.ModelMultipleChoiceField(
+		queryset=Location.objects.all(),
+		widget= LocationsWidget(**dselect2),
+		required=False)
 	
 	class Meta:
 		model = Text
 		fields = source_fields
 		fields += ',text_type,authors,editors,translators,publishers,text_file,excerpt_file'
-		fields += ',languages'
+		fields += ',languages,locations'
 		fields = fields.split(',')
 	
 class InfographicForm(SourceForm):
@@ -216,11 +224,15 @@ class InfographicForm(SourceForm):
 		queryset=Language.objects.all(),
 		widget= LanguagesWidget(**dselect2),
 		required=False)
+	locations = forms.ModelMultipleChoiceField(
+		queryset=Location.objects.all(),
+		widget= LocationsWidget(**dselect2),
+		required=False)
 	
 	class Meta:
 		model = Infographic
 		fields = source_fields
-		fields += ',infographic_type,creators,image_file,languages'
+		fields += ',infographic_type,creators,image_file,languages,locations'
 		fields = fields.split(',')
 
 
@@ -237,11 +249,15 @@ class ImageForm(SourceForm):
 		queryset=Location.objects.all(),
 		widget = LocationsWidget(**dselect2),
 		required=False)
+	locations = forms.ModelMultipleChoiceField(
+		queryset=Location.objects.all(),
+		widget= LocationsWidget(**dselect2),
+		required=False)
 	
 	class Meta:
 		model = Image
 		fields = source_fields
-		fields += ',image_type,creators,image_file'
+		fields += ',image_type,creators,image_file,locations'
 		fields = fields.split(',')
 
 
@@ -266,12 +282,16 @@ class PictureStoryForm(SourceForm):
 		queryset=Language.objects.all(),
 		widget= LanguagesWidget(**dselect2),
 		required=False)
+	locations = forms.ModelMultipleChoiceField(
+		queryset=Location.objects.all(),
+		widget= LocationsWidget(**dselect2),
+		required=False)
 	
 	class Meta:
 		model = PictureStory
 		fields = source_fields
 		fields += ',picture_story_type,authors,artists,publishers,image_file,excerpt_file'
-		fields += ',languages'
+		fields += ',languages,locations'
 		fields = fields.split(',')
 
 
