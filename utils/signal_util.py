@@ -28,12 +28,14 @@ def catch_m2m(instance, action, pk_set, model_name,field_name):
 	if z:
 		# the event object stores changes in the changed_fields as a dict
 		# easyaudit does not catch m2m changes, here we update the attr with m2m changes
-		event = CRUDEvent.objects.filter(content_type__model = model_name,object_id= instance.pk)[0]
-		v = {field_name:[','.join([str(n) for n in before]),','.join([str(n) for n in after])]}
-		if type(event.changed_fields) != dict: event.changed_fields = v
-		else: 
-			event.changed_fields.update(v)
-		event.save()
+		event = CRUDEvent.objects.filter(content_type__model = model_name,object_id= instance.pk)
+		if event: 
+			event = event[0]
+			v = {field_name:[','.join([str(n) for n in before]),','.join([str(n) for n in after])]}
+			if type(event.changed_fields) != dict: event.changed_fields = v
+			else: 
+				event.changed_fields.update(v)
+			event.save()
 		# print(model_name,field_name, 'before:',','.join([str(n) for n in before]))
 		# print(model_name,field_name,'after:',','.join([str(n) for n in after]))
 	
