@@ -48,6 +48,10 @@ def instance2names(instance):
 	app_name,_,model_name = s.split('.')
 	return app_name, model_name
 
+def instance2name(instance):
+	model_name = instance.__class__.__name__
+	return model_name
+
 
 def expose_m2m(instance, field_name,attr):
 	''' return a comma seperated string of attr from m2m linked model. '''
@@ -56,3 +60,38 @@ def expose_m2m(instance, field_name,attr):
 	for item in m2m.all():
 		n.append(getattr(item,attr))
 	return ','.join(n)
+
+
+def instance2color(instance):
+	name = instance2name(instance).lower()
+	if name in color_dict.keys(): return color_dict[name]
+	else: return 'black'
+
+def instance2icon(instance):
+	name = instance2name(instance).lower()
+	if name in icon_dict.keys(): 
+		return icon_dict[name]
+	return 'not found'
+
+def instance2map_buttons(instance):
+	app_name,model_name= instance2names(instance)
+	m = ''
+	m += '<a class = "btn btn-link btn-sm mt-1 pl-0 text-dark" href='
+	m += '/edit_' + model_name.lower()+'/' + str(instance.pk) +'/'
+	m += ' role="button"><i class="far fa-edit"></i></a>'
+	m += '<a class = "btn btn-link btn-sm mt-1 pl-0 text-dark" href='
+	m += '/locations/show_links/'+app_name+'/'+ model_name.lower()+'/' + str(instance.pk) +'/'
+	m += ' role="button"><i class="fas fa-project-diagram"></i></a>'
+	return m
+
+
+names = 'text,picturestory,dot,image,infographic,famine,film,music,person'.split(',');
+colors = '#55b7d4,#5aa5c4,black,#3845f5b,#e04eed,#ed4c72,#1e662a,#db2528,#e39817'.split(',')
+icons ='fa fa-book,fa fa-star,fa fa-circle,fa fa-picture-o'
+icons +=',fa fa-bar-chart,fas fa-exclamation,fa fa-video-camera,fa fa-music,fa fa-male'
+icons = ['<i class="'+icon+' fa-lg mt-2" aria-hidden="true"></i>' for icon in icons.split(',')]
+color_dict,icon_dict ={}, {}
+for i,name in enumerate(names):
+	color_dict[name] = colors[i]
+	icon_dict[name] = icons[i]
+
