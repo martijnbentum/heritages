@@ -10,7 +10,7 @@ from .widgets import CollectionWidget,PublishingOutletWidget,AvailableWidget, Te
 from .widgets import RatedWidget,CommissionerWidget,MusicTypeWidget, FilmCompanyWidget
 from .widgets import ImageTypeWidget, InfographicTypeWidget,FilmTypeWidget, PublisherWidget
 from .widgets import RequestUsePermissionWidget, PublishersWidget
-from .widgets import TargetAudienceWidget
+from .widgets import TargetAudienceWidget, PictureStoryTypeWidget
 from locations.models import Location
 from locations.widgets import LocationWidget, LocationsWidget
 from misc.models import Famine, Language, Keyword
@@ -263,8 +263,8 @@ class ImageForm(SourceForm):
 
 class PictureStoryForm(SourceForm):
 	picture_story_type= forms.ModelChoiceField(
-		queryset=ImageType.objects.all(),
-		widget = ImageTypeWidget(**dselect2),
+		queryset=PictureStoryType.objects.all(),
+		widget = PictureStoryTypeWidget(**dselect2),
 		required=False)
 	authors = forms.ModelMultipleChoiceField(
 		queryset=Person.objects.all(),
