@@ -138,9 +138,10 @@ class Image(Source):
 	@property
 	def pop_up(self):
 		m = self._pop_up
-		m += '<a class = "btn btn-link btn-sm mt-1 pl-0 text-dark" target="_blank" href='
-		m += self.image_file
-		m += 'role="button"><i class="fas fa-play"></i></a>'
+		if self.image_file.name:
+			m += '<a class = "btn btn-link btn-sm mt-1 pl-0 text-dark" target="_blank" href='
+			m += self.image_file.url
+			m += 'role="button"><i class="fas fa-play"></i></a>'
 		return m
 	
 class Infographic(Source):
