@@ -75,6 +75,13 @@
 		<td class="col-2">Excerpt file</th>
 		<td class="col-9">{{form.excerpt_file}} {{form.excerpt_file.error}}</td>
 	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Locations</th>
+		<td class="col-9">{{form.locations}} {{form.locations.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'locations:add_location' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
 	{% include 'utilities/add_source.html' %}
 	</table>
 		<div class="col-md-12 d-flex">
