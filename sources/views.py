@@ -4,7 +4,7 @@ from utilities.views import edit_model, add_simple_model, list_view, delete_mode
 from .forms import MusicForm, MusicTypeForm, FilmTypeForm, FilmForm, TargetAudienceForm
 from .forms import FilmCompanyForm, CollectionForm, TextForm, TextTypeForm
 from .forms import InfographicForm, InfographicTypeForm, ImageForm, ImageTypeForm
-from .forms import PictureStoryForm, PictureStoryTypeForm, PublisherForm
+from .forms import PictureStoryForm, PictureStoryTypeForm, PublisherForm, PublishingOutletForm
 from .forms import LocationForm, LanguageForm, KeywordForm
 from persons.forms import PersonForm
 
@@ -26,9 +26,9 @@ def create_simple_view(name):
 	c += '\treturn add_simple_model(request,__name__,"'+name+'","sources","add '+name+'")'
 	return exec(c,globals())
 
-#create simple forms for the following models
+#create simple views for the following models
 names = 'TextType,MusicType,ImageType,FilmType,InfographicType,PictureStoryType'
-names += ',FilmCompany,Publisher,Collection,TargetAudience'
+names += ',FilmCompany,Publisher,Collection,TargetAudience,PublishingOutlet'
 for name in names.split(','):
 	create_simple_view(name)
 

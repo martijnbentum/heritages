@@ -45,6 +45,13 @@
 			role="button"><i class="fa fa-plus"></i></a></td>
 	</tr>
 	<tr class="d-flex">
+		<td class="col-2">Publishing outlet</th>
+		<td class="col-9">{{form.publishing_outlet}} {{form.publishing_outlet.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_publishing_outlet' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
 		<td class="col-2">Source link</th>
 		<td class="col-9">{{form.source_link}} {{form.source_link.error}}</td>
 	</tr>

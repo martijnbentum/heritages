@@ -13,6 +13,7 @@ urlpatterns = [
 	path('add_picture_story/',views.edit_picture_story, name='add_picture_story'),
 	path('add_picturestory/',views.edit_picture_story, name='add_picturestory'),
 	path('add_picture_story_type/',views.add_picture_story_type, name='add_picture_story_type'),
+	path('add_publishing_outlet/',views.add_publishing_outlet, name='add_publishing_outlet'),
 	path('add_image_type/',views.add_image_type, name='add_image_type'),
 	path('add_text_type/',views.add_text_type, name='add_text_type'),
 	path('add_music_type/',views.add_music_type, name='add_music_type'),
