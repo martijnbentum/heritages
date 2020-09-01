@@ -25,7 +25,7 @@ class Person(models.Model, info):
 	date_of_death = 1
 	location_of_birth = models.ForeignKey(Location, **dargs, related_name='person_location_of_birth')
 	location_of_death = models.ForeignKey(Location, **dargs, related_name='person_location_of_death')
-	occupation = models.ForeignKey(Occupation, **dargs)
+	occupation = models.ManyToManyField(Occupation, blank=True)
 	affiliation = models.ForeignKey(Affiliation, **dargs)
 	biography_link = models.CharField(max_length=3000,default='')
 	comments = models.TextField(default='')
