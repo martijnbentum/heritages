@@ -57,7 +57,9 @@ class LocationsWidget(ModelSelect2MultipleWidget):
 			m = obj.name + ' | ' + obj.country
 			if obj.region != '':
 				m += ' | ' +obj.region
-		else: m = obj.name + ' | ' + obj.gps
+		else: 
+			if obj.gps:m = obj.name + ' | ' + obj.gps
+			else: m = obj.name 
 		
 		return m
 
