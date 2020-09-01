@@ -35,7 +35,7 @@ class LocationForm(ModelForm):
 		widget=LocationTypeWidget(**dselect2),
 		required=False)
 	location_status= forms.ModelChoiceField(
-		queryset=LocationType.objects.all().order_by('name'),
+		queryset=LocationStatus.objects.all().order_by('name'),
 		widget=LocationStatusWidget(**dselect2),
 		required=False)
 	location_precision= forms.ModelChoiceField(
