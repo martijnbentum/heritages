@@ -5,6 +5,7 @@ from misc.models import Keyword
 from locations.models import Location
 from utils.map_util import instance2related_locations, field2locations
 from utilities.models import instance2name, instance2color, instance2map_buttons
+from partial_date import PartialDateField
 
 
 def make_simple_model(name):
@@ -21,8 +22,8 @@ class Person(models.Model, info):
 	name = models.CharField(max_length=1000,default='')
 	gender= models.ForeignKey(Gender,**dargs)
 	nationality = models.ForeignKey(Nationality,**dargs)
-	date_of_birth = 1
-	date_of_death = 1
+	date_of_birth= PartialDateField(null=True,blank=True)
+	date_of_death= PartialDateField(null=True,blank=True)
 	location_of_birth = models.ForeignKey(Location, **dargs, related_name='person_location_of_birth')
 	location_of_death = models.ForeignKey(Location, **dargs, related_name='person_location_of_death')
 	occupation = models.ManyToManyField(Occupation, blank=True)

@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm, modelform_factory
 from .models import Person,Gender,Nationality,Occupation,Affiliation
-from .widgets import GenderWidget, OccupationWidget 
+from .widgets import GenderWidget, OccupationWidget,OccupationsWidget 
 from .widgets import AffiliationWidget, NationalityWidget 
 from locations.models import Location
 from locations.widgets import LocationWidget, LocationsWidget
@@ -47,9 +47,9 @@ class PersonForm(ModelForm):
 		queryset=Location.objects.all(),
 		widget = LocationWidget(**dselect2),
 		required=False)
-	occupation = forms.ModelChoiceField(
+	occupation = forms.ModelMultipleChoiceField(
 		queryset=Occupation.objects.all(),
-		widget = OccupationWidget(**dselect2),
+		widget = OccupationsWidget(**dselect2),
 		required=False)
 	affiliation= forms.ModelChoiceField(
 		queryset=Affiliation.objects.all(),
@@ -61,11 +61,13 @@ class PersonForm(ModelForm):
 		queryset=Keyword.objects.all(),
 		widget=KeywordsWidget(**dselect2),
 		required=False)
+	date_of_birth= forms.CharField(**dchar)
+	date_of_death= forms.CharField(**dchar)
 
 	class Meta:
 		model = Person
 		fields = 'name,gender,nationality,location_of_birth,location_of_birth'
 		fields += ',occupation,affiliation,biography_link,comments,keywords'
-		#fields += ',date_of_birth,date_of_death'
+		fields += ',date_of_birth,date_of_death'
 		fields = fields.split(',')
 

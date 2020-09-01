@@ -49,14 +49,15 @@ for name in names.split(','):
 source_fields = 'famines,title_english,title_original,collection,publishing_outlet'
 source_fields += ',available,request_use_permission,rated,keywords,description'
 source_fields += ',comments,commissioned_by,source_link,flag,thumbnail'
+source_fields += ',date_created,date_released'
 
 class SourceForm(ModelForm):
 	famines = forms.ModelMultipleChoiceField(
 		queryset=Famine.objects.all(),
 		widget=FaminesWidget(**dselect2),
 		required=False)
-	title_english = forms.CharField(**dchar_required)
-	title_original = forms.CharField(**dchar)
+	title_original = forms.CharField(**dchar_required)
+	title_english = forms.CharField(**dchar)
 	collection = forms.ModelChoiceField(
 		queryset=Collection.objects.all(),
 		widget= CollectionWidget(**dselect2),
@@ -88,12 +89,11 @@ class SourceForm(ModelForm):
 		widget= CommissionerWidget(**dselect2),
 		required=False)
 	source_link = forms.CharField(**dchar)
-	#date_created
-	#date_released
+	date_created= forms.CharField(**dchar)
+	date_released= forms.CharField(**dchar)
 
 	class Meta:
 		model = Source
-		#fields += ',date_created,date_released'
 		fields = source_fields.split(',')
 
 class MusicForm(SourceForm):

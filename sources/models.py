@@ -7,6 +7,7 @@ from misc.models import Keyword, Language,Famine
 from locations.models import Location
 from utilities.models import instance2name, instance2color, instance2icon, instance2map_buttons
 from utilities.models import instance2names
+from partial_date import PartialDateField
 
 
 def make_simple_model(name):
@@ -24,8 +25,8 @@ class Source(models.Model):
 	'''abstract base class for music,film,image,text,infographic,picturestory.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	famines = models.ManyToManyField(Famine, blank=True)
-	title_english = models.CharField(max_length=1000,default='')
 	title_original = models.CharField(max_length=1000,default='')
+	title_english = models.CharField(max_length=1000,default='')
 	collection = models.ForeignKey(Collection, **dargs)
 	publishing_outlet = models.ForeignKey(PublishingOutlet,**dargs)
 	available = models.ForeignKey(Available,**dargs)
@@ -34,8 +35,8 @@ class Source(models.Model):
 	keywords= models.ManyToManyField(Keyword,blank=True)
 	description = models.TextField(default='')
 	comments = models.TextField(default='')
-	date_created = 1
-	date_released = 1
+	date_created = PartialDateField(null=True,blank=True)
+	date_released = PartialDateField(null=True,blank=True)
 	commissioned_by = models.ForeignKey(Commissioner,**dargs)
 	source_link = models.CharField(max_length=1000,default='')
 	flag = models.BooleanField(default = False)

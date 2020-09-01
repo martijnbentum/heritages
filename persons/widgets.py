@@ -44,4 +44,9 @@ class OccupationWidget(SimpleBaseWidget):
 	def get_queryset(self):
 		return Occupation.objects.all().order_by('name')
 
+class OccupationsWidget(SimpleBasesWidget):
+	model = Occupation
+	def get_queryset(self):
+		return Occupation.objects.all().order_by('name')
+
 
