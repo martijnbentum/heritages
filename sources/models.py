@@ -84,6 +84,7 @@ class Music(Source,info):
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	lyrics = models.TextField(default='')
 	music_video_link = models.CharField(max_length=1000,default='')
+	album = models.CharField(max_length=1000,default='')
 	performing_artists = models.CharField(max_length=3000,default='')
 	composers = models.ManyToManyField(Person,blank=True,related_name='music_composer_set')
 	music_type = models.ForeignKey(MusicType,**dargs)

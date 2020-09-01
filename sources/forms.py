@@ -99,6 +99,7 @@ class SourceForm(ModelForm):
 class MusicForm(SourceForm):
 	lyrics = forms.CharField(**dtext)
 	music_video_link = forms.CharField(**dchar)
+	album = forms.CharField(**dchar)
 	performing_artists = forms.CharField(**dchar)
 	composers = forms.ModelMultipleChoiceField(
 		queryset=Person.objects.all(),
@@ -121,7 +122,7 @@ class MusicForm(SourceForm):
 		model = Music
 		fields = source_fields
 		fields += ',lyrics,music_video_link,performing_artists,composers,music_type'
-		fields += ',languages,locations'
+		fields += ',languages,locations,album'
 		#fields += ',date_created,date_released'
 		fields = fields.split(',')
 
