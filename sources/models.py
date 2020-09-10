@@ -11,7 +11,7 @@ from partial_date import PartialDateField
 
 
 def make_simple_model(name):
-	exec('class '+name + '(SimpleModel):\n\tpass',globals())
+	exec('class '+name + '(SimpleModel,info):\n\tpass',globals())
 
 names = 'MusicType,Collection,Rated,Commissioner'
 names += ',FilmCompany,FilmType,TargetAudience,PublishingOutlet,Available,ImageType'
@@ -127,7 +127,7 @@ class Film(Source, info):
 
 	
 
-class Image(Source):
+class Image(Source, info):
 	'''Meta data for Images related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	language_original = models.ForeignKey(Language,**dargs,related_name='image_language_original')
@@ -146,7 +146,7 @@ class Image(Source):
 			m += 'role="button"><i class="fas fa-play"></i></a>'
 		return m
 	
-class Infographic(Source):
+class Infographic(Source,info):
 	'''Meta data for infographics related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	infographic_type = models.ForeignKey(InfographicType,**dargs)
@@ -161,7 +161,7 @@ class Infographic(Source):
 		m = self._pop_up
 		return m
 
-class PictureStory(Source):
+class PictureStory(Source,info):
 	'''Meta data for picturestories (comics / graphic novels) related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	picture_story_type = models.ForeignKey(PictureStoryType,**dargs)
@@ -182,7 +182,7 @@ class PictureStory(Source):
 		m = self._pop_up
 		return m
 	
-class Text(Source):
+class Text(Source,info):
 	'''Meta data for texts related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	text_type = models.ForeignKey(TextType,**dargs)

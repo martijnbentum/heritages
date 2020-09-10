@@ -9,7 +9,7 @@ from partial_date import PartialDateField
 
 
 def make_simple_model(name):
-	exec('class '+name + '(SimpleModel):\n\tpass',globals())
+	exec('class '+name + '(SimpleModel,info):\n\tpass',globals())
 
 names = 'Gender,Nationality,Occupation,Affiliation'
 names = names.split(',')

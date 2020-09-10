@@ -8,7 +8,7 @@ from utilities.models import instance2name, instance2color, instance2icon, insta
 
 
 def make_simple_model(name):
-	exec('class '+name + '(SimpleModel):\n\tpass',globals())
+	exec('class '+name + '(SimpleModel,info):\n\tpass',globals())
 
 names = 'CausalTrigger,FamineName,Keyword'
 names = names.split(',')
