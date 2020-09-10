@@ -45,8 +45,8 @@ def list_view(request, model_name, app_name,html_name='',field_names = ''):
 		'order':s.order.order_by,'direction':s.order.direction,
 		'query':s.query.query,'nentries':s.nentries, 'list':instances,'name':name,
 		'type_name':name+'_type','app_name':app_name,'fields':field_dict.items()}
-	print(s.notes,000)
-	print(field_names, field_dict.items())
+	# print(s.notes,000)
+	# print(field_names, field_dict.items())
 	# return render(request, app_name+'/'+model_name.lower()+'_list.html',var)
 	return render(request, html_name.replace('$','/'),var)
 
