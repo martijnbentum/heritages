@@ -13,7 +13,7 @@
    crossorigin=""></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OverlappingMarkerSpiderfier-Leaflet/0.2.6/oms.min.js"></script>
 	<style>
-		#mapid {height: 900px;}
+		#mapid {height: 840px;}
 	</style>
 {% endblock %}
 
@@ -46,6 +46,7 @@ function onMapClick(e) {
 
 function make_marker(name,latlng,popup,markerid) {
 	latlng = latlng.split(',').map(Number);
+	if (latlng == 0) {return false}
 	var marker = L.marker(latlng,{icon:make_icon(name), className:markerid})
 	marker.bindPopup(popup,{maxWidth:200,closeButton:false})
 	oms.addMarker(marker);
@@ -79,6 +80,7 @@ var linklist= JSON.parse(document.getElementById('link-list').textContent);
 for (i = 0; i<linklist.length; i++) {
 	var marker = make_marker(...linklist[i]);
 	var latlng = linklist[i][1].split(',').map(Number);
+	if (latlng == 0) {continue;}
 	bounds.push(latlng);
 	var name = linklist[i][0];
 	var role = linklist[i][4];
@@ -90,7 +92,7 @@ for (i = 0; i<linklist.length; i++) {
 		console.log(polyline);
 		layerDict[name].push(polyline)
 	}
-	marker.bindTooltip(role,{sticky:true, interactive:true});
+	if (marker) {marker.bindTooltip(role,{sticky:true, interactive:true});}
 }
 <!-- set map to fit the placed markers --> 
 var polyline = L.polyline(bounds);
