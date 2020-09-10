@@ -37,6 +37,10 @@ class Person(models.Model, info):
 		return self.name
 
 	@property
+	def occupations_str(self):
+		return ', '.join([o.name for self.occupation.all()])
+
+	@property
 	def latlng(self):
 		if self.location_field:
 			locations = field2locations(self,self.location_field)
@@ -52,7 +56,7 @@ class Person(models.Model, info):
 		m += '<p class="h6 mb-0" style="color:'+instance2color(self)+';">'+self.name+'</p>'
 		m += '<hr class="mt-1 mb-0" style="border:1px solid '+instance2color(self)+';">'
 		if self.occupation:
-			m += '<p class="mt-2 mb-0">'+self.occupation.name+'</p>'
+			m += '<p class="mt-2 mb-0">'+self.occupations_str+'</p>'
 		m += instance2map_buttons(self)
 		return m
 		
