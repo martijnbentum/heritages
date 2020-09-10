@@ -33,6 +33,11 @@
 			"{% url 'utilities:list_view' 'Person' 'persons' %}">person</a>
           <a class="dropdown-item" href=
 			"{% url 'locations:map' %}">map</a>
+			<div class="dropdown-divider"></div> 
+			<a class="dropdown-item" href=
+				"{% url 'accounts:log_view' %}">log</a>
+			<a class="dropdown-item" href=
+				"{% url 'accounts:logs_view' %}">logs</a>
 			
         </div>
       </li>
