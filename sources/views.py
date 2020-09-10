@@ -22,8 +22,8 @@ def create_simple_view(name):
 	'''Create a simple view based on the Model name. 
 	Assumes the form only has a name field.
 	'''
-	c = 'def add_'+make_fname(name)+'(request):\n'
-	c += '\treturn add_simple_model(request,__name__,"'+name+'","sources","add '+name+'")'
+	c = 'def add_'+make_fname(name)+'(request,pk=None):\n'
+	c += '\treturn add_simple_model(request,__name__,"'+name+'","sources","add '+name+'",pk=pk)'
 	return exec(c,globals())
 
 #create simple views for the following models

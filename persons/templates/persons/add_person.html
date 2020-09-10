@@ -1,4 +1,5 @@
 {% extends "utilities/base.html" %}
+{% load getattribute %}
 
 {% block head %}
 	{{form.media.css}}
@@ -28,9 +29,11 @@
 	<tr class="d-flex">
 		<td class="col-2">Gender</th>
 		<td class="col-9">{{form.gender}} {{form.gender.error}}</td>
+		{% if request.user|has_group:"typemaster" %}
 		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
 			href = "{% url 'persons:add_gender' %}"
 			role="button"><i class="fa fa-plus"></i></a></td>
+		{% endif %}
 	</tr>
 	<tr class="d-flex">
 		<td class="col-2">Nationality</th>
@@ -86,9 +89,11 @@
 	<tr class="d-flex">
 		<td class="col-2">Keywords</th>
 		<td class="col-9">{{form.keywords}} {{form.keywords.error}}</td>
+		{% if request.user|has_group:"typemaster" %}
 		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
 			href = "{% url 'misc:add_keyword' %}"
 			role="button"><i class="fa fa-plus"></i></a></td>
+		{% endif %}
 	</tr>
 	</table>
 		<div class="col-md-12 d-flex">
