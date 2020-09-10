@@ -38,7 +38,7 @@ class Person(models.Model, info):
 
 	@property
 	def occupations_str(self):
-		return ', '.join([o.name for self.occupation.all()])
+		return ', '.join([o.name for o in self.occupation.all()])
 
 	@property
 	def latlng(self):
