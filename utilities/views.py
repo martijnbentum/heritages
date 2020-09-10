@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from django.apps import apps
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
@@ -9,7 +10,7 @@ from utils.view_util import Crud, Cruds, make_tabs, FormsetFactoryManager
 from .models import copy_complete
 from utilities.search import Search
 
-te = 'title_english'
+te = 'title_original'
 field_names_dict = {'person':'name,gender,location_of_birth',
 	'music':te+',music_type','film':te+',film_type',
 	'text':te+',text_type', 'infographic':te+',infographic_type',
@@ -20,7 +21,7 @@ field_names_dict = {'person':'name,gender,location_of_birth',
 
 def _handle_fieldnames(field_names):
 	fields = field_names.split(',')
-	field_dict = {}
+	field_dict = OrderedDict()
 	for f in fields:
 		if '$' in f:
 			name,hname = f.split('$')
@@ -38,7 +39,6 @@ def list_view(request, model_name, app_name,html_name='',field_names = ''):
 	if html_name == '': html_name = 'utilities/general_list.html'
 	s = Search(request,model_name,app_name)
 	instances= s.filter()
-	if model_name == 'UserLoc': model_name = 'location'
 	name = model_name.lower()
 	field_dict = _handle_fieldnames(field_names) if field_names else {}
 	var = {name +'_list':instances,'page_name':model_name,
