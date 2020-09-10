@@ -1,3 +1,4 @@
+{% load getattribute %}
 	<tr class="d-flex">
 		<td class="col-2">Date created</th>
 		<td class="col-9">{{form.date_created}} {{form.date_created.error}}</td>
@@ -16,9 +17,11 @@
 	<tr class="d-flex">
 		<td class="col-2">Keywords</th>
 		<td class="col-9">{{form.keywords}} {{form.keywords.error}}</td>
+		{% if request.user|has_group:"typemaster" %}
 		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
 			href = "{% url 'misc:add_keyword' %}"
 			role="button"><i class="fa fa-plus"></i></a></td>
+		{% endif %}
 	</tr>
 	<tr class="d-flex">
 		<td class="col-2">Collection</th>

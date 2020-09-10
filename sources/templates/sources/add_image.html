@@ -1,4 +1,5 @@
 {% extends "utilities/base.html" %}
+{% load getattribute %}
 
 {% block head %}
 	{{form.media.css}}
@@ -33,9 +34,11 @@
 	<tr class="d-flex">
 		<td class="col-2">Image type</th>
 		<td class="col-9">{{form.image_type}} {{form.image_type.error}}</td>
+		{% if request.user|has_group:"typemaster" %}
 		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
 			href = "{% url 'sources:add_image_type' %}"
 			role="button"><i class="fa fa-plus"></i></a></td>
+		{% endif %}
 	</tr>
 	<tr class="d-flex">
 		<td class="col-2">Creators</th>

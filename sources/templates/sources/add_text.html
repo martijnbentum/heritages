@@ -1,4 +1,5 @@
 {% extends "utilities/base.html" %}
+{% load getattribute %}
 
 {% block head %}
 	{{form.media.css}}
@@ -31,9 +32,11 @@
 	<tr class="d-flex">
 		<td class="col-2">Text type</th>
 		<td class="col-9">{{form.text_type}} {{form.text_type.error}}</td>
+		{% if request.user|has_group:"typemaster" %}
 		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
 			href = "{% url 'sources:add_text_type' %}"
 			role="button"><i class="fa fa-plus"></i></a></td>
+		{% endif %}
 	</tr>
 	<tr class="d-flex">
 		<td class="col-2">Authors</th>
