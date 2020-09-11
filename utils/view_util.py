@@ -6,6 +6,7 @@ from django.db.models.signals import pre_save,post_save,m2m_changed
 from django.dispatch import receiver
 import datetime
 from utils import signal_util
+from utilities.models import instance2name, instance2names
 
 
 
@@ -143,7 +144,10 @@ class Crud:
 				self.cruds.extend(cruds)
 			if attr == 'relations':
 				for r in self.instance.relations.through.objects.all():  
-					if self.instance.pk in [ r.primary.pk, r.secondary.pk ]:
+					if hasattr(r,'primary'): pk1,pk2 = r.primary.pk,r.secondary.pk
+					elif hasattr(r,'container'):pk1,pk2=r.container.pk,r.contained.pk
+					else:continue
+					if self.instance.pk in [ pk1, pk2 ]:
 						self.cruds.append(Crud(r,instance2name(r)))
 
 	def __lt__(self,other):

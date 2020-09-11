@@ -9,6 +9,7 @@ from utils import view_util
 from utils.view_util import Crud, Cruds, make_tabs, FormsetFactoryManager
 from .models import copy_complete
 from utilities.search import Search
+import time
 
 te = 'title_original'
 field_names_dict = {'person':'name,gender,location_of_birth',
@@ -50,6 +51,8 @@ def list_view(request, model_name, app_name,html_name='',field_names = ''):
 	# return render(request, app_name+'/'+model_name.lower()+'_list.html',var)
 	return render(request, html_name.replace('$','/'),var)
 
+def timer(start):
+	return time.time() -start
 
 @permission_required('utilities.add_generic')
 def edit_model(request, name_space, model_name, app_name, instance_id = None, 
@@ -58,11 +61,12 @@ def edit_model(request, name_space, model_name, app_name, instance_id = None,
 	assumes a 'add_{{model_name}}.html template and edit_{{model_name}} function
 	and {{model_name}}Form
 	'''
+	start = time.time()
 	names = formset_names
 	model = apps.get_model(app_name,model_name)
 	modelform = view_util.get_modelform(name_space,model_name+'Form')
 	instance= model.objects.get(pk=instance_id) if instance_id else None
-	crud = Crud(instance) if instance else None
+	crud = Crud(instance) if instance and model_name != 'Location' else None
 	ffm, form = None, None
 	print(model,modelform,model_name,app_name,98765)
 	if request.method == 'POST':

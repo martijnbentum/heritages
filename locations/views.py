@@ -60,8 +60,9 @@ def show_links(request,app_name,model_name,pk):
 
 
 def edit_location(request, pk=None, focus = '', view='complete'):
+	names = 'location_relation_formset'
 	return edit_model(request, __name__,'Location','locations',pk, 
-		focus = focus, view=view)
+		formset_names=names,focus = focus, view=view)
 
 
 def delete(request, pk, model_name):
