@@ -106,8 +106,8 @@ class Music(Source,info):
 class Film(Source, info):
 	'''Meta data for movies related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
-	language_original = models.ForeignKey(Language,**dargs,related_name='film_language_original')
-	language_subtitle = models.ForeignKey(Language,**dargs,related_name='film_language_subtitle')
+	languages_original=models.ManyToManyField(Language,blank=True,related_name='film_language_original')
+	languages_subtitle=models.ManyToManyField(Language,blank=True,related_name='film_language_subtitle')
 	writers = models.ManyToManyField(Person,blank=True, related_name='film_writers_set')
 	directors = models.ManyToManyField(Person,blank=True, related_name='film_directors_set')
 	film_company = models.ForeignKey(FilmCompany,**dargs)
