@@ -117,6 +117,11 @@ def add_simple_model(request, name_space,model_name,app_name, page_name, pk= Non
 	form = None
 	if request.method == 'POST':
 		form = modelform(request.POST,instance=instance)
+		button = getbutton(request)
+		print(button,'12345667889999')
+		if button in 'delete,confirm_delete': 
+			print('deleting simple model')
+			return delete_model(request,name_space,model_name,app_name,pk,True)
 		if form.is_valid():
 			form.save()
 			messages.success(request, model_name + ' saved')
@@ -129,7 +134,7 @@ def add_simple_model(request, name_space,model_name,app_name, page_name, pk= Non
 	return render(request, 'utilities/add_simple_model.html',var)
 
 @permission_required('utilities.delete_generic')
-def delete_model(request, name_space, model_name, app_name, pk):
+def delete_model(request, name_space, model_name, app_name, pk, close = False):
 	model = apps.get_model(app_name,model_name)
 	instance= get_object_or_404(model,id =pk)
 	focus, button = getfocus(request), getbutton(request)
@@ -145,6 +150,7 @@ def delete_model(request, name_space, model_name, app_name, pk):
 		if button == 'confirm_delete':
 			instance.delete()
 			show_messages(request,button, model_name)
+			if close: return HttpResponseRedirect('/utilities/close/')
 			return HttpResponseRedirect('/utilities/list_view/'+model_name.lower()+'/'+app_name+'/')
 	info = instance.info
 	print(1,info,instance,pk)

@@ -18,6 +18,7 @@ urlpatterns = [
 	path('add_causal_trigger/',views.add_causaltrigger, name='add_causal_trigger'),
 	path('add_causal_trigger/<int:pk>',views.add_causaltrigger, name='add_causal_trigger'),
 	path('add_language/',views.add_language, name='add_language'),
+	path('add_language/<int:pk>',views.add_language, name='add_language'),
 	path('add_keyword/',views.add_keyword, name='add_keyword'),
 	path('add_keyword/<int:pk>',views.add_keyword, name='add_keyword'),
 	path('delete/<int:pk>/<str:model_name>',views.delete,name='delete'),
