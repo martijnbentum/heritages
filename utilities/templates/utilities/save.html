@@ -4,5 +4,8 @@
 	 href="{% url 'utilities:close' %}">Cancel</a>
 {% else %}
 	<button type="submit" name="save" value="add_another" 
-	class ="btn btn-secondary ml-1">Save | add another</button>
+	class ="btn btn-outline-secondary ml-1">Save | add another</button>
+{% endif %}
+{% if 'Edit' in page_name %}
+<button type="submit" name="save" value="delete" class ="btn btn-outline-warning ml-1">Delete</button>
 {% endif %}

@@ -33,6 +33,7 @@ class Person(models.Model, info):
 	description= models.TextField(default='')
 	keywords= models.ManyToManyField(Keyword,blank=True)
 	location_field = 'location_of_birth'
+	flag = models.BooleanField(default = False)
 
 	def __str__(self):
 		return self.name

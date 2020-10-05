@@ -9,8 +9,8 @@
 <div class="d-flex">
 {% include 'utilities/list_search_bar.html' %} 
 {% with app_name|add:":add_"|add:name as add_instance%}
-<a class ="btn btn-link ml-auto" href="{% url add_instance  %}"
-role="button">Add {{name}}</a>
+<a class ="btn btn-link ml-auto text-dark " href="{% url add_instance  %}"
+role="button"><strong>Add {{name}}</strong></a>
 {% endwith %}
 </div>
 

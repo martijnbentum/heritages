@@ -69,6 +69,6 @@ class PersonForm(ModelForm):
 		model = Person
 		fields = 'name,gender,nationality,location_of_birth,location_of_birth'
 		fields += ',occupation,affiliation,biography_link,comments,keywords'
-		fields += ',date_of_birth,date_of_death,description'
+		fields += ',date_of_birth,date_of_death,description,flag'
 		fields = fields.split(',')
 

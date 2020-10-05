@@ -11,7 +11,7 @@ from .models import copy_complete
 from utilities.search import Search
 import time
 
-te = 'title_original'
+te = 'title_original,title_english'
 field_names_dict = {'person':'name,gender,location_of_birth',
 	'music':te+',music_type','film':te+',film_type',
 	'text':te+',text_type', 'infographic':te+',infographic_type',
@@ -96,7 +96,7 @@ def edit_model(request, name_space, model_name, app_name, instance_id = None,
 	tabs = make_tabs(model_name.lower(), focus_names = focus)
 	page_name = 'Edit ' +model_name.lower() if instance_id else 'Add ' +model_name.lower()
 	args = {'form':form,'page_name':page_name,'crud':crud,
-		'tabs':tabs, 'view':view}
+		'tabs':tabs, 'view':view,'app_name':app_name,'model_name':model_name}
 	args.update(ffm.dict)
 	return render(request,app_name+'/add_' + model_name.lower() + '.html',args)
 		
