@@ -27,7 +27,7 @@ class info():
 		for k in self.__dict__.keys():
 			if k == '_state' or k == 'id': continue
 			m += '<tr class="d-flex">'
-			m += '<th class="col-2">'+k.ljust(n)+'</th>'
+			m += '<th class="col-4">'+k.ljust(n)+'</th>'
 			m += '<td class="col-8">'+str(self.__dict__[k]) +'</td>'
 		m += '</table>'
 		return m
