@@ -200,6 +200,10 @@ class TextForm(SourceForm):
 		queryset=Language.objects.all(),
 		widget= LanguagesWidget(**dselect2),
 		required=False)
+	original_languages = forms.ModelMultipleChoiceField(
+		queryset=Language.objects.all(),
+		widget= LanguagesWidget(**dselect2),
+		required=False)
 	locations = forms.ModelMultipleChoiceField(
 		queryset=Location.objects.all(),
 		widget= LocationsWidget(**dselect2),
@@ -209,7 +213,7 @@ class TextForm(SourceForm):
 		model = Text
 		fields = source_fields
 		fields += ',text_type,authors,editors,translators,publishers,text_file,excerpt_file'
-		fields += ',languages,locations'
+		fields += ',languages,locations,original_languages'
 		fields = fields.split(',')
 	
 class InfographicForm(SourceForm):

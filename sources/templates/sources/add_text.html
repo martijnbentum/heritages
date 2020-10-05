@@ -85,6 +85,13 @@
 			role="button"><i class="fa fa-plus"></i></a></td>
 	</tr>
 	<tr class="d-flex">
+		<td class="col-2">Original languages</th>
+		<td class="col-9">{{form.original_languages}} {{form.original_languages.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'misc:add_language' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
 		<td class="col-2">Text file</th>
 		<td class="col-9">{{form.text_file}} {{form.text_file.error}}</td>
 	</tr>

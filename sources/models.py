@@ -191,6 +191,8 @@ class Text(Source,info):
 	translator = models.ForeignKey(Person,**dargs,related_name='text_translator_set')
 	publishers = models.ManyToManyField(Publisher,blank=True,related_name='text_publisher')
 	languages = models.ManyToManyField(Language, blank=True)
+	original_languages= models.ManyToManyField(Language, blank=True,
+		related_name='text_original_languages')
 	text_file = models.FileField(upload_to='media/',blank=True,null=True)
 	excerpt_file = models.FileField(upload_to='media/',blank=True,null=True)
 	locations = models.ManyToManyField(Location,blank=True, related_name='text_locations')
