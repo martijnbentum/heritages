@@ -1,10 +1,10 @@
 from django_select2.forms import ModelSelect2Widget, ModelSelect2MultipleWidget
-from .models import Famine,Collection,PublishingOutlet,Available,Rated
-from .models import Keyword,Commissioner,Person,MusicType,Language,Music
+from .models import Collection,PublishingOutlet,Available,Rated
+from .models import Commissioner,MusicType,Language,Music
 from .models import Film,Image,PictureStory,Text,Infographic,Publisher
 from .models import InfographicType, TextType, FilmType,PictureStoryType,ImageType
 from .models import RequestUsePermission, FilmCompany
-from .models import Location, TargetAudience
+from .models import TargetAudience, Institution
 
 class SimpleBaseWidget(ModelSelect2Widget):
 	search_fields = ['name__icontains']
@@ -141,5 +141,10 @@ class FilmCompaniesWidget(SimpleBasesWidget):
 	model =FilmCompany 
 	def get_queryset(self):
 		return FilmCompany.objects.all().order_by('name')
+
+class InstitutionsWidget(SimpleBasesWidget):
+	model =Institution
+	def get_queryset(self):
+		return Institution.objects.all().order_by('name')
 
 

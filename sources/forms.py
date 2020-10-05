@@ -5,12 +5,13 @@ from .models import Collection,PublishingOutlet,Available,Rated
 from .models import Commissioner,MusicType,Music, Infographic
 from .models import RequestUsePermission, FilmCompany, FilmType, Film, Text, Image
 from .models import TargetAudience, TextType, InfographicType, ImageType
-from .models import Publisher, PictureStoryType, PictureStory
+from .models import Publisher, PictureStoryType, PictureStory, Institution
 from .widgets import CollectionWidget,PublishingOutletWidget,AvailableWidget, TextTypeWidget
 from .widgets import RatedWidget,CommissionerWidget,MusicTypeWidget, FilmCompanyWidget
 from .widgets import ImageTypeWidget, InfographicTypeWidget,FilmTypeWidget, PublisherWidget
 from .widgets import RequestUsePermissionWidget, PublishersWidget
 from .widgets import TargetAudienceWidget, PictureStoryTypeWidget,FilmCompaniesWidget
+from .widgets import TargetAudienceWidget,InstitutionsWidget
 from locations.models import Location
 from locations.widgets import LocationWidget, LocationsWidget
 from misc.models import Famine, Language, Keyword
@@ -184,6 +185,10 @@ class TextForm(SourceForm):
 		queryset=Person.objects.all(),
 		widget = PersonsWidget(**dselect2),
 		required=False)
+	institution_authors= forms.ModelMultipleChoiceField(
+		queryset=Institution.objects.all(),
+		widget = InstitutionsWidget(**dselect2),
+		required=False)
 	editors= forms.ModelMultipleChoiceField(
 		queryset=Person.objects.all(),
 		widget = PersonsWidget(**dselect2),
@@ -213,7 +218,7 @@ class TextForm(SourceForm):
 		model = Text
 		fields = source_fields
 		fields += ',text_type,authors,editors,translators,publishers,text_file,excerpt_file'
-		fields += ',languages,locations,original_languages'
+		fields += ',languages,locations,original_languages,institution_authors'
 		fields = fields.split(',')
 	
 class InfographicForm(SourceForm):

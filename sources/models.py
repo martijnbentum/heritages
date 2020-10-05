@@ -16,6 +16,7 @@ def make_simple_model(name):
 names = 'MusicType,Collection,Rated,Commissioner'
 names += ',FilmCompany,FilmType,TargetAudience,PublishingOutlet,Available,ImageType'
 names += ',InfographicType,PictureStoryType,TextType,Publisher,RequestUsePermission'
+names += ',Institution'
 names = names.split(',')
 
 for name in names:
@@ -186,9 +187,10 @@ class Text(Source,info):
 	'''Meta data for texts related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	text_type = models.ForeignKey(TextType,**dargs)
-	author = models.ForeignKey(Person,**dargs,related_name='text_author_set')
-	editor = models.ForeignKey(Person,**dargs,related_name='text_editor_set')
-	translator = models.ForeignKey(Person,**dargs,related_name='text_translator_set')
+	authors = models.ManyToManyField(Person,blank=True,related_name='text_author_set')
+	institution_authors= models.ManyToManyField(Institution,blank=True,related_name='text_author_set')
+	editors = models.ManyToManyField(Person,blank=True,related_name='text_editor_set')
+	translators = models.ManyToManyField(Person,blank=True,related_name='text_translator_set')
 	publishers = models.ManyToManyField(Publisher,blank=True,related_name='text_publisher')
 	languages = models.ManyToManyField(Language, blank=True)
 	original_languages= models.ManyToManyField(Language, blank=True,

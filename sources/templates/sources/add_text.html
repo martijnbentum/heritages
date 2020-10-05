@@ -46,6 +46,13 @@
 			role="button"><i class="fa fa-plus"></i></a></td>
 	</tr>
 	<tr class="d-flex">
+		<td class="col-2">Institution (anonymous authors)</th>
+		<td class="col-9">{{form.institution_authors}} {{form.institution_authors.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'persons:add_person' 'inline'%}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
 		<td class="col-2">Editors</th>
 		<td class="col-9">{{form.editors}} {{form.editors.error}}</td>
 		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
