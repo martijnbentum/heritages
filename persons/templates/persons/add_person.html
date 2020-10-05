@@ -36,13 +36,6 @@
 		{% endif %}
 	</tr>
 	<tr class="d-flex">
-		<td class="col-2">Nationality</th>
-		<td class="col-9">{{form.nationality}} {{form.nationality.error}}</td>
-		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
-			href = "{% url 'persons:add_nationality' %}"
-			role="button"><i class="fa fa-plus"></i></a></td>
-	</tr>
-	<tr class="d-flex">
 		<td class="col-2">Date of birth</th>
 		<td class="col-9">{{form.date_of_birth}} {{form.date_of_birth.error}}</td>
 	</tr>
