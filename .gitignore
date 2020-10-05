@@ -1,6 +1,7 @@
 db.sqlite3
 __pycache__
 .env
+*.jpg
 *.swp
 __init__.py
 sources/migrations/
