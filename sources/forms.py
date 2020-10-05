@@ -40,7 +40,7 @@ def create_simple_form(name):
 #create simple forms for the following models
 names = 'TextType,ImageType,MusicType,PictureStoryType,FilmType,InfographicType'
 names += ',FilmCompany,TargetAudience,Collection,Publisher,Location,Language'
-names += ',Keyword,PublishingOutlet'
+names += ',Keyword,PublishingOutlet,Institution'
 for name in names.split(','):
 	create_simple_form(name)
 #----

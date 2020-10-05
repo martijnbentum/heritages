@@ -5,7 +5,7 @@ from .forms import MusicForm, MusicTypeForm, FilmTypeForm, FilmForm, TargetAudie
 from .forms import FilmCompanyForm, CollectionForm, TextForm, TextTypeForm
 from .forms import InfographicForm, InfographicTypeForm, ImageForm, ImageTypeForm
 from .forms import PictureStoryForm, PictureStoryTypeForm, PublisherForm, PublishingOutletForm
-from .forms import LocationForm, LanguageForm, KeywordForm
+from .forms import LocationForm, LanguageForm, KeywordForm,InstitutionForm
 from persons.forms import PersonForm
 
 def index(request):
@@ -28,7 +28,7 @@ def create_simple_view(name):
 
 #create simple views for the following models
 names = 'TextType,MusicType,ImageType,FilmType,InfographicType,PictureStoryType'
-names += ',FilmCompany,Publisher,Collection,TargetAudience,PublishingOutlet'
+names += ',FilmCompany,Publisher,Collection,TargetAudience,PublishingOutlet,Institution'
 for name in names.split(','):
 	create_simple_view(name)
 
