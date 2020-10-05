@@ -57,6 +57,7 @@ class PersonForm(ModelForm):
 		required=False)
 	biography_link = forms.CharField(**dchar)
 	comments = forms.CharField(**dtext)
+	description = forms.CharField(**dtext)
 	keywords = forms.ModelMultipleChoiceField(
 		queryset=Keyword.objects.all(),
 		widget=KeywordsWidget(**dselect2),
@@ -68,6 +69,6 @@ class PersonForm(ModelForm):
 		model = Person
 		fields = 'name,gender,nationality,location_of_birth,location_of_birth'
 		fields += ',occupation,affiliation,biography_link,comments,keywords'
-		fields += ',date_of_birth,date_of_death'
+		fields += ',date_of_birth,date_of_death,description'
 		fields = fields.split(',')
 

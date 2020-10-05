@@ -30,6 +30,7 @@ class Person(models.Model, info):
 	affiliation = models.ForeignKey(Affiliation, **dargs)
 	biography_link = models.CharField(max_length=3000,default='')
 	comments = models.TextField(default='')
+	description= models.TextField(default='')
 	keywords= models.ManyToManyField(Keyword,blank=True)
 	location_field = 'location_of_birth'
 
