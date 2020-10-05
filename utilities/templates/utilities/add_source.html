@@ -4,7 +4,11 @@
 		<td class="col-9">{{form.date_created}} {{form.date_created.error}}</td>
 	</tr>
 	<tr class="d-flex">
+		{% if 'text' in page_name %}
+		<td class="col-2">Date published</th>
+		{% else %}
 		<td class="col-2">Date released</th>
+		{% endif %}
 		<td class="col-9">{{form.date_released}} {{form.date_released.error}}</td>
 	</tr>
 	<tr class="d-flex">
