@@ -10,7 +10,7 @@ from .widgets import CollectionWidget,PublishingOutletWidget,AvailableWidget, Te
 from .widgets import RatedWidget,CommissionerWidget,MusicTypeWidget, FilmCompanyWidget
 from .widgets import ImageTypeWidget, InfographicTypeWidget,FilmTypeWidget, PublisherWidget
 from .widgets import RequestUsePermissionWidget, PublishersWidget
-from .widgets import TargetAudienceWidget, PictureStoryTypeWidget
+from .widgets import TargetAudienceWidget, PictureStoryTypeWidget,FilmCompaniesWidget
 from locations.models import Location
 from locations.widgets import LocationWidget, LocationsWidget
 from misc.models import Famine, Language, Keyword
@@ -144,9 +144,9 @@ class FilmForm(SourceForm):
 		queryset=Person.objects.all(),
 		widget = PersonsWidget(**dselect2),
 		required=False)
-	film_company= forms.ModelChoiceField(
+	film_companies= forms.ModelMultipleChoiceField(
 		queryset=FilmCompany.objects.all(),
-		widget = FilmCompanyWidget(**dselect2),
+		widget = FilmCompaniesWidget(**dselect2),
 		required=False)
 	locations_shot= forms.ModelMultipleChoiceField(
 		queryset=Location.objects.all(),
@@ -169,7 +169,7 @@ class FilmForm(SourceForm):
 	class Meta:
 		model = Film
 		fields = source_fields
-		fields += ',languages_original,languages_subtitle,writers,directors,film_company'
+		fields += ',languages_original,languages_subtitle,writers,directors,film_companies'
 		fields += ',locations_shot,locations_released,target_audience,film_type,video_link'
 		#fields += ',date_created,date_released'
 		fields = fields.split(',')

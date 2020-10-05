@@ -110,7 +110,7 @@ class Film(Source, info):
 	languages_subtitle=models.ManyToManyField(Language,blank=True,related_name='film_language_subtitle')
 	writers = models.ManyToManyField(Person,blank=True, related_name='film_writers_set')
 	directors = models.ManyToManyField(Person,blank=True, related_name='film_directors_set')
-	film_company = models.ForeignKey(FilmCompany,**dargs)
+	film_companies = models.ManyToManyField(FilmCompany,blank=True,related_name='film_film_company')
 	locations_shot = models.ManyToManyField(Location,blank=True, related_name='film_location_shot')
 	locations_released= models.ManyToManyField(Location,blank=True, 
 		related_name='film_location_released')

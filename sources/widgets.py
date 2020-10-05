@@ -137,5 +137,9 @@ class FilmCompanyWidget(SimpleBaseWidget):
 	def get_queryset(self):
 		return FilmCompany.objects.all().order_by('name')
 
+class FilmCompaniesWidget(SimpleBasesWidget):
+	model =FilmCompany 
+	def get_queryset(self):
+		return FilmCompany.objects.all().order_by('name')
 
 
