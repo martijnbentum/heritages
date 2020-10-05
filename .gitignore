@@ -3,6 +3,7 @@ __pycache__
 .env
 *.xlsx
 *.jpg
+*.png
 *.swp
 __init__.py
 sources/migrations/
