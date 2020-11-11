@@ -34,7 +34,7 @@ class LocationPrecisionWidget(ModelSelect2Widget):
 
 class LocationWidget(ModelSelect2Widget):
 	model = Location
-	search_fields = ['name__icontains']
+	search_fields = ['name__startswith']
 
 	def label_from_instance(self,obj):
 		if obj.country != '':
@@ -50,7 +50,7 @@ class LocationWidget(ModelSelect2Widget):
 
 class LocationsWidget(ModelSelect2MultipleWidget):
 	model = Location
-	search_fields = ['name__icontains']
+	search_fields = ['name__startswith']
 
 	def label_from_instance(self,obj):
 		if obj.country != '':
