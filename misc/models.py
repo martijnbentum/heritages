@@ -23,6 +23,7 @@ class Famine(models.Model, info):
 	end_year= 1
 	locations= models.ManyToManyField(Location,blank=True,related_name='famine_locations')
 	estimated_excess_mortality = models.IntegerField(blank=True,null=True)
+	excess_mortality_description = models.TextField(default='')
 	causal_triggers = models.ManyToManyField(CausalTrigger, blank=True,
 		related_name='famine_causal_triggers')
 	description = models.TextField(default='')

@@ -42,6 +42,7 @@ class FamineForm(ModelForm):
 		required=False)
 	estimated_excess_mortality= forms.IntegerField(required=False,widget=forms.NumberInput(**dattr))
 	description= forms.CharField(**dtext)
+	excess_mortality_description = forms.CharField(**dtext)
 	comments = forms.CharField(**dtext)
 	keywords = forms.ModelMultipleChoiceField(
 		queryset=Keyword.objects.all(),
@@ -51,6 +52,6 @@ class FamineForm(ModelForm):
 	class Meta:
 		model = Famine
 		fields = 'names,locations,estimated_excess_mortality,causal_triggers,description,comments'
-		fields += ',keywords'
+		fields += ',keywords,excess_mortality_description'
 		fields = fields.split(',')
 
