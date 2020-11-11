@@ -114,16 +114,12 @@ class MusicForm(SourceForm):
 		queryset=Language.objects.all(),
 		widget= LanguagesWidget(**dselect2),
 		required=False)
-	locations = forms.ModelMultipleChoiceField(
-		queryset=Location.objects.all(),
-		widget= LocationsWidget(**dselect2),
-		required=False)
 
 	class Meta:
 		model = Music
 		fields = source_fields
 		fields += ',lyrics,music_video_link,performing_artists,composers,music_type'
-		fields += ',languages,locations,album'
+		fields += ',languages,album'
 		#fields += ',date_created,date_released'
 		fields = fields.split(',')
 

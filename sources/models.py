@@ -93,8 +93,6 @@ class Music(Source,info):
 	languages = models.ManyToManyField(Language, blank=True)
 	music_file = models.FileField(upload_to='media/',blank=True,null=True)
 	music_link = models.CharField(max_length=1000,default='')
-	locations= models.ManyToManyField(Location,blank=True, related_name='music_locations')
-	location_field = 'locations'
 	play_field = 'music_video_link'
 
 	@property
