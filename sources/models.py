@@ -118,6 +118,7 @@ class Film(Source, info):
 	target_audience = models.ForeignKey(TargetAudience,**dargs)
 	film_type = models.ForeignKey(FilmType,**dargs)
 	video_link = models.CharField(max_length=1000,default='')
+	video_part_link = models.CharField(max_length=1000,default='')
 	location_field = 'locations_shot'
 	play_field = 'video_link'
 	

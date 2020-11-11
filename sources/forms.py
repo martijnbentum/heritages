@@ -166,13 +166,14 @@ class FilmForm(SourceForm):
 		widget = FilmTypeWidget(**dselect2),
 		required=False)
 	video_link = forms.CharField(**dchar)
+	video_part_link = forms.CharField(**dchar)
 
 	class Meta:
 		model = Film
 		fields = source_fields
 		fields += ',languages_original,languages_subtitle,writers,directors,film_companies'
 		fields += ',locations_shot,locations_released,target_audience,film_type,video_link'
-		#fields += ',date_created,date_released'
+		fields += ',video_part_link'
 		fields = fields.split(',')
 
 
