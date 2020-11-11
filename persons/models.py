@@ -62,4 +62,7 @@ class Person(models.Model, info):
 			m += '<p class="mt-2 mb-0">'+self.occupations_str+'</p>'
 		m += instance2map_buttons(self)
 		return m
+
+	class Meta:
+		unique_together = [['name','date_of_birth']]
 		

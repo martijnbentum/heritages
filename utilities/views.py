@@ -89,7 +89,9 @@ def edit_model(request, name_space, model_name, app_name, instance_id = None,
 						kwargs={'pk':instance.pk,'focus':focus}))
 				else: print('ERROR',ffm.errors)
 			else: return HttpResponseRedirect('/utilities/close/')
-		else: print(form,'not valid')
+		else:
+			print(list(form.non_field_errors()))
+			[show_messages(request,'error',l) for l in list(form.non_field_errors())]
 	if not form: form = modelform(instance=instance)
 	if not ffm: ffm = FormsetFactoryManager(name_space,names,instance=instance)
 	tabs = make_tabs(model_name.lower(), focus_names = focus)
@@ -175,6 +177,7 @@ def show_messages(request,button,model_name):
 		'saved a copy of '+model_name+'. Use "save" button to store edits to this copy')
 	elif button == 'confirm_delete':messages.success(request, model_name + ' deleted')
 	elif button == 'cancel':messages.warning(request,'delete aborted')
+	elif button == 'error':messages.warning(request,model_name)
 	else: messages.success(request, model_name + ' saved')
 
 def close(request):

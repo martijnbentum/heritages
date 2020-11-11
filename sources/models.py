@@ -101,6 +101,9 @@ class Music(Source,info):
 	
 		return m
 
+	class Meta:
+		unique_together = [['title_original','date_released']]
+
 
 class Film(Source, info):
 	'''Meta data for movies related to famines.'''
@@ -125,6 +128,8 @@ class Film(Source, info):
 		m = self._pop_up
 		return m
 
+	class Meta:
+		unique_together = [['title_original','date_released']]
 	
 
 class Image(Source, info):
@@ -145,6 +150,10 @@ class Image(Source, info):
 			m += self.image_file.url
 			m += 'role="button"><i class="fas fa-play"></i></a>'
 		return m
+
+	class Meta:
+		unique_together = [['title_original','image_file']]
+
 	
 class Infographic(Source,info):
 	'''Meta data for infographics related to famines.'''
@@ -160,6 +169,9 @@ class Infographic(Source,info):
 	def pop_up(self):
 		m = self._pop_up
 		return m
+
+	class Meta:
+		unique_together = [['title_original','image_file']]
 
 class PictureStory(Source,info):
 	'''Meta data for picturestories (comics / graphic novels) related to famines.'''
@@ -181,6 +193,10 @@ class PictureStory(Source,info):
 	def pop_up(self):
 		m = self._pop_up
 		return m
+
+	class Meta:
+		unique_together = [['title_original','image_file']]
+
 	
 class Text(Source,info):
 	'''Meta data for texts related to famines.'''
@@ -205,6 +221,8 @@ class Text(Source,info):
 		return m
 
 
+	class Meta:
+		unique_together = [['title_original','date_released']]
 
 
 

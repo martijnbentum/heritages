@@ -131,7 +131,7 @@ class Location(models.Model, info):
 
 	class Meta:
 		ordering = ['name']
-
+		unique_together = [['name','latitude','longitude']]
 
 
 
