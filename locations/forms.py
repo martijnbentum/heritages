@@ -4,13 +4,13 @@ from django.db.utils import IntegrityError
 from .models import Location, LocationRelation, LocationType, LocationStatus, LocationPrecision
 from .widgets import LocationWidget, LocationsWidget, LocationPrecisionWidget 
 from .widgets import LocationVerboseWidget, LocationTypeWidget, LocationStatusWidget
+from utilities.forms import make_select2_attr
 
 dattr = {'attrs':{'style':'width:100%'}}
 dchar = {'widget':forms.TextInput(**dattr),'required':False}
 dchar_required = {'widget':forms.TextInput(**dattr),'required':True}
 dtext = {'widget':forms.Textarea(attrs={'style':'width:100%','rows':3}),'required':False}
-dselect2 = {'attrs':{'data-placeholder':'Select by name...','style':'width:100%',
-	'class':'searching'}}
+dselect2 = make_select2_attr(input_length = 0)
 mft = {'fields':('name',),'widgets':{'name':forms.TextInput(dattr)}}
 
 
