@@ -39,8 +39,12 @@ for name in names.split(','):
 
 
 def location_list(request):
-	'''list view of locations.'''
-	return list_view(request, 'Location', 'locations')
+	'''list view of locations.
+	redirect to the utilities list view (nav bar directly calls the utilities list view)
+	location view is slow to load because loading relation value (eg country) take
+	2 ms for each, so for each location a country and region takes 4ms not easy to speed up
+	'''
+	return list_view(request, 'Location', 'locations',max_entries=50)
 
 
 def map(request):

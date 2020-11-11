@@ -31,25 +31,24 @@ def _handle_fieldnames(field_names):
 		field_dict[name] = hname
 	return field_dict
 	
+	
 
-def list_view(request, model_name, app_name,html_name='',field_names = ''):
+def list_view(request, model_name, app_name,html_name='',field_names = '',max_entries=100):
 	'''list view of a model.'''
-	print(field_names)
+	print(max_entries)
 	if field_names == '': field_names = field_names_dict[model_name.lower()]
-	print(field_names)
 	if html_name == '': html_name = 'utilities/general_list.html'
-	s = Search(request,model_name,app_name)
+	s = Search(request,model_name,app_name,max_entries=max_entries)
 	instances= s.filter()
 	name = model_name.lower()
 	field_dict = _handle_fieldnames(field_names) if field_names else {}
 	var = {name +'_list':instances,'page_name':model_name,
 		'order':s.order.order_by,'direction':s.order.direction,
 		'query':s.query.query,'nentries':s.nentries, 'list':instances,'name':name,
-		'type_name':name+'_type','app_name':app_name,'fields':field_dict.items()}
-	# print(s.notes,000)
-	# print(field_names, field_dict.items())
-	# return render(request, app_name+'/'+model_name.lower()+'_list.html',var)
-	return render(request, html_name.replace('$','/'),var)
+		'type_name':name+'_type','app_name':app_name,'fields':field_dict.items(),
+		'delete':app_name+':delete','edit':app_name+':edit_'+name}
+	r =  render(request, html_name.replace('$','/'),var)
+	return r
 
 def timer(start):
 	return time.time() -start

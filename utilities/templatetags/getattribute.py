@@ -1,5 +1,6 @@
 from django import template
 from django.conf import settings
+import time
 
 register = template.Library()
 
@@ -15,6 +16,7 @@ def get_value_from_dict(dictionary,key):
 
 def has_group(user,group_name):
 	return user.groups.filter(name=group_name).exists()
+
 
 register.filter('getattribute',getattribute)
 register.filter('get_value_from_dict',get_value_from_dict)
