@@ -27,6 +27,7 @@ dchar = {'widget':forms.TextInput(**dattr),'required':False}
 dchar_required = {'widget':forms.TextInput(**dattr),'required':True}
 dtext = {'widget':forms.Textarea(attrs={'style':'width:100%','rows':3}),'required':False}
 dselect2 = make_select2_attr(input_length = 0)
+dselect2n2 = make_select2_attr(input_length = 2)
 mft = {'fields':('name',),'widgets':{'name':forms.TextInput(dattr)}}
 
 
@@ -147,11 +148,11 @@ class FilmForm(SourceForm):
 		required=False)
 	locations_shot= forms.ModelMultipleChoiceField(
 		queryset=Location.objects.all(),
-		widget = LocationsWidget(**dselect2),
+		widget = LocationsWidget(**dselect2n2),
 		required=False)
 	locations_released= forms.ModelMultipleChoiceField(
 		queryset=Location.objects.all(),
-		widget = LocationsWidget(**dselect2),
+		widget = LocationsWidget(**dselect2n2),
 		required=False)
 	target_audience= forms.ModelChoiceField(
 		queryset=TargetAudience.objects.all(),
@@ -208,7 +209,7 @@ class TextForm(SourceForm):
 		required=False)
 	locations = forms.ModelMultipleChoiceField(
 		queryset=Location.objects.all(),
-		widget= LocationsWidget(**dselect2),
+		widget= LocationsWidget(**dselect2n2),
 		required=False)
 	
 	class Meta:
@@ -233,7 +234,7 @@ class InfographicForm(SourceForm):
 		required=False)
 	locations = forms.ModelMultipleChoiceField(
 		queryset=Location.objects.all(),
-		widget= LocationsWidget(**dselect2),
+		widget= LocationsWidget(**dselect2n2),
 		required=False)
 	
 	class Meta:
@@ -254,7 +255,7 @@ class ImageForm(SourceForm):
 		required=False)
 	locations = forms.ModelMultipleChoiceField(
 		queryset=Location.objects.all(),
-		widget = LocationsWidget(**dselect2),
+		widget = LocationsWidget(**dselect2n2),
 		required=False)
 	locations = forms.ModelMultipleChoiceField(
 		queryset=Location.objects.all(),
@@ -291,7 +292,7 @@ class PictureStoryForm(SourceForm):
 		required=False)
 	locations = forms.ModelMultipleChoiceField(
 		queryset=Location.objects.all(),
-		widget= LocationsWidget(**dselect2),
+		widget= LocationsWidget(**dselect2n2),
 		required=False)
 	
 	class Meta:
