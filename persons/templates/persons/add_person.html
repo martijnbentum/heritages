@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<form method="post">
+<form method="post" enctype="multipart/form-data">
 	{% csrf_token %}
 	<div class="col-md-12 d-flex">
 	<h4 class="col-2 ml-0 pl-0">{{page_name}}</h4>
@@ -67,6 +67,10 @@
 		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
 			href = "{% url 'persons:add_occupation' %}"
 			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Thumbnail</th>
+		<td class="col-9">{{form.thumbnail}} {{form.thumbnail.error}}</td>
 	</tr>
 	<tr class="d-flex">
 		<td class="col-2">Biography link</th>

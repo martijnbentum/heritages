@@ -34,6 +34,7 @@ class Person(models.Model, info):
 	keywords= models.ManyToManyField(Keyword,blank=True)
 	location_field = 'location_of_birth'
 	flag = models.BooleanField(default = False)
+	thumbnail = models.ImageField(upload_to='media/',blank=True,null=True)
 
 	def __str__(self):
 		return self.name
