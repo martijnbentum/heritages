@@ -240,7 +240,7 @@ class InfographicForm(SourceForm):
 	class Meta:
 		model = Infographic
 		fields = source_fields
-		fields += ',infographic_type,creators,image_file,languages,locations'
+		fields += ',infographic_type,creators,image_file,languages,locations,image_filename'
 		fields = fields.split(',')
 
 
@@ -265,7 +265,7 @@ class ImageForm(SourceForm):
 	class Meta:
 		model = Image
 		fields = source_fields
-		fields += ',image_type,creators,image_file,locations'
+		fields += ',image_type,creators,image_file,locations,image_filename'
 		fields = fields.split(',')
 
 
@@ -299,7 +299,7 @@ class PictureStoryForm(SourceForm):
 		model = PictureStory
 		fields = source_fields
 		fields += ',picture_story_type,authors,artists,publishers,image_file,excerpt_file'
-		fields += ',languages,locations'
+		fields += ',languages,locations,image_filename'
 		fields = fields.split(',')
 
 

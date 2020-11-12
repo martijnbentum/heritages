@@ -141,6 +141,8 @@ class Image(Source, info):
 	creators = models.ManyToManyField(Person,blank=True, related_name='image_creators_set')
 	image_file = models.ImageField(upload_to='media/',blank=True,null=True)
 	location_field = 'locations'
+	image_filename = models.CharField(max_length=500,default='',blank=True,null=True)
+
 
 	@property
 	def pop_up(self):
@@ -152,7 +154,7 @@ class Image(Source, info):
 		return m
 
 	class Meta:
-		unique_together = [['title_original','image_file']]
+		unique_together = [['title_original','image_filename']]
 
 	
 class Infographic(Source,info):
@@ -164,6 +166,7 @@ class Infographic(Source,info):
 	languages = models.ManyToManyField(Language, blank=True)
 	locations = models.ManyToManyField(Location,blank=True, related_name='infographic_locations')
 	location_field = 'locations'
+	image_filename = models.CharField(max_length=500,default='',blank=True,null=True)
 
 	@property
 	def pop_up(self):
@@ -171,7 +174,7 @@ class Infographic(Source,info):
 		return m
 
 	class Meta:
-		unique_together = [['title_original','image_file']]
+		unique_together = [['title_original','image_filename']]
 
 class PictureStory(Source,info):
 	'''Meta data for picturestories (comics / graphic novels) related to famines.'''
@@ -188,6 +191,7 @@ class PictureStory(Source,info):
 	excerpt_file = models.FileField(upload_to='media/',blank=True,null=True)
 	locations = models.ManyToManyField(Location,blank=True, related_name='picture_story_locations')
 	location_field = 'locations'
+	image_filename = models.CharField(max_length=500,default='',blank=True,null=True)
 
 	@property
 	def pop_up(self):
@@ -195,7 +199,7 @@ class PictureStory(Source,info):
 		return m
 
 	class Meta:
-		unique_together = [['title_original','image_file']]
+		unique_together = [['title_original','image_filename']]
 
 	
 class Text(Source,info):
