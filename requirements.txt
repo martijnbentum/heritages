@@ -5,3 +5,4 @@ python-decouple
 django-easy-audit
 django-redis
 #/var/www/redefregion/partial_date/dist/partial-date-0.1.tar.gz
+openpyxl
