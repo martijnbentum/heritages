@@ -1,0 +1,19 @@
+{{helper|json_script:"helperjs"}}
+<script>
+var table= document.getElementById("form_table");
+helper = JSON.parse(document.getElementById('helperjs').textContent)
+for (let row of table.rows) {
+	for (let cell of row.cells) {
+		if (cell.innerText != '') {
+			console.log(cell.innerText);
+			name = cell.innerText.split(' ').join('_');
+			name  = name.replace('(','').replace(')',''); 
+			cell.id = name
+			help_text = helper[cell.innerText.toLowerCase()]
+			console.log(help_text);
+			tippy('#'+ name,{content: help_text,allowHTML:true,});
+		}
+	}
+}
+//console.log(table)
+</script>
