@@ -20,7 +20,7 @@
 
 
 
-	<table class="table table-borderless table-sm">
+	<table class="table table-borderless table-sm" id = "form_table">
 	<tr class="d-flex">
 		<td class="col-2">Names</th>
 		<td class="col-9">{{form.names}} {{form.names.error}}</td>
@@ -75,4 +75,5 @@
 </form>
 <br>
 {{form.media.js}}
+{% include 'utilities/helper.html' %}
 {% endblock %}

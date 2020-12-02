@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<form method="post">
+<form method="post"> 
 	{% csrf_token %}
 	<div class="col-md-12 d-flex">
 		<h4 class="col-2 ml-0 pl-0">{{page_name}}</h4>
@@ -15,7 +15,7 @@
 	</div>
 	<hr>
 
-	<table class="table table-borderless table-sm">
+	<table class="table table-borderless table-sm" id = "form_table">
 	<tr class="d-flex">
 		<td class="col-2">name</th>
 		<td class="col-9">{{form.name}} {{form.name.error}}</td>
@@ -79,4 +79,5 @@
 
 
 {{form.media.js}}
+{% include 'utilities/helper.html' %}
 {% endblock %}
