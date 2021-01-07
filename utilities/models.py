@@ -5,6 +5,7 @@ from utils.model_util import id_generator, info
 
 class SimpleModel(models.Model):
 	name = models.CharField(max_length=300,default='',unique=True)
+	endnode = True
 
 	def __str__(self):
 		return self.name

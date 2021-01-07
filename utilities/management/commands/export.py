@@ -5,7 +5,7 @@ import os
 
 '''
 Export entire database to xlsx / xlm / json file
-Filename is region_[date]
+Filename is heritage_[date]
 
 At the current db size this takes a minute or two
 
@@ -29,7 +29,7 @@ class Command(BaseCommand):
 		path = path if path and os.path.isdir(path) else ''
 		if path != '' and not path.endswith('/'): path += '/'
 
-		filename = path + 'region_'+time.strftime('%Y_%m_%d_%H_%M')
+		filename = path + 'heritage_'+time.strftime('%Y_%m_%d_%H_%M')
 		print('exporting the database...')
 		if options['output']:print('filetypes: ',', '.join(options['output']))
 		if save:
