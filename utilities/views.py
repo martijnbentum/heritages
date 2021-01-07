@@ -7,7 +7,8 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from utils import view_util, help_util
 from utils.view_util import Crud, Cruds, make_tabs, FormsetFactoryManager
-from .models import copy_complete
+from utils.model_util import copy_complete
+# from .models import copy_complete
 from utilities.search import Search
 import time
 
@@ -76,7 +77,7 @@ def edit_model(request, name_space, model_name, app_name, instance_id = None,
 		form = modelform(request.POST, request.FILES, instance=instance)
 		if form.is_valid():
 			print('form is valid: ',form.cleaned_data,type(form))
-			print(form.cleaned_data['image_file'],str(form.cleaned_data['image_file']))
+			# print(form.cleaned_data['image_file'],str(form.cleaned_data['image_file']))
 			instance = form.save()
 			if view == 'complete':
 				ffm = FormsetFactoryManager(name_space,names,request,instance)
