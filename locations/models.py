@@ -20,6 +20,7 @@ class LocationRelation(models.Model, info):
 									on_delete=models.CASCADE, default=None)
 	contained = models.ForeignKey('Location', related_name='contained',
 									on_delete=models.CASCADE, default=None)
+	endnode = True
 
 	def __str__(self):
 		'''deleting a Location can resultin an error due to the easy audit app.
