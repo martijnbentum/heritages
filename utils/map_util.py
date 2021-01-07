@@ -1,4 +1,4 @@
-from utilities.models import instance2name
+from .model_util import instance2name
 from locations.models import Location
 import random
 
