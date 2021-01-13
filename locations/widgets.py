@@ -69,7 +69,7 @@ class LocationsWidget(ModelSelect2MultipleWidget):
 
 class LocationVerboseWidget(ModelSelect2Widget):
 	model = Location
-	search_fields = ['name__icontains']
+	search_fields = ['name__startswith']
 
 	def label_from_instance(self,obj):
 		return obj.name + ' | ' + obj.location_type.name
