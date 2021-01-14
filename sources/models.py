@@ -41,7 +41,7 @@ class Source(models.Model):
 	commissioned_by = models.ForeignKey(Commissioner,**dargs)
 	source_link = models.CharField(max_length=1000,default='')
 	flag = models.BooleanField(default = False)
-	thumbnail = models.ImageField(upload_to='media/',blank=True,null=True)
+	thumbnail = models.ImageField(upload_to='thumbnail/',blank=True,null=True)
 
 	class Meta:
 		abstract = True
@@ -91,7 +91,7 @@ class Music(Source,info):
 	composers = models.ManyToManyField(Person,blank=True,related_name='music_composer_set')
 	music_type = models.ForeignKey(MusicType,**dargs)
 	languages = models.ManyToManyField(Language, blank=True)
-	music_file = models.FileField(upload_to='media/',blank=True,null=True)
+	music_file = models.FileField(upload_to='music/',blank=True,null=True)
 	music_link = models.CharField(max_length=1000,default='')
 	play_field = 'music_video_link'
 
@@ -139,7 +139,7 @@ class Image(Source, info):
 	image_type = models.ForeignKey(ImageType,**dargs)
 	locations = models.ManyToManyField(Location,blank=True, related_name='image_locations')
 	creators = models.ManyToManyField(Person,blank=True, related_name='image_creators_set')
-	image_file = models.ImageField(upload_to='media/',blank=True,null=True)
+	image_file = models.ImageField(upload_to='image/',blank=True,null=True)
 	location_field = 'locations'
 	image_filename = models.CharField(max_length=500,default='',blank=True,null=True)
 
@@ -162,7 +162,7 @@ class Infographic(Source,info):
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	infographic_type = models.ForeignKey(InfographicType,**dargs)
 	creators = models.ManyToManyField(Person,blank=True, related_name='infographic_creators_set')
-	image_file = models.ImageField(upload_to='media/',blank=True,null=True)
+	image_file = models.ImageField(upload_to='infographic/',blank=True,null=True)
 	languages = models.ManyToManyField(Language, blank=True)
 	locations = models.ManyToManyField(Location,blank=True, related_name='infographic_locations')
 	location_field = 'locations'
@@ -187,8 +187,8 @@ class PictureStory(Source,info):
 	publishers = models.ManyToManyField(Publisher,blank=True,
 		related_name='picture_story_publisher_set')
 	languages = models.ManyToManyField(Language, blank=True)
-	image_file = models.ImageField(upload_to='media/',blank=True,null=True)
-	excerpt_file = models.FileField(upload_to='media/',blank=True,null=True)
+	image_file = models.ImageField(upload_to='picturestory/',blank=True,null=True)
+	excerpt_file = models.FileField(upload_to='picturestory/',blank=True,null=True)
 	locations = models.ManyToManyField(Location,blank=True, related_name='picture_story_locations')
 	location_field = 'locations'
 	image_filename = models.CharField(max_length=500,default='',blank=True,null=True)
@@ -214,8 +214,8 @@ class Text(Source,info):
 	languages = models.ManyToManyField(Language, blank=True)
 	original_languages= models.ManyToManyField(Language, blank=True,
 		related_name='text_original_languages')
-	text_file = models.FileField(upload_to='media/',blank=True,null=True)
-	excerpt_file = models.FileField(upload_to='media/',blank=True,null=True)
+	text_file = models.FileField(upload_to='text/',blank=True,null=True)
+	excerpt_file = models.FileField(upload_to='text/',blank=True,null=True)
 	locations = models.ManyToManyField(Location,blank=True, related_name='text_locations')
 	location_field = 'locations'
 	
