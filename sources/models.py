@@ -15,7 +15,7 @@ def make_simple_model(name):
 
 names = 'MusicType,Collection,Rated,Commissioner'
 names += ',FilmCompany,FilmType,TargetAudience,PublishingOutlet,Available,ImageType'
-names += ',InfographicType,PictureStoryType,TextType,Publisher,RequestUsePermission'
+names += ',InfographicType,PictureStoryType,TextType,Publisher,Permission'
 names += ',Institution'
 names = names.split(',')
 
@@ -31,7 +31,7 @@ class Source(models.Model):
 	collection = models.ForeignKey(Collection, **dargs)
 	publishing_outlet = models.ForeignKey(PublishingOutlet,**dargs)
 	available = models.ForeignKey(Available,**dargs)
-	request_use_permission = models.ForeignKey(RequestUsePermission,**dargs)
+	permission = models.ForeignKey(Permission,**dargs)
 	rated = models.ForeignKey(Rated, **dargs)
 	keywords= models.ManyToManyField(Keyword,blank=True)
 	description = models.TextField(default='')

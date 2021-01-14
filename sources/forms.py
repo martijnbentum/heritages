@@ -3,13 +3,13 @@ from django.forms import ModelForm, modelform_factory
 from .models import Source, SimpleModel
 from .models import Collection,PublishingOutlet,Available,Rated
 from .models import Commissioner,MusicType,Music, Infographic
-from .models import RequestUsePermission, FilmCompany, FilmType, Film, Text, Image
+from .models import Permission, FilmCompany, FilmType, Film, Text, Image
 from .models import TargetAudience, TextType, InfographicType, ImageType
 from .models import Publisher, PictureStoryType, PictureStory, Institution
 from .widgets import CollectionWidget,PublishingOutletWidget,AvailableWidget, TextTypeWidget
 from .widgets import RatedWidget,CommissionerWidget,MusicTypeWidget, FilmCompanyWidget
 from .widgets import ImageTypeWidget, InfographicTypeWidget,FilmTypeWidget, PublisherWidget
-from .widgets import RequestUsePermissionWidget, PublishersWidget
+from .widgets import PermissionWidget, PublishersWidget
 from .widgets import TargetAudienceWidget, PictureStoryTypeWidget,FilmCompaniesWidget
 from .widgets import TargetAudienceWidget,InstitutionsWidget
 from locations.models import Location
@@ -49,7 +49,7 @@ for name in names.split(','):
 # set the field names for the parent source form, these fields need to be
 # set in the children forms Meta class as well (I think)
 source_fields = 'famines,title_english,title_original,collection,publishing_outlet'
-source_fields += ',available,request_use_permission,rated,keywords,description'
+source_fields += ',available,permission,rated,keywords,description'
 source_fields += ',comments,commissioned_by,source_link,flag,thumbnail'
 source_fields += ',date_created,date_released'
 
@@ -72,9 +72,9 @@ class SourceForm(ModelForm):
 		queryset=Available.objects.all(),
 		widget= AvailableWidget(**dselect2),
 		required=False)
-	request_use_permission = forms.ModelChoiceField(
-		queryset=RequestUsePermission.objects.all(),
-		widget= RequestUsePermissionWidget(**dselect2),
+	permission = forms.ModelChoiceField(
+		queryset=Permission.objects.all(),
+		widget= PermissionWidget(**dselect2),
 		required=False)
 	rated = forms.ModelChoiceField(
 		queryset=Rated.objects.all(),
