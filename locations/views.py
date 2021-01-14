@@ -79,7 +79,7 @@ def get_querysets(names = None):
 	each item should follow this format: app_name$model_name
 	'''
 	if not names: 
-		names = 'Film,Music,Image,Text,PictureStory,Infographic'.split(',')
+		names = 'Film,Image,Text,PictureStory,Infographic'.split(',')
 		names = ['sources$'+name for name in names]
 		names.extend('persons$Person,misc$Famine'.split(','))
 	if type(names) == str: names = names.split(',')
