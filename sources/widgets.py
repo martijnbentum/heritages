@@ -3,7 +3,7 @@ from .models import Collection,PublishingOutlet,Available,Rated
 from .models import Commissioner,MusicType,Language,Music
 from .models import Film,Image,PictureStory,Text,Infographic,Publisher
 from .models import InfographicType, TextType, FilmType,PictureStoryType,ImageType
-from .models import RequestUsePermission, FilmCompany
+from .models import Permission, FilmCompany
 from .models import TargetAudience, Institution
 
 class SimpleBaseWidget(ModelSelect2Widget):
@@ -97,10 +97,10 @@ class AvailableWidget(SimpleBaseWidget):
 	def get_queryset(self):
 		return Available.objects.all().order_by('name')
 
-class RequestUsePermissionWidget(SimpleBaseWidget):
-	model = RequestUsePermission
+class PermissionWidget(SimpleBaseWidget):
+	model = Permission
 	def get_queryset(self):
-		return RequestUsePermission.objects.all().order_by('name')
+		return Permission.objects.all().order_by('name')
 
 class RatedWidget(SimpleBaseWidget):
 	model = Rated
