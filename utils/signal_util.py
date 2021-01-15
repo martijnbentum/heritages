@@ -1,12 +1,18 @@
 from django.apps import apps
-import sys
-from easyaudit.models import CRUDEvent
-from django.db.models.signals import m2m_changed
+from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
+from django.conf import settings
+
+from easyaudit.models import CRUDEvent
 
 from misc.models import Famine
 from sources.models import Film,Text,Image,PictureStory,Music,Infographic
 from persons.models import Person
+
+from .backup_util import put_file, isfile
+
+import sys
+import os
 
 def catch_m2m(instance, action, pk_set, model_name,field_name):
 	'''Adds a changed field dict to changed_fields attr of easyaudit event object
@@ -73,3 +79,30 @@ def bla(sender, instance,action,**kwargs):
 	pk_set = kwargs['pk_set']
 	catch_m2m(instance,action,pk_set,'famine','names')
 '''
+
+@receiver(post_save, sender = Image)
+def print_filename(sender, instance, **kwargs):
+	if instance.image_file:
+		local_path, remote_path, filename=  extract_filename_and_path(instance.image_file.name)
+		print(local_path,remote_path,filename)
+		if not isfile(remote_path + filename):
+			print('file not yet backed up, saving to remote folder')
+			put_file(local_path,remote_path,filename)
+		else: print('backup file already exists, doing nothing')
+
+def extract_filename_and_path(name):
+	media_dir = settings.MEDIA_ROOT
+	media_remote_dir = media_dir.split('/')[-1]
+	if not media_dir.endswith('/'): media_dir += '/'
+	if not media_remote_dir.endswith('/'): media_remote_dir += '/'
+	if '/' not in name: filename, remote_path = name, ''
+	else: filename, remote_path = name.split('/')[-1], '/'.join(name.split('/')[:-1])
+	remote_path += '/'
+	local_path = media_dir + remote_path
+	name = local_path + '/' + filename
+	remote_path = media_remote_dir + remote_path
+	if not os.path.isdir(local_path):print(path,'not an existing directory') 
+	if not os.path.isfile(name):print(name,'not an existing file')
+	return local_path, remote_path, filename
+
+		
