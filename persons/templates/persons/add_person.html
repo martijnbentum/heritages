@@ -51,14 +51,14 @@
 		<td class="col-2">Location of birth</th>
 		<td class="col-9">{{form.location_of_birth}} {{form.location_of_birth.error}}</td>
 		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
-			href = "{% url 'locations:add_location' %}"
+			href = "{% url 'locations:add_location' 'inline'%}"
 			role="button"><i class="fa fa-plus"></i></a></td>
 	</tr>
 	<tr class="d-flex">
 		<td class="col-2">Location of death</th>
 		<td class="col-9">{{form.location_of_death}} {{form.location_of_death.error}}</td>
 		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
-			href = "{% url 'locations:add_location' %}"
+			href = "{% url 'locations:add_location' 'inline'%}"
 			role="button"><i class="fa fa-plus"></i></a></td>
 	</tr>
 	<tr class="d-flex">
