@@ -92,7 +92,7 @@
 		<td class="col-2">Locations</th>
 		<td class="col-9">{{form.locations}} {{form.locations.error}}</td>
 		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
-			href = "{% url 'locations:add_location' %}"
+			href = "{% url 'locations:add_location' 'inline'%}"
 			role="button"><i class="fa fa-plus"></i></a></td>
 	</tr>
 	{% include 'utilities/add_source.html' %}
