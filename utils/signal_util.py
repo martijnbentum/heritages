@@ -90,6 +90,29 @@ def print_filename(sender, instance, **kwargs):
 			put_file(local_path,remote_path,filename)
 		else: print('backup file already exists, doing nothing')
 
+def make_file_backup_postsave_receiver(app_name,model_name):
+	m = '@receiver(post_save, sender = '
+	m += model_name + ')\n'
+	m += 'def save_file_backup(sender, instance, **kwargs):\n'
+	m += '\tapp_name, model_name = instance2names(instance)\n'
+	#work in progress, need to get the fields from make_models_image_file_dict and loop them
+	m += '\to = extract_filename_and_path(instance.image_file.name)\n'
+	m += '\tprint(o)\n'
+	m += '\tif not isfile(remote_path + filename):\n'
+	m += '\t\tprint("file not yet backed up, saving to remote folder")\n'
+	m += '\t\tput_file(local_path,remote_path,filename)\n'
+	m += '\telse: print("backup file already exists, doing nothing")\n'
+
+def model2file_backup_postsave_receiver(app_name,model_name):
+	pass
+
+
+'''
+for k in make_models_image_file_dict:
+	model2file_backup_postsave_receiver(*k)
+'''
+		
+
 def extract_filename_and_path(name):
 	media_dir = settings.MEDIA_ROOT
 	media_remote_dir = media_dir.split('/')[-1]
