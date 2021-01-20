@@ -2,8 +2,7 @@ from django.apps import apps
 import random
 import string
 import itertools
-# from .export import all_models, selected_models
-selected_models = 1
+
 
 
 class info():
@@ -150,6 +149,7 @@ def make_models_image_file_dict():
 	key 		app_name, model name (tuple)
 	value 		list of field_names (can either be image or file field
 	'''
+	from .export import all_models, selected_models
 	
 	d = {}
 	for model in selected_models:

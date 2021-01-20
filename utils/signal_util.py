@@ -10,6 +10,7 @@ from sources.models import Film,Text,Image,PictureStory,Music,Infographic
 from persons.models import Person
 
 from .backup_util import put_file, isfile
+from .model_util import make_models_image_file_dict
 
 import sys
 import os
