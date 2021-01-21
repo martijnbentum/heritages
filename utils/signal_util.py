@@ -114,7 +114,6 @@ def make_file_backup_postsave_receiver(app_name,model_name):
 	m += '\t\t\t\tprint("file not yet backed up, saving to remote folder")\n'
 	m += '\t\t\t\tput_file(local_path,remote_path,filename)\n'
 	m += '\t\t\telse: print("backup file already exists, doing nothing")\n'
-	print(m)
 	exec(m,globals())
 
 
