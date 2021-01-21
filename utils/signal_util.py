@@ -80,38 +80,48 @@ def bla(sender, instance,action,**kwargs):
 	pk_set = kwargs['pk_set']
 	catch_m2m(instance,action,pk_set,'famine','names')
 '''
-
+'''
 @receiver(post_save, sender = Image)
 def print_filename(sender, instance, **kwargs):
-	if instance.image_file:
-		local_path, remote_path, filename=  extract_filename_and_path(instance.image_file.name)
-		print(local_path,remote_path,filename)
-		if not isfile(remote_path + filename):
-			print('file not yet backed up, saving to remote folder')
-			put_file(local_path,remote_path,filename)
-		else: print('backup file already exists, doing nothing')
+	field_names = make_models_image_file_dict()['sources','Image']
+	for field_name in field_names:
+		print('handling field:',field_name)
+		# if instance.image_file:
+		field = getattr(instance,field_name)
+		if field:
+			local_path, remote_path, filename=  extract_filename_and_path(field.name)
+			print(local_path,remote_path,filename)
+			if not isfile(remote_path + filename):
+				print('file not yet backed up, saving to remote folder')
+				put_file(local_path,remote_path,filename)
+			else: print('backup file already exists, doing nothing')
+'''
 
 def make_file_backup_postsave_receiver(app_name,model_name):
 	m = '@receiver(post_save, sender = '
 	m += model_name + ')\n'
-	m += 'def save_file_backup(sender, instance, **kwargs):\n'
-	m += '\tapp_name, model_name = instance2names(instance)\n'
-	#work in progress, need to get the fields from make_models_image_file_dict and loop them
-	m += '\to = extract_filename_and_path(instance.image_file.name)\n'
-	m += '\tprint(o)\n'
-	m += '\tif not isfile(remote_path + filename):\n'
-	m += '\t\tprint("file not yet backed up, saving to remote folder")\n'
-	m += '\t\tput_file(local_path,remote_path,filename)\n'
-	m += '\telse: print("backup file already exists, doing nothing")\n'
+	m += 'def save_file_backup_'+app_name + '_' + model_name 
+	m += '(sender, instance, **kwargs):\n'
+	m += '\tfieldnames = make_models_image_file_dict()["'
+	m += app_name + '","'+model_name +'"]\n'
+	m += '\tfor field_name in  fieldnames:\n'
+	m += '\t\tprint("handling field:",field_name)\n'
+	m += '\t\tfield = getattr(instance,field_name)\n'
+	m += '\t\tif field:\n'
+	m += '\t\t\tlocal_path, remote_path, filename = extract_filename_and_path(field.name)\n'
+	m += '\t\t\tprint(local_path, remote_path, filename)\n'
+	m += '\t\t\tif not isfile(remote_path + filename):\n'
+	m += '\t\t\t\tprint("file not yet backed up, saving to remote folder")\n'
+	m += '\t\t\t\tput_file(local_path,remote_path,filename)\n'
+	m += '\t\t\telse: print("backup file already exists, doing nothing")\n'
+	print(m)
+	exec(m,globals())
 
-def model2file_backup_postsave_receiver(app_name,model_name):
-	pass
 
-
-'''
-for k in make_models_image_file_dict:
-	model2file_backup_postsave_receiver(*k)
-'''
+d = make_models_image_file_dict()
+for k in d:
+	app_name, model_name = k
+	make_file_backup_postsave_receiver(app_name,model_name)
 		
 
 def extract_filename_and_path(name):
