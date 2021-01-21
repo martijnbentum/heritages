@@ -19,8 +19,8 @@ class PersonWidget(SimpleBaseWidget):
 
 	def label_from_instance(self,obj):
 		m = obj.name
-		if self.pseudonyms:
-			m += ' | ' + self.pseudonyms
+		if obj.pseudonyms:
+			m += ' | ' + obj.pseudonyms
 		return m
 
 	def get_queryset(self):
@@ -32,8 +32,8 @@ class PersonsWidget(SimpleBasesWidget):
 
 	def label_from_instance(self,obj):
 		m = obj.name
-		if self.pseudonyms:
-			m += ' | ' + self.pseudonyms
+		if obj.pseudonyms:
+			m += ' | ' + obj.pseudonyms
 		return m
 
 	def get_queryset(self):
