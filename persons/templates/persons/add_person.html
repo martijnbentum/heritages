@@ -31,6 +31,10 @@
 		<td class="col-9">{{form.name}} {{form.name.error}}</td>
 	</tr>
 	<tr class="d-flex">
+		<td class="col-2">Pseudonym</th>
+		<td class="col-9">{{form.pseudonyms}} {{form.pseudonyms.error}}</td>
+	</tr>
+	<tr class="d-flex">
 		<td class="col-2">Gender</th>
 		<td class="col-9">{{form.gender}} {{form.gender.error}}</td>
 		{% if request.user|has_group:"typemaster" %}
