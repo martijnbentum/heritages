@@ -20,6 +20,7 @@ for name in names:
 class Person(models.Model, info):
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	name = models.CharField(max_length=1000,default='')
+	pseudonyms = models.CharField(max_length=1000,default='')
 	gender= models.ForeignKey(Gender,**dargs)
 	nationality = models.ForeignKey(Nationality,**dargs)
 	date_of_birth= PartialDateField(null=True,blank=True)

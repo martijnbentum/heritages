@@ -14,12 +14,28 @@ class SimpleBasesWidget(ModelSelect2MultipleWidget):
 
 
 class PersonWidget(SimpleBaseWidget):
+	search_fields = ['name__icontains','pseudonyms__icontains']
 	model = Person
+
+	def label_from_instance(self,obj):
+		m = obj.name
+		if self.pseudonyms:
+			m += ' | ' self.pseudonyms
+		return m
+
 	def get_queryset(self):
 		return Person.objects.all().order_by('name')
 
 class PersonsWidget(SimpleBasesWidget):
+	search_fields = ['name__icontains','pseudonyms__icontains']
 	model = Person
+
+	def label_from_instance(self,obj):
+		m = obj.name
+		if self.pseudonyms:
+			m += ' | ' self.pseudonyms
+		return m
+
 	def get_queryset(self):
 		return Person.objects.all().order_by('name')
 
@@ -48,5 +64,6 @@ class OccupationsWidget(SimpleBasesWidget):
 	model = Occupation
 	def get_queryset(self):
 		return Occupation.objects.all().order_by('name')
+
 
 

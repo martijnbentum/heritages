@@ -31,6 +31,7 @@ for name in names.split(','):
 
 class PersonForm(ModelForm):
 	name= forms.CharField(**dchar)
+	pseudonyms= forms.CharField(**dchar)
 	gender = forms.ModelChoiceField(
 		queryset=Gender.objects.all(),
 		widget = GenderWidget(**dselect2),
