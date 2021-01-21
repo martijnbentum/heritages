@@ -50,6 +50,7 @@ class Location(models.Model, info):
 	information = models.TextField(default='',blank=True)
 	active = models.BooleanField(default=False)
 	notes = models.TextField(default='',blank=True)
+	endnode = True
 
 	def save(self):
 		if not self.pk:
