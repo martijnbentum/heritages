@@ -99,6 +99,7 @@ def instance2names(instance):
 	# s = str(type(instance)).split("'")[-2]
 	# app_name,_,model_name = s.split('.')
 	app_name,model_name = instance._meta.app_label, instance._meta.model_name.capitalize()
+	if model_name == 'Picturestory': model_name = 'PictureStory'
 	return app_name, model_name
 
 def instance2name(instance):
