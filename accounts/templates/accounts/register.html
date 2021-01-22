@@ -11,9 +11,9 @@
 
 <div class="col-md-12 d-flex">
 <h4 class="mt-2">Register</h4>
-<a class ="btn btn-link ml-auto" href="{% url 'login' %}" 
+<a class ="btn btn-link ml-auto text-dark" href="{% url 'login' %}" 
 role="button">Login</a>
-<a class ="btn btn-link ml-auto" href="{% url 'password_reset' %}" 
+<a class ="btn btn-link ml-auto text-dark" href="{% url 'password_reset' %}" 
 role="button">Password reset</a>
 </div>
 <hr class="mt-0 mb-4">
@@ -24,6 +24,6 @@ role="button">Password reset</a>
 <table class="table table-borderless" >
     {{ form.as_table }}
 </table>
-    <button type="submit" value="Submit" class ="btn btn-success">Register</button>
+    <button type="submit" value="Submit" class ="btn btn-dark ml-3">Register</button>
   </form>
 {% endblock %}
