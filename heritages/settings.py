@@ -154,6 +154,7 @@ LOGOUT_REDIRECT_URL = '/sources/add_film/'
 
 TEMPLATE_STRING_IF_INVALID = ''
 
+DEFAULT_FROM_EMAIL = 'heritagesofhunger@ru.nl'
 
 
 from django.contrib.messages import constants as messages
