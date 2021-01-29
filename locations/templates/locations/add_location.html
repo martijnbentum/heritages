@@ -48,7 +48,7 @@
 	{{location_relation_formset.management_form}}
 	<table class="table table-borderless"> 
 		<tr class ="d-flex">
-			<th class="col-8">Location
+			<th class="col-8" id='location_container'>Location
 				<a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
 					 href ="{% url 'locations:add_location' 'inline' %}" role="button">
 						<i class="fa fa-plus"></i>
@@ -80,4 +80,8 @@
 
 {{form.media.js}}
 {% include 'utilities/helper.html' %}
+<script>
+console.log(helper['location container'])
+tippy('#location_container',{content: helper['location container'],allowHTML:true,});
+</script>
 {% endblock %}
