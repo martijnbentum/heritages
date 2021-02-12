@@ -9,11 +9,12 @@
 {% include 'utilities/list_search_bar.html' %} 
 
 {% if person_list %}
-
 <div class="d-flex">
 <table class="table table-hover">
 	<tr>
 	<th><a class="text-dark" href="?order_by=name,{{order}},{{direction}},{{query}}"
+		style="text-decoration:none;">name</a></th>
+	<th><a class="text-dark" href="?order_by=pseudonyms,{{order}},{{direction}},{{query}}"
 		style="text-decoration:none;">name</a></th>
 	<th><a class="text-dark" href="?order_by=gender,{{order}},{{direction}},{{query}}"
 		style="text-decoration:none;">Gender</a></th>
@@ -24,6 +25,7 @@
 	{% for person in list%}
 	<tr>
 		<td>{{person.name}}</td>
+		<td>{{person.psuedonyms}}</td>
 		<td>{{person.gender}}</td>
 		<td>{{person.location_of_birth}}</td>
 		<td style="white-space:nowrap;"><a class="btn btn-link btn-sm ml-auto"
