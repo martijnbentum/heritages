@@ -13,7 +13,7 @@ from utilities.search import Search
 import time
 
 te = 'title_original,title_english'
-field_names_dict = {'person':'name,gender,location_of_birth',
+field_names_dict = {'person':'name,pseudonyms,gender,location_of_birth',
 	'music':te+',music_type','film':te+',film_type',
 	'text':te+',text_type', 'infographic':te+',infographic_type',
 	'image':te+',image_type','picturestory':te+',picture_story_type',
