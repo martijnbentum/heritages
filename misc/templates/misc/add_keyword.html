@@ -1,0 +1,74 @@
+{% extends "utilities/base.html" %}
+
+{% block head %}
+	{{form.media.css}}
+	<title>{{page_name}}</title>
+{% endblock %}
+
+{% block content %}
+<form method="post">
+	{% csrf_token %}
+	<div class="col-md-12 d-flex">
+	<h4 class="col-2 ml-0 pl-0">{{page_name}}</h4>
+	{% include 'utilities/save.html' %}
+	{% include 'utilities/list_button.html' %}
+	</div>
+	<hr>
+	{% if 'Edit' in page_name and 'unknown' not in crud.last_update %}
+		{% include 'utilities/change_log.html' %}
+		{% else %} <p class="mb-4"></p>
+	{% endif %}
+
+	<table class="table table-borderless table-sm" id = "form_table">
+		<tr class="d-flex">
+			<td class="col-2">Name</th>
+			<td class="col-9">{{form.name}} {{form.name.error}}</td>
+		</tr>
+	<tr class="d-flex">
+		<td class="col-2">Description</th>
+		<td class="col-9">{{form.description}} {{form.description.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Comments</th>
+		<td class="col-9">{{form.comments}} {{form.comments.error}}</td>
+	</tr>
+	</table>
+
+{% if 'Edit' in page_name and not form.instance.category_keyword or 'Add' in page_name %}
+
+	{{keywordkeyword_formset.management_form}}
+	<table class="table table-borderless"> 
+		<tr class ="d-flex">
+			<th class="col-8" id='category_keyword'>Category Keyword
+				<a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+					 href ="{% url 'misc:add_keyword' 'inline' %}" role="button">
+						<i class="fa fa-plus"></i>
+				</a>
+			</th>
+			<th><i class="fa fa-times text-danger"></i></th>
+		</tr>
+			<tr class ="d-flex">
+				<td class="col-8">{{keywordkeyword_formset.forms.0.container}} 
+					{{keywordkeyword_formset.forms.0.container.errors}}</td>
+				<td class="col-1">{{keywordkeyword_formset.forms.0.DELETE}} 
+					{{keywordkeyword_formset.forms.0.id}}</td>
+			</tr>
+	</table>
+{% elif form.instance.name %}
+	<p> <b>{{form.instance.name}}</b> is a category keyword containing the following keywords</p>
+	{% for instance in form.instance.category_relations_instances %}
+		<p><a href = "{% url 'misc:edit_keyword' instance.pk %}"> {{instance.name }}<a></p>
+	{% endfor %}
+{% endif %}
+
+	{% include 'utilities/save.html' %}
+	</div>
+</form>
+<br>
+{{form.media.js}}
+{% include 'utilities/helper.html' %}
+<script>
+console.log(helper['location container'])
+tippy('#category_keyword',{content: helper['category keyword'],allowHTML:true,});
+</script>
+{% endblock %}
