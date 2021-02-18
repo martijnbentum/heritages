@@ -1,9 +1,9 @@
 from django import forms
-from django.forms import ModelForm, modelform_factory
-from .models import Famine,FamineName,CausalTrigger,Keyword, Language
+from django.forms import ModelForm, modelform_factory, inlineformset_factory
+from .models import Famine,FamineName,CausalTrigger,Keyword, Language, KeywordRelation
 from locations.models import Location
 from .widgets import FamineNameWidget,FamineNamesWidget, FamineWidget, CausalTriggerWidget 
-from .widgets import CausalTriggersWidget, KeywordsWidget
+from .widgets import CausalTriggersWidget, CategoryKeywordWidget, KeywordsWidget
 from locations.widgets import LocationsWidget
 from utilities.forms import make_select2_attr
 
@@ -23,7 +23,7 @@ def create_simple_form(name):
 	exec(name + 'Form = modelform_factory('+name+',**mft)',globals())
 
 #create simple forms for the following models
-names = 'CausalTrigger,FamineName,Keyword,Language'
+names = 'CausalTrigger,FamineName,Language'
 for name in names.split(','):
 	create_simple_form(name)
 
@@ -55,3 +55,35 @@ class FamineForm(ModelForm):
 		fields += ',keywords,excess_mortality_description'
 		fields = fields.split(',')
 
+
+class KeywordForm(ModelForm):
+	name = forms.CharField(**dchar_required)
+	description= forms.CharField(**dtext)
+	comments = forms.CharField(**dtext)
+	#this field is only here to ensure select is working on the formset
+	locations= forms.ModelMultipleChoiceField(
+		queryset=Location.objects.all(),
+		widget = LocationsWidget(**make_select2_attr(input_length=2)),
+		required=False)
+	#this field is only here to ensure select is working on the formset
+
+
+	class Meta:
+		model = Keyword
+		fields = 'name,description,comments'.split(',')
+
+class KeywordRelationForm(ModelForm):
+	container = forms.ModelChoiceField(
+		queryset=Keyword.objects.all(),
+		widget=CategoryKeywordWidget(**dselect2))
+
+	class Meta:
+		model=KeywordRelation
+		fields = 'container,contained'.split(',')
+
+keywordkeyword_formset = inlineformset_factory(
+	Keyword,KeywordRelation,fk_name = 'contained', 
+	form = KeywordRelationForm, extra = 1)
+	
+
+	
