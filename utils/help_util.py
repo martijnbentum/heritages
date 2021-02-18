@@ -57,13 +57,16 @@ class ModelHelper:
 class FieldHelper:
 	def __init__(self,line):
 		self.line = line
-		try:self.model_name, self.field_name, self.help_text = line[:3]
+		self.ok = True
+		try:
+			self.model_name, self.field_name, self.help_text = line[:3]
+			if self.field_name == None: self.ok = False
 		except:self.ok = False
-		else:self.ok = True
-		self.id = self.field_name.lower().replace(' ','_')
-		self.help_text_html = ''
-		for line in self.help_text.split('\n'):
-			self.help_text_html += '<p>'+line+'</p> '
+		if self.ok:
+			self.id = self.field_name.lower().replace(' ','_')
+			self.help_text_html = ''
+			for line in self.help_text.split('\n'):
+				self.help_text_html += '<p>'+line+'</p> '
 			
 
 	def __repr__(self):
