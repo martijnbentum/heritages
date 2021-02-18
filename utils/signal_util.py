@@ -1,11 +1,11 @@
 from django.apps import apps
-from django.db.models.signals import m2m_changed, post_save
+from django.db.models.signals import m2m_changed, post_save, post_delete
 from django.dispatch import receiver
 from django.conf import settings
 
 from easyaudit.models import CRUDEvent
 
-from misc.models import Famine
+from misc.models import Famine, KeywordRelation
 from sources.models import Film,Text,Image,PictureStory,Music,Infographic
 from persons.models import Person
 
@@ -73,6 +73,11 @@ for name in names.split(','):
 	model2m2mreceiver(model_name,app_name)
 
 
+@receiver(post_delete, sender = KeywordRelation)
+def update_keywords(sender,instance, **kwargs):
+	instance.container.save()
+	instance.contained.save()
+
 #example of a receiver function to cat m2m_changed singals.
 '''
 @receiver(m2m_changed,sender=Famine.names.through)
@@ -80,6 +85,7 @@ def bla(sender, instance,action,**kwargs):
 	pk_set = kwargs['pk_set']
 	catch_m2m(instance,action,pk_set,'famine','names')
 '''
+#example of a backup receiver
 '''
 @receiver(post_save, sender = Image)
 def print_filename(sender, instance, **kwargs):
