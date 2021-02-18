@@ -10,11 +10,54 @@ from utilities.models import instance2name, instance2color, instance2icon, insta
 def make_simple_model(name):
 	exec('class '+name + '(SimpleModel,info):\n\tpass',globals())
 
-names = 'CausalTrigger,FamineName,Keyword'
+names = 'CausalTrigger,FamineName'
 names = names.split(',')
 
 for name in names:
 	make_simple_model(name)
+
+class Keyword(models.Model, info):
+	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
+	name = models.CharField(max_length=300,default='',unique=True)
+	description = models.TextField(default='')
+	comments = models.TextField(default='')
+	category = models.CharField(max_length=300,default='')
+	category_relations= models.CharField(max_length=300,default='')
+
+	def __repr__(self):
+		return self.name
+
+	def save(self,*args,**kwargs):
+		super(Keyword,self).save(*args,**kwargs)
+		old_category = self.category
+		self.category = self._category
+		old_relations= self.category_relations
+		self.category_relations= self._category_relations_str
+		if old_category != self.category or old_relations != self.category_relations:
+			super(Keyword,self).save(*args,**kwargs)
+		
+
+	@property
+	def category_keyword(self):
+		relations = self.container.all()
+		return bool(relations)
+
+	@property
+	def _category(self):
+		relations = self.container.all()
+		if relations:return relations[0].container.name
+		relations = self.contained.all()
+		if relations:return relations[0].container.name
+		return ''
+
+	@property
+	def category_relations_instances(self):
+		relations = self.container.all()
+		return [r.contained for r in relations]
+
+	@property
+	def _category_relations_str(self):
+		return ' | '.join([x.name for x in self.category_relations_instances])
 
 class Famine(models.Model, info):
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
@@ -91,5 +134,11 @@ class KeywordRelation(models.Model, info):
 
 	class Meta:
 		unique_together = ('container','contained')
+
+
+	def save(self,*args,**kwargs):
+		super(KeywordRelation,self).save(*args,**kwargs)
+		self.container.save()
+		self.contained.save()
 	
 # Create your models here.
