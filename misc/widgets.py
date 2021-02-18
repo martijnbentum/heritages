@@ -48,6 +48,20 @@ class CausalTriggersWidget(SimpleBasesWidget):
 	def get_queryset(self):
 		return CausalTrigger.objects.all().order_by('name')
 
+
+class KeywordWidget(SimpleBaseWidget):
+	model = Keyword
+	
+	def label_from_instance(self,obj):
+		relations = obj.contained.all()
+		if relations:
+			return obj.name + ' | ' + ', '.join([r.container.name for r in relations])
+		else: return obj.name
+
+	def get_queryset(self):
+		return Keyword.objects.all().order_by('name')
+
+
 class KeywordsWidget(SimpleBasesWidget):
 	model = Keyword
 	
@@ -60,7 +74,22 @@ class KeywordsWidget(SimpleBasesWidget):
 	def get_queryset(self):
 		return Keyword.objects.all().order_by('name')
 
+
+class CategoryKeywordWidget(SimpleBaseWidget):
+	model = Keyword
+	
+	def label_from_instance(self,obj):
+		relations = obj.container.all().order_by('contained__name')
+		if relations:
+			return obj.name + ' | ' + ', '.join([r.contained.name for r in relations[:3]]) + ', ...'
+		else: return obj.name
+
+	def get_queryset(self):
+		return Keyword.objects.filter(contained__isnull=True).order_by('name')
+
+
 class LanguagesWidget(SimpleBasesWidget):
 	model = Language
 	def get_queryset(self):
 		return Language.objects.all().order_by('name')
+
