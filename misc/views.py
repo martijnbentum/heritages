@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .forms import FamineForm,FamineNameForm,LanguageForm
-from .forms import CausalTriggerForm,KeywordForm
-from utilities.views import edit_model, add_simple_model, list_view
+from .forms import CausalTriggerForm,KeywordForm, keywordkeyword_formset
+from utilities.views import edit_model, add_simple_model, list_view, delete_model
 
 
 def create_simple_view(name):
@@ -13,10 +13,16 @@ def create_simple_view(name):
 	return exec(c,globals())
 
 #create simple views for the following models
-names = 'CausalTrigger,FamineName,Keyword,Location,Language'
+names = 'CausalTrigger,FamineName,Location,Language'
 for name in names.split(','):
 	create_simple_view(name)
 
+
+def edit_keyword(request,pk=None,focus='',view='complete'):
+	names = 'keywordkeyword_formset'
+	print(pk,focus,view,123456,request)
+	return edit_model(request,__name__,'Keyword','misc',pk,
+		formset_names=names,focus=focus,view=view)
 
 
 def edit_famine(request,pk=None,focus='',view='complete'):
