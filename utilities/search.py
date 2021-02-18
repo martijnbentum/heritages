@@ -238,7 +238,7 @@ def get_field_typesdict():
 def get_foreign_keydict():
 	m = 'film:title_english,music:title_english,image:title_english,text:title_english'
 	m += ',infographic:title_english,picturestory:title_english,person:name,famine:names'
-	m += ',location:name'
+	m += ',location:name,keyword:name'
 	return make_dict(m)
 
 

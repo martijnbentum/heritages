@@ -1,3 +1,4 @@
+{% load getattribute %}
 <nav class="navbar navbar-expand-md navbar-light bg-light">
   <a class="navbar-brand" href={% url 'sources:music' %}>Heritages of Hunger</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,6 +67,10 @@
 			"{% url 'locations:add_location' %}">location</a>
           <a class="dropdown-item" href=
 			"{% url 'persons:add_person' %}">person</a>
+		{% if request.user|has_group:"typemaster" %}
+			  <a class="dropdown-item" href=
+				"{% url 'misc:add_keyword' %}">keyword</a>
+		{% endif %}
         </div>
       </li>
 

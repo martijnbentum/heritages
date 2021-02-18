@@ -18,7 +18,8 @@ field_names_dict = {'person':'name,pseudonyms,gender,location_of_birth',
 	'text':te+',text_type', 'infographic':te+',infographic_type',
 	'image':te+',image_type','picturestory':te+',picture_story_type',
 	'famine':'names_str$names,locations_str$locations',
-	'location':'name,country,region,location_type$type'}
+	'location':'name,country,region,location_type$type',
+	'keyword':'name,category,category_relations$relations'}
 
 
 def _handle_fieldnames(field_names):
@@ -34,7 +35,7 @@ def _handle_fieldnames(field_names):
 	
 	
 
-def list_view(request, model_name, app_name,html_name='',field_names = '',max_entries=100):
+def list_view(request, model_name, app_name,html_name='',field_names = '',max_entries=200):
 	'''list view of a model.'''
 	print(max_entries)
 	if field_names == '': field_names = field_names_dict[model_name.lower()]
