@@ -6,7 +6,7 @@ from django.conf import settings
 from easyaudit.models import CRUDEvent
 
 from misc.models import Famine, KeywordRelation
-from sources.models import Film,Text,Image,PictureStory,Music,Infographic
+from sources.models import Film,Text,Image,PictureStory,Music,Infographic,Videogame
 from persons.models import Person
 
 from .backup_util import put_file, isfile
