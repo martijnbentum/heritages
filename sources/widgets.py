@@ -3,6 +3,7 @@ from .models import Collection,PublishingOutlet,Available,Rated
 from .models import Commissioner,MusicType,Language,Music
 from .models import Film,Image,PictureStory,Text,Infographic,Publisher
 from .models import InfographicType, TextType, FilmType,PictureStoryType,ImageType
+from .models import GameType,ProductionStudio
 from .models import Permission, FilmCompany
 from .models import TargetAudience, Institution
 
@@ -82,6 +83,11 @@ class FilmTypeWidget(SimpleBaseWidget):
 	def get_queryset(self):
 		return FilmType.objects.all().order_by('name')
 
+class GameTypeWidget(SimpleBaseWidget):
+	model = GameType
+	def get_queryset(self):
+		return GameType.objects.all().order_by('name')
+
 class PictureStoryTypeWidget(SimpleBaseWidget):
 	model = PictureStoryType
 	def get_queryset(self):
@@ -141,6 +147,11 @@ class FilmCompaniesWidget(SimpleBasesWidget):
 	model =FilmCompany 
 	def get_queryset(self):
 		return FilmCompany.objects.all().order_by('name')
+
+class ProductionStudiosWidget(SimpleBasesWidget):
+	model =ProductionStudio
+	def get_queryset(self):
+		return ProductionStudio.objects.all().order_by('name')
 
 class InstitutionsWidget(SimpleBasesWidget):
 	model =Institution
