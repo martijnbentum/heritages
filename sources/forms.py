@@ -1,17 +1,19 @@
 from django import forms
 from django.forms import ModelForm, modelform_factory
-from .models import Source, SimpleModel
+from .models import Source, SimpleModel, Videogame
 from .models import Collection,PublishingOutlet,Available,Rated
 from .models import Commissioner,MusicType,Music, Infographic
 from .models import Permission, FilmCompany, FilmType, Film, Text, Image
 from .models import TargetAudience, TextType, InfographicType, ImageType
 from .models import Publisher, PictureStoryType, PictureStory, Institution
+from .models import GameType, ProductionStudio
 from .widgets import CollectionWidget,PublishingOutletWidget,AvailableWidget, TextTypeWidget
 from .widgets import RatedWidget,CommissionerWidget,MusicTypeWidget, FilmCompanyWidget
 from .widgets import ImageTypeWidget, InfographicTypeWidget,FilmTypeWidget, PublisherWidget
 from .widgets import PermissionWidget, PublishersWidget
 from .widgets import TargetAudienceWidget, PictureStoryTypeWidget,FilmCompaniesWidget
 from .widgets import TargetAudienceWidget,InstitutionsWidget
+from .widgets import GameTypeWidget,ProductionStudiosWidget
 from locations.models import Location
 from locations.widgets import LocationWidget, LocationsWidget
 from misc.models import Famine, Language, Keyword
@@ -41,7 +43,7 @@ def create_simple_form(name):
 #create simple forms for the following models
 names = 'TextType,ImageType,MusicType,PictureStoryType,FilmType,InfographicType'
 names += ',FilmCompany,TargetAudience,Collection,Publisher,Location,Language'
-names += ',Keyword,PublishingOutlet,Institution'
+names += ',Keyword,PublishingOutlet,Institution,GameType,ProductionStudio'
 for name in names.split(','):
 	create_simple_form(name)
 #----
@@ -51,7 +53,7 @@ for name in names.split(','):
 source_fields = 'famines,title_english,title_original,collection,publishing_outlet'
 source_fields += ',available,permission,rated,keywords,description'
 source_fields += ',comments,commissioned_by,source_link,flag,thumbnail'
-source_fields += ',date_created,date_released'
+source_fields += ',date_created,date_released,setting'
 
 class SourceForm(ModelForm):
 	famines = forms.ModelMultipleChoiceField(
@@ -93,6 +95,10 @@ class SourceForm(ModelForm):
 	source_link = forms.CharField(**dchar)
 	date_created= forms.CharField(**dchar)
 	date_released= forms.CharField(**dchar)
+	setting= forms.ModelMultipleChoiceField(
+		queryset=Location.objects.all(),
+		widget = LocationsWidget(**dselect2n2),
+		required=False)
 
 	class Meta:
 		model = Source
@@ -142,6 +148,10 @@ class FilmForm(SourceForm):
 		queryset=Person.objects.all(),
 		widget = PersonsWidget(**dselect2),
 		required=False)
+	creators= forms.ModelMultipleChoiceField(
+		queryset=Person.objects.all(),
+		widget = PersonsWidget(**dselect2),
+		required=False)
 	film_companies= forms.ModelMultipleChoiceField(
 		queryset=FilmCompany.objects.all(),
 		widget = FilmCompaniesWidget(**dselect2),
@@ -170,7 +180,7 @@ class FilmForm(SourceForm):
 		fields = source_fields
 		fields += ',languages_original,languages_subtitle,writers,directors,film_companies'
 		fields += ',locations_shot,locations_released,target_audience,film_type,video_link'
-		fields += ',video_part_link'
+		fields += ',video_part_link,creators'
 		fields = fields.split(',')
 
 
@@ -305,6 +315,31 @@ class PictureStoryForm(SourceForm):
 
 
 
+class VideogameForm(SourceForm):
+	game_type= forms.ModelChoiceField(
+		queryset=GameType.objects.all(),
+		widget = GameTypeWidget(**dselect2),
+		required=False)
+	production_studio = forms.ModelMultipleChoiceField(
+		queryset=ProductionStudio.objects.all(),
+		widget = ProductionStudiosWidget(**dselect2),
+		required=False)
+	languages_original = forms.ModelMultipleChoiceField(
+		queryset=Language.objects.all(),
+		widget=LanguagesWidget(**dselect2),
+		required=False)
+	languages_subtitle = forms.ModelMultipleChoiceField(
+		queryset=Language.objects.all(),
+		widget=LanguagesWidget(**dselect2),
+		required=False)
+	video_link = forms.CharField(**dchar)
+
+	class Meta:
+		model = Videogame
+		fields = source_fields
+		fields += ',game_type,languages_original,languages_subtitle,video_link'
+		fields += ',production_studio'
+		fields = fields.split(',')
 
 
 
