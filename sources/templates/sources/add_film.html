@@ -57,6 +57,13 @@
 			role="button"><i class="fa fa-plus"></i></a></td>
 	</tr>
 	<tr class="d-flex">
+		<td class="col-2">Creators</th>
+		<td class="col-9">{{form.creators}} {{form.creators.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'persons:add_person' 'inline' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
 		<td class="col-2">Film companies</th>
 		<td class="col-9">{{form.film_companies}} {{form.film_companies.error}}</td>
 		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
