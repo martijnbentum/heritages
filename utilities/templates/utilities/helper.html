@@ -18,13 +18,18 @@ for (let row of table.rows) {
 			help_text = helper[cell.innerText.toLowerCase()]
 			//console.log(help_text);
 			//create the pop up help text with tippy
-			tippy('#'+ name,{content: help_text,allowHTML:true,});
+			try{ tippy('#'+ name,{content: help_text,allowHTML:true,}); }
+			catch (error){ console.log(error); }
+			
 		}
 	}
 }
 //console.log(table)
 
 //the flag is outside the form so the help text needs to be created sperately
+try{
 tippy('#flag',{content: helper['flag symbol'],allowHTML:true,});
 tippy('#id_flag',{content: helper['flag symbol'],allowHTML:true,});
+}
+catch (error){ console.log(error); }
 </script>
