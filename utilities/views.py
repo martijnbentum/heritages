@@ -19,7 +19,8 @@ field_names_dict = {'person':'name,pseudonyms,gender,location_of_birth',
 	'image':te+',image_type','picturestory':te+',picture_story_type',
 	'famine':'names_str$names,locations_str$locations',
 	'location':'name,country,region,location_type$type',
-	'keyword':'name,category,category_relations$relations'}
+	'keyword':'name,category,category_relations$relations',
+	'videogame':te+',game_type'}
 
 
 def _handle_fieldnames(field_names):
