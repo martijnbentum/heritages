@@ -16,7 +16,7 @@ def make_simple_model(name):
 names = 'MusicType,Collection,Rated,Commissioner'
 names += ',FilmCompany,FilmType,TargetAudience,PublishingOutlet,Available,ImageType'
 names += ',InfographicType,PictureStoryType,TextType,Publisher,Permission'
-names += ',Institution'
+names += ',Institution,ProductionStudio,GameType'
 names = names.split(',')
 
 for name in names:
@@ -42,6 +42,7 @@ class Source(models.Model):
 	source_link = models.CharField(max_length=1000,default='')
 	flag = models.BooleanField(default = False)
 	thumbnail = models.ImageField(upload_to='thumbnail/',blank=True,null=True)
+	setting = models.ManyToManyField(Location,blank=True)
 
 	class Meta:
 		abstract = True
@@ -112,6 +113,7 @@ class Film(Source, info):
 	languages_subtitle=models.ManyToManyField(Language,blank=True,related_name='film_language_subtitle')
 	writers = models.ManyToManyField(Person,blank=True, related_name='film_writers_set')
 	directors = models.ManyToManyField(Person,blank=True, related_name='film_directors_set')
+	creators = models.ManyToManyField(Person,blank=True,related_name='film_creators_set')
 	film_companies = models.ManyToManyField(FilmCompany,blank=True,related_name='film_film_company')
 	locations_shot = models.ManyToManyField(Location,blank=True, related_name='film_location_shot')
 	locations_released= models.ManyToManyField(Location,blank=True, 
@@ -224,9 +226,29 @@ class Text(Source,info):
 		m = self._pop_up
 		return m
 
-
 	class Meta:
 		unique_together = [['title_original','date_released']]
 
 
+
+class Videogame(Source,info):
+	'''Meta data for texts related to famines.'''
+	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
+	game_type = models.ForeignKey(GameType,**dargs)
+	production_studio= models.ManyToManyField(ProductionStudio,blank=True,
+		related_name='videogame_productionstudio_set')
+	languages_original=models.ManyToManyField(Language,blank=True,
+		related_name='videogame_language_original')
+	languages_subtitle=models.ManyToManyField(Language,blank=True,
+		related_name='videogame_language_subtitle')
+	video_link = models.CharField(max_length=1000,default='')
+	location_field = ''
+	
+	@property
+	def pop_up(self):
+		m = self._pop_up
+		return m
+
+	class Meta:
+		unique_together = [['title_original','date_released']]
 
