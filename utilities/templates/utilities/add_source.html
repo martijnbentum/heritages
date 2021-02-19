@@ -1,5 +1,12 @@
 {% load getattribute %}
 	<tr class="d-flex">
+		<td class="col-2">Setting</th>
+		<td class="col-9">{{form.setting}} {{form.setting.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'locations:add_location' 'inline' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
 		<td class="col-2">Date created</th>
 		<td class="col-9">{{form.date_created}} {{form.date_created.error}}</td>
 	</tr>
