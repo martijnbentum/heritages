@@ -25,6 +25,8 @@
 			"{% url 'sources:picturestory' %}">picturestory</a>
           <a class="dropdown-item" href=
 			"{% url 'sources:text' %}">text</a>
+          <a class="dropdown-item" href=
+			"{% url 'utilities:list_view' 'Videogame' 'sources' %}">video game</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href=
 			"{% url 'utilities:list_view' 'Famine' 'misc' %}">famine</a>
@@ -32,6 +34,10 @@
 			"{% url 'utilities:list_view' 'Location' 'locations' 50 %}">location</a>
           <a class="dropdown-item" href=
 			"{% url 'utilities:list_view' 'Person' 'persons' %}">person</a>
+		{% if request.user|has_group:"typemaster" %}
+          <a class="dropdown-item" href=
+			"{% url 'utilities:list_view' 'Keyword' 'misc' %}">keyword</a>
+		{% endif %}
           <a class="dropdown-item" href=
 			"{% url 'locations:map' %}">map</a>
 			<div class="dropdown-divider"></div> 
@@ -60,6 +66,8 @@
 			"{% url 'sources:add_picture_story' %}">picture story</a>
           <a class="dropdown-item" href=
 			"{% url 'sources:add_text' %}">text</a>
+          <a class="dropdown-item" href=
+			"{% url 'sources:add_videogame' %}">video game</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href=
 			"{% url 'misc:add_famine' %}">famine</a>
