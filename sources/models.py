@@ -93,7 +93,6 @@ class Music(Source,info):
 	composers = models.ManyToManyField(Person,blank=True,related_name='music_composer_set')
 	music_type = models.ForeignKey(MusicType,**dargs)
 	languages = models.ManyToManyField(Language, blank=True)
-	music_file = models.FileField(upload_to='music/',blank=True,null=True)
 	music_link = models.CharField(max_length=1000,default='')
 	play_field = 'music_video_link'
 
@@ -123,7 +122,7 @@ class Film(Source, info):
 	film_type = models.ForeignKey(FilmType,**dargs)
 	video_link = models.CharField(max_length=1000,default='')
 	video_part_link = models.CharField(max_length=1000,default='')
-	location_field = 'locations_shot'
+	location_field = 'setting'
 	play_field = 'video_link'
 	
 	@property
