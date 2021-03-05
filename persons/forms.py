@@ -71,5 +71,6 @@ class PersonForm(ModelForm):
 		fields = 'name,gender,nationality,location_of_birth,location_of_birth'
 		fields += ',occupation,affiliation,biography_link,comments,keywords'
 		fields += ',date_of_birth,date_of_death,description,flag,thumbnail,pseudonyms'
+		fields += ',pseudonym_precedent'
 		fields = fields.split(',')
 
