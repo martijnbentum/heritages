@@ -1,4 +1,5 @@
 from django.apps import apps
+from django.db.models.fields.files import ImageFileDescriptor, ImageField
 import random
 import string
 import itertools
@@ -143,7 +144,7 @@ def simple_copy(instance, commit = True,add_copy_suffix = True):
 	return copy
 
 		
-def make_models_image_file_dict():
+def make_models_image_file_dict(only_image_fields=False):
 	'''
 	creates a dictionary with all models containing a image or file field.
 	dict contents:
@@ -158,7 +159,9 @@ def make_models_image_file_dict():
 		file_field_names = []
 		for field in fields:
 			if field.get_internal_type() == 'FileField':
+				if only_image_fields and type(field) != ImageField: continue
 				file_field_names.append(field.name)
+				temp = field
 		if file_field_names: 
 			app_name, model_name = instance2names(model)
 			d[app_name, model_name] = file_field_names
