@@ -81,7 +81,9 @@ def get_querysets(names = None):
 	if not names: 
 		names = 'Film,Image,Text,PictureStory,Infographic'.split(',')
 		names = ['sources$'+name for name in names]
-		names.extend('persons$Person,misc$Famine'.split(','))
+		# names.extend('persons$Person,misc$Famine'.split(','))
+		#request to not show persons on the map #60
+		names.extend('misc$Famine'.split(','))
 	if type(names) == str: names = names.split(',')
 	qs = []
 	for name in names:
