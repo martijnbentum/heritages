@@ -16,7 +16,8 @@ def catch_output(name):
 
 def get_output(name):
 	'''fetches output from the smbclient call'''
-	return open(smbouputdir + name).read()
+	try:return open(smbouputdir + name).read()
+	except: return ''
 
 def _mkdir(name, verbose = False):
 	'''Create a directory in the remote directory HOHrepositoryfiles
@@ -111,7 +112,8 @@ def mkdir(remote_path,verbose = False):
 		_mkdir(name,verbose)
 	else: 
 		if verbose: print('path does not exists',path,directory)
-		create_path(path)
+		#create_path(path)
+		mkdir(path)
 		if verbose: print('making directory',directory,'at',path)
 		name = path + '/' +directory if path != '' else directory
 		_mkdir(name,verbose)
