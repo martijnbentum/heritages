@@ -2,11 +2,11 @@ from django import forms
 from django.forms import ModelForm, modelform_factory
 from .models import Source, SimpleModel, Videogame
 from .models import Collection,PublishingOutlet,Available,Rated
-from .models import Commissioner,MusicType,Music, Infographic
+from .models import Commissioner,MusicType,Music, Infographic,Recordedspeech
 from .models import Permission, FilmCompany, FilmType, Film, Text, Image
 from .models import TargetAudience, TextType, InfographicType, ImageType
 from .models import Publisher, PictureStoryType, PictureStory, Institution
-from .models import GameType, ProductionStudio
+from .models import GameType, ProductionStudio,RecordedspeechType,BroadcastingStation
 from .widgets import CollectionWidget,PublishingOutletWidget,AvailableWidget, TextTypeWidget
 from .widgets import RatedWidget,CommissionerWidget,MusicTypeWidget, FilmCompanyWidget
 from .widgets import ImageTypeWidget, InfographicTypeWidget,FilmTypeWidget, PublisherWidget
@@ -14,6 +14,7 @@ from .widgets import PermissionWidget, PublishersWidget
 from .widgets import TargetAudienceWidget, PictureStoryTypeWidget,FilmCompaniesWidget
 from .widgets import TargetAudienceWidget,InstitutionsWidget
 from .widgets import GameTypeWidget,ProductionStudiosWidget
+from .widgets import RecordedspeechTypeWidget,BroadcastingStationWidget
 from locations.models import Location
 from locations.widgets import LocationWidget, LocationsWidget
 from misc.models import Famine, Language, Keyword
@@ -43,7 +44,8 @@ def create_simple_form(name):
 #create simple forms for the following models
 names = 'TextType,ImageType,MusicType,PictureStoryType,FilmType,InfographicType'
 names += ',FilmCompany,TargetAudience,Collection,Publisher,Location,Language'
-names += ',Keyword,PublishingOutlet,Institution,GameType,ProductionStudio'
+names += ',Keyword,PublishingOutlet,Institution,GameType,ProductionStudio,RecordedspeechType'
+names += ',BroadcastingStation'
 for name in names.split(','):
 	create_simple_form(name)
 #----
@@ -342,6 +344,39 @@ class VideogameForm(SourceForm):
 		fields = fields.split(',')
 
 
+class RecordedspeechForm(SourceForm):
+	recordedspeech_type= forms.ModelChoiceField(
+		queryset=RecordedspeechType.objects.all(),
+		widget = RecordedspeechTypeWidget(**dselect2),
+		required=False)
+	creators= forms.ModelMultipleChoiceField(
+		queryset=Person.objects.all(),
+		widget = PersonsWidget(**dselect2),
+		required=False)
+	speakers= forms.ModelMultipleChoiceField(
+		queryset=Person.objects.all(),
+		widget = PersonsWidget(**dselect2),
+		required=False)
+	broadcasting_station= forms.ModelChoiceField(
+		queryset=BroadcastingStation.objects.all(),
+		widget = BroadcastingStationWidget(**dselect2),
+		required=False)
+	languages = forms.ModelMultipleChoiceField(
+		queryset=Language.objects.all(),
+		widget=LanguagesWidget(**dselect2),
+		required=False)
+	locations_recorded= forms.ModelMultipleChoiceField(
+		queryset=Location.objects.all(),
+		widget = LocationsWidget(**dselect2n2),
+		required=False)
+	audio_link = forms.CharField(**dchar)
+
+	class Meta:
+		model = Recordedspeech
+		fields = source_fields
+		fields += ',recordedspeech_type,creators,speakers,languages,audio_link'
+		fields += ',broadcasting_station,locations_recorded'
+		fields = fields.split(',')
 
 
 

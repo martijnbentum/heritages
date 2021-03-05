@@ -6,6 +6,7 @@ from .models import InfographicType, TextType, FilmType,PictureStoryType,ImageTy
 from .models import GameType,ProductionStudio
 from .models import Permission, FilmCompany
 from .models import TargetAudience, Institution
+from .models import RecordedspeechType,BroadcastingStation 
 
 class SimpleBaseWidget(ModelSelect2Widget):
 	search_fields = ['name__icontains']
@@ -88,6 +89,16 @@ class GameTypeWidget(SimpleBaseWidget):
 	def get_queryset(self):
 		return GameType.objects.all().order_by('name')
 
+class RecordedspeechTypeWidget(SimpleBaseWidget):
+	model = RecordedspeechType
+	def get_queryset(self):
+		return RecordedspeechType.objects.all().order_by('name')
+
+class BroadcastingStationWidget(SimpleBaseWidget):
+	model =BroadcastingStation
+	def get_queryset(self):
+		return BroadcastingStation.objects.all().order_by('name')
+
 class PictureStoryTypeWidget(SimpleBaseWidget):
 	model = PictureStoryType
 	def get_queryset(self):
@@ -157,5 +168,6 @@ class InstitutionsWidget(SimpleBasesWidget):
 	model =Institution
 	def get_queryset(self):
 		return Institution.objects.all().order_by('name')
+
 
 

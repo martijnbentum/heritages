@@ -120,7 +120,8 @@ def make_file_backup_postsave_receiver(app_name,model_name):
 	m += '\t\t\t\tprint("file not yet backed up, saving to remote folder")\n'
 	m += '\t\t\t\tput_file(local_path,remote_path,filename)\n'
 	m += '\t\t\telse: print("backup file already exists, doing nothing")\n'
-	exec(m,globals())
+	try:exec(m,globals())
+	except:print('could not execute\n',m,'\n for make file backup post save receiver')
 
 
 d = make_models_image_file_dict()

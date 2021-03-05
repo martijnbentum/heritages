@@ -1,0 +1,105 @@
+{% extends "utilities/base.html" %}
+{% load getattribute %}
+
+{% block head %}
+	{{form.media.css}}
+	<title>{{page_name}}</title>
+{% endblock %}
+
+{% block content %}
+
+<form method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	<div class="col-md-12 d-flex">
+		{% if 'Edit' in page_name %}
+			<h4 class="col-2 ml-0 pl-0">Edit recorded speech</h4>
+		{% else %}
+			<h4 class="col-2 ml-0 pl-0">Add recorded speech</h4>
+		{% endif %}
+		{% include 'utilities/save.html' %}
+		<div class="d-flex justify-content-end"> 
+			{% include 'utilities/list_button.html' %}
+		</div>
+			{% include 'utilities/flag.html' %}
+	</div>
+	<hr>
+	{% if 'Edit' in page_name and 'unknown' not in crud.last_update %}
+		{% include 'utilities/change_log.html' %}
+		{% else %} <p class="mb-4"></p>
+	{% endif %}
+
+	<table class="table table-borderless table-sm" id="form_table">
+	<tr class="d-flex">
+		<td class="col-2" id="title_original" >Title original</th>
+		<td class="col-9">{{form.title_original}} {{form.title_original.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Title english</th>
+		<td class="col-9">{{form.title_english}} {{form.title_english.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Speech type</th>
+		<td class="col-9">{{form.recordedspeech_type}} {{form.recordedspeech_type.error}}</td>
+		{% if request.user|has_group:"typemaster" %}
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_recordedspeech_type' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+		{% endif %}
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Creators</th>
+		<td class="col-9">{{form.creators}} {{form.creators.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'persons:add_person' 'inline' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Speakers</th>
+		<td class="col-9">{{form.speakers}} {{form.speakers.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'persons:add_person' 'inline' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Broadcasting Station</th>
+		<td class="col-9">{{form.broadcasting_station}} {{form.broadcasting_station.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_broadcasting_station' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Locations recorded</th>
+		<td class="col-9">{{form.locations_recorded}} {{form.locations_recorded.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'locations:add_location' 'inline' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Source link</th>
+		<td class="col-9">{{form.source_link}} {{form.source_link.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Audio link</th>
+		<td class="col-9">{{form.audio_link}} {{form.audio_link.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Languages</th>
+		<td class="col-9">{{form.languages}} {{form.languages.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'misc:add_language' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	{% include 'utilities/add_source.html' %}
+	</table>
+		<div class="col-md-12 d-flex">
+			<div class="col-2"></div>
+			{% include 'utilities/save.html' %}
+		</div>
+</form>
+<br>
+{{form.media.js}}
+{% include 'utilities/helper.html' %}
+
+
+
+{% endblock %}

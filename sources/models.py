@@ -16,7 +16,7 @@ def make_simple_model(name):
 names = 'MusicType,Collection,Rated,Commissioner'
 names += ',FilmCompany,FilmType,TargetAudience,PublishingOutlet,Available,ImageType'
 names += ',InfographicType,PictureStoryType,TextType,Publisher,Permission'
-names += ',Institution,ProductionStudio,GameType'
+names += ',Institution,ProductionStudio,GameType,RecordedspeechType,BroadcastingStation'
 names = names.split(',')
 
 for name in names:
@@ -252,3 +252,25 @@ class Videogame(Source,info):
 	class Meta:
 		unique_together = [['title_original','date_released']]
 
+class Recordedspeech(Source,info):
+	'''Meta data for texts related to famines.'''
+	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
+	recordedspeech_type= models.ForeignKey(RecordedspeechType,**dargs)
+	creators = models.ManyToManyField(Person,blank=True,related_name='recordedspeech_creators_set')
+	speakers = models.ManyToManyField(Person,blank=True,related_name='recordedspeech_speakers_set')
+	broadcasting_station= models.ForeignKey(BroadcastingStation,**dargs)
+	languages=models.ManyToManyField(Language,blank=True,
+		related_name='recordedspeech_language')
+	audio_link = models.CharField(max_length=1000,default='')
+	locations_recorded= models.ManyToManyField(Location,blank=True, 
+		related_name='recordedspeech_location_recorded')
+	location_field = ''
+	
+	@property
+	def pop_up(self):
+		m = self._pop_up
+		return m
+
+	class Meta:
+		unique_together = [['title_original','date_released']]
+	

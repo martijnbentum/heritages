@@ -20,7 +20,7 @@ field_names_dict = {'person':'name,pseudonyms,gender,location_of_birth',
 	'famine':'names_str$names,locations_str$locations',
 	'location':'name,country,region,location_type$type',
 	'keyword':'name,category,category_relations$relations',
-	'videogame':te+',game_type'}
+	'videogame':te+',game_type','recordedspeech':te+',recordedspeech_type'}
 
 
 def _handle_fieldnames(field_names):

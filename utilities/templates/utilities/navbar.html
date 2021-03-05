@@ -27,6 +27,8 @@
 			"{% url 'sources:text' %}">text</a>
           <a class="dropdown-item" href=
 			"{% url 'utilities:list_view' 'Videogame' 'sources' %}">video game</a>
+          <a class="dropdown-item" href=
+			"{% url 'utilities:list_view' 'recordedspeech' 'sources' %}">recorded speech</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href=
 			"{% url 'utilities:list_view' 'Famine' 'misc' %}">famine</a>
@@ -68,6 +70,8 @@
 			"{% url 'sources:add_text' %}">text</a>
           <a class="dropdown-item" href=
 			"{% url 'sources:add_videogame' %}">video game</a>
+          <a class="dropdown-item" href=
+			"{% url 'sources:add_recordedspeech' %}">recorded speech</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href=
 			"{% url 'misc:add_famine' %}">famine</a>
