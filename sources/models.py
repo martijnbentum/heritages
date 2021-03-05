@@ -17,6 +17,7 @@ names = 'MusicType,Collection,Rated,Commissioner'
 names += ',FilmCompany,FilmType,TargetAudience,PublishingOutlet,Available,ImageType'
 names += ',InfographicType,PictureStoryType,TextType,Publisher,Permission'
 names += ',Institution,ProductionStudio,GameType,RecordedspeechType,BroadcastingStation'
+names += ',MemorialType'
 names = names.split(',')
 
 for name in names:
@@ -274,3 +275,26 @@ class Recordedspeech(Source,info):
 	class Meta:
 		unique_together = [['title_original','date_released']]
 	
+
+class Memorialsite(Source,info):
+	'''Meta data for texts related to famines.'''
+	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
+	memorial_type= models.ForeignKey(MemorialType,**dargs)
+	creators = models.ManyToManyField(Person,blank=True,related_name='memorialsite_creators_set')
+	artists= models.ManyToManyField(Person,blank=True,related_name='memorialsite_artists_set')
+	image_file1 = models.ImageField(upload_to='memorialsite/',blank=True,null=True)
+	image_file2 = models.ImageField(upload_to='memorialsite/',blank=True,null=True)
+	image_file3 = models.ImageField(upload_to='memorialsite/',blank=True,null=True)
+	donors= models.ManyToManyField(Person,blank=True,related_name='memorialsite_donors_set')
+	locations= models.ManyToManyField(Location,blank=True, 
+		related_name='memorialsite_location_recorded')
+	video_link = models.CharField(max_length=1000,default='')
+	location_field = ''
+	
+	@property
+	def pop_up(self):
+		m = self._pop_up
+		return m
+
+	class Meta:
+		unique_together = [['title_original','date_released']]

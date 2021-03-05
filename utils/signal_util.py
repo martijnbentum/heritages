@@ -7,6 +7,7 @@ from easyaudit.models import CRUDEvent
 
 from misc.models import Famine, KeywordRelation
 from sources.models import Film,Text,Image,PictureStory,Music,Infographic,Videogame
+from sources.models import Recordedspeech, Memorialsite
 from persons.models import Person
 
 from .backup_util import put_file, isfile
@@ -121,7 +122,11 @@ def make_file_backup_postsave_receiver(app_name,model_name):
 	m += '\t\t\t\tput_file(local_path,remote_path,filename)\n'
 	m += '\t\t\telse: print("backup file already exists, doing nothing")\n'
 	try:exec(m,globals())
-	except:print('could not execute\n',m,'\n for make file backup post save receiver')
+	except:
+		print('-'*90)
+		print('could not execute\n',m,'\n for make file backup post save receiver')
+		print(sys.exc_info())
+		print('-'*90)
 
 
 d = make_models_image_file_dict()

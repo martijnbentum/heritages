@@ -7,6 +7,7 @@ from .models import Permission, FilmCompany, FilmType, Film, Text, Image
 from .models import TargetAudience, TextType, InfographicType, ImageType
 from .models import Publisher, PictureStoryType, PictureStory, Institution
 from .models import GameType, ProductionStudio,RecordedspeechType,BroadcastingStation
+from .models import Memorialsite,MemorialType
 from .widgets import CollectionWidget,PublishingOutletWidget,AvailableWidget, TextTypeWidget
 from .widgets import RatedWidget,CommissionerWidget,MusicTypeWidget, FilmCompanyWidget
 from .widgets import ImageTypeWidget, InfographicTypeWidget,FilmTypeWidget, PublisherWidget
@@ -15,6 +16,7 @@ from .widgets import TargetAudienceWidget, PictureStoryTypeWidget,FilmCompaniesW
 from .widgets import TargetAudienceWidget,InstitutionsWidget
 from .widgets import GameTypeWidget,ProductionStudiosWidget
 from .widgets import RecordedspeechTypeWidget,BroadcastingStationWidget
+from .widgets import MemorialTypeWidget
 from locations.models import Location
 from locations.widgets import LocationWidget, LocationsWidget
 from misc.models import Famine, Language, Keyword
@@ -45,7 +47,7 @@ def create_simple_form(name):
 names = 'TextType,ImageType,MusicType,PictureStoryType,FilmType,InfographicType'
 names += ',FilmCompany,TargetAudience,Collection,Publisher,Location,Language'
 names += ',Keyword,PublishingOutlet,Institution,GameType,ProductionStudio,RecordedspeechType'
-names += ',BroadcastingStation'
+names += ',BroadcastingStation,MemorialType'
 for name in names.split(','):
 	create_simple_form(name)
 #----
@@ -378,6 +380,34 @@ class RecordedspeechForm(SourceForm):
 		fields += ',broadcasting_station,locations_recorded'
 		fields = fields.split(',')
 
+class MemorialsiteForm(SourceForm):
+	memorial_type= forms.ModelChoiceField(
+		queryset=MemorialType.objects.all(),
+		widget = MemorialTypeWidget(**dselect2),
+		required=False)
+	creators= forms.ModelMultipleChoiceField(
+		queryset=Person.objects.all(),
+		widget = PersonsWidget(**dselect2),
+		required=False)
+	artists= forms.ModelMultipleChoiceField(
+		queryset=Person.objects.all(),
+		widget = PersonsWidget(**dselect2),
+		required=False)
+	donors= forms.ModelMultipleChoiceField(
+		queryset=Person.objects.all(),
+		widget = PersonsWidget(**dselect2),
+		required=False)
+	locations= forms.ModelMultipleChoiceField(
+		queryset=Location.objects.all(),
+		widget = LocationsWidget(**dselect2n2),
+		required=False)
+	video_link = forms.CharField(**dchar)
 
+	class Meta:
+		model = Memorialsite
+		fields = source_fields
+		fields += ',memorial_type,creators,artists,donors,locations,image_file1'
+		fields += ',image_file2,image_file3,video_link'
+		fields = fields.split(',')
 
 

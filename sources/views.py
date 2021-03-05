@@ -8,7 +8,8 @@ from .forms import PictureStoryForm, PictureStoryTypeForm, PublisherForm, Publis
 from .forms import LocationForm, LanguageForm, KeywordForm,InstitutionForm,VideogameForm
 from .forms import GameTypeForm, ProductionStudioForm, RecordedspeechTypeForm
 from .forms import GameTypeForm, ProductionStudioForm, RecordedspeechTypeForm
-from .forms import RecordedspeechForm, BroadcastingStationForm
+from .forms import RecordedspeechForm, BroadcastingStationForm, MemorialTypeForm
+from .forms import MemorialsiteForm
 from persons.forms import PersonForm
 
 def index(request):
@@ -32,7 +33,7 @@ def create_simple_view(name):
 #create simple views for the following models
 names = 'TextType,MusicType,ImageType,FilmType,InfographicType,PictureStoryType'
 names += ',FilmCompany,Publisher,Collection,TargetAudience,PublishingOutlet,Institution'
-names += ',ProductionStudio,GameType,RecordedspeechType,BroadcastingStation'
+names += ',ProductionStudio,GameType,RecordedspeechType,BroadcastingStation,MemorialType'
 for name in names.split(','):
 	create_simple_view(name)
 
@@ -47,6 +48,9 @@ def edit_music(request,pk=None,focus='',view='complete'):
 
 def edit_film(request,pk=None,focus='',view='complete'):
 	return edit_model(request,__name__,'Film','sources',pk,focus=focus,view=view)
+
+def edit_memorialsite(request,pk=None,focus='',view='complete'):
+	return edit_model(request,__name__,'Memorialsite','sources',pk,focus=focus,view=view)
 
 def edit_videogame(request,pk=None,focus='',view='complete'):
 	return edit_model(request,__name__,'Videogame','sources',pk,focus=focus,view=view)

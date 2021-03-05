@@ -7,6 +7,7 @@ from .models import GameType,ProductionStudio
 from .models import Permission, FilmCompany
 from .models import TargetAudience, Institution
 from .models import RecordedspeechType,BroadcastingStation 
+from .models import MemorialType
 
 class SimpleBaseWidget(ModelSelect2Widget):
 	search_fields = ['name__icontains']
@@ -88,6 +89,11 @@ class GameTypeWidget(SimpleBaseWidget):
 	model = GameType
 	def get_queryset(self):
 		return GameType.objects.all().order_by('name')
+
+class MemorialTypeWidget(SimpleBaseWidget):
+	model = MemorialType
+	def get_queryset(self):
+		return MemorialType.objects.all().order_by('name')
 
 class RecordedspeechTypeWidget(SimpleBaseWidget):
 	model = RecordedspeechType
