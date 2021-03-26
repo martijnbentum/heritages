@@ -33,8 +33,8 @@
 <h5 class="text-secondary">Current set</h4> 
 <hr class="mt-0 mb-4">
 {% for instance in instances %}
-	<a class="text-dark" style="text-decoration:none;" href="{{url}}{{instance.pk}}">
-	{{instance.name}}</p>
+	<p><a class="text-dark" style="text-decoration:none;" href="{{url}}{{instance.pk}}">
+	{{instance.name}}</a></p>
 {% endfor %}
 
 {{form.media.js}}
