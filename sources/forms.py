@@ -393,9 +393,13 @@ class MemorialsiteForm(SourceForm):
 		queryset=Person.objects.all(),
 		widget = PersonsWidget(**dselect2),
 		required=False)
-	donors= forms.ModelMultipleChoiceField(
+	donor_persons= forms.ModelMultipleChoiceField(
 		queryset=Person.objects.all(),
 		widget = PersonsWidget(**dselect2),
+		required=False)
+	donor_institutions= forms.ModelMultipleChoiceField(
+		queryset=Institution.objects.all(),
+		widget = InstitutionsWidget(**dselect2),
 		required=False)
 	locations= forms.ModelMultipleChoiceField(
 		queryset=Location.objects.all(),
@@ -406,8 +410,8 @@ class MemorialsiteForm(SourceForm):
 	class Meta:
 		model = Memorialsite
 		fields = source_fields
-		fields += ',memorial_type,creators,artists,donors,locations,image_file1'
-		fields += ',image_file2,image_file3,video_link'
+		fields += ',memorial_type,creators,artists,donor_persons,donor_institutions'
+		fields += ',locations,image_file1,image_file2,image_file3,video_link'
 		fields = fields.split(',')
 
 

@@ -61,10 +61,17 @@
 			role="button"><i class="fa fa-plus"></i></a></td>
 	</tr>
 	<tr class="d-flex">
-		<td class="col-2">Donors</th>
-		<td class="col-9">{{form.donors}} {{form.donors.error}}</td>
+		<td class="col-2">Donors (person)</th>
+		<td class="col-9">{{form.donor_persons}} {{form.donors.error}}</td>
 		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
 			href = "{% url 'persons:add_person' 'inline' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Donors (institution)</th>
+		<td class="col-9">{{form.donor_institutions}} {{form.donors.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_institution' %}"
 			role="button"><i class="fa fa-plus"></i></a></td>
 	</tr>
 	<tr class="d-flex">

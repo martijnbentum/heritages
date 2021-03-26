@@ -284,7 +284,10 @@ class Memorialsite(Source,info):
 	image_file1 = models.ImageField(upload_to='memorialsite/',blank=True,null=True)
 	image_file2 = models.ImageField(upload_to='memorialsite/',blank=True,null=True)
 	image_file3 = models.ImageField(upload_to='memorialsite/',blank=True,null=True)
-	donors= models.ManyToManyField(Person,blank=True,related_name='memorialsite_donors_set')
+	donor_persons= models.ManyToManyField(Person,blank=True,
+		related_name='memorialsite_person_donors_set')
+	donor_institutions= models.ManyToManyField(Institution,blank=True,
+		related_name='memorialsite_institution_donors_set')
 	locations= models.ManyToManyField(Location,blank=True, 
 		related_name='memorialsite_location_recorded')
 	video_link = models.CharField(max_length=1000,default='')
