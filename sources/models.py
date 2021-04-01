@@ -288,6 +288,10 @@ class Memorialsite(Source,info):
 		related_name='memorialsite_person_donors_set')
 	donor_institutions= models.ManyToManyField(Institution,blank=True,
 		related_name='memorialsite_institution_donors_set')
+	commissioning_persons= models.ManyToManyField(Person,blank=True,
+		related_name='memorialsite_person_commissioning_set')
+	commissioning_institutions= models.ManyToManyField(Institution,blank=True,
+		related_name='memorialsite_institution_commissioning_set')
 	locations= models.ManyToManyField(Location,blank=True, 
 		related_name='memorialsite_location_recorded')
 	video_link = models.CharField(max_length=1000,default='')

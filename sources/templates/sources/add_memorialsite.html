@@ -62,14 +62,29 @@
 	</tr>
 	<tr class="d-flex">
 		<td class="col-2">Donors (person)</th>
-		<td class="col-9">{{form.donor_persons}} {{form.donors.error}}</td>
+		<td class="col-9">{{form.donor_persons}} {{form.donor_persons.error}}</td>
 		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
 			href = "{% url 'persons:add_person' 'inline' %}"
 			role="button"><i class="fa fa-plus"></i></a></td>
 	</tr>
 	<tr class="d-flex">
 		<td class="col-2">Donors (institution)</th>
-		<td class="col-9">{{form.donor_institutions}} {{form.donors.error}}</td>
+		<td class="col-9">{{form.donor_institutions}} {{form.donor_institutions.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_institution' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Commissioning persons</th>
+		<td class="col-9">{{form.commissioning_persons}} {{form.commissioning_persons.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'persons:add_person' 'inline' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Commissioning institutions</th>
+		<td class="col-9">{{form.commissioning_institutions}} 
+		{{form.commissioning_institutions.error}}</td>
 		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
 			href = "{% url 'sources:add_institution' %}"
 			role="button"><i class="fa fa-plus"></i></a></td>
