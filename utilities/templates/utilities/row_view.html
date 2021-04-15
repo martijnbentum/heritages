@@ -1,0 +1,92 @@
+{% extends "utilities/base.html" %}
+
+{% block content %}
+
+<div class="grid-container">
+	<div class="grid-item icon">
+		<i class="fa fa-film" aria-hidden="true"></i> 
+	</div>
+	<div class="grid-item title">
+		<p class="p-title">{{instance.title}}</p>
+	</div>
+	<div class="grid-item year">
+		<p class="p-year">{{instance.date_released}}</p>
+	</div>  
+	<div class="grid-item description">
+		<p class="p-description">{{instance.description}}</p>
+	</div>
+	<div class="grid-item plus">
+		<a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_image_type' %}"
+			role="button"><i class="fa fa-plus"></i></a>
+	</div>
+	<div class="grid-item info">
+		<div class="nested grid-item info-famine">famine</div>
+		<div class="nested grid-item info-keywords">keywords</div>
+		<div class="nested grid-item info-location">location</div>
+	</div>
+	<div class="grid-item image">
+		<img src="{{instance.thumbnail.url}}" alt="" height="100">
+	</div>  
+</div>
+
+
+
+<style>
+p {
+	margin-bottom:0px;
+	font-family: "Georgia", serif;
+	font-size: small;
+}
+
+.p-title {
+	font-size: large;
+}
+
+.p-year{
+	font-size: large;
+}
+.p-description{
+	font-size: large;
+}
+
+
+
+.grid-container {
+	display:grid;
+	grid-template-columns: 1fr 4fr 4fr 2fr;
+	padding: 1px;
+	grid-gap: 1px;
+	justify-items: center;
+	align-items: center;
+}
+
+.grid-item {
+	background-color: #f0f0f0;
+	padding: 1px;
+}
+
+.title {
+	grid-column:2/4;
+	justify-self:left;
+}
+.plus{
+	align-self:start;
+}
+
+.description{
+	grid-column:2/4;
+	justify-self:left;
+}
+.info{
+	grid-column:2;
+	justify-self:left;
+	display:grid;
+}
+.image{
+	grid-column:3;
+	justify-self:right;
+}
+</style>
+
+{% endblock %}
