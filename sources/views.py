@@ -41,8 +41,6 @@ def view_list(request,name):
 	return list_view(request, name,'sources')
 
 
-
-
 def edit_music(request,pk=None,focus='',view='complete'):
 	return edit_model(request,__name__,'Music','sources',pk,focus=focus,view=view)
 
