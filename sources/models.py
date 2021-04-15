@@ -52,6 +52,11 @@ class Source(models.Model):
 		return self.title_english
 
 	@property
+	def title(self):
+		if self.title_english: return self.title_english
+		return self.title_original
+
+	@property
 	def _pop_up(self):
 		app_name, model_name = instance2names(self)
 		m = ''
@@ -129,6 +134,13 @@ class Film(Source, info):
 	def pop_up(self):
 		m = self._pop_up
 		return m
+
+	@property
+	def language(self):
+		languages=  self.languages_original.all()
+		if languages:
+			return ', '.join( [x.name for x in languages] )
+
 
 	class Meta:
 		unique_together = [['title_original','date_released']]
