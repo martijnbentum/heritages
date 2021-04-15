@@ -35,6 +35,16 @@ def _handle_fieldnames(field_names):
 		field_dict[name] = hname
 	return field_dict
 	
+
+def row_view(request, model_name='', app_name='',html_name=''):
+	'''list view of a model.'''
+	if html_name == '': html_name = 'utilities/row_view.html'
+	instance= apps.get_model('sources','Film').objects.get(title_original= '13 in de Oorlog: De Hongerwinter')
+	name = model_name.lower()
+	var = {name +'_row':instance,'page_name':model_name,
+		'name':name,'app_name':app_name,'instance':instance}
+	r =  render(request, html_name,var)
+	return r
 	
 
 def list_view(request, model_name, app_name,html_name='',field_names = '',max_entries=200):
