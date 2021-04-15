@@ -1,0 +1,72 @@
+{% extends "utilities/base.html" %}
+
+{% block content %}
+<table class="d-flex">
+	<tr>
+	<td class="column-width"> 
+		<img src="{{instance.thumbnail.url}}" alt="" height="100">
+	</td>
+	<td valign="top">
+		<h5><i class="fa fa-film" aria-hidden="true"></i> </h5>
+		<a class = "btn btn-link btn-sm ml-auto text-dark inline" 
+			href = "{% url 'sources:edit_film' instance.pk %}"
+			role = "button">
+			<h4>{{instance.title}}</h4>
+			</a>
+		<hr class="mt-0 pt-0">
+		<!-- <p class="date_released"><b>Date released:</b></p> -->
+		<p class="inline">{{instance.date_released}}</p>
+		<!-- <p class="">{{instance.language}}</p> -->
+		<p class="inline">{{instance.description}}</p>
+
+	</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'sources:add_image_type' %}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+</table>
+
+
+<style>
+
+.inline {
+	display: inline-block;
+}
+
+.date_released {
+	margin-top: 20px;  
+	font-family: "Garamond", serif;
+}	
+
+hr {
+	margin-left:10px;
+}
+
+
+i {
+	display: inline-block;
+	margin-left: 10px;  
+}	
+
+p {
+	margin-left: 50px;  
+	margin-bottom: 0px;  
+	font-family: "Garamond", serif;
+}	
+
+h4 {
+	margin-left: 10px;  
+	display: inline-block;
+	font-family: "Georgia", serif;
+}
+h5 {
+	display: inline-block;
+}
+
+.test {
+	float: left;
+}
+.column-width {
+	width: 20;
+}
+</style>
+{% endblock %}
