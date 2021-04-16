@@ -7,32 +7,74 @@
 		<i class="fa fa-film" aria-hidden="true"></i> 
 	</div>
 	<div class="grid-item title">
-		<p class="p-title">{{instance.title}}</p>
+		<a class = "btn btn-link btn-sm ml-auto nostyle p-title"
+			href = "{% url 'sources:edit_film' instance.pk %}"
+			role = "button">
+			<p class="p-title">{{instance.title}}</p>
+		</a>
 	</div>
 	<div class="grid-item year">
-		<p class="p-year">{{instance.date_released}}</p>
+		<p class="p-year blue">{{instance.date_released}}</p>
 	</div>  
 	<div class="grid-item description">
-		<p class="p-description">{{instance.description}}</p>
+		<p class="p-description grey" id = 'description'>{{instance.description}}</p>
 	</div>
 	<div class="grid-item plus">
-		<a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
-			href = "{% url 'sources:add_image_type' %}"
+		<a class = "btn btn-link btn-sm ml-auto text-dark" 
+			href = "#" onclick="toggle_row_view()"
 			role="button"><i class="fa fa-plus"></i></a>
 	</div>
-	<div class="grid-item info">
-		<div class="nested grid-item info-famine">famine</div>
-		<div class="nested grid-item info-keywords">keywords</div>
-		<div class="nested grid-item info-location">location</div>
+	<div class="grid-item info" id='info-toggle'>
+		<div class="nested grid-item info-famine">
+			<p class="p-info small">Famine:</p>
+			<p class="p-info blue normal"> {{instance.famine_names|truncatewords:3}}</p>
+		</div>
+		<div class="nested grid-item info-keywords">
+			<p class="p-info small">Keywords:</p>
+			<p class="p-info blue normal"> {{instance.keyword_names|truncatewords:3}}</p>
+		</div>
+		<div class="nested grid-item info-location">
+			<p class="p-info small">Location:</p>
+			<p class="p-info blue normal"> {{instance.setting_names|truncatewords:3}}</p>
+		</div>
 	</div>
-	<div class="grid-item image">
-		<img src="{{instance.thumbnail.url}}" alt="" height="100">
+	<div class="grid-item image toggle" id='image-toggle'>
+		<img src="{{instance.thumbnail.url}}" alt="" height="120">
 	</div>  
 </div>
 
 
+<script>
+var description = document.getElementById("description")
+var description_text = description.innerHTML
+var description_text_trunc = description_text.substring(0,170) + ' ...';
+description.innerHTML = description_text_trunc;
+
+function toggle_row_view() {
+	var info = document.getElementById("info-toggle");
+	var image= document.getElementById("image-toggle");
+	if (info.style.display == 'grid') {
+		info.style.display = 'None';
+		image.style.display = 'None';
+		description.innerHTML = description_text_trunc;
+	} else {
+		info.style.display = 'grid';
+		image.style.display = 'inline';
+		description.innerHTML = description_text;
+	}
+}
+		
+
+
+</script>
+
 
 <style>
+a {
+	margin-bottom:0px;
+	padding-bottom:0px;
+}
+
 p {
 	margin-bottom:0px;
 	font-family: "Georgia", serif;
@@ -40,30 +82,52 @@ p {
 }
 
 .p-title {
-	font-size: large;
+	font-size: 110%;
+	text-decoration: underline;
+	color: black;
+	padding-bottom:0px;
 }
 
 .p-year{
-	font-size: large;
+	font-size: 125%;
 }
 .p-description{
-	font-size: large;
+	font-size: 90%;
 }
 
+.p-info{
+	display:inline;
+}
 
+.small{
+	font-size: 75%;
+}
+
+.normal{
+	font-size: 90%;
+}
+
+.blue{
+	color: #56c1e8;
+}
+
+.grey{
+	color: #918f87;
+}
 
 .grid-container {
 	display:grid;
 	grid-template-columns: 1fr 4fr 4fr 2fr;
 	padding: 1px;
-	grid-gap: 1px;
+	grid-gap: 3px;
 	justify-items: center;
 	align-items: center;
 }
 
 .grid-item {
-	background-color: #f0f0f0;
-	padding: 1px;
+	/*background-color: #f0f0f0;*/
+	padding: 0px;
+	text-align: justify;
 }
 
 .title {
@@ -79,13 +143,17 @@ p {
 	justify-self:left;
 }
 .info{
+	grid-gap: 15px;
 	grid-column:2;
+	align-times:center;
 	justify-self:left;
-	display:grid;
+	display:None;
 }
+
 .image{
 	grid-column:3;
 	justify-self:right;
+	display:None;
 }
 </style>
 
