@@ -38,13 +38,32 @@ def _handle_fieldnames(field_names):
 
 def row_view(request, model_name='', app_name='',html_name=''):
 	'''list view of a model.'''
+	n = 'Image,Infographic,Film,Music,PictureStory,Text,Videogame,Recordedspeech,Memorialsite'
+	models = [apps.get_model('sources',name) for name in n.split(',')]
+	models.append(apps.get_model('persons','Person'))
+	instances = []
+	for x in models:
+		instances.extend(x.objects.all())
+	print(models)
+	print(len(instances))
+	instances = instances
 	if html_name == '': html_name = 'utilities/row_view.html'
 	instance= apps.get_model('sources','Film').objects.get(title_original= '13 in de Oorlog: De Hongerwinter')
 	name = model_name.lower()
 	var = {name +'_row':instance,'page_name':model_name,
-		'name':name,'app_name':app_name,'instance':instance}
+		'name':name,'app_name':app_name,'instance':instance,'instances':instances}
 	r =  render(request, html_name,var)
 	return r
+
+def all_list_view(request = None):
+	n = 'Image,Infographic,Film,Music,PictureStory,Text,Videogame,Recordedspeech,Memorialsite'
+	models = [apps.get_model('sources',name) for name in n.split(',')]
+	models.append(apps.get_model('persons','Person'))
+	instances = []
+	for x in models:
+		instances.extend(x.objects.all())
+	print(models)
+	return instances
 	
 
 def list_view(request, model_name, app_name,html_name='',field_names = '',max_entries=200):
