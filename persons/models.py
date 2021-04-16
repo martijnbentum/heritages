@@ -42,6 +42,14 @@ class Person(models.Model, info):
 		return self.name
 
 	@property
+	def icon(self):
+		return 'fas fa-user'
+
+	@property
+	def title(self): #helper property to display name in overviews
+		return self.name
+
+	@property
 	def occupations_str(self):
 		return ', '.join([o.name for o in self.occupation.all()])
 
@@ -67,4 +75,6 @@ class Person(models.Model, info):
 
 	class Meta:
 		unique_together = [['name','date_of_birth']]
+
+	
 		
