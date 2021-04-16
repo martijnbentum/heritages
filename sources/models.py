@@ -105,6 +105,10 @@ class Source(models.Model):
 		keywords= self.keywords.all() 
 		if keywords: return ', '.join([k.name for k in keywords])
 		else: return ''
+
+	@property
+	def identifier(self):
+		return self._meta.app_label + '_' + self._meta.model_name + '_' + str( self.pk )
 		
 
 class Music(Source,info):
@@ -119,6 +123,11 @@ class Music(Source,info):
 	languages = models.ManyToManyField(Language, blank=True)
 	music_link = models.CharField(max_length=1000,default='')
 	play_field = 'music_video_link'
+	
+	@property
+	def icon(self):
+		return 'fas fa-music'
+
 
 	@property
 	def pop_up(self):
@@ -148,6 +157,10 @@ class Film(Source, info):
 	video_part_link = models.CharField(max_length=1000,default='')
 	location_field = 'setting'
 	play_field = 'video_link'
+
+	@property
+	def icon(self):
+		return 'fa fa-film'
 	
 	@property
 	def pop_up(self):
@@ -176,6 +189,10 @@ class Image(Source, info):
 	location_field = 'locations'
 	image_filename = models.CharField(max_length=500,default='',blank=True,null=True)
 
+	@property
+	def icon(self):
+		return 'fas fa-image'
+
 
 	@property
 	def pop_up(self):
@@ -200,6 +217,11 @@ class Infographic(Source,info):
 	locations = models.ManyToManyField(Location,blank=True, related_name='infographic_locations')
 	location_field = 'locations'
 	image_filename = models.CharField(max_length=500,default='',blank=True,null=True)
+
+
+	@property
+	def icon(self):
+		return 'fas fa-chart-area'
 
 	@property
 	def pop_up(self):
@@ -227,6 +249,10 @@ class PictureStory(Source,info):
 	image_filename = models.CharField(max_length=500,default='',blank=True,null=True)
 
 	@property
+	def icon(self):
+		return 'fas fa-image'
+
+	@property
 	def pop_up(self):
 		m = self._pop_up
 		return m
@@ -251,6 +277,10 @@ class Text(Source,info):
 	excerpt_file = models.FileField(upload_to='text/',blank=True,null=True)
 	locations = models.ManyToManyField(Location,blank=True, related_name='text_locations')
 	location_field = 'locations'
+
+	@property
+	def icon(self):
+		return 'fas fa-file-alt'
 	
 	@property
 	def pop_up(self):
@@ -274,6 +304,10 @@ class Videogame(Source,info):
 		related_name='videogame_language_subtitle')
 	video_link = models.CharField(max_length=1000,default='')
 	location_field = ''
+
+	@property
+	def icon(self):
+		return 'fas fa-gamepad'
 	
 	@property
 	def pop_up(self):
@@ -296,6 +330,10 @@ class Recordedspeech(Source,info):
 	locations_recorded= models.ManyToManyField(Location,blank=True, 
 		related_name='recordedspeech_location_recorded')
 	location_field = ''
+
+	@property
+	def icon(self):
+		return 'far fa-comments'
 	
 	@property
 	def pop_up(self):
@@ -327,6 +365,10 @@ class Memorialsite(Source,info):
 		related_name='memorialsite_location_recorded')
 	video_link = models.CharField(max_length=1000,default='')
 	location_field = ''
+
+	@property
+	def icon(self):
+		return 'fas fa-monument'
 	
 	@property
 	def pop_up(self):
