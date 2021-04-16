@@ -87,6 +87,25 @@ class Source(models.Model):
 			locations = field2locations(self,self.location_field)
 			return [location.gps for location in locations]
 		else: return None
+	
+	@property
+	def setting_names(self):
+		locations = self.setting.all() 
+		if locations: return ', '.join([l.name for l in locations])
+		else: return ''
+
+	@property
+	def famine_names(self):
+		famines= self.famines.all() 
+		if famines: return ', '.join([f.names_str for f in famines])
+		else: return ''
+
+	@property
+	def keyword_names(self):
+		keywords= self.keywords.all() 
+		if keywords: return ', '.join([k.name for k in keywords])
+		else: return ''
+		
 
 class Music(Source,info):
 	'''Meta data for songs related to famines.'''
