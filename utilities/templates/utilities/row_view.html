@@ -2,57 +2,65 @@
 
 {% block content %}
 
-<div class="grid-container">
-	<div class="grid-item icon">
-		<i class="fa fa-film" aria-hidden="true"></i> 
-	</div>
-	<div class="grid-item title">
-		<a class = "btn btn-link btn-sm ml-auto nostyle p-title"
-			href = "{% url 'sources:edit_film' instance.pk %}"
-			role = "button">
-			<p class="p-title">{{instance.title}}</p>
-		</a>
-	</div>
-	<div class="grid-item year">
-		<p class="p-year blue">{{instance.date_released}}</p>
-	</div>  
-	<div class="grid-item description">
-		<p class="p-description grey" id = 'description'>{{instance.description}}</p>
-	</div>
-	<div class="grid-item plus">
-		<a class = "btn btn-link btn-sm ml-auto text-dark" 
-			href = "#" onclick="toggle_row_view()"
-			role="button"><i class="fa fa-plus"></i></a>
-	</div>
-	<div class="grid-item info" id='info-toggle'>
-		<div class="nested grid-item info-famine">
-			<p class="p-info small">Famine:</p>
-			<p class="p-info blue normal"> {{instance.famine_names|truncatewords:3}}</p>
-		</div>
-		<div class="nested grid-item info-keywords">
-			<p class="p-info small">Keywords:</p>
-			<p class="p-info blue normal"> {{instance.keyword_names|truncatewords:3}}</p>
-		</div>
-		<div class="nested grid-item info-location">
-			<p class="p-info small">Location:</p>
-			<p class="p-info blue normal"> {{instance.setting_names|truncatewords:3}}</p>
-		</div>
-	</div>
-	<div class="grid-item image toggle" id='image-toggle'>
-		<img src="{{instance.thumbnail.url}}" alt="" height="120">
-	</div>  
-</div>
+{% for instance in instances %}
 
+	<div class="grid-container" id='{{instance.identifier}}_row_container'>
+		<div class="grid-item icon">
+			<i class="{{instance.icon}}" aria-hidden="true"></i> 
+		</div>
+		<div class="grid-item title">
+			<a class = "btn btn-link btn-sm ml-auto nostyle p-title"
+				href = "{% url 'sources:edit_film' instance.pk %}"
+				role = "button">
+				<p class="p-title">{{instance.title}}</p>
+			</a>
+		</div>
+		<div class="grid-item year">
+			{% if instance.date_released %}
+				<p class="p-year blue">{{instance.date_released}}</p>
+			{% endif %}
+		</div>  
+		<div class="grid-item description">
+			{% if instance.description %}
+			<p class="p-description grey" id = '{{instance.pk}}_description'>
+				{{instance.description}}</p>
+			{% endif %}
+		</div>
+		<div class="grid-item plus">
+			<a class = "btn btn-link btn-sm ml-auto text-dark" 
+				href = "#." onclick="toggle_row_view('{{instance.identifier}}')"
+				role="button"><i class="fa fa-plus"></i></a>
+		</div>
+		<div class="grid-item info" id='{{instance.identifier}}_info-toggle'>
+			<div class="nested grid-item info-famine">
+				<p class="p-info small">Famine:</p>
+			</div>
+			<div class="nested grid-item info-keywords">
+				<p class="p-info small">Keywords:</p>
+			</div>
+			<div class="nested grid-item info-location">
+				<p class="p-info small">Location:</p>
+			</div>
+		</div>
+		<div class="grid-item image toggle" id='{{instance.identifier}}_image-toggle'>
+			{% if instance.thumbnail %}
+			{% endif %}
+		</div>  
+	</div>
+	<hr>
+{% endfor %}
 
 <script>
-var description = document.getElementById("description")
+var description = document.getElementById("17_description")
 var description_text = description.innerHTML
 var description_text_trunc = description_text.substring(0,170) + ' ...';
 description.innerHTML = description_text_trunc;
 
-function toggle_row_view() {
-	var info = document.getElementById("info-toggle");
-	var image= document.getElementById("image-toggle");
+function toggle_row_view(identifier) {
+	var app, model, pk = identifier.split("_")
+	console.log(app,model,pk)
+	var info = document.getElementById(identifier + "_info-toggle");
+	var image= document.getElementById(identifier + "_image-toggle");
 	if (info.style.display == 'grid') {
 		info.style.display = 'None';
 		image.style.display = 'None';
@@ -70,6 +78,11 @@ function toggle_row_view() {
 
 
 <style>
+hr {
+	margin-bottom:0px;
+	padding-bottom:0px;
+}
+
 a {
 	margin-bottom:0px;
 	padding-bottom:0px;
