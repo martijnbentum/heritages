@@ -76,5 +76,8 @@ class Person(models.Model, info):
 	class Meta:
 		unique_together = [['name','date_of_birth']]
 
+	@property
+	def edit_url(self):
+		return self._meta.app_label + ':edit_' + self._meta.model_name 
 	
 		
