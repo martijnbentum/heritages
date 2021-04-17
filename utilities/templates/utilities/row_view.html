@@ -10,7 +10,7 @@
 		</div>
 		<div class="grid-item title">
 			<a class = "btn btn-link btn-sm ml-auto nostyle p-title"
-				href = "{% url 'sources:edit_film' instance.pk %}"
+				href = "{% url instance.edit_url instance.pk %}"
 				role = "button">
 				<p class="p-title">{{instance.title}}</p>
 			</a>
@@ -22,7 +22,7 @@
 		</div>  
 		<div class="grid-item description">
 			{% if instance.description %}
-			<p class="p-description grey" id = '{{instance.pk}}_description'>
+			<p class="p-description grey" id = '{{instance.identifier}}_description'>
 				{{instance.description}}</p>
 			{% endif %}
 		</div>
@@ -34,16 +34,20 @@
 		<div class="grid-item info" id='{{instance.identifier}}_info-toggle'>
 			<div class="nested grid-item info-famine">
 				<p class="p-info small">Famine:</p>
+				<p class="p-info blue normal"> {{instance.famine_names|truncatewords:3}}</p>
 			</div>
 			<div class="nested grid-item info-keywords">
 				<p class="p-info small">Keywords:</p>
+				<p class="p-info blue normal"> {{instance.keyword_names|truncatewords:3}}</p>
 			</div>
 			<div class="nested grid-item info-location">
 				<p class="p-info small">Location:</p>
+				<p class="p-info blue normal"> {{instance.setting_names|truncatewords:3}}</p>
 			</div>
 		</div>
 		<div class="grid-item image toggle" id='{{instance.identifier}}_image-toggle'>
 			{% if instance.thumbnail %}
+				<img src="{{instance.thumbnail.url}}" alt="" height="120">
 			{% endif %}
 		</div>  
 	</div>
@@ -51,24 +55,38 @@
 {% endfor %}
 
 <script>
-var description = document.getElementById("17_description")
-var description_text = description.innerHTML
-var description_text_trunc = description_text.substring(0,170) + ' ...';
-description.innerHTML = description_text_trunc;
+var descriptions = document.getElementsByClassName('p-description')
+//var description = document.getElementById("17_description")
+//var description_text = description.innerHTML
+//var description_text_trunc = description_text.substring(0,170) + ' ...';
+//description.innerHTML = description_text_trunc;
+var description_dict = {}
+for ( i =0; i < descriptions.length; i++ ){
+	description = descriptions[i];
+	var d ={}
+	d.text = description.innerHTML;
+	d.truncated_text = d.text.substring(0,170) + ' ...';
+	description_dict[description.id] = d;
+	description.innerHTML = d.truncated_text;
+}
+console.log(descriptions);
+console.log(1);
+console.log(description_dict);
 
 function toggle_row_view(identifier) {
 	var app, model, pk = identifier.split("_")
 	console.log(app,model,pk)
+	var description = document.getElementById(identifier + '_description')
 	var info = document.getElementById(identifier + "_info-toggle");
 	var image= document.getElementById(identifier + "_image-toggle");
 	if (info.style.display == 'grid') {
 		info.style.display = 'None';
 		image.style.display = 'None';
-		description.innerHTML = description_text_trunc;
+		description.innerHTML = description_dict[identifier + '_description'].truncated_text;
 	} else {
 		info.style.display = 'grid';
 		image.style.display = 'inline';
-		description.innerHTML = description_text;
+		description.innerHTML = description_dict[identifier + '_description'].text;
 	}
 }
 		
