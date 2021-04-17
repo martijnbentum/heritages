@@ -65,7 +65,9 @@ for ( i =0; i < descriptions.length; i++ ){
 	description = descriptions[i];
 	var d ={}
 	d.text = description.innerHTML;
-	d.truncated_text = d.text.substring(0,170) + ' ...';
+	if (d.text.length > 165) {
+		d.truncated_text = d.text.substring(0,165) + ' ...';
+	} else { d.truncated_text = d.text; }
 	description_dict[description.id] = d;
 	description.innerHTML = d.truncated_text;
 }
@@ -74,19 +76,24 @@ console.log(1);
 console.log(description_dict);
 
 function toggle_row_view(identifier) {
-	var app, model, pk = identifier.split("_")
+	var [app, model, pk] = identifier.split("_")
 	console.log(app,model,pk)
 	var description = document.getElementById(identifier + '_description')
 	var info = document.getElementById(identifier + "_info-toggle");
 	var image= document.getElementById(identifier + "_image-toggle");
-	if (info.style.display == 'grid') {
-		info.style.display = 'None';
+	console.log(identifier,model,pk);
+	if (image.style.display == 'inline') {
+		if (!(model == 'person')) {info.style.display = 'None';}
 		image.style.display = 'None';
-		description.innerHTML = description_dict[identifier + '_description'].truncated_text;
+		if (identifier + '_description' in description_dict) {
+			description.innerHTML = description_dict[identifier + '_description'].truncated_text;
+		}
 	} else {
-		info.style.display = 'grid';
+		if (!(model == 'person')) {info.style.display = 'grid';}
 		image.style.display = 'inline';
-		description.innerHTML = description_dict[identifier + '_description'].text;
+		if (identifier + '_description' in description_dict) {
+			description.innerHTML = description_dict[identifier + '_description'].text;
+		}
 	}
 }
 		
@@ -121,6 +128,7 @@ p {
 
 .p-year{
 	font-size: 125%;
+	text-align: center;
 }
 .p-description{
 	font-size: 90%;
