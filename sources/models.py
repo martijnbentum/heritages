@@ -109,6 +109,10 @@ class Source(models.Model):
 	@property
 	def identifier(self):
 		return self._meta.app_label + '_' + self._meta.model_name + '_' + str( self.pk )
+
+	@property
+	def edit_url(self):
+		return self._meta.app_label + ':edit_' + self._meta.model_name 
 		
 
 class Music(Source,info):
