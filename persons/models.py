@@ -80,4 +80,7 @@ class Person(models.Model, info):
 	def edit_url(self):
 		return self._meta.app_label + ':edit_' + self._meta.model_name 
 	
+	@property
+	def identifier(self):
+		return self._meta.app_label + '_' + self._meta.model_name + '_' + str( self.pk )
 		
