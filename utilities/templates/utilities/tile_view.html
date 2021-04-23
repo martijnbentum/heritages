@@ -1,0 +1,105 @@
+{% extends "utilities/base.html" %}
+
+{% block content %}
+
+{% for instance in instances %}
+	<a class = "btn btn-link btn-sm ml-auto tile"
+		href = "{% url instance.edit_url instance.pk %}"
+		role = "button">
+			<div class="text">
+				<img src="{{instance.thumbnail.url}}" alt="">
+				<p class="p-title">
+					<i class="{{instance.icon}} fa-lg" aria-hidden="true"></i>
+					{{instance.title|truncatewords:10}}
+				</p>
+			</div>
+	</a>
+{% endfor %}
+
+
+<style>
+
+i {
+	margin-right:10px;
+	margin-top:5px;
+}
+
+p {
+	margin-bottom:0px;
+	font-family: "Georgia", serif;
+	font-size: small;
+}
+
+img {
+	width:230px;
+	height:200px;
+	object-fit:cover;
+}
+
+.text {
+	width: 230px;
+	height: 230px;
+	text-align: center;
+}
+
+.p-title {
+	font-size: 90%;
+	text-decoration: underline;
+	color: black;
+	padding-bottom:0px;
+}
+
+.p-year{
+	font-size: 125%;
+	text-align: center;
+}
+.p-description{
+	font-size: 90%;
+}
+
+.blue{
+	color: #56c1e8;
+}
+
+
+.tile{
+	background-color: #f2f2ed;
+	margin: 2px;
+	padding: 3px 4px 15px 4px;
+	text-align: justify;
+}
+
+.grid-item {
+	/*background-color: #f0f0f0;*/
+	padding: 0px;
+	text-align: justify;
+}
+
+.title {
+	grid-column:2/4;
+	justify-self:left;
+}
+.plus{
+	align-self:start;
+}
+
+.description{
+	grid-column:2/4;
+	justify-self:left;
+}
+.info{
+	grid-gap: 15px;
+	grid-column:2;
+	align-times:center;
+	justify-self:left;
+	display:None;
+}
+
+.image{
+	grid-column:3;
+	justify-self:right;
+	display:None;
+}
+</style>
+
+{% endblock %}

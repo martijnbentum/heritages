@@ -7,7 +7,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from utils import view_util, help_util
 from utils.view_util import Crud, Cruds, make_tabs, FormsetFactoryManager
-from utils.model_util import copy_complete
+from utils.model_util import copy_complete, get_all_instances
 # from .models import copy_complete
 from utilities.search import Search
 import time
@@ -34,19 +34,19 @@ def _handle_fieldnames(field_names):
 		else: name,hname = f,f.replace('_',' ')
 		field_dict[name] = hname
 	return field_dict
+
+
+def tile_view(request):
+	instances= [instance for instance in get_all_instances() if instance.thumbnail]
+	var = {'page_name':'tile view','instances':instances}
+	return render(request,'utilities/tile_view.html',var)
+		
+	
 	
 
 def row_view(request, model_name='', app_name='',html_name=''):
 	'''list view of a model.'''
-	n = 'Image,Infographic,Film,Music,PictureStory,Text,Videogame,Recordedspeech,Memorialsite'
-	models = [apps.get_model('sources',name) for name in n.split(',')]
-	models.append(apps.get_model('persons','Person'))
-	instances = []
-	for x in models:
-		instances.extend(x.objects.all())
-	print(models)
-	print(len(instances))
-	instances = instances
+	instances = get_all_instances()
 	if html_name == '': html_name = 'utilities/row_view.html'
 	instance= apps.get_model('sources','Film').objects.get(title_original= '13 in de Oorlog: De Hongerwinter')
 	name = model_name.lower()
