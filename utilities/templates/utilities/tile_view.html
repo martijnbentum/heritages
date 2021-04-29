@@ -1,19 +1,22 @@
 {% extends "utilities/base.html" %}
 
 {% block content %}
+<button id="myBtn">Open Modal</button>
 
 {% for instance in instances %}
-	<a class = "btn btn-link btn-sm ml-auto tile"
+	<div class="tile">
+	<a class = "btn btn-link btn-sm ml-auto"
 		href = "{% url instance.edit_url instance.pk %}"
 		role = "button">
-			<div class="text">
-				<img src="{{instance.thumbnail.url}}" alt="">
+			<div class="text" id = "{{instance.identifier}}">
+				<img src="{{instance.thumbnail.url}}" alt="" bla="hoi">
 				<p class="p-title">
 					<i class="{{instance.icon}} fa-lg" aria-hidden="true"></i>
 					{{instance.title|truncatewords:10}}
 				</p>
 			</div>
 	</a>
+	</div>
 {% endfor %}
 
 <div class="modal" id="myModal">
@@ -26,6 +29,12 @@
 </div>
 
 <script>
+var tiles= document.getElementsByClassName('text')
+for ( i =0; i < tiles.length; i++ ){
+	tile= tiles[i];
+	console.log(tile);
+}
+	
 // Get the modal
 var modal = document.getElementById("myModal");
 
@@ -40,10 +49,6 @@ btn.onclick = function() {
   modal.style.display = "block";
 }
 
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
@@ -79,10 +84,7 @@ window.onclick = function(event) {
 
 /* The Close Button */
 .close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
+	display:none;
 }
 
 .close:hover,
@@ -107,10 +109,11 @@ img {
 	width:230px;
 	height:200px;
 	object-fit:cover;
+	padding:0px;
 }
 
 .text {
-	width: 230px;
+	width: 225px;
 	height: 230px;
 	text-align: center;
 }
@@ -136,43 +139,19 @@ img {
 
 
 .tile{
+	display: inline-block;
 	background-color: #f2f2ed;
 	margin: 2px;
 	padding: 3px 4px 15px 4px;
 	text-align: justify;
+	border-radius:10px;
 }
 
-.grid-item {
-	/*background-color: #f0f0f0;*/
-	padding: 0px;
-	text-align: justify;
+a {
+	padding:0;
 }
 
-.title {
-	grid-column:2/4;
-	justify-self:left;
-}
-.plus{
-	align-self:start;
-}
 
-.description{
-	grid-column:2/4;
-	justify-self:left;
-}
-.info{
-	grid-gap: 15px;
-	grid-column:2;
-	align-times:center;
-	justify-self:left;
-	display:None;
-}
-
-.image{
-	grid-column:3;
-	justify-self:right;
-	display:None;
-}
 </style>
 
 {% endblock %}
