@@ -1,21 +1,19 @@
 {% extends "utilities/base.html" %}
 
 {% block content %}
-<button id="myBtn">Open Modal</button>
 
 {% for instance in instances %}
 	<div class="tile">
-	<a class = "btn btn-link btn-sm ml-auto"
-		href = "{% url instance.edit_url instance.pk %}"
-		role = "button">
-			<div class="text" id = "{{instance.identifier}}">
-				<img src="{{instance.thumbnail.url}}" alt="" bla="hoi">
-				<p class="p-title">
-					<i class="{{instance.icon}} fa-lg" aria-hidden="true"></i>
-					{{instance.title|truncatewords:10}}
-				</p>
-			</div>
-	</a>
+		<img class="tile-img" src="{{instance.thumbnail.url}}" alt="" 
+			onclick="gomodal(this, '{{instance.pk}}', '{{instance.title}}')">
+		<p class="p-title">
+			<i class="{{instance.icon}} fa-lg" aria-hidden="true"></i>
+			<a 
+				href = "{% url instance.edit_url instance.pk %}"
+				role = "button">
+				{{instance.title|truncatechars:35}}
+			</a>
+		</p>
 	</div>
 {% endfor %}
 
@@ -23,13 +21,15 @@
   <!-- Modal content -->
   <div class="modal-content">
     <span class="close">&times;</span>
-    <p>Some text in the Modal..</p>
+	<img id="modal-img" class="big-img" src="/media/thumbnail/Pulp_Fiction_1994_poster.jpeg">
+	<p id="modal-title" class="modal-title">Some text in the Modal..</p>
   </div>
 
 </div>
+<button id="myBtn">Open Modal</button>
 
 <script>
-var tiles= document.getElementsByClassName('text')
+var tiles= document.getElementsByClassName('tile-img')
 for ( i =0; i < tiles.length; i++ ){
 	tile= tiles[i];
 	console.log(tile);
@@ -49,6 +49,21 @@ btn.onclick = function() {
   modal.style.display = "block";
 }
 
+function gomodal(img, pk, title) {
+	console.log(title);
+	console.log(pk);
+	var modal_title = document.getElementById("modal-title");
+	var modal_img= document.getElementById("modal-img");
+	var x = modal.qu
+	console.log(modal);
+	console.log(img);
+	console.log(modal_img);
+	console.log(modal_title);
+	modal_title.innerText = title;
+	modal_img.src = img.src;
+	modal.style.display = "block";
+}
+
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
@@ -59,6 +74,7 @@ window.onclick = function(event) {
 </script>
 
 <style>
+
 /* The Modal (background) */
 .modal {
   display: none; /* Hidden by default */
@@ -70,16 +86,18 @@ window.onclick = function(event) {
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  background-color: rgba(0,0,0,0.85); /* Black w/ opacity */
 }
 
 /* Modal Content/Box */
 .modal-content {
-  background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  background-color: black;
+  margin-left: auto; /* 15% from the top and centered */
+  margin-right: auto; /* 15% from the top and centered */
+  margin-top: 5%; /* 15% from the top and centered */
   padding: 20px;
-  border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  width: 90%; /* Could be more or less, depending on screen size */
+  height: 75%; /* Could be more or less, depending on screen size */
 }
 
 /* The Close Button */
@@ -87,70 +105,62 @@ window.onclick = function(event) {
 	display:none;
 }
 
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
+.modal-title {
+	color:white;
+	font-size: 150%;
+	justify:center;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:auto;
 }
 
-i {
-	margin-right:10px;
+
+.tile {
+	display:inline-block;
+	height:250px;
+	width:250px;
+	background-color: #f0f0f0;
 	margin-top:5px;
+	margin-left:3px;
 }
 
-p {
-	margin-bottom:0px;
-	font-family: "Georgia", serif;
-	font-size: small;
+.big-img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: auto;
+	margin-bottom: auto;
+	max-width:100%;
+	height:auto;
+	object-fit:contain;
+	width:240px;
+	justify:center;
 }
 
 img {
-	width:230px;
-	height:200px;
+	border-radius:8px;
+	width:240px;
+	height:210px;
 	object-fit:cover;
 	padding:0px;
+	margin:5px
 }
 
-.text {
-	width: 225px;
-	height: 230px;
-	text-align: center;
-}
-
-.p-title {
-	font-size: 90%;
-	text-decoration: underline;
-	color: black;
-	padding-bottom:0px;
-}
-
-.p-year{
-	font-size: 125%;
-	text-align: center;
-}
-.p-description{
-	font-size: 90%;
-}
-
-.blue{
-	color: #56c1e8;
-}
-
-
-.tile{
-	display: inline-block;
-	background-color: #f2f2ed;
-	margin: 2px;
-	padding: 3px 4px 15px 4px;
-	text-align: justify;
-	border-radius:10px;
+i {
+	margin-left:5px;
 }
 
 a {
-	padding:0;
+	display:inline-block;
+	color:black;
+	margin-left:5px;
 }
 
+p {
+	font-family: "Georgia", serif;
+	font-size: small;
+	margin-top: 3px;
+}
 
 </style>
 
