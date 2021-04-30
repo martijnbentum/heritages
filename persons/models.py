@@ -92,10 +92,11 @@ class Person(models.Model, info):
 	@property
 	def date(self):
 		m = ''
-		if self.date_of_birth:m += self.date_of_birth 
-		if self.date_of_death:m += ' - ' + self.date_of_death 
-		age = self.age
+		if self.date_of_birth:m += str(self.date_of_birth)
+		if self.date_of_death:m += ' - ' + str(self.date_of_death)
+		age = str(self.age)
 		if age: m += ' (' + age + ')'
+		return m
 	
 		
 		

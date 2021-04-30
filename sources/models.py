@@ -116,7 +116,9 @@ class Source(models.Model):
 		
 	@property
 	def date(self):
-		return self.date_released
+		if self.date_released: return self.date_released
+		elif self.date_created: return self.date_created
+		else: return ''
 
 class Music(Source,info):
 	'''Meta data for songs related to famines.'''

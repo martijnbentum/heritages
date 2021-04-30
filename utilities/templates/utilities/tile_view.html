@@ -109,7 +109,7 @@ async function display_large_image(identifier) {
 	in_modal_state = true;
 	current_img_identifier = identifier;
 	modal_title.innerText = d['title'];
-	modal_date.innerText = d['date_released'];
+	modal_date.innerText = d['date'];
 	modal_img.src = '/media/' + d['thumbnail'];
 	modal_edit.href = "/" +d['edit_url'].replace(':','/') + "/" + d['pk'] + "/"
 	modal.style.display = "block";
