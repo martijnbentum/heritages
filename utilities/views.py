@@ -2,7 +2,9 @@ from collections import OrderedDict
 from django.apps import apps
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
-from django.http import HttpResponse, HttpResponseRedirect
+from django.core import serializers
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.forms.models import model_to_dict
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from utils import view_util, help_util
@@ -219,3 +221,26 @@ def show_messages(request,button,model_name):
 def close(request):
 	'''page that closes itself for on the fly creation of model instances (loaded in a new tab).'''
 	return render(request,'utilities/close.html')
+
+def ajax_instance_info(request,identifier,fields = 'all'):
+	app_name, model_name, pk = identifier.split('_')
+	model = apps.get_model(app_name,model_name)
+	print(model,identifier, fields,app_name,model_name,pk)
+	instance = model.objects.get(pk=int(pk))
+	print(instance,1234)
+	if fields == 'all': 
+		return JsonResponse(serializers.serialize('json',[instance]),safe=False)
+	if ',' in fields: fields = fields.split(',')
+	else: fields = [fields]
+	d = {}
+	for field in fields:
+		if hasattr(instance,field):
+			attr = str(getattr(instance,field))
+			if attr == 'None': attr = ''
+			d[field] = attr
+		else: d[field] = '---not available---'
+	return JsonResponse(d)
+		
+
+
+

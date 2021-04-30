@@ -4,8 +4,8 @@
 
 {% for instance in instances %}
 	<div class="tile">
-		<img class="tile-img" src="{{instance.thumbnail.url}}" alt="" 
-			onclick="gomodal(this, '{{instance.pk}}', '{{instance.title}}')">
+		<img id='{{instance.identifier}}' class="tile-img" src="{{instance.thumbnail.url}}" alt="" 
+			onclick="display_large_image('{{instance.identifier}}')"> 
 		<p class="p-title">
 			<i class="{{instance.icon}} fa-lg" aria-hidden="true"></i>
 			<a 
@@ -22,53 +22,105 @@
   <div class="modal-content">
     <span class="close">&times;</span>
 	<img id="modal-img" class="big-img" src="/media/thumbnail/Pulp_Fiction_1994_poster.jpeg">
-	<p id="modal-title" class="modal-title">Some text in the Modal..</p>
+
+	<a  id="modal-edit-link" class="modal-edit-link"
+		href = ""
+		role = "button">
+			<p id="modal-title" class="modal-title">Some text in the Modal..</p>
+	</a>
+	<p id="modal-date" class="modal-date">Some text in the Modal..</p>
   </div>
 
 </div>
-<button id="myBtn">Open Modal</button>
 
 <script>
+document.onkeydown = checkKey;
+
+function checkKey(e) {
+	e = e || window.event;
+	var direction = ''
+	if (e.keyCode == 37 || e.keyCode == 38) {
+		direction = 'back' 
+	}
+	else if (e.keyCode == 39 || e.keyCode == 40) {
+		direction = 'forward'
+	}
+	console.log(direction)
+	console.log(e.keyCode)
+	if (in_modal_state) {
+		i = find_identifier_index(current_img_identifier);
+		if (direction == 'back') {
+			if (i == 0) {i = tiles.length -1;}
+			else { i -= 1;}
+		} 
+		else if (direction == 'forward') {
+			if (i == tiles.length -1) { i = 0; }
+			else { i += 1;}
+		}
+		display_large_image(tiles[i].id);
+	}
+}
+
 var tiles= document.getElementsByClassName('tile-img')
 for ( i =0; i < tiles.length; i++ ){
 	tile= tiles[i];
 	console.log(tile);
 }
+
+function find_identifier_index(identifier) {
+	for ( i =0; i < tiles.length; i++ ){
+		tile= tiles[i];
+		console.log(tile);
+		if (tile.id == identifier) {return i;}
+	}
+}
 	
+// whether the large image is shown in the modal
+var in_modal_state = false;
+// identifier of the instance of which the image is shown
+var current_img_identifier= '';
 // Get the modal
 var modal = document.getElementById("myModal");
-
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
-
-// Get the <span> element that closes the modal
+//elements that display the image, title and date
+var modal_title = document.getElementById("modal-title");
+var modal_img= document.getElementById("modal-img");
+var modal_date= document.getElementById("modal-date");
+var modal_edit= document.getElementById("modal-edit-link");
+// Get the <span> element that closes the modal, OBSOLETE??
 var span = document.getElementsByClassName("close")[0];
 
-// When the user clicks on the button, open the modal
-btn.onclick = function() {
-  modal.style.display = "block";
+async function get_instance_info(identifier,fields= false) {
+	//gets information of an instance, instance is loaded based on 
+	//the identifier field
+	//fields 	the field names the info should be gathered from
+	// 			false or 'all' returns the dict of the instance (not property values)
+	//returns a dictionary of field name field info or a json representation of the instance
+	var url = '/utilities/ajax_instance_info/' + identifier 
+	if (fields) { url += '/' + fields ;}
+	const response = await fetch(url); 
+	const instance_info = await response.json();
+	return instance_info;
 }
 
-function gomodal(img, pk, title) {
-	console.log(title);
-	console.log(pk);
-	var modal_title = document.getElementById("modal-title");
-	var modal_img= document.getElementById("modal-img");
-	var x = modal.qu
-	console.log(modal);
-	console.log(img);
-	console.log(modal_img);
-	console.log(modal_title);
-	modal_title.innerText = title;
-	modal_img.src = img.src;
+async function display_large_image(identifier) {
+	//displays large image of a given instance (identified with identifier)
+	fields = 'thumbnail,edit_url,title_original,pk,date_released'
+	var d  = await get_instance_info(identifier,fields)
+	in_modal_state = true;
+	current_img_identifier = identifier;
+	modal_title.innerText = d['title_original'];
+	modal_date.innerText = d['date_released'];
+	modal_img.src = '/media/' + d['thumbnail'];
+	modal_edit.href = "/" +d['edit_url'].replace(':','/') + "/" + d['pk'] + "/"
 	modal.style.display = "block";
+	console.log(d['edit_url']);
 }
-
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
+	in_modal_state = false;
   }
 }
 </script>
@@ -91,7 +143,8 @@ window.onclick = function(event) {
 
 /* Modal Content/Box */
 .modal-content {
-  background-color: black;
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.45); /* Black w/ opacity */
   margin-left: auto; /* 15% from the top and centered */
   margin-right: auto; /* 15% from the top and centered */
   margin-top: 5%; /* 15% from the top and centered */
@@ -114,6 +167,23 @@ window.onclick = function(event) {
 	margin-top:auto;
 }
 
+.modal-edit-link{
+	justify:center;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+
+.modal-date{
+	color:grey;
+	font-size: 80%;
+	justify:center;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:auto;
+	margin-bottom:0px;
+}
+
 
 .tile {
 	display:inline-block;
@@ -130,10 +200,11 @@ window.onclick = function(event) {
 	margin-right: auto;
 	margin-top: auto;
 	margin-bottom: auto;
+	height:90%;
+	width:auto;
 	max-width:100%;
-	height:auto;
+	margin:0px
 	object-fit:contain;
-	width:240px;
 	justify:center;
 }
 
