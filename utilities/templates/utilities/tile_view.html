@@ -104,7 +104,7 @@ async function get_instance_info(identifier,fields= false) {
 
 async function display_large_image(identifier) {
 	//displays large image of a given instance (identified with identifier)
-	fields = 'thumbnail,edit_url,title,pk,date_released'
+	fields = 'thumbnail,edit_url,title,pk,date'
 	var d  = await get_instance_info(identifier,fields)
 	in_modal_state = true;
 	current_img_identifier = identifier;
