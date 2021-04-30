@@ -104,11 +104,11 @@ async function get_instance_info(identifier,fields= false) {
 
 async function display_large_image(identifier) {
 	//displays large image of a given instance (identified with identifier)
-	fields = 'thumbnail,edit_url,title_original,pk,date_released'
+	fields = 'thumbnail,edit_url,title,pk,date_released'
 	var d  = await get_instance_info(identifier,fields)
 	in_modal_state = true;
 	current_img_identifier = identifier;
-	modal_title.innerText = d['title_original'];
+	modal_title.innerText = d['title'];
 	modal_date.innerText = d['date_released'];
 	modal_img.src = '/media/' + d['thumbnail'];
 	modal_edit.href = "/" +d['edit_url'].replace(':','/') + "/" + d['pk'] + "/"

@@ -238,7 +238,7 @@ def ajax_instance_info(request,identifier,fields = 'all'):
 			attr = str(getattr(instance,field))
 			if attr == 'None': attr = ''
 			d[field] = attr
-		else: d[field] = '---not available---'
+		else: d[field] = ''
 	return JsonResponse(d)
 		
 
