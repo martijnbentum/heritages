@@ -86,14 +86,14 @@ class Person(models.Model, info):
 
 	@property
 	def age(self):
-		try: return self.date_of_death.start_dt.year = self.date_of_birth.start_dt.year
+		try: return self.date_of_death.start_dt.year - self.date_of_birth.start_dt.year
 		except:return ''
 
 	@property
 	def date(self):
 		m = ''
 		if self.date_of_birth:m += self.date_of_birth 
-		if self.date_of_death:m += ' - ' self.date_of_death 
+		if self.date_of_death:m += ' - ' + self.date_of_death 
 		age = self.age
 		if age: m += ' (' + age + ')'
 	
