@@ -114,6 +114,9 @@ class Source(models.Model):
 	def edit_url(self):
 		return self._meta.app_label + ':edit_' + self._meta.model_name 
 		
+	@property
+	def date(self):
+		return self.date_released
 
 class Music(Source,info):
 	'''Meta data for songs related to famines.'''
@@ -131,6 +134,7 @@ class Music(Source,info):
 	@property
 	def icon(self):
 		return 'fas fa-music'
+
 
 
 	@property

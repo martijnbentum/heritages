@@ -83,4 +83,19 @@ class Person(models.Model, info):
 	@property
 	def identifier(self):
 		return self._meta.app_label + '_' + self._meta.model_name + '_' + str( self.pk )
+
+	@property
+	def age(self):
+		try: return self.date_of_death.start_dt.year = self.date_of_birth.start_dt.year
+		except:return ''
+
+	@property
+	def date(self):
+		m = ''
+		if self.date_of_birth:m += self.date_of_birth 
+		if self.date_of_death:m += ' - ' self.date_of_death 
+		age = self.age
+		if age: m += ' (' + age + ')'
+	
+		
 		
