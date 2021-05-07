@@ -19,21 +19,25 @@
 
 <div class="modal" id="myModal">
   <!-- Modal content -->
-  <div class="modal-content">
-	<a id="close_modal" href="" role = "button">
+	<i id="modal-icon" class="" style="color:white;"></i>
+	<a id="close_modal" class="close_modal" href="" role = "button">
 		<span class="close">&times;</span>
 	</a>
+  <div class="modal-content">
 	<img id="modal-img" class="big-img" src="">
 
 	<a  id="modal-edit-link" class="modal-edit-link"
 		href = ""
 		role = "button">
-			<p id="modal-title" class="modal-title">Some text in the Modal..</p>
+			<p id="modal-title" class="modal-title">
+			Some text in the Modal..</p>
 	</a>
-	<p id="modal-date" class="modal-date">Some text in the Modal..</p>
+	<p id="modal-date" class="modal-date">Some text in the Modal..
+	</p>
   </div>
 
 </div>
+<i id="modal-icon" class="fas fa-image fa-lg" style="color:blue;"></i>
 
 <script>
 document.onkeydown = checkKey;
@@ -87,6 +91,7 @@ var current_img_identifier= '';
 var modal = document.getElementById("myModal");
 //elements that display the image, title and date
 var modal_title = document.getElementById("modal-title");
+var modal_icon= document.getElementById("modal-icon");
 var modal_img= document.getElementById("modal-img");
 var modal_date= document.getElementById("modal-date");
 var modal_edit= document.getElementById("modal-edit-link");
@@ -109,11 +114,14 @@ async function get_instance_info(identifier,fields= false) {
 
 async function display_large_image(identifier) {
 	//displays large image of a given instance (identified with identifier)
-	fields = 'thumbnail,edit_url,title,pk,date'
+	fields = 'thumbnail,edit_url,title,pk,date,icon'
 	var d  = await get_instance_info(identifier,fields)
 	in_modal_state = true;
 	current_img_identifier = identifier;
 	modal_title.innerText = d['title'];
+	console.log(modal_icon);
+	modal_icon.className=d['icon'] + ' fa-2x modal-icon';
+	console.log(modal_icon);
 	modal_date.innerText = d['date'];
 	modal_img.src = '/media/' + d['thumbnail'];
 	modal_edit.href = "/" +d['edit_url'].replace(':','/') + "/" + d['pk'] + "/"
@@ -157,7 +165,7 @@ close_modal.onclick = function() {
   background-color: rgba(0,0,0,0.45); /* Black w/ opacity */
   margin-left: auto; /* 15% from the top and centered */
   margin-right: auto; /* 15% from the top and centered */
-  margin-top: 5%; /* 15% from the top and centered */
+  margin-top: 2%; /* 15% from the top and centered */
   padding: 20px;
   width: 90%; /* Could be more or less, depending on screen size */
   height: 75%; /* Could be more or less, depending on screen size */
@@ -165,8 +173,9 @@ close_modal.onclick = function() {
 
 /* The Close Button */
 .close {
-	display:inline;
     color: rgba(10,10,10,0.03); /* Black w/ opacity */
+	padding-right:50px;
+	font-size:300%;
 }
 
 .close:hover,
@@ -174,6 +183,12 @@ close_modal.onclick = function() {
   color: rgba(255,255,255,0.45); /* Black w/ opacity */
   text-decoration: none;
   cursor: pointer;
+}
+
+.close_modal {
+	float:right;
+	margin-top:15px;
+	padding-right;50px;
 }
 
 .modal-title {
@@ -199,6 +214,15 @@ close_modal.onclick = function() {
 	margin-left:auto;
 	margin-right:auto;
 	margin-top:auto;
+	margin-bottom:0px;
+}
+
+.modal-icon{
+	color:white;
+	justify:center;
+	margin-left:50px;
+	margin-right:auto;
+	margin-top:30px;
 	margin-bottom:0px;
 }
 
