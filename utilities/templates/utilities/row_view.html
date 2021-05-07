@@ -6,7 +6,7 @@
 
 	<div class="grid-container" id='{{instance.identifier}}_row_container'>
 		<div class="grid-item icon">
-			<i class="{{instance.icon}}" aria-hidden="true"></i> 
+			<i class="{{instance.icon}} fa-lg" aria-hidden="true"></i> 
 		</div>
 		<div class="grid-item title">
 			<a class = "btn btn-link btn-sm ml-auto nostyle p-title"
@@ -16,38 +16,41 @@
 			</a>
 		</div>
 		<div class="grid-item year">
-			{% if instance.date_released %}
-				<p class="p-year blue">{{instance.date_released}}</p>
+			{% if instance.date %}
+				<p class="p-year blue">{{instance.date}}</p>
 			{% endif %}
 		</div>  
+		<div class="grid-item plus">
+			<a class = "btn btn-link btn-sm ml-auto text-dark" 
+				href = "#." onclick="toggle_row_view('{{instance.identifier}}')"
+				role="button">
+					<i class="fas fa-chevron-down" 
+					   id='{{instance.identifier}}_plus'></i>
+			</a>
+		</div>
 		<div class="grid-item description">
 			{% if instance.description %}
 			<p class="p-description grey" id = '{{instance.identifier}}_description'>
 				{{instance.description}}</p>
 			{% endif %}
 		</div>
-		<div class="grid-item plus">
-			<a class = "btn btn-link btn-sm ml-auto text-dark" 
-				href = "#." onclick="toggle_row_view('{{instance.identifier}}')"
-				role="button"><i class="fa fa-plus"></i></a>
-		</div>
 		<div class="grid-item info" id='{{instance.identifier}}_info-toggle'>
 			<div class="nested grid-item info-famine">
 				<p class="p-info small">Famine:</p>
-				<p class="p-info blue normal"> {{instance.famine_names|truncatewords:3}}</p>
+				<p class="p-info blue normal"> {{instance.famine_names|truncatechars:33}}</p>
 			</div>
 			<div class="nested grid-item info-keywords">
 				<p class="p-info small">Keywords:</p>
-				<p class="p-info blue normal"> {{instance.keyword_names|truncatewords:3}}</p>
+				<p class="p-info blue normal"> {{instance.keyword_names|truncatechars:33}}</p>
 			</div>
 			<div class="nested grid-item info-location">
 				<p class="p-info small">Location:</p>
-				<p class="p-info blue normal"> {{instance.setting_names|truncatewords:3}}</p>
+				<p class="p-info blue normal"> {{instance.setting_names|truncatechars:33}}</p>
 			</div>
 		</div>
 		<div class="grid-item image toggle" id='{{instance.identifier}}_image-toggle'>
 			{% if instance.thumbnail %}
-				<img src="{{instance.thumbnail.url}}" alt="" height="120">
+				<img src="{{instance.thumbnail.url}}" alt="" height="150">
 			{% endif %}
 		</div>  
 	</div>
@@ -81,16 +84,21 @@ function toggle_row_view(identifier) {
 	var description = document.getElementById(identifier + '_description')
 	var info = document.getElementById(identifier + "_info-toggle");
 	var image= document.getElementById(identifier + "_image-toggle");
+	var plus= document.getElementById(identifier + "_plus");
 	console.log(identifier,model,pk);
 	if (image.style.display == 'inline') {
 		if (!(model == 'person')) {info.style.display = 'None';}
 		image.style.display = 'None';
+		plus.classList.remove('fa-chevron-up'); 
+		plus.classList.add('fa-chevron-down'); 
 		if (identifier + '_description' in description_dict) {
 			description.innerHTML = description_dict[identifier + '_description'].truncated_text;
 		}
 	} else {
 		if (!(model == 'person')) {info.style.display = 'grid';}
 		image.style.display = 'inline';
+		plus.classList.remove('fa-chevron-down'); 
+		plus.classList.add('fa-chevron-up'); 
 		if (identifier + '_description' in description_dict) {
 			description.innerHTML = description_dict[identifier + '_description'].text;
 		}
@@ -127,8 +135,9 @@ p {
 }
 
 .p-year{
-	font-size: 125%;
+	font-size: 90%;
 	text-align: center;
+	margin-top: 8px;
 }
 .p-description{
 	font-size: 90%;
@@ -160,7 +169,7 @@ p {
 	padding: 1px;
 	grid-gap: 3px;
 	justify-items: center;
-	align-items: center;
+	align-items: top;
 }
 
 .grid-item {
@@ -181,6 +190,12 @@ p {
 	grid-column:2/4;
 	justify-self:left;
 }
+
+.year{
+	grid-column:4;
+	grid-row:1/3;
+}
+
 .info{
 	grid-gap: 15px;
 	grid-column:2;
@@ -193,6 +208,10 @@ p {
 	grid-column:3;
 	justify-self:right;
 	display:None;
+}
+
+.icon{
+	margin-top:8px;
 }
 </style>
 
