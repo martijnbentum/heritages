@@ -47,6 +47,7 @@ class Person(models.Model, info):
 
 	@property
 	def title(self): #helper property to display name in overviews
+		if self.pseudonym_precedent and self.pseudonyms: return self.pseudonyms
 		return self.name
 
 	@property
