@@ -75,7 +75,7 @@ def list_view(request, model_name, app_name,html_name='',field_names = '',max_en
 	if html_name == '': html_name = 'utilities/general_list.html'
 	s = Search(request,model_name,app_name,max_entries=max_entries)
 	instances= s.filter()
-	print(instances,12345,type(instances),len(instances))
+	# removing double entries from search results, necessary??
 	instances = list(set(instances))
 	name = model_name.lower()
 	field_dict = _handle_fieldnames(field_names) if field_names else {}
