@@ -20,12 +20,14 @@ class FamineWidget(SimpleBaseWidget):
 
 class FaminesWidget(SimpleBasesWidget):
 	model = Famine
+	search_fields = ['names__name__icontains']
 
 	def label_from_instance(self,obj):
-		return ', '.join([n.name for n in obj.names.all()])
+		#return ', '.join([n.name for n in obj.names.all()])
+		return obj.names_str
 
 	def get_queryset(self):
-		return Famine.objects.all().order_by('names')
+		return Famine.objects.all()
 
 
 class FamineNameWidget(SimpleBaseWidget):
