@@ -30,5 +30,6 @@ urlpatterns = [
 	path('utilities/',include('utilities.urls')),
 	re_path(r'^select2/',include('django_select2.urls'))
 ]
-urlpatterns += staticfiles_urlpatterns()
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+	urlpatterns += staticfiles_urlpatterns()
+	urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
