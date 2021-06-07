@@ -35,7 +35,7 @@
 			</a>
 		</div>
 		<div class="grid-item">
-			<a id="close_modal" class="close_modal" href="#" role = "button">
+			<a id="close_modal" class="close_modal" onclick="return false;" href="#/" role = "button">
 				<span class="close">&times;</span>
 			</a>
 		</div>
@@ -165,15 +165,15 @@ async function display_large_image(identifier) {
 	//console.log(d['edit_url']);
 	if (image_urls.length > 1) {
 		one_of_x.innerText= 1 + '/' + image_urls.length;
-		setTimeout(switch_images,3000,image_urls,d['thumbnail'])
+		setTimeout(switch_images,3000,image_urls,d['thumbnail'],identifier)
 		image_reel_on = true;
 	}
 }
 
-function switch_images(image_urls,current_image) {
+function switch_images(image_urls,current_image, identifier) {
 	console.log(image_urls,current_image,image_reel_on);
 	var next_modal= document.getElementById("");
-	if (in_modal_state && image_reel_on) {
+	if (in_modal_state && image_reel_on && current_img_identifier == identifier) {
 		for ( i =0; i < image_urls.length; i++ ){
 			url= image_urls[i];
 			if (url  == current_image) {
@@ -187,7 +187,7 @@ function switch_images(image_urls,current_image) {
 		console.log(image_urls,image_urls[index],index);
 		one_of_x.innerText= (index +1) + '/' + image_urls.length;
 		
-		setTimeout(switch_images,3000,image_urls,image_urls[index]);
+		setTimeout(switch_images,3000,image_urls,image_urls[index],identifier);
 	}
 }
 
