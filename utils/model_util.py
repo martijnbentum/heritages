@@ -181,3 +181,14 @@ def get_all_instances(model_names = ''):
 		instances.extend(x.objects.all())
 	return instances
 
+
+def instance2image_urls(instance):
+	'''returns all urls of an instance to all attached images (i.e. ImageFields).'''
+	o = []
+	for field in instance._meta.fields:
+		if type(field) == ImageField:
+			x= getattr(instance,field.name)
+			if x.name:
+				o.append(x.url)
+	return ','.join(o)
+
