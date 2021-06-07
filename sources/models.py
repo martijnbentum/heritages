@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.fields.files import ImageField
 from persons.models import Person
 from utilities.models import SimpleModel
 from utils.model_util import info
@@ -119,6 +120,16 @@ class Source(models.Model):
 		if self.date_released: return self.date_released
 		elif self.date_created: return self.date_created
 		else: return ''
+
+	@property
+	def image_urls(self):
+		'''returns a string of comma seperated urls to images.'''
+		o = []
+		for field in self._meta.fields:
+			if type(field) == ImageField:
+				x= getattr(self,field.name)
+				if x.name:o.append(x.name)
+		return ','.join(o)
 
 class Music(Source,info):
 	'''Meta data for songs related to famines.'''
