@@ -44,16 +44,13 @@ def tile_view(request):
 	return render(request,'utilities/tile_view.html',var)
 		
 	
-	
-
-def row_view(request, model_name='', app_name='',html_name=''):
+def row_view(request ):
 	'''list view of a model.'''
 	instances = get_all_instances()
-	if html_name == '': html_name = 'utilities/row_view.html'
-	instance= apps.get_model('sources','Film').objects.get(title_original= '13 in de Oorlog: De Hongerwinter')
-	name = model_name.lower()
-	var = {name +'_row':instance,'page_name':model_name,
-		'name':name,'app_name':app_name,'instance':instance,'instances':instances}
+	html_name = 'utilities/row_view.html'
+	name = 'row view'
+	var = {'page_name':'row view',
+		'name':name,'instances':instances}
 	r =  render(request, html_name,var)
 	return r
 
