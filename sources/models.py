@@ -207,7 +207,7 @@ class Artefact(Source, info):
 	artefact_type = models.ForeignKey(ArtefactType,**dargs)
 	locations = models.ManyToManyField(Location,blank=True, related_name='artefact_locations')
 	creators = models.ManyToManyField(Person,blank=True, related_name='artefact_creators_set')
-	image_file = models.ImageField(upload_to='image/',blank=True,null=True)
+	image_file = models.ImageField(upload_to='artefact/',blank=True,null=True)
 	location_field = 'locations'
 	image_filename = models.CharField(max_length=500,default='',blank=True,null=True)
 
