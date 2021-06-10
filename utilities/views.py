@@ -15,7 +15,8 @@ from utilities.search import Search
 import time
 
 te = 'title_original,title_english'
-field_names_dict = {'person':'name,pseudonyms,gender,location_of_birth',
+field_names_dict = {
+	'person':'name,pseudonyms,gender,location_of_birth',
 	'music':te+',music_type','film':te+',film_type',
 	'text':te+',text_type', 'infographic':te+',infographic_type',
 	'image':te+',image_type','picturestory':te+',picture_story_type',
@@ -23,7 +24,9 @@ field_names_dict = {'person':'name,pseudonyms,gender,location_of_birth',
 	'location':'name,country,region,location_type$type',
 	'keyword':'name,category,category_relations$relations',
 	'videogame':te+',game_type','recordedspeech':te+',recordedspeech_type',
-	'memorialsite':te+',memorial_type'}
+	'memorialsite':te+',memorial_type',
+	'artefact':te+',artefact_type',
+	}
 
 
 def _handle_fieldnames(field_names):

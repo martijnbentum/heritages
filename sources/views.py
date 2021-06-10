@@ -9,7 +9,7 @@ from .forms import LocationForm, LanguageForm, KeywordForm,InstitutionForm,Video
 from .forms import GameTypeForm, ProductionStudioForm, RecordedspeechTypeForm
 from .forms import GameTypeForm, ProductionStudioForm, RecordedspeechTypeForm
 from .forms import RecordedspeechForm, BroadcastingStationForm, MemorialTypeForm
-from .forms import MemorialsiteForm
+from .forms import MemorialsiteForm, ArtefactForm, ArtefactTypeForm
 from persons.forms import PersonForm
 
 def index(request):
@@ -34,6 +34,7 @@ def create_simple_view(name):
 names = 'TextType,MusicType,ImageType,FilmType,InfographicType,PictureStoryType'
 names += ',FilmCompany,Publisher,Collection,TargetAudience,PublishingOutlet,Institution'
 names += ',ProductionStudio,GameType,RecordedspeechType,BroadcastingStation,MemorialType'
+names += ',ArtefactType'
 for name in names.split(','):
 	create_simple_view(name)
 
@@ -64,6 +65,9 @@ def edit_infographic(request,pk=None,focus='',view='complete'):
 
 def edit_image(request,pk=None,focus='',view='complete'):
 	return edit_model(request,__name__,'Image','sources',pk,focus=focus,view=view)
+
+def edit_artefact(request,pk=None,focus='',view='complete'):
+	return edit_model(request,__name__,'Artefact','sources',pk,focus=focus,view=view)
 
 def edit_picture_story(request,pk=None,focus='',view='complete'):
 	return edit_model(request,__name__,'PictureStory','sources',pk,focus=focus,view=view)

@@ -169,7 +169,7 @@ def make_models_image_file_dict(only_image_fields=False):
 
 def get_all_instances(model_names = ''):
 	n = 'Image,Infographic,Film,Music,PictureStory,Text,Videogame'
-	n += ',Recordedspeech,Memorialsite,Person'
+	n += ',Recordedspeech,Memorialsite,Person,Artefact'
 	if not model_names: model_names = n.split(',')
 	model_names = [n.lower() for n in model_names]
 	all_models = apps.get_models()

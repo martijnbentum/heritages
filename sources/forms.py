@@ -3,15 +3,15 @@ from django.forms import ModelForm, modelform_factory
 from .models import Source, SimpleModel, Videogame
 from .models import Collection,PublishingOutlet,Available,Rated
 from .models import Commissioner,MusicType,Music, Infographic,Recordedspeech
-from .models import Permission, FilmCompany, FilmType, Film, Text, Image
-from .models import TargetAudience, TextType, InfographicType, ImageType
+from .models import Permission, FilmCompany, FilmType, Film, Text, Image,Artefact
+from .models import TargetAudience, TextType, InfographicType, ImageType,ArtefactType
 from .models import Publisher, PictureStoryType, PictureStory, Institution
 from .models import GameType, ProductionStudio,RecordedspeechType,BroadcastingStation
 from .models import Memorialsite,MemorialType
 from .widgets import CollectionWidget,PublishingOutletWidget,AvailableWidget, TextTypeWidget
 from .widgets import RatedWidget,CommissionerWidget,MusicTypeWidget, FilmCompanyWidget
 from .widgets import ImageTypeWidget, InfographicTypeWidget,FilmTypeWidget, PublisherWidget
-from .widgets import PermissionWidget, PublishersWidget
+from .widgets import PermissionWidget, PublishersWidget, ArtefactTypeWidget
 from .widgets import TargetAudienceWidget, PictureStoryTypeWidget,FilmCompaniesWidget
 from .widgets import TargetAudienceWidget,InstitutionsWidget
 from .widgets import GameTypeWidget,ProductionStudiosWidget
@@ -47,7 +47,7 @@ def create_simple_form(name):
 names = 'TextType,ImageType,MusicType,PictureStoryType,FilmType,InfographicType'
 names += ',FilmCompany,TargetAudience,Collection,Publisher,Location,Language'
 names += ',Keyword,PublishingOutlet,Institution,GameType,ProductionStudio,RecordedspeechType'
-names += ',BroadcastingStation,MemorialType'
+names += ',BroadcastingStation,MemorialType,ArtefactType'
 for name in names.split(','):
 	create_simple_form(name)
 #----
@@ -280,6 +280,30 @@ class ImageForm(SourceForm):
 		model = Image
 		fields = source_fields
 		fields += ',image_type,creators,image_file,locations,image_filename'
+		fields = fields.split(',')
+
+class ArtefactForm(SourceForm):
+	artefact_type= forms.ModelChoiceField(
+		queryset=ArtefactType.objects.all(),
+		widget = ArtefactTypeWidget(**dselect2),
+		required=False)
+	creators = forms.ModelMultipleChoiceField(
+		queryset=Person.objects.all(),
+		widget = PersonsWidget(**dselect2),
+		required=False)
+	locations = forms.ModelMultipleChoiceField(
+		queryset=Location.objects.all(),
+		widget = LocationsWidget(**dselect2n2),
+		required=False)
+	locations = forms.ModelMultipleChoiceField(
+		queryset=Location.objects.all(),
+		widget= LocationsWidget(**dselect2),
+		required=False)
+	
+	class Meta:
+		model = Artefact
+		fields = source_fields
+		fields += ',artefact_type,creators,image_file,locations,image_filename'
 		fields = fields.split(',')
 
 

@@ -18,7 +18,7 @@ names = 'MusicType,Collection,Rated,Commissioner'
 names += ',FilmCompany,FilmType,TargetAudience,PublishingOutlet,Available,ImageType'
 names += ',InfographicType,PictureStoryType,TextType,Publisher,Permission'
 names += ',Institution,ProductionStudio,GameType,RecordedspeechType,BroadcastingStation'
-names += ',MemorialType'
+names += ',MemorialType,ArtefactType'
 names = names.split(',')
 
 for name in names:
@@ -50,7 +50,9 @@ class Source(models.Model):
 		abstract = True
 
 	def __str__(self):
-		return self.title_english
+		if self.title_original:
+			return self.title_original
+		else: return self.title_english
 
 	@property
 	def title(self):
@@ -198,6 +200,23 @@ class Film(Source, info):
 	class Meta:
 		unique_together = [['title_original','date_released']]
 	
+
+class Artefact(Source, info):
+	'''Meta data for Images related to famines.'''
+	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
+	artefact_type = models.ForeignKey(ArtefactType,**dargs)
+	locations = models.ManyToManyField(Location,blank=True, related_name='artefact_locations')
+	creators = models.ManyToManyField(Person,blank=True, related_name='artefact_creators_set')
+	image_file = models.ImageField(upload_to='image/',blank=True,null=True)
+	location_field = 'locations'
+	image_filename = models.CharField(max_length=500,default='',blank=True,null=True)
+
+	@property
+	def icon(self):
+		return 'fas fa-utensil-spoon'
+
+	class Meta:
+		unique_together = [['title_original','date_created','image_filename']]
 
 class Image(Source, info):
 	'''Meta data for Images related to famines.'''

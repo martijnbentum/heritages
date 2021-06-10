@@ -7,7 +7,7 @@ from .models import GameType,ProductionStudio
 from .models import Permission, FilmCompany
 from .models import TargetAudience, Institution
 from .models import RecordedspeechType,BroadcastingStation 
-from .models import MemorialType
+from .models import MemorialType, Artefact, ArtefactType
 
 class SimpleBaseWidget(ModelSelect2Widget):
 	search_fields = ['name__icontains']
@@ -40,6 +40,11 @@ class ImageWidget(BaseWidget):
 	model = Image 
 	def get_queryset(self):
 		return Image.objects.all().order_by('title_english')
+
+class ArtefactWidget(BaseWidget):
+	model = Artefact
+	def get_queryset(self):
+		return Artefact.objects.all().order_by('title_english')
 
 class PictureStoryWidget(BaseWidget):
 	model = PictureStory
@@ -114,6 +119,11 @@ class ImageTypeWidget(SimpleBaseWidget):
 	model = ImageType
 	def get_queryset(self):
 		return ImageType.objects.all().order_by('name')
+
+class ArtefactTypeWidget(SimpleBaseWidget):
+	model = ArtefactType
+	def get_queryset(self):
+		return ArtefactType.objects.all().order_by('name')
 
 class AvailableWidget(SimpleBaseWidget):
 	model = Available
