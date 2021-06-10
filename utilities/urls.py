@@ -13,7 +13,7 @@ urlpatterns = [
 		name='list_view'),
 	path('list_view_general/<str:model_name>/<str:app_name>/<str:field_names>/',
 		views.list_view,name='list_view_general'),
-	path('row_view/<str:model_name>/<str:app_name>/',views.row_view,name='row_view'),
+	path('row_view/',views.row_view,name='row_view'),
 	path('tile_view/',views.tile_view,name='tile_view'),
 	path('ajax_instance_info/<str:identifier>/',views.ajax_instance_info, 
 		name='ajax_instance_info'),
