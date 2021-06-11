@@ -69,34 +69,3 @@
 		<td class="col-9">{{form.thumbnail}} {{form.thumbnail.error}}</td>
 	</tr>
 
-<script>
-var description= document.getElementById('id_description');
-var description_length= document.getElementById('description_length');
-
-document.addEventListener('keydown',logkey);
-function logkey(e) {
-	//console.log(description.value)
-	var audio = new Audio('media/quack.mp3')
-	//nwords = description.value.split(' ')
-	//console.log(description.textLength,e.key)
-	if (e.key == "Backspace")  { l = description.textLength-1 }
-	else {l = description.textLength+1 }
-	if (l < 0){l=0;}
-	description_length.textContent = l 
-	if (e.key != "Backspace" && description.textLength > 500 && description.textLength % 5 == 0) {
-		audio.play();
-		//console.log('play');
-	}
-	if (description.textLength > 500) {
-		description_length.style.color='red';
-	} else {
-		description_length.style.color='grey';
-	}
-}
-</script>
-
-<style>
-.text-length {
-	color:grey;
-	justify:left;
-}
