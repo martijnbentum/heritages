@@ -45,6 +45,7 @@ class Source(models.Model):
 	flag = models.BooleanField(default = False)
 	thumbnail = models.ImageField(upload_to='thumbnail/',blank=True,null=True)
 	setting = models.ManyToManyField(Location,blank=True)
+	release_date_precedent = models.BooleanField(default=False)
 
 	class Meta:
 		abstract = True
@@ -119,8 +120,10 @@ class Source(models.Model):
 		
 	@property
 	def date(self):
-		if self.date_released: return self.date_released
+		if self.date_released and self.date_created and self.release_date_precedent:
+			return self.date_released
 		elif self.date_created: return self.date_created
+		elif self.date_released: return self.date_released
 		else: return ''
 
 	@property
@@ -290,7 +293,7 @@ class PictureStory(Source,info):
 
 	@property
 	def icon(self):
-		return 'fas fa-image'
+		return 'fas fa-book-open'
 
 	@property
 	def pop_up(self):

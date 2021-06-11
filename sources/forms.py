@@ -57,7 +57,7 @@ for name in names.split(','):
 source_fields = 'famines,title_english,title_original,collection,publishing_outlet'
 source_fields += ',available,permission,rated,keywords,description'
 source_fields += ',comments,commissioned_by,source_link,flag,thumbnail'
-source_fields += ',date_created,date_released,setting'
+source_fields += ',date_created,date_released,setting,release_date_precedent'
 
 class SourceForm(ModelForm):
 	famines = forms.ModelMultipleChoiceField(

@@ -14,10 +14,12 @@
 		{% if 'text' in page_name %}
 		<td class="col-2">Date published</th>
 		<td class="col-9">{{form.date_released}} {{form.date_released.error}}</td>
+		<td>{{form.release_date_precedent}} {{form.release_date_precedent.error}}</td>
 		{% elif 'artefact' in page_name %}
 		{% else %}
 		<td class="col-2">Date released</th>
 		<td class="col-9">{{form.date_released}} {{form.date_released.error}}</td>
+		<td>{{form.release_date_precedent}} {{form.release_date_precedent.error}}</td>
 		{% endif %}
 	</tr>
 	<tr class="d-flex">
