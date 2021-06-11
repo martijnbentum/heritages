@@ -401,6 +401,8 @@ class Memorialsite(Source,info):
 		related_name='memorialsite_person_commissioning_set')
 	commissioning_institutions= models.ManyToManyField(Institution,blank=True,
 		related_name='memorialsite_institution_commissioning_set')
+	languages=models.ManyToManyField(Language,blank=True,
+		related_name='memorialsite_language')
 	locations= models.ManyToManyField(Location,blank=True, 
 		related_name='memorialsite_location_recorded')
 	video_link = models.CharField(max_length=1000,default='')
