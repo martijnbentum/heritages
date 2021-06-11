@@ -16,6 +16,17 @@ class SimpleModel(models.Model):
 class generic(models.Model):
 	pass
 
+class Protocol(models.Model, info):
+	app_name = models.CharField(max_length=300,default='')
+	model_name = models.CharField(max_length=300,default='')
+	field_name = models.CharField(max_length=300,default='')
+	explanation = models.TextField(default='')
+
+	class Meta:
+		unique_together = [['model_name','field_name']]
+
+	def __str__(self):
+		return self.app_name + ' ' + self.model_name + ' ' + self.field_name
 
 
 def expose_m2m(instance, field_name,attr):

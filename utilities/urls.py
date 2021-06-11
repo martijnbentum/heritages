@@ -18,5 +18,6 @@ urlpatterns = [
 	path('ajax_instance_info/<str:identifier>/',views.ajax_instance_info, 
 		name='ajax_instance_info'),
 	path('ajax_instance_info/<str:identifier>/<str:fields>/',views.ajax_instance_info, 
-		name='ajax_instance_info')
+		name='ajax_instance_info'),
+	path('add_protocol/<str:model_name>/<str:app_name>',views.edit_protocol,name='add_protocol'),
 ]

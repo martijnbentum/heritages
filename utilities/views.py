@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.core import serializers
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.forms.models import model_to_dict
+from django.forms import modelformset_factory
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from utils import view_util, help_util
@@ -12,6 +13,7 @@ from utils.view_util import Crud, Cruds, make_tabs, FormsetFactoryManager
 from utils.model_util import copy_complete, get_all_instances
 # from .models import copy_complete
 from utilities.search import Search
+from .models import Protocol
 import time
 
 te = 'title_original,title_english'
@@ -244,5 +246,12 @@ def ajax_instance_info(request,identifier,fields = 'all'):
 	return JsonResponse(d)
 		
 
+def edit_protocol(request, app_name, model_name):
+	ProtocolFormSet = modelformset_factory(Protocol, fields=('field_name','explanation'),extra=1)
+	queryset=Protocol.objects.filter(app_name = app_name).filter(model_name=model_name)
+	formset = ProtocolFormSet(queryset=queryset)
+	page_name = 'Protocol ' + model_name
+	var = {'formset':formset,'page_name':page_name}
+	return render(request, 'utilities/add_protocol.html',var)
 
 
