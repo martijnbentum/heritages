@@ -32,6 +32,7 @@ DEBUG = config('DEBUG', cast=bool)
 # ALLOWED_HOSTS = [127.0.0.1]
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast =Csv())
 
+ADMINS=[('Martijn','bentummartijn@gmail.com')]
 
 # Application definition
 
