@@ -65,12 +65,13 @@ class PersonForm(ModelForm):
 		required=False)
 	date_of_birth= forms.CharField(**dchar)
 	date_of_death= forms.CharField(**dchar)
+	viaf = forms.CharField(**dchar)
 
 	class Meta:
 		model = Person
 		fields = 'name,gender,nationality,location_of_birth,location_of_birth'
 		fields += ',occupation,affiliation,biography_link,comments,keywords'
 		fields += ',date_of_birth,date_of_death,description,flag,thumbnail,pseudonyms'
-		fields += ',pseudonym_precedent'
+		fields += ',pseudonym_precedent,viaf'
 		fields = fields.split(',')
 
