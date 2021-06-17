@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import ModelForm, inlineformset_factory
+from django.forms import ModelForm, formset_factory
 from django_select2.forms import ModelSelect2Widget
 from .models import Protocol
 
@@ -12,9 +12,11 @@ def make_select2_attr(field_name = 'name', input_length = 2):
 
 
 
-'''
+dattr = {'attrs':{'style':'width:95%'}}
 dchar_required = {'widget':forms.TextInput(**dattr),'required':True}
-dtext_required = {'widget':forms.Textarea(attrs={'style':'width:100%','rows':3}),'required':True}
+dtext_required = {'widget':forms.Textarea(
+	attrs={'style':'width:100%; font-size:80%','rows':6}),'required':True}
+
 class ProtocolForm(ModelForm):
 	model_name= forms.CharField(**dchar_required)
 	field_name= forms.CharField(**dchar_required)
@@ -23,4 +25,4 @@ class ProtocolForm(ModelForm):
 	class Meta:
 		model = Protocol
 		fields = ['field_name','explanation']
-'''
+
