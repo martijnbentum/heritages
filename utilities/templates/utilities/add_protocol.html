@@ -9,6 +9,12 @@
 {% endblock %}
 
 {% block content %}
+
+<p style="color:#cad2de; margin-left:15px;"> {{note}}</p>
+
+<form method="post">
+	{% csrf_token %}
+
 <div class="col-md-12 d-flex">
 	<h4 class="mt-2">{{page_name}}</h4>
 	<div class="protocol">
@@ -22,8 +28,6 @@
 <hr class="mt-0 mb-4">
 
 
-<form method="post">
-    {% csrf_token %}
 	<table class="table table-borderless" >
 		<tr class="d-flex">
 			<th class="col-4">field</th>
@@ -35,7 +39,7 @@
 			<tr class ="d-flex">
 				<th class="col-4">{{f.field_name}} {{f.field_name.errors}}</th>
 				<th class="col-7">{{f.explanation}} {{f.explanation.errors}}</th>
-				<td class="col-1">{{f.DELETE}} </td>
+				<td class="col-1">{{f.DELETE}} {{f.id}}</td>
 			</tr>
 		{% endfor %}
 

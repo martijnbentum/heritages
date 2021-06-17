@@ -12,6 +12,14 @@
 	<h4 class="col-2 ml-0 pl-0">{{page_name}}</h4>
 	{% include 'utilities/save.html' %}
 	{% include 'utilities/list_button.html' %}
+
+		<a class = "btn btn-link btn-sm ml-auto" style="color:#cad2de" 
+			href="{% url 'utilities:add_protocol' app_name model_name %}"
+			target="_blank"
+			>
+			<i class="fas fa-question-circle"></i>
+		</a>
+
 	</div>
 	<hr>
 	{% if 'Edit' in page_name and 'unknown' not in crud.last_update %}

@@ -247,14 +247,25 @@ def ajax_instance_info(request,identifier,fields = 'all'):
 	return JsonResponse(d)
 		
 
-def edit_protocol(request, app_name, model_name):
+def edit_protocol(request, app_name, model_name, field_name = None):
 	app_name, model_name = app_name.lower(), model_name.lower()
 	ProtocolFormSet = modelformset_factory(Protocol, ProtocolForm,
 		fields=('field_name','explanation'),extra=1,can_delete=True)
 	queryset=Protocol.objects.filter(app_name = app_name,model_name=model_name)
-	formset = ProtocolFormSet(queryset=queryset)
+	formset = []
+	if request.method == 'POST':
+		formset = ProtocolFormSet(request.POST,queryset=queryset)
+		if formset.is_valid():
+			formset.save()
+			print('save is a success')
+			# if not field_name: return render(request,'utilities/close.html')
+			# return HttpResponseRedirect('/'+app_name+'/add_'+ model_name+'/')
+			return render(request,'utilities/close.html')
+		else: print('not valid',formset.errors,app_name,model_name)
+	if not formset: formset = ProtocolFormSet(queryset=queryset)
+	note = 'changes to the protocol text will be visible after refreshing the page'
 	page_name = 'Protocol ' + model_name
-	var = {'formset':formset,'page_name':page_name}
+	var = {'formset':formset,'page_name':page_name,'note':note}
 	return render(request, 'utilities/add_protocol.html',var)
 
 

@@ -16,7 +16,15 @@
 		<div class="d-flex justify-content-end"> 
 			{% include 'utilities/list_button.html' %}
 		</div>
-			{% include 'utilities/flag.html' %}
+
+		<a class = "btn btn-link btn-sm ml-auto" style="color:#cad2de" 
+			href="{% url 'utilities:add_protocol' app_name model_name %}"
+			target="_blank"
+			>
+			<i class="fas fa-question-circle"></i>
+		</a>
+
+		{% include 'utilities/flag.html' %}
 	</div>
 	<hr>
 	{% if 'Edit' in page_name and 'unknown' not in crud.last_update %}

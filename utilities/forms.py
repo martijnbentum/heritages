@@ -13,14 +13,14 @@ def make_select2_attr(field_name = 'name', input_length = 2):
 
 
 dattr = {'attrs':{'style':'width:95%'}}
-dchar_required = {'widget':forms.TextInput(**dattr),'required':True}
-dtext_required = {'widget':forms.Textarea(
-	attrs={'style':'width:100%; font-size:80%','rows':6}),'required':True}
+dchar= {'widget':forms.TextInput(**dattr),'required':False}
+dtext= {'widget':forms.Textarea(
+	attrs={'style':'width:100%; font-size:80%','rows':6}),'required':False}
 
 class ProtocolForm(ModelForm):
-	model_name= forms.CharField(**dchar_required)
-	field_name= forms.CharField(**dchar_required)
-	explanation= forms.CharField(**dtext_required)
+	model_name= forms.CharField(**dchar)
+	field_name= forms.CharField(**dchar)
+	explanation= forms.CharField(**dtext)
 
 	class Meta:
 		model = Protocol
