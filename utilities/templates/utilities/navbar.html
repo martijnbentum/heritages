@@ -40,14 +40,15 @@
 			"{% url 'utilities:list_view' 'Location' 'locations' 50 %}">location</a>
           <a class="dropdown-item" href=
 			"{% url 'utilities:list_view' 'Person' 'persons' %}">person</a>
-          <a class="dropdown-item" href=
-			"{% url 'utilities:tile_view' %}">tiles</a>
-          <a class="dropdown-item" href=
-			"{% url 'utilities:row_view' %}">rows</a>
 		{% if request.user|has_group:"typemaster" %}
           <a class="dropdown-item" href=
 			"{% url 'utilities:list_view' 'Keyword' 'misc' %}">keyword</a>
 		{% endif %}
+			<div class="dropdown-divider"></div> 
+          <a class="dropdown-item" href=
+			"{% url 'utilities:tile_view' %}">tiles</a>
+          <a class="dropdown-item" href=
+			"{% url 'utilities:row_view' %}">rows</a>
           <a class="dropdown-item" href=
 			"{% url 'locations:map' %}">map</a>
 			<div class="dropdown-divider"></div> 
