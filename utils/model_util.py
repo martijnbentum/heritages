@@ -179,8 +179,8 @@ def get_all_instances(model_names = '',flag_filter_person = True):
 			if model._meta.model_name == model_name: models.append(model)
 	instances = []
 	for x in models:
-		# if x._meta.model_name == 'person': instances.extend(x.objects.filter(flag == True))
-		instances.extend(x.objects.all())
+		if x._meta.model_name == 'person': instances.extend(x.objects.filter(flag = True))
+		else:instances.extend(x.objects.all())
 	return instances
 
 
