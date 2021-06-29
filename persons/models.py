@@ -1,7 +1,7 @@
 from django.db import models
 from utilities.models import SimpleModel
 from utils.model_util import info
-from misc.models import Keyword
+from misc.models import Keyword, Famine
 from locations.models import Location
 from utils.map_util import instance2related_locations, field2locations
 from utilities.models import instance2name, instance2color, instance2map_buttons
@@ -38,6 +38,7 @@ class Person(models.Model, info):
 	flag = models.BooleanField(default = False)
 	thumbnail = models.ImageField(upload_to='thumbnail/',blank=True,null=True)
 	viaf = models.CharField(max_length=1000,default='')
+	famines = models.ManyToManyField(Famine, blank=True)
 
 	def __str__(self):
 		return self.name
@@ -100,5 +101,10 @@ class Person(models.Model, info):
 		if age: m += ' (' + age + ')'
 		return m
 	
+	@property
+	def famine_names(self):
+		famines= self.famines.all() 
+		if famines: return ', '.join([f.names_str for f in famines])
+		else: return ''
 		
 		

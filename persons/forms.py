@@ -66,12 +66,16 @@ class PersonForm(ModelForm):
 	date_of_birth= forms.CharField(**dchar)
 	date_of_death= forms.CharField(**dchar)
 	viaf = forms.CharField(**dchar)
+	famines = forms.ModelMultipleChoiceField(
+		queryset=Famine.objects.all(),
+		widget=FaminesWidget(**dselect2),
+		required=False)
 
 	class Meta:
 		model = Person
 		fields = 'name,gender,nationality,location_of_birth,location_of_birth'
 		fields += ',occupation,affiliation,biography_link,comments,keywords'
 		fields += ',date_of_birth,date_of_death,description,flag,thumbnail,pseudonyms'
-		fields += ',pseudonym_precedent,viaf'
+		fields += ',pseudonym_precedent,viaf,famines'
 		fields = fields.split(',')
 

@@ -36,16 +36,22 @@
 		</div>
 		<div class="grid-item info" id='{{instance.identifier}}_info-toggle'>
 			<div class="nested grid-item info-famine">
+				{% if instance.famine_names %}
 				<p class="p-info small">Famine:</p>
 				<p class="p-info blue normal"> {{instance.famine_names|truncatechars:33}}</p>
+				{% endif %}
 			</div>
 			<div class="nested grid-item info-keywords">
+				{% if instance.keyword_names %}
 				<p class="p-info small">Keywords:</p>
 				<p class="p-info blue normal"> {{instance.keyword_names|truncatechars:33}}</p>
+				{% endif %}
 			</div>
 			<div class="nested grid-item info-location">
+				{% if instance.setting_names %}
 				<p class="p-info small">Location:</p>
 				<p class="p-info blue normal"> {{instance.setting_names|truncatechars:33}}</p>
+				{% endif %}
 			</div>
 		</div>
 		<div class="grid-item image toggle" id='{{instance.identifier}}_image-toggle'>
@@ -87,7 +93,7 @@ function toggle_row_view(identifier) {
 	var plus= document.getElementById(identifier + "_plus");
 	console.log(identifier,model,pk);
 	if (image.style.display == 'inline') {
-		if (!(model == 'person')) {info.style.display = 'None';}
+		info.style.display = 'None';
 		image.style.display = 'None';
 		plus.classList.remove('fa-chevron-up'); 
 		plus.classList.add('fa-chevron-down'); 
@@ -95,7 +101,7 @@ function toggle_row_view(identifier) {
 			description.innerHTML = description_dict[identifier + '_description'].truncated_text;
 		}
 	} else {
-		if (!(model == 'person')) {info.style.display = 'grid';}
+		info.style.display = 'grid';
 		image.style.display = 'inline';
 		plus.classList.remove('fa-chevron-down'); 
 		plus.classList.add('fa-chevron-up'); 
