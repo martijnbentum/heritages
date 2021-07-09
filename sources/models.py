@@ -409,7 +409,7 @@ class Memorialsite(Source,info):
 	locations= models.ManyToManyField(Location,blank=True, 
 		related_name='memorialsite_location_recorded')
 	video_link = models.CharField(max_length=1000,default='')
-	location_field = ''
+	location_field = 'locations'
 
 	@property
 	def icon(self):
