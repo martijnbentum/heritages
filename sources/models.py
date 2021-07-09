@@ -68,7 +68,7 @@ class Source(models.Model):
 			m += '<img src="'+self.thumbnail.url+'" width="200" style="border-radius:3%">'
 		m += instance2icon(self)
 		m += '<p class="h6 mb-0 mt-1" style="color:'+instance2color(self)+';">'
-		m += self.title_english +'</p>'
+		m += self.title +'</p>'
 		m += '<hr class="mt-1 mb-0" style="border:1px solid '+instance2color(self)+';">'
 		m += '<p class="mt-2 mb-0">'+self.description+'</p>'
 
@@ -213,6 +213,11 @@ class Artefact(Source, info):
 	image_file = models.ImageField(upload_to='artefact/',blank=True,null=True)
 	location_field = 'locations'
 	image_filename = models.CharField(max_length=500,default='',blank=True,null=True)
+
+	@property
+	def pop_up(self):
+		m = self._pop_up
+		return m
 
 	@property
 	def icon(self):

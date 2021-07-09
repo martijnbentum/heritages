@@ -79,7 +79,9 @@ def get_querysets(names = None):
 	each item should follow this format: app_name$model_name
 	'''
 	if not names: 
-		names = 'Film,Image,Text,PictureStory,Infographic'.split(',')
+		names = 'Film,Image,Text,PictureStory,Infographic,Artefact,Memorialsite'
+		names += ',Recordedspeech,Videogame'
+		names = names.split(',')
 		names = ['sources$'+name for name in names]
 		# names.extend('persons$Person,misc$Famine'.split(','))
 		#request to not show persons on the map #60

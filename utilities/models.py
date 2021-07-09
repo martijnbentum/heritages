@@ -44,10 +44,14 @@ def instance2color(instance):
 	else: return 'black'
 
 def instance2icon(instance):
+	'''
 	name = instance2name(instance).lower()
 	if name in icon_dict.keys(): 
 		return icon_dict[name]
 	return 'not found'
+	'''
+	if not hasattr(instance,'icon'):return ''
+	return '<i class="'+instance.icon+' fa-lg mt-2" aria-hidden="true"></i>' 
 
 def instance2map_buttons(instance):
 	app_name,model_name= instance2names(instance)
@@ -61,13 +65,14 @@ def instance2map_buttons(instance):
 	return m
 
 
-names = 'text,picturestory,dot,image,infographic,famine,film,music,person'.split(',');
-colors = '#0fba62,#5aa5c4,black,#345beb,#e04eed,#ed4c72,#1e662a,#c92f04,#e39817'.split(',')
-icons ='fa fa-book,fa fa-star,fa fa-circle,fa fa-picture-o'
-icons +=',fa fa-bar-chart,fas fa-exclamation,fa fa-video-camera,fa fa-music,fa fa-male'
-icons = ['<i class="'+icon+' fa-lg mt-2" aria-hidden="true"></i>' for icon in icons.split(',')]
-color_dict,icon_dict ={}, {}
+names = 'text,picturestory,dot,image,infographic,famine,film,artefact,memorialsite,recordedspeech,videogame'.split(',');
+colors = '#0fba62,#5aa5c4,black,#345beb,#e04eed,#ed4c72,#1e662a,#c92f04,#e39817,#eb4034,#ebbd34'.split(',')
+#names = 'text,picturestory,dot,image,infographic,famine,film,music,person'.split(',');
+#colors = '#0fba62,#5aa5c4,black,#345beb,#e04eed,#ed4c72,#1e662a,#c92f04,#e39817'.split(',')
+# icons ='fa fa-book,fa fa-star,fa fa-circle,fa fa-picture-o'
+# icons +=',fa fa-bar-chart,fas fa-exclamation,fa fa-video-camera,fa fa-music,fa fa-male'
+# icons = ['<i class="'+icon+' fa-lg mt-2" aria-hidden="true"></i>' for icon in icons.split(',')]
+color_dict={}
 for i,name in enumerate(names):
 	color_dict[name] = colors[i]
-	icon_dict[name] = icons[i]
 
