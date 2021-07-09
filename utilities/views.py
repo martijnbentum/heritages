@@ -248,6 +248,7 @@ def ajax_instance_info(request,identifier,fields = 'all'):
 		
 
 def edit_protocol(request, app_name, model_name, field_name = None):
+	print(app_name,model_name,field_name,1111,222)
 	app_name, model_name = app_name.lower(), model_name.lower()
 	ProtocolFormSet = modelformset_factory(Protocol, ProtocolForm,
 		fields=('field_name','explanation'),extra=1,can_delete=True)
@@ -256,7 +257,13 @@ def edit_protocol(request, app_name, model_name, field_name = None):
 	if request.method == 'POST':
 		formset = ProtocolFormSet(request.POST,queryset=queryset)
 		if formset.is_valid():
-			formset.save()
+			instances = formset.save()
+			for instance in instances:
+				need_save = False
+				if not instance.app_name or instance.model_name: need_save = True
+				if not instance.app_name: instance.app_name = app_name
+				if not instance.model_name: instance.model_name = model_name
+				if need_save: instance.save()
 			print('save is a success')
 			# if not field_name: return render(request,'utilities/close.html')
 			# return HttpResponseRedirect('/'+app_name+'/add_'+ model_name+'/')
