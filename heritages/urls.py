@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, re_path, include
 from django.contrib.staticfiles.urls import static, staticfiles_urlpatterns
 from . import settings
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,7 +29,8 @@ urlpatterns = [
 	path('persons/',include('persons.urls')),
 	path('sources/',include('sources.urls')),
 	path('utilities/',include('utilities.urls')),
-	re_path(r'^select2/',include('django_select2.urls'))
+	re_path(r'^select2/',include('django_select2.urls')),
+	re_path(r'media/(?P<filename>.*)$', views.protected_media, name='protected_media'),
 ]
 if settings.DEBUG:
 	urlpatterns += staticfiles_urlpatterns()
