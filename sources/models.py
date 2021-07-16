@@ -46,6 +46,7 @@ class Source(models.Model):
 	thumbnail = models.ImageField(upload_to='thumbnail/',blank=True,null=True)
 	setting = models.ManyToManyField(Location,blank=True)
 	release_date_precedent = models.BooleanField(default=False)
+	location_field = ''
 
 	class Meta:
 		abstract = True
@@ -57,8 +58,8 @@ class Source(models.Model):
 
 	@property
 	def title(self):
-		if self.title_english: return self.title_english
-		return self.title_original
+		if self.title_original: return self.title_original
+		return self.title_english
 
 	@property
 	def _pop_up(self):
@@ -75,9 +76,9 @@ class Source(models.Model):
 		if hasattr(self,'play_field'):
 			link =  getattr(self,getattr(self,'play_field'))
 			if link:
-				m += '<a class = "btn btn-link btn-sm mt-1 pl-0 text-dark" target="_blank" href='
+				m += '<a class = "btn btn-link btn-sm mt-1 pl-0 text-dark" target="_blank" href="'
 				m += link
-				m += 'role="button"><i class="fas fa-play"></i></a>'
+				m += '" role="button"><i class="fas fa-play"></i></a>'
 		m += instance2map_buttons(self)
 		return m
 
@@ -153,12 +154,9 @@ class Music(Source,info):
 	def icon(self):
 		return 'fas fa-music'
 
-
-
 	@property
 	def pop_up(self):
 		m = self._pop_up
-	
 		return m
 
 	class Meta:
