@@ -68,6 +68,7 @@ def model2m2mreceiver(model_name,app_name):
 
 #list of models with m2m models that need to be tracked by easyaudit.'''
 names = 'Famine$misc,Film$sources,Text$sources,Image$sources,PictureStory$sources'
+names += ',Artefact$sources,Videogame$sources,Memorialsite$sources,Recordedspeech$sources'
 names += ',Music$sources,Infographic$sources,Person$persons'
 for name in names.split(','):
 	model_name, app_name = name.split('$')
@@ -88,7 +89,7 @@ def make_file_backup_postsave_receiver(app_name,model_name):
 	m += '\tfieldnames = make_models_image_file_dict()["'
 	m += app_name + '","'+model_name +'"]\n'
 	m += '\tfor field_name in  fieldnames:\n'
-	m += '\t\tprint("handling field:",field_name)\n'
+	#m += '\t\tprint("handling field:",field_name)\n'
 	m += '\t\tfield = getattr(instance,field_name)\n'
 	m += '\t\tif field:\n'
 	m += '\t\t\tlocal_path, remote_path, filename = extract_filename_and_path(field.name)\n'
