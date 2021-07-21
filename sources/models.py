@@ -12,6 +12,7 @@ from partial_date import PartialDateField
 
 
 def make_simple_model(name):
+	'''make a simple model with only a name attribute.'''
 	exec('class '+name + '(SimpleModel,info):\n\tpass',globals())
 
 names = 'MusicType,Collection,Rated,Commissioner'
@@ -25,7 +26,7 @@ for name in names:
 	make_simple_model(name)
 
 class Source(models.Model):
-	'''abstract base class for source models'''
+	'''abstract base class for source models for all non simple non relational models'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	famines = models.ManyToManyField(Famine, blank=True)
 	title_original = models.CharField(max_length=1000,default='')
@@ -112,6 +113,14 @@ class Source(models.Model):
 		else: return ''
 
 	@property
+	def language_names(self):
+		if not hasattr(self,'languages_original'): return ''
+		languages=  self.languages_original.all()
+		if languages:
+			return ', '.join( [x.name for x in languages] )
+		return ''
+
+	@property
 	def identifier(self):
 		return self._meta.app_label + '_' + self._meta.model_name + '_' + str( self.pk )
 
@@ -137,6 +146,7 @@ class Source(models.Model):
 				if x.name:o.append(x.name)
 		return ','.join(o)
 
+
 class Music(Source,info):
 	'''Meta data for songs related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
@@ -158,6 +168,7 @@ class Music(Source,info):
 	def pop_up(self):
 		m = self._pop_up
 		return m
+
 
 	class Meta:
 		unique_together = [['title_original','date_released']]
@@ -190,13 +201,6 @@ class Film(Source, info):
 		m = self._pop_up
 		return m
 
-	@property
-	def language(self):
-		languages=  self.languages_original.all()
-		if languages:
-			return ', '.join( [x.name for x in languages] )
-
-
 	class Meta:
 		unique_together = [['title_original','date_released']]
 	
@@ -223,10 +227,10 @@ class Artefact(Source, info):
 	class Meta:
 		unique_together = [['title_original','date_created','image_filename']]
 
+
 class Image(Source, info):
 	'''Meta data for Images related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
-	language_original = models.ForeignKey(Language,**dargs,related_name='image_language_original')
 	image_type = models.ForeignKey(ImageType,**dargs)
 	locations = models.ManyToManyField(Location,blank=True, related_name='image_locations')
 	creators = models.ManyToManyField(Person,blank=True, related_name='image_creators_set')
@@ -237,7 +241,6 @@ class Image(Source, info):
 	@property
 	def icon(self):
 		return 'fas fa-image'
-
 
 	@property
 	def pop_up(self):
@@ -263,7 +266,6 @@ class Infographic(Source,info):
 	location_field = 'locations'
 	image_filename = models.CharField(max_length=500,default='',blank=True,null=True)
 
-
 	@property
 	def icon(self):
 		return 'fas fa-chart-area'
@@ -275,6 +277,7 @@ class Infographic(Source,info):
 
 	class Meta:
 		unique_together = [['title_original','image_filename']]
+
 
 class PictureStory(Source,info):
 	'''Meta data for picturestories (comics / graphic novels) related to famines.'''
@@ -349,7 +352,6 @@ class Videogame(Source,info):
 		related_name='videogame_language_subtitle')
 	video_link = models.CharField(max_length=1000,default='')
 	
-
 	@property
 	def icon(self):
 		return 'fas fa-gamepad'
@@ -361,6 +363,7 @@ class Videogame(Source,info):
 
 	class Meta:
 		unique_together = [['title_original','date_released']]
+
 
 class Recordedspeech(Source,info):
 	'''Meta data for texts related to famines.'''
