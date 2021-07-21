@@ -24,7 +24,7 @@ class Keyword(models.Model, info):
 	category = models.CharField(max_length=300,default='')
 	category_relations= models.CharField(max_length=300,default='')
 
-	def __repr__(self):
+	def __str__(self):
 		return self.name
 
 	def save(self,*args,**kwargs):
