@@ -25,7 +25,7 @@ for name in names:
 	make_simple_model(name)
 
 class Source(models.Model):
-	'''abstract base class for music,film,image,text,infographic,picturestory.'''
+	'''abstract base class for source models'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	famines = models.ManyToManyField(Famine, blank=True)
 	title_original = models.CharField(max_length=1000,default='')
@@ -46,7 +46,7 @@ class Source(models.Model):
 	thumbnail = models.ImageField(upload_to='thumbnail/',blank=True,null=True)
 	setting = models.ManyToManyField(Location,blank=True)
 	release_date_precedent = models.BooleanField(default=False)
-	location_field = ''
+	location_field = 'setting'
 
 	class Meta:
 		abstract = True
@@ -179,7 +179,6 @@ class Film(Source, info):
 	film_type = models.ForeignKey(FilmType,**dargs)
 	video_link = models.CharField(max_length=1000,default='')
 	video_part_link = models.CharField(max_length=1000,default='')
-	location_field = 'setting'
 	play_field = 'video_link'
 
 	@property
@@ -349,7 +348,7 @@ class Videogame(Source,info):
 	languages_subtitle=models.ManyToManyField(Language,blank=True,
 		related_name='videogame_language_subtitle')
 	video_link = models.CharField(max_length=1000,default='')
-	location_field = ''
+	
 
 	@property
 	def icon(self):
@@ -375,7 +374,6 @@ class Recordedspeech(Source,info):
 	audio_link = models.CharField(max_length=1000,default='')
 	locations_recorded= models.ManyToManyField(Location,blank=True, 
 		related_name='recordedspeech_location_recorded')
-	location_field = ''
 
 	@property
 	def icon(self):
