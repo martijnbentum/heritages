@@ -52,14 +52,14 @@ class Location(models.Model, info):
 	notes = models.TextField(default='',blank=True)
 	endnode = True
 
-	def save(self):
+	def save(self,*args, **kwargs):
 		if not self.pk:
 			try: geonameid = eval(self.information)['geonameid']
 			except: 
 				geonameid = id_generator(length = 27)
 				self.active = True
 			self.geonameid = geonameid
-		super(Location, self).save()
+		super(Location, self).save(*args,**kwargs)
 
 	def __str__(self):
 		return self.name 
