@@ -45,8 +45,8 @@ def _handle_fieldnames(field_names):
 
 
 def tile_view(request):
-	# instances= [instance for instance in get_all_instances() if instance.thumbnail]
-	instances = get_all_instances()
+	instances= [instance for instance in get_all_instances() if instance.thumbnail]
+	# instances = get_all_instances()
 	print(len(instances),'ninstances')
 	var = {'page_name':'tile view','instances':instances}
 	return render(request,'utilities/tile_view.html',var)
