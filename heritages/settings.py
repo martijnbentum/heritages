@@ -38,6 +38,7 @@ ADMINS=[('Martijn','bentummartijn@gmail.com')]
 # Application definition
 
 INSTALLED_APPS = [
+	'test_without_migrations',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
