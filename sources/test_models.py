@@ -66,6 +66,8 @@ def _make_random_float(lower=0, upper=90,percision = 3):
 	return round(f,percision)
 
 
+
+
 class SourceTestCase(TestCase):
 	'''test the abstract class source.
 	main models in source inherit from this class
@@ -81,12 +83,14 @@ class SourceTestCase(TestCase):
 		Music.objects.create(title_original =  'pop up') # should be third to be created for assert
 		Music.objects.create(title_original =  'pop up and play', music_video_link = 'link') # 4!
 		Music.objects.create(title_original =  'badaboem', date_released= d2) 
+		Music.objects.create(title_original =  'extra') 
 		mt = MusicType.objects.create(name='jazz')
 		m = Music.objects.create(
 			title_original = 'the song',
 			music_type = mt,
 			date_created = d1,
 			date_released = d2,
+			description = lorem
 		)
 		m.composers.add(*h.instance(Person,1))
 		m.languages.add(*h.instance(Language,2))
@@ -356,4 +360,12 @@ class MemorialsiteTestCase(TestCase):
 	def test_unique_together(self):
 		with self.assertRaises(IntegrityError) as context:
 			Memorialsite.objects.create(**self.unique_dict)
+
+
+
+
+lorem = '''Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam elit enim, euismod sed pharetra sit amet, volutpat a ipsum. Morbi mattis luctus luctus. In hac habitasse platea dictumst. Cras nec euismod dolor. Integer a gravida magna, at porta orci. Donec vel quam vel nibh porta sagittis at id eros. Donec commodo sit amet neque non molestie. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus eleifend volutpat enim, convallis pellentesque ante sollicitudin porta. Nunc arcu risus, rhoncus quis lectus non, tempor finibus felis. Mauris rhoncus magna vel diam cursus elementum.
+
+Proin dignissim blandit tellus nec ultrices. Mauris ultrices iaculis arcu et porta. Cras auctor nunc ut urna cursus, at lacinia velit vehicula. In quis aliquet orci. Quisque dignissim eleifend volutpat. Vivamus gravida elit sit amet elit blandit, ac pellentesque tortor commodo. Morbi bibendum pharetra blandit. Duis in ipsum porta, efficitur felis vel, vehicula purus. Vestibulum eget sapien at lacus placerat viverra. Suspendisse erat elit, pellentesque sit amet dapibus eu, tincidunt ut leo. Suspendisse lacus quam, placerat nec augue quis, malesuada dignissim diam. Integer viverra arcu quis maximus porttitor. Donec vestibulum mauris eget justo porttitor ultricies. Cras enim est, interdum a pretium a, lacinia vel nunc. Suspendisse tempor risus mauris, et scelerisque nunc euismod lacinia.
+'''
 
