@@ -154,6 +154,14 @@ class Source(models.Model):
 				if x.name:o.append(x.name)
 		return ','.join(o)
 
+	@property
+	def info_available(self):
+		n = len(self.description) > 165
+		if self.setting_names or self.famine_names or self.keyword_names or self.thumbnail or n:
+			return True
+		else: False
+	
+
 
 class Music(Source,info):
 	'''Meta data for songs related to famines.'''
