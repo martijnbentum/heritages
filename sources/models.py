@@ -84,13 +84,19 @@ class Source(models.Model):
 		return m
 
 	@property
+	def pop_up(self):
+		'''can be overwritten by inherited classes to add to the _popup'''	
+		return self._pop_up
+
+	@property
 	def related_locations(self):
 		return instance2related_locations(self)	
 
 	@property
 	def latlng(self):
-		if self.location_field:
-			locations = field2locations(self,self.location_field)
+		location_field = self.location_field if self.location_field else 'setting'
+		locations = field2locations(self,self.location_field)
+		if locations:
 			return [location.gps for location in locations]
 		else: return None
 	
@@ -114,8 +120,10 @@ class Source(models.Model):
 
 	@property
 	def language_names(self):
-		if not hasattr(self,'languages_original'): return ''
-		languages=  self.languages_original.all()
+		if hasattr(self,'languages_original'): l = getattr(self,'languages_original')
+		elif hasattr(self,'languages'): l = getattr(self,'languages')
+		else: return ''
+		languages=  l.all()
 		if languages:
 			return ', '.join( [x.name for x in languages] )
 		return ''
@@ -164,11 +172,6 @@ class Music(Source,info):
 	def icon(self):
 		return 'fas fa-music'
 
-	@property
-	def pop_up(self):
-		m = self._pop_up
-		return m
-
 
 	class Meta:
 		unique_together = [['title_original','date_released']]
@@ -196,17 +199,13 @@ class Film(Source, info):
 	def icon(self):
 		return 'fa fa-film'
 	
-	@property
-	def pop_up(self):
-		m = self._pop_up
-		return m
 
 	class Meta:
 		unique_together = [['title_original','date_released']]
 	
 
 class Artefact(Source, info):
-	'''Meta data for Images related to famines.'''
+	'''Meta data for material artefacts related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	artefact_type = models.ForeignKey(ArtefactType,**dargs)
 	locations = models.ManyToManyField(Location,blank=True, related_name='artefact_locations')
@@ -215,10 +214,6 @@ class Artefact(Source, info):
 	location_field = 'locations'
 	image_filename = models.CharField(max_length=500,default='',blank=True,null=True)
 
-	@property
-	def pop_up(self):
-		m = self._pop_up
-		return m
 
 	@property
 	def icon(self):
@@ -270,11 +265,6 @@ class Infographic(Source,info):
 	def icon(self):
 		return 'fas fa-chart-area'
 
-	@property
-	def pop_up(self):
-		m = self._pop_up
-		return m
-
 	class Meta:
 		unique_together = [['title_original','image_filename']]
 
@@ -299,11 +289,6 @@ class PictureStory(Source,info):
 	@property
 	def icon(self):
 		return 'fas fa-book-open'
-
-	@property
-	def pop_up(self):
-		m = self._pop_up
-		return m
 
 	class Meta:
 		unique_together = [['title_original','image_filename']]
@@ -330,11 +315,6 @@ class Text(Source,info):
 	def icon(self):
 		return 'fas fa-file-alt'
 	
-	@property
-	def pop_up(self):
-		m = self._pop_up
-		return m
-
 	class Meta:
 		unique_together = [['title_original','date_released']]
 
@@ -355,11 +335,6 @@ class Videogame(Source,info):
 	@property
 	def icon(self):
 		return 'fas fa-gamepad'
-	
-	@property
-	def pop_up(self):
-		m = self._pop_up
-		return m
 
 	class Meta:
 		unique_together = [['title_original','date_released']]
@@ -381,11 +356,6 @@ class Recordedspeech(Source,info):
 	@property
 	def icon(self):
 		return 'far fa-comments'
-	
-	@property
-	def pop_up(self):
-		m = self._pop_up
-		return m
 
 	class Meta:
 		unique_together = [['title_original','date_released']]
@@ -419,10 +389,5 @@ class Memorialsite(Source,info):
 	def icon(self):
 		return 'fas fa-monument'
 	
-	@property
-	def pop_up(self):
-		m = self._pop_up
-		return m
-
 	class Meta:
 		unique_together = [['title_original','date_released']]
