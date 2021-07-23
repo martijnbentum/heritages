@@ -255,6 +255,7 @@ class Image(Source, info):
 	@property
 	def creator_occupation_name(self):
 		name = 'Creator'
+		if not self.image_type: return name
 		if self.image_type.name == 'drawings':name = 'Drawer'
 		if self.image_type.name == 'engravings':name = 'Engrapher'
 		if self.image_type.name == 'Etching':name = 'Graphic artist'
