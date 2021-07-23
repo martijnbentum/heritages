@@ -138,6 +138,9 @@ class Source(models.Model):
 
 	@property
 	def detail_url(self):
+		detail_view_done ='image'.split(',')
+		if self._meta.model_name not in detail_view_done: 
+			return self.edit_url
 		return self._meta.app_label + ':detail_' + self._meta.model_name + '_view' 
 		
 	@property
