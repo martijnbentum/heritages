@@ -250,6 +250,19 @@ class Image(Source, info):
 		return 'fas fa-image'
 
 	@property
+	def creator_occupation_name(self):
+		name = 'Creator'
+		if self.image_type.name == 'drawings':name = 'Drawer'
+		if self.image_type.name == 'engravings':name = 'Engrapher'
+		if self.image_type.name == 'Etching':name = 'Graphic artist'
+		if self.image_type.name == 'lithographs':name = 'Graphic artist'
+		if self.image_type.name == 'paintings':name = 'Painter'
+		if self.image_type.name == 'poster':name = 'Graphic artist'
+		if self.image_type.name == 'photograph':name = 'Photographer'
+		if self.image_type.name == 'woodcuts':name = 'Graphic artist'
+		return name
+
+	@property
 	def pop_up(self):
 		m = self._pop_up
 		if self.image_file.name:
