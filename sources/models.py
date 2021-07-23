@@ -135,6 +135,10 @@ class Source(models.Model):
 	@property
 	def edit_url(self):
 		return self._meta.app_label + ':edit_' + self._meta.model_name 
+
+	@property
+	def detail_url(self):
+		return self._meta.app_label + ':detail_' + self._meta.model_name + '_view' 
 		
 	@property
 	def date(self):
