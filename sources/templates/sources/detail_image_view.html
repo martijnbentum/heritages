@@ -46,11 +46,11 @@
 						{% if not forloop.last %}
 							<a class="info-text"
 							href = "{% url creator.edit_url creator.pk %}"
-							role="button">{{creator.name}},</a>
+							role="button">{{creator.title}},</a>
 						{% else %}
 							<a class="info-text"
 							href = "{% url creator.edit_url creator.pk %}"
-							role="button">{{creator.name}}</a>
+							role="button">{{creator.title}}</a>
 						{% endif %}
 					{% endfor %}
 				{% else %}
