@@ -21,7 +21,7 @@
 				role="button"><i class="far fa-edit text-secondary"></i></a>
 		</h3>
 
-		{% if instance.title_english %}
+		{% if instance.title_english and instance.title_english != instance.title_original%}
 			<p><small>({{instance.title_english}})</small></p>
 		{% endif %}
 
