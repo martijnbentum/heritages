@@ -30,9 +30,16 @@
 
 	<div class="info">
 		<div class="grid-item general">
+			{%if instance.image_type%}
+			<div class = "one-line">
+				<span class = "info-header">Image type:</span>
+				<span class = "info-text">{{instance.image_type}}</span>
+			</div>
+			<br>
+			{% endif %}
 
 			<div class = "one-line">
-				<span class = "info-header"> Photographer:</span>
+				<span class = "info-header"> {{instance.creator_occupation_name}}:</span>
 				{%if creators %}
 					<span class = "info-text">
 					{% for creator in creators %}
