@@ -93,6 +93,9 @@ class Famine(models.Model, info):
 			return [location.gps for location in locations]
 		else: return None
 
+	@property
+	def edit_url(self):
+		return self._meta.app_label + ':edit_' + self._meta.model_name 
 
 	@property
 	def pop_up(self):
