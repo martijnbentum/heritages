@@ -27,9 +27,10 @@ def detail_image_view(request,pk):
 	instance = Image.objects.get(pk = pk)
 	creators = instance.creators.all()
 	locations= instance.locations.all()
+	settings= instance.setting.all()
 	famines = instance.famines.all()
 	args = {'instance':instance, 'page_name':instance.title,'creators':creators}
-	args.update({'locations':locations, 'famines':famines})
+	args.update({'locations':locations, 'settings':settings,'famines':famines})
 	return render(request,'sources/detail_image_view.html',args)
 
 def create_simple_view(name):
