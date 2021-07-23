@@ -14,7 +14,11 @@
 		<p class="p-title">
 			<i class="{{instance.icon}} fa-lg" aria-hidden="true"></i>
 			<a 
-				href = "{% url instance.detail_url instance.pk %}"
+				{% if instance.detail_url %}
+					href = "{% url instance.detail_url instance.pk %}"
+				{% else %}
+					href = "{% url instance.edit_url instance.pk %}"
+				{% endif %}
 				role = "button">
 				{{instance.title|truncatechars:31}}
 			</a>
