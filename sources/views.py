@@ -11,6 +11,7 @@ from .forms import GameTypeForm, ProductionStudioForm, RecordedspeechTypeForm
 from .forms import RecordedspeechForm, BroadcastingStationForm, MemorialTypeForm
 from .forms import MemorialsiteForm, ArtefactForm, ArtefactTypeForm
 from persons.forms import PersonForm
+from .models import Image
 
 def index(request):
 	return HttpResponse('hello world')
@@ -21,6 +22,15 @@ def make_fname(name):
 		if c.isupper(): o += '_' + c
 		else: o += c
 	return o.lower()
+
+def detail_image_view(request,pk):
+	instance = Image.objects.get(pk = pk)
+	creators = instance.creators.all()
+	locations= instance.locations.all()
+	famines = instance.famines.all()
+	args = {'instance':instance, 'page_name':instance.title,'creators':creators}
+	args.update({'locations':locations, 'famines':famines})
+	return render(request,'sources/detail_image_view.html',args)
 
 def create_simple_view(name):
 	'''Create a simple view based on the Model name. 
