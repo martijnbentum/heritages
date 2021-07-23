@@ -5,6 +5,7 @@ from . import views
 app_name = 'sources'
 urlpatterns = [
 	path('',views.edit_film, name='add_film'),
+	path('detail_image_view/<int:pk>',views.detail_image_view, name='detail_image_view'),
 	path('add_videogame/',views.edit_videogame, name='add_videogame'),
 	path('add_memorialsite/',views.edit_memorialsite, name='add_memorialsite'),
 	path('add_recordedspeech/',views.edit_recordedspeech, name='add_recordedspeech'),
