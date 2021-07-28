@@ -98,10 +98,10 @@
 				</span>
 			</div>
 			<br>
+			{%if creators %}
 			<div class = "one-line">
 				<span class = "info-header"> 
 					Creator:</span>
-				{%if creators %}
 					<span class = "info-text">
 					{% for creator in creators %}
 						{% if not forloop.last %}
@@ -114,13 +114,28 @@
 							role="button">{{creator.title}}</a>
 						{% endif %}
 					{% endfor %}
+				</span>
+			</div>
+			<br>
+			{% endif %}
+
+			<div class = "one-line">
+				<span class = "info-header"> Language:</span>
+				{%if languages%}
+					<span class = "info-text">
+					{% for language in languages%}
+						{% if not forloop.last %}
+							{{language.name}},
+						{% else %}
+							{{language.name}}
+						{% endif %}
+					{% endfor %}
 				{% else %}
 					<span class = "grey">Unknown
 				{% endif %}
 				</span>
 			</div>
 			<br>
-
 			<div class = "one-line">
 				<span class = "info-header"> Famine:</span>
 				{%if famines %}
@@ -223,7 +238,6 @@
 	grid-gap: 9px;
 }
 .grid-item {
-	background-color: #f0f0f0;
 	padding: 0px;
 	align-self:start;
 	justify-self:left;
