@@ -9,9 +9,11 @@
 <div class="grid-container"> 
 	<div class="grid-item">
 		{% if instance.image_file %}
-			<img id='big-image' class="big-img" src="{{instance.image_file.url}}">  
+			<img id='big-image' class="big-img" 
+				src="{{instance.image_file.url}}">  
 		{% else %}
-			<img id='big-image' class="big-img op" src="media/no_image_available.png">
+			<img id='big-image' class="big-img op"
+				 src="media/no_image_available.png">
 		{% endif %}
 	</div>
 	<div class="grid-item">
@@ -21,9 +23,11 @@
 				role="button"><i class="far fa-edit text-secondary"></i></a>
 		</h3>
 
-		{% if instance.title_english and instance.title_english != instance.title_original%}
-			<p><small>({{instance.title_english}})</small></p>
+	{% with instance as i %}
+		{% if i.title_english and i.title_english != i.title_original%}
+			<p><small>({{i.title_english}})</small></p>
 		{% endif %}
+	{% endwith %}
 
 		<hr>
 	</div>
@@ -39,7 +43,8 @@
 			{% endif %}
 
 			<div class = "one-line">
-				<span class = "info-header"> {{instance.creator_occupation_name}}:</span>
+				<span class = "info-header"> 
+					{{instance.creator_occupation_name}}:</span>
 				{%if creators %}
 					<span class = "info-text">
 					{% for creator in creators %}
