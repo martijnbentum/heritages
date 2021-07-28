@@ -120,7 +120,8 @@ class Source(models.Model):
 
 	@property
 	def language_names(self):
-		if hasattr(self,'languages_original'): l = getattr(self,'languages_original')
+		if hasattr(self,'languages_original'): 
+			l = getattr(self,'languages_original')
 		elif hasattr(self,'languages'): l = getattr(self,'languages')
 		else: return ''
 		languages=  l.all()
@@ -130,7 +131,7 @@ class Source(models.Model):
 
 	@property
 	def identifier(self):
-		return self._meta.app_label + '_' + self._meta.model_name + '_' + str( self.pk )
+		return self._meta.app_label+'_'+self._meta.model_name+'_'+str( self.pk )
 
 	@property
 	def edit_url(self):
@@ -138,14 +139,15 @@ class Source(models.Model):
 
 	@property
 	def detail_url(self):
-		detail_view_done ='image'.split(',')
+		detail_view_done ='image,film'.split(',')
 		if self._meta.model_name not in detail_view_done: 
 			return self.edit_url
-		return self._meta.app_label + ':detail_' + self._meta.model_name + '_view' 
+		return self._meta.app_label+':detail_'+self._meta.model_name+'_view' 
 		
 	@property
 	def date(self):
-		if self.date_released and self.date_created and self.release_date_precedent:
+		rdp = self.release_date_precedent
+		if self.date_released and self.date_created and rdp:
 			return self.date_released
 		elif self.date_created: return self.date_created
 		elif self.date_released: return self.date_released
@@ -177,7 +179,8 @@ class Music(Source,info):
 	music_video_link = models.CharField(max_length=1000,default='')
 	album = models.CharField(max_length=1000,default='')
 	performing_artists = models.CharField(max_length=3000,default='')
-	composers = models.ManyToManyField(Person,blank=True,related_name='music_composer_set')
+	composers = models.ManyToManyField(Person,blank=True,
+		related_name='music_composer_set')
 	music_type = models.ForeignKey(MusicType,**dargs)
 	languages = models.ManyToManyField(Language, blank=True)
 	music_link = models.CharField(max_length=1000,default='')
@@ -195,13 +198,20 @@ class Music(Source,info):
 class Film(Source, info):
 	'''Meta data for movies related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
-	languages_original=models.ManyToManyField(Language,blank=True,related_name='film_language_original')
-	languages_subtitle=models.ManyToManyField(Language,blank=True,related_name='film_language_subtitle')
-	writers = models.ManyToManyField(Person,blank=True, related_name='film_writers_set')
-	directors = models.ManyToManyField(Person,blank=True, related_name='film_directors_set')
-	creators = models.ManyToManyField(Person,blank=True,related_name='film_creators_set')
-	film_companies = models.ManyToManyField(FilmCompany,blank=True,related_name='film_film_company')
-	locations_shot = models.ManyToManyField(Location,blank=True, related_name='film_location_shot')
+	languages_original=models.ManyToManyField(Language,blank=True,
+		related_name='film_language_original')
+	languages_subtitle=models.ManyToManyField(Language,blank=True,
+		related_name='film_language_subtitle')
+	writers = models.ManyToManyField(Person,blank=True, 
+		related_name='film_writers_set')
+	directors = models.ManyToManyField(Person,blank=True, 
+		related_name='film_directors_set')
+	creators = models.ManyToManyField(Person,blank=True,
+		related_name='film_creators_set')
+	film_companies = models.ManyToManyField(FilmCompany,blank=True,
+		related_name='film_film_company')
+	locations_shot = models.ManyToManyField(Location,blank=True, 
+		related_name='film_location_shot')
 	locations_released= models.ManyToManyField(Location,blank=True, 
 		related_name='film_location_released')
 	target_audience = models.ForeignKey(TargetAudience,**dargs)
@@ -214,6 +224,11 @@ class Film(Source, info):
 	def icon(self):
 		return 'fa fa-film'
 	
+	@property
+	def video(self):
+		if self.video_link: return self.video_link.replace('watch?v=','embed/')
+		if self.video_part_link: return self.video_part_link
+		return ''
 
 	class Meta:
 		unique_together = [['title_original','date_released']]
@@ -223,11 +238,14 @@ class Artefact(Source, info):
 	'''Meta data for material artefacts related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	artefact_type = models.ForeignKey(ArtefactType,**dargs)
-	locations = models.ManyToManyField(Location,blank=True, related_name='artefact_locations')
-	creators = models.ManyToManyField(Person,blank=True, related_name='artefact_creators_set')
+	locations = models.ManyToManyField(Location,blank=True, 
+		related_name='artefact_locations')
+	creators = models.ManyToManyField(Person,blank=True, 
+		related_name='artefact_creators_set')
 	image_file = models.ImageField(upload_to='artefact/',blank=True,null=True)
 	location_field = 'locations'
-	image_filename = models.CharField(max_length=500,default='',blank=True,null=True)
+	image_filename = models.CharField(max_length=500,default='',blank=True,
+		null=True)
 
 
 	@property
@@ -242,11 +260,14 @@ class Image(Source, info):
 	'''Meta data for Images related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	image_type = models.ForeignKey(ImageType,**dargs)
-	locations = models.ManyToManyField(Location,blank=True, related_name='image_locations')
-	creators = models.ManyToManyField(Person,blank=True, related_name='image_creators_set')
+	locations = models.ManyToManyField(Location,blank=True, 
+		related_name='image_locations')
+	creators = models.ManyToManyField(Person,blank=True, 
+		related_name='image_creators_set')
 	image_file = models.ImageField(upload_to='image/',blank=True,null=True)
 	location_field = 'locations'
-	image_filename = models.CharField(max_length=500,default='',blank=True,null=True)
+	image_filename = models.CharField(max_length=500,default='',
+		blank=True,null=True)
 
 	@property
 	def icon(self):
@@ -270,7 +291,8 @@ class Image(Source, info):
 	def pop_up(self):
 		m = self._pop_up
 		if self.image_file.name:
-			m += '<a class = "btn btn-link btn-sm mt-1 pl-0 text-dark" target="_blank" href='
+			m += '<a class = "btn btn-link btn-sm mt-1 pl-0 text-dark" '
+			m += 'target="_blank" href='
 			m += self.image_file.url
 			m += 'role="button"><i class="fas fa-play"></i></a>'
 		return m
@@ -283,12 +305,15 @@ class Infographic(Source,info):
 	'''Meta data for infographics related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	infographic_type = models.ForeignKey(InfographicType,**dargs)
-	creators = models.ManyToManyField(Person,blank=True, related_name='infographic_creators_set')
+	creators = models.ManyToManyField(Person,blank=True, 
+		related_name='infographic_creators_set')
 	image_file = models.ImageField(upload_to='infographic/',blank=True,null=True)
 	languages = models.ManyToManyField(Language, blank=True)
-	locations = models.ManyToManyField(Location,blank=True, related_name='infographic_locations')
+	locations = models.ManyToManyField(Location,blank=True, 
+		related_name='infographic_locations')
 	location_field = 'locations'
-	image_filename = models.CharField(max_length=500,default='',blank=True,null=True)
+	image_filename = models.CharField(max_length=500,default='',blank=True,
+		null=True)
 
 	@property
 	def icon(self):
@@ -299,21 +324,28 @@ class Infographic(Source,info):
 
 
 class PictureStory(Source,info):
-	'''Meta data for picturestories (comics / graphic novels) related to famines.'''
+	'''Meta data for picturestories (comics / graphic novels) related to famines.
+	'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	picture_story_type = models.ForeignKey(PictureStoryType,**dargs)
-	authors = models.ManyToManyField(Person,blank=True, related_name='picture_story_author_set')
-	artists = models.ManyToManyField(Person,blank=True, related_name='picture_story_artist_set')
+	authors = models.ManyToManyField(Person,blank=True, 
+		related_name='picture_story_author_set')
+	artists = models.ManyToManyField(Person,blank=True, 
+		related_name='picture_story_artist_set')
 	translators= models.ManyToManyField(Person,blank=True, 
 		related_name='picture_story_translator_set')
 	publishers = models.ManyToManyField(Publisher,blank=True,
 		related_name='picture_story_publisher_set')
 	languages = models.ManyToManyField(Language, blank=True)
-	image_file = models.ImageField(upload_to='picturestory/',blank=True,null=True)
-	excerpt_file = models.FileField(upload_to='picturestory/',blank=True,null=True)
-	locations = models.ManyToManyField(Location,blank=True, related_name='picture_story_locations')
+	image_file = models.ImageField(upload_to='picturestory/',blank=True,
+		null=True)
+	excerpt_file = models.FileField(upload_to='picturestory/',blank=True,
+		null=True)
+	locations = models.ManyToManyField(Location,blank=True, 
+		related_name='picture_story_locations')
 	location_field = 'locations'
-	image_filename = models.CharField(max_length=500,default='',blank=True,null=True)
+	image_filename = models.CharField(max_length=500,default='',
+		blank=True,null=True)
 
 	@property
 	def icon(self):
@@ -327,17 +359,23 @@ class Text(Source,info):
 	'''Meta data for texts related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	text_type = models.ForeignKey(TextType,**dargs)
-	authors = models.ManyToManyField(Person,blank=True,related_name='text_author_set')
-	institution_authors= models.ManyToManyField(Institution,blank=True,related_name='text_author_set')
-	editors = models.ManyToManyField(Person,blank=True,related_name='text_editor_set')
-	translators = models.ManyToManyField(Person,blank=True,related_name='text_translator_set')
-	publishers = models.ManyToManyField(Publisher,blank=True,related_name='text_publisher')
+	authors = models.ManyToManyField(Person,blank=True,
+		related_name='text_author_set')
+	institution_authors= models.ManyToManyField(Institution,blank=True,
+		related_name='text_author_set')
+	editors = models.ManyToManyField(Person,blank=True,
+		related_name='text_editor_set')
+	translators = models.ManyToManyField(Person,blank=True,
+		related_name='text_translator_set')
+	publishers = models.ManyToManyField(Publisher,blank=True,
+		related_name='text_publisher')
 	languages = models.ManyToManyField(Language, blank=True)
 	original_languages= models.ManyToManyField(Language, blank=True,
 		related_name='text_original_languages')
 	text_file = models.FileField(upload_to='text/',blank=True,null=True)
 	excerpt_file = models.FileField(upload_to='text/',blank=True,null=True)
-	locations = models.ManyToManyField(Location,blank=True, related_name='text_locations')
+	locations = models.ManyToManyField(Location,blank=True, 
+		related_name='text_locations')
 	location_field = 'locations'
 
 	@property
@@ -373,8 +411,10 @@ class Recordedspeech(Source,info):
 	'''Meta data for texts related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	recordedspeech_type= models.ForeignKey(RecordedspeechType,**dargs)
-	creators = models.ManyToManyField(Person,blank=True,related_name='recordedspeech_creators_set')
-	speakers = models.ManyToManyField(Person,blank=True,related_name='recordedspeech_speakers_set')
+	creators = models.ManyToManyField(Person,blank=True,
+		related_name='recordedspeech_creators_set')
+	speakers = models.ManyToManyField(Person,blank=True,
+		related_name='recordedspeech_speakers_set')
 	broadcasting_station= models.ForeignKey(BroadcastingStation,**dargs)
 	languages=models.ManyToManyField(Language,blank=True,
 		related_name='recordedspeech_language')
@@ -394,11 +434,16 @@ class Memorialsite(Source,info):
 	'''Meta data for texts related to famines.'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	memorial_type= models.ForeignKey(MemorialType,**dargs)
-	creators = models.ManyToManyField(Person,blank=True,related_name='memorialsite_creators_set')
-	artists= models.ManyToManyField(Person,blank=True,related_name='memorialsite_artists_set')
-	image_file1 = models.ImageField(upload_to='memorialsite/',blank=True,null=True)
-	image_file2 = models.ImageField(upload_to='memorialsite/',blank=True,null=True)
-	image_file3 = models.ImageField(upload_to='memorialsite/',blank=True,null=True)
+	creators = models.ManyToManyField(Person,blank=True,
+		related_name='memorialsite_creators_set')
+	artists= models.ManyToManyField(Person,blank=True,
+		related_name='memorialsite_artists_set')
+	image_file1 = models.ImageField(upload_to='memorialsite/',blank=True,
+		null=True)
+	image_file2 = models.ImageField(upload_to='memorialsite/',blank=True,
+		null=True)
+	image_file3 = models.ImageField(upload_to='memorialsite/',blank=True,
+		null=True)
 	donor_persons= models.ManyToManyField(Person,blank=True,
 		related_name='memorialsite_person_donors_set')
 	donor_institutions= models.ManyToManyField(Institution,blank=True,
