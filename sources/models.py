@@ -6,7 +6,8 @@ from utils.model_util import info
 from utils.map_util import instance2related_locations, field2locations
 from misc.models import Keyword, Language,Famine
 from locations.models import Location
-from utilities.models import instance2name, instance2color, instance2icon, instance2map_buttons
+from utilities.models import instance2name, instance2color, instance2icon 
+from utilities.models import instance2map_buttons
 from utilities.models import instance2names
 from partial_date import PartialDateField
 
@@ -16,17 +17,17 @@ def make_simple_model(name):
 	exec('class '+name + '(SimpleModel,info):\n\tpass',globals())
 
 names = 'MusicType,Collection,Rated,Commissioner'
-names += ',FilmCompany,FilmType,TargetAudience,PublishingOutlet,Available,ImageType'
+names += ',FilmCompany,FilmType,TargetAudience,PublishingOutlet,Available'
 names += ',InfographicType,PictureStoryType,TextType,Publisher,Permission'
-names += ',Institution,ProductionStudio,GameType,RecordedspeechType,BroadcastingStation'
-names += ',MemorialType,ArtefactType'
+names += ',Institution,ProductionStudio,GameType,RecordedspeechType'
+names += ',MemorialType,ArtefactType,ImageType,BroadcastingStation'
 names = names.split(',')
 
 for name in names:
 	make_simple_model(name)
 
 class Source(models.Model):
-	'''abstract base class for source models for all non simple non relational models'''
+	'''abstract class all non simple non relational models'''
 	dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
 	famines = models.ManyToManyField(Famine, blank=True)
 	title_original = models.CharField(max_length=1000,default='')
@@ -67,18 +68,20 @@ class Source(models.Model):
 		app_name, model_name = instance2names(self)
 		m = ''
 		if self.thumbnail.name:
-			m += '<img src="'+self.thumbnail.url+'" width="200" style="border-radius:3%">'
+			m += '<img src="'+self.thumbnail.url
+			m +='" width="200" style="border-radius:3%">'
 		m += instance2icon(self)
 		m += '<p class="h6 mb-0 mt-1" style="color:'+instance2color(self)+';">'
 		m += self.title +'</p>'
-		m += '<hr class="mt-1 mb-0" style="border:1px solid '+instance2color(self)+';">'
+		m += '<hr class="mt-1 mb-0" style="border:1px solid '
+		m += instance2color(self)+';">'
 		m += '<p class="mt-2 mb-0">'+self.description+'</p>'
 
 		if hasattr(self,'play_field'):
 			link =  getattr(self,getattr(self,'play_field'))
 			if link:
-				m += '<a class = "btn btn-link btn-sm mt-1 pl-0 text-dark" target="_blank" href="'
-				m += link
+				m += '<a class = "btn btn-link btn-sm mt-1 pl-0 text-dark" '
+				m += 'target="_blank" href="' + link
 				m += '" role="button"><i class="fas fa-play"></i></a>'
 		m += instance2map_buttons(self)
 		return m
@@ -94,7 +97,8 @@ class Source(models.Model):
 
 	@property
 	def latlng(self):
-		location_field = self.location_field if self.location_field else 'setting'
+		lf = self.location_field
+		location_field = lf if lf else 'setting'
 		locations = field2locations(self,self.location_field)
 		if locations:
 			return [location.gps for location in locations]
@@ -166,7 +170,9 @@ class Source(models.Model):
 	@property
 	def info_available(self):
 		n = len(self.description) > 165
-		if self.setting_names or self.famine_names or self.keyword_names or self.thumbnail or n:
+		t = self.thumbnail
+		if (self.setting_names or self.famine_names or self.keyword_names or 
+			self.thumbnail or n):
 			return True
 		else: False
 	
@@ -226,9 +232,18 @@ class Film(Source, info):
 	
 	@property
 	def video(self):
-		if self.video_link: return self.video_link.replace('watch?v=','embed/')
-		if self.video_part_link: return self.video_part_link
-		return ''
+		video = ''
+		if self.video_link: video = self.video_link
+		elif self.video_part_link: video = self.video_part_link
+		else: return ''
+		if 'watch?v=' in video:
+			return video.replace('watch?v=','embed/')
+		elif 'embed' not in video: 	
+			v= video.split('/')
+			return 'https://www.youtube.com/embed/' + v[-1]
+		else: return ''
+		
+		
 
 	class Meta:
 		unique_together = [['title_original','date_released']]
