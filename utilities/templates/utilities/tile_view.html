@@ -5,10 +5,12 @@
 {% for instance in instances %}
 	<div class="tile">
 		{% if instance.thumbnail %}
-		<img id='{{instance.identifier}}' class="tile-img" src="{{instance.thumbnail.url}}" alt="" 
+		<img id='{{instance.identifier}}' class="tile-img" 
+			src="{{instance.thumbnail.url}}" alt="" 
 			onclick="display_large_image('{{instance.identifier}}')"> 
 		{% else %}
-		<img id='{{instance.identifier}}' class="tile-img op" src="media/no_image_available.png" alt="" 
+		<img id='{{instance.identifier}}' class="tile-img op" 
+			src="media/no_image_available.png" alt="" 
 			onclick="display_large_image('{{instance.identifier}}')"> 
 		{% endif %}
 		<p class="p-title">
@@ -34,7 +36,8 @@
 			<i id="modal-icon" class="" style="color:white;"></i>
 		</div>
 		<div class="grid-item">
-			<a id="prev_modal" class="prev_next_modal prev_modal" href="#" role = "button">
+			<a id="prev_modal" class="prev_next_modal prev_modal" href="#" 
+				role = "button">
 				<i class="fas fa-chevron-left"></i>
 			</a>
 		</div>
@@ -44,14 +47,16 @@
 			</a>
 		</div>
 		<div class="grid-item">
-			<a id="close_modal" class="close_modal" onclick="return false;" href="#/" role = "button">
+			<a id="close_modal" class="close_modal" onclick="return false;" 
+				href="#/" role = "button">
 				<span class="close">&times;</span>
 			</a>
 		</div>
 	</div>
 
   <div class="modal-content">
-	<img id="modal-img" class="big-img" src="" alt="media/no_image_available.png">
+	<img id="modal-img" class="big-img" src="" 
+		alt="media/no_image_available.png">
 
 	<a  id="modal-edit-link" class="modal-edit-link"
 		href = ""
@@ -145,8 +150,9 @@ async function get_instance_info(identifier,fields= false) {
 	//gets information of an instance, instance is loaded based on 
 	//the identifier field
 	//fields 	the field names the info should be gathered from
-	// 			false or 'all' returns the dict of the instance (not property values)
-	//returns a dictionary of field name field info or a json representation of the instance
+	//		false or 'all' returns the dict of the instance (not property values)
+	//returns a dictionary of field name field info or a json representation 
+	//		of the instance
 	var url = '/utilities/ajax_instance_info/' + identifier 
 	if (fields) { url += '/' + fields ;}
 	const response = await fetch(url); 
@@ -195,11 +201,12 @@ function switch_images(image_urls,current_image, identifier) {
 	console.log(image_urls,current_image,image_reel_on);
 	var next_modal= document.getElementById("");
 	var index = 0;
-	if (in_modal_state && image_reel_on && current_img_identifier == identifier) {
+	if (in_modal_state && image_reel_on 
+		&& current_img_identifier == identifier) {
 		for ( i =0; i < image_urls.length; i++ ){
 			url= image_urls[i];
 			if (url  == current_image) {
-				console.log(url,i,image_urls.length, i == (image_urls.length -1));
+				console.log(url,i,image_urls.length);
 				if (i == (image_urls.length -1)) {index = 0;}
 				else {index = i + 1;}
 				console.log(index)
