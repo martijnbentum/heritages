@@ -11,7 +11,7 @@ from .forms import GameTypeForm, ProductionStudioForm, RecordedspeechTypeForm
 from .forms import RecordedspeechForm, BroadcastingStationForm, MemorialTypeForm
 from .forms import MemorialsiteForm, ArtefactForm, ArtefactTypeForm
 from persons.forms import PersonForm
-from .models import Image
+from .models import Image, Film
 
 def index(request):
 	return HttpResponse('hello world')
@@ -32,6 +32,20 @@ def detail_image_view(request,pk):
 	args = {'instance':instance, 'page_name':instance.title,'creators':creators}
 	args.update({'locations':locations, 'settings':settings,'famines':famines})
 	return render(request,'sources/detail_image_view.html',args)
+
+def detail_film_view(request,pk):
+	instance = Film.objects.get(pk = pk)
+	directors = instance.directors.all()
+	writers= instance.writers.all()
+	creators = instance.creators.all()
+	locations_shot= instance.locations_shot.all()
+	settings= instance.setting.all()
+	famines = instance.famines.all()
+	args = {'instance':instance, 'page_name':instance.title,'creators':creators}
+	args.update({'locations_shot':locations_shot, 'settings':settings})
+	args.update({'famines':famines, 'writers':writers, 'directors':directors})
+	return render(request,'sources/detail_film_view.html',args)
+	pass
 
 def create_simple_view(name):
 	'''Create a simple view based on the Model name. 
