@@ -1,15 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from utilities.views import edit_model, add_simple_model, list_view, delete_model
-from .forms import MusicForm, MusicTypeForm, FilmTypeForm, FilmForm, TargetAudienceForm
+from .forms import MusicForm, MusicTypeForm, FilmTypeForm, FilmForm
 from .forms import FilmCompanyForm, CollectionForm, TextForm, TextTypeForm
 from .forms import InfographicForm, InfographicTypeForm, ImageForm, ImageTypeForm
-from .forms import PictureStoryForm, PictureStoryTypeForm, PublisherForm, PublishingOutletForm
-from .forms import LocationForm, LanguageForm, KeywordForm,InstitutionForm,VideogameForm
+from .forms import PictureStoryForm, PictureStoryTypeForm, PublisherForm
+from .forms import LocationForm, LanguageForm, KeywordForm,InstitutionForm
 from .forms import GameTypeForm, ProductionStudioForm, RecordedspeechTypeForm
 from .forms import GameTypeForm, ProductionStudioForm, RecordedspeechTypeForm
 from .forms import RecordedspeechForm, BroadcastingStationForm, MemorialTypeForm
 from .forms import MemorialsiteForm, ArtefactForm, ArtefactTypeForm
+from .forms import PublishingOutletForm, TargetAudienceForm,VideogameForm
 from persons.forms import PersonForm
 from .models import Image, Film
 
@@ -41,9 +42,11 @@ def detail_film_view(request,pk):
 	locations_shot= instance.locations_shot.all()
 	settings= instance.setting.all()
 	famines = instance.famines.all()
+	languages= instance.languages_original.all()
 	args = {'instance':instance, 'page_name':instance.title,'creators':creators}
 	args.update({'locations_shot':locations_shot, 'settings':settings})
 	args.update({'famines':famines, 'writers':writers, 'directors':directors})
+	args.update({'languages':languages})
 	return render(request,'sources/detail_film_view.html',args)
 	pass
 
