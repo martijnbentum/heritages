@@ -10,6 +10,7 @@ from utilities.models import instance2name, instance2color, instance2icon
 from utilities.models import instance2map_buttons
 from utilities.models import instance2names
 from partial_date import PartialDateField
+from utils.link2embed_source import link2embed_source
 
 
 def make_simple_model(name):
@@ -231,19 +232,17 @@ class Film(Source, info):
 		return 'fa fa-film'
 	
 	@property
-	def video(self):
-		video = ''
-		if self.video_link: video = self.video_link
-		elif self.video_part_link: video = self.video_part_link
-		else: return ''
-		if 'watch?v=' in video:
-			return video.replace('watch?v=','embed/')
-		elif 'embed' not in video: 	
-			v= video.split('/')
-			return 'https://www.youtube.com/embed/' + v[-1]
-		else: return ''
-		
-		
+	def embed_video(self):
+		return link2embed_source(self)
+
+	@property
+	def links(self):
+		o = {}
+		if self.source_link: o.update({'information':self.source_link})
+		if self.video_link: o.update({'video':self.video_link})
+		if self.video_part_link: o.update({'clip':self.video_part_link})
+		if o: return o
+		return ''
 
 	class Meta:
 		unique_together = [['title_original','date_released']]
