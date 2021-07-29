@@ -43,10 +43,11 @@ def detail_film_view(request,pk):
 	settings= instance.setting.all()
 	famines = instance.famines.all()
 	languages= instance.languages_original.all()
+	subtitles= instance.languages_subtitle.all()
 	args = {'instance':instance, 'page_name':instance.title,'creators':creators}
 	args.update({'locations_shot':locations_shot, 'settings':settings})
 	args.update({'famines':famines, 'writers':writers, 'directors':directors})
-	args.update({'languages':languages})
+	args.update({'languages':languages, 'subtitles':subtitles})
 	return render(request,'sources/detail_film_view.html',args)
 	pass
 
