@@ -9,6 +9,8 @@ urlpatterns = [
 		name='detail_image_view'),
 	path('detail_film_view/<int:pk>',views.detail_film_view, 
 		name='detail_film_view'),
+	path('detail_music_view/<int:pk>',views.detail_music_view, 
+		name='detail_music_view'),
 	path('add_videogame/',views.edit_videogame, name='add_videogame'),
 	path('add_memorialsite/',views.edit_memorialsite, name='add_memorialsite'),
 	path('add_recordedspeech/',views.edit_recordedspeech, 
