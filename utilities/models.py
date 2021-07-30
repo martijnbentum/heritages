@@ -10,6 +10,10 @@ class SimpleModel(models.Model):
 	def __str__(self):
 		return self.name
 
+	@property
+	def title(self):
+		return name
+
 	class Meta:
 		abstract=True
 
