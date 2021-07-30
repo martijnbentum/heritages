@@ -12,7 +12,7 @@ from .forms import RecordedspeechForm, BroadcastingStationForm, MemorialTypeForm
 from .forms import MemorialsiteForm, ArtefactForm, ArtefactTypeForm
 from .forms import PublishingOutletForm, TargetAudienceForm,VideogameForm
 from persons.forms import PersonForm
-from .models import Image, Film, Music
+from .models import Image, Film, Music, Text
 
 def index(request):
 	return HttpResponse('hello world')
@@ -43,6 +43,26 @@ def detail_music_view(request,pk):
 	args = {'instance':instance, 'page_name':instance.title,}
 	args.update({'settings':settings,'famines':famines,'languages':languages})
 	return render(request,'sources/detail_music_view.html',args)
+
+def detail_text_view(request,pk):
+	instance = Text.objects.get(pk = pk)
+	authors = list(instance.authors.all())
+	temp= list(instance.institution_authors.all())
+	if temp:authors += temp
+	editors = instance.editors.all()
+	translators= instance.translators.all()
+	publishers = instance.publishers.all()
+	locations= instance.locations.all()
+	settings= instance.setting.all()
+	famines = instance.famines.all()
+	languages= instance.languages.all()
+	original_languages= instance.original_languages.all()
+	args = {'instance':instance, 'page_name':instance.title,}
+	args.update({'settings':settings,'famines':famines,'languages':languages})
+	args.update({'original_languages':original_languages,'authors':authors})
+	args.update({'editors':editors,'publishers':publishers})
+	args.update({'locations':locations})
+	return render(request,'sources/detail_text_view.html',args)
 
 def detail_film_view(request,pk):
 	instance = Film.objects.get(pk = pk)
