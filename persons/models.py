@@ -26,8 +26,10 @@ class Person(models.Model, info):
 	nationality = models.ForeignKey(Nationality,**dargs)
 	date_of_birth= PartialDateField(null=True,blank=True)
 	date_of_death= PartialDateField(null=True,blank=True)
-	location_of_birth = models.ForeignKey(Location, **dargs, related_name='person_location_of_birth')
-	location_of_death = models.ForeignKey(Location, **dargs, related_name='person_location_of_death')
+	location_of_birth = models.ForeignKey(Location, **dargs, 
+		related_name='person_location_of_birth')
+	location_of_death = models.ForeignKey(Location, **dargs, 
+		related_name='person_location_of_death')
 	occupation = models.ManyToManyField(Occupation, blank=True)
 	affiliation = models.ForeignKey(Affiliation, **dargs)
 	biography_link = models.CharField(max_length=3000,default='')
@@ -70,8 +72,10 @@ class Person(models.Model, info):
 			m = '<i class="fa fa-female fa-lg" aria-hidden="true"></i>'
 		else:
 			m = '<i class="fa fa-male fa-lg" aria-hidden="true"></i>'
-		m += '<p class="h6 mb-0" style="color:'+instance2color(self)+';">'+self.name+'</p>'
-		m += '<hr class="mt-1 mb-0" style="border:1px solid '+instance2color(self)+';">'
+		m += '<p class="h6 mb-0" style="color:'+instance2color(self)
+		m += ';">'+self.name+'</p>'
+		m += '<hr class="mt-1 mb-0" style="border:1px solid '
+		m += instance2color(self)+';">'
 		if self.occupation:
 			m += '<p class="mt-2 mb-0">'+self.occupations_str+'</p>'
 		m += instance2map_buttons(self)
@@ -86,11 +90,14 @@ class Person(models.Model, info):
 	
 	@property
 	def identifier(self):
-		return self._meta.app_label + '_' + self._meta.model_name + '_' + str( self.pk )
+		m = self._meta.app_label + '_' + self._meta.model_name + '_'  
+		m += str( self.pk )
 
 	@property
 	def age(self):
-		try: return self.date_of_death.start_dt.year - self.date_of_birth.start_dt.year
+		try: 
+			m=self.date_of_death.start_dt.year-self.date_of_birth.start_dt.year
+			return m
 		except:return ''
 
 	@property
