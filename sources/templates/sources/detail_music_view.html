@@ -1,0 +1,313 @@
+{% extends "utilities/base.html" %}
+
+{% block head %}
+	<title>{{page_name}}</title>
+{% endblock %}
+
+{% block content %}
+
+<div class="grid-container"> 
+	<div class="grid-item">
+		{% if instance.thumbnail %}
+			<img id='big-image' class="big-img" 
+				src="{{instance.thumbnail.url}}">  
+		{% else %}
+			<img id='big-image' class="big-img op"
+				 src="media/no_image_available.png">
+		{% endif %}
+	</div>
+	<div class="grid-item">
+		{% if instance.embed_video %}	
+			<iframe width="500" height="300" 
+				src="{{instance.embed_video}}" 
+				title="video player" 
+				frameborder="0" 
+				allow="accelerometer; autoplay; clipboard-write; 
+					encrypted-media; gyroscope; picture-in-picture" 
+				 allowfullscreen>
+			</iframe>
+		{% endif %}
+	</div>
+	<div class="grid-item wide">
+		<h3>{{instance.title_original}} 
+			<a class="btn btn-link btn-sm ml-auto"
+				href = "{% url instance.edit_url instance.pk %}"
+				role="button"><i class="far fa-edit text-secondary"></i></a>
+		</h3>
+
+	{% with instance as i %}
+		{% if i.title_english and i.title_english != i.title_original%}
+			<p><small>({{i.title_english}})</small></p>
+		{% endif %}
+	{% endwith %}
+
+		<hr>
+	</div>
+
+	<div class="info">
+		<div class="grid-item general">
+			{%if instance.music_type%}
+			<div class = "one-line">
+				<span class = "info-header">Music type:</span>
+				<span class = "info-text">{{instance.music_type}}</span>
+			</div>
+			<br>
+			{% endif %}
+
+			<div class = "one-line">
+				<span class = "info-header"> 
+					Composer:</span>
+				{%if composers %}
+					<span class = "info-text">
+					{% for composer in composers%}
+						{% if not forloop.last %}
+							<a class="info-text"
+							href = "{% url composer.edit_url composer.pk %}"
+							role="button">{{composer.title}},</a>
+						{% else %}
+							<a class="info-text"
+							href = "{% url composer.edit_url composer.pk %}"
+							role="button">{{composer.title}}</a>
+						{% endif %}
+					{% endfor %}
+				{% else %}
+					<span class = "grey">Unknown
+				{% endif %}
+				</span>
+			</div>
+			<br>
+			{% if instance.performing_artists%}
+			<div class = "one-line">
+				<span class = "info-header">Performing artist:</span> 
+				<span class = "info-text"> {{instance.performing_artists}}</span>
+			</div>
+			{% endif %}
+			<br>
+			<div class = "one-line">
+				<span class = "info-header"> Language:</span>
+				{%if languages%}
+					<span class = "info-text">
+					{% for language in languages%}
+						{% if not forloop.last %}
+							{{language.name}},
+						{% else %}
+							{{language.name}}
+						{% endif %}
+					{% endfor %}
+				{% else %}
+					<span class = "grey">Unknown
+				{% endif %}
+				</span>
+			</div>
+			<br>
+			<div class = "one-line">
+				<span class = "info-header"> Famine:</span>
+				{%if famines %}
+					<span class = "info-text">
+					{% for famine in famines %}
+						{% if not forloop.last %}
+							<a class="info-text"
+							href = "{% url famine.edit_url famine.pk %}"
+							role="button">{{famine}},</a>
+						{% else %}
+							<a class="info-text"
+							href = "{% url famine.edit_url famine.pk %}"
+							role="button">{{famine}}</a>
+						{% endif %}
+					{% endfor %}
+				{% else %}
+					<span class = "grey">Unknown
+				{% endif %}
+				</span>
+			</div>
+			<br>
+
+			<div class = "one-line">
+				<span class = "info-header">Setting:</span>
+				{% if locations %}
+					<span class = "info-text">
+					{% for location in settings %}
+						{% if not forloop.last %}
+						  {{location.name}} <small>{{location.country}},</small>
+						{% else %}
+						  {{location.name}} <small>{{location.country}}</small>
+						{% endif %}
+					{% endfor %}
+				{% else %}
+					<span class = "grey">Unknown
+				{% endif %}
+				</span>
+			</div>
+			<br>
+
+			{% if instance.date_created %}
+			<div class = "one-line">
+				<span class = "info-header">Created:</span> 
+				<span class = "info-text"> {{instance.date_created}}</span>
+			</div>
+			<br>
+			{% endif %}
+			{% if instance.date_released%}
+			<div class = "one-line">
+				<span class = "info-header">Released:</span> 
+				<span class = "info-text">{{instance.date_released}}</span>
+			</div>
+			<br>
+			{% endif %}
+			{% if instance.keyword_names %}
+			<div class = "one-line">
+				<span class = "info-header">Keywords:</span> 
+				<span class = "info-text">{{instance.keyword_names}}</span>
+			</div>
+			<br>
+			{% endif %}
+
+			{% if instance.links %}
+			<div class = "one-line">
+				<span class = "info-header">Links:</span>
+					<span class = "info-text">
+					{% for name, link in instance.links.items%}
+						{% if not forloop.last %}
+							<a class="info-text"
+							href = "{{link}}"
+							target = "_blank"
+							role="button">{{name}},</a>
+						{% else %}
+							<a class="info-text"
+							href = "{{link}}"
+							target = "_blank"
+							role="button">{{name}}</a>
+						{% endif %}
+					{% endfor %}
+				</span>
+			</div>
+			<br>
+			{% endif %}
+
+		</div>
+
+		<div class="grid-item description">
+			<div> 
+			<span class = "info-header center">Description:</span>
+			<br>
+			{% if instance.description %}
+				{{instance.description }}
+			{% endif %}
+			<br><br>
+			<span class = "info-header center">Lyrics:</span>
+			</div>
+			<div class="lyrics"> 
+			<p>{{instance.lyrics | linebreaks}}</p>
+			</div>
+		</div>
+
+	</div>
+
+
+</div>
+
+
+
+
+<style>
+.grid-container {
+	display:grid;
+	padding: 1px;
+	grid-template-columns: 3fr 6fr;
+	grid-gap: 9px;
+}
+.grid-item {
+	padding: 0px;
+	align-self:start;
+	justify-self:left;
+}
+
+.description { 
+	background-color: #f0f0f0;
+	padding: 30px;
+	padding-top: 5px;
+	padding-bottom: 15px;
+	justify-self:left;
+}
+
+.wide{
+	grid-column:1/3;
+}
+
+.center{
+	justify-self:center;
+}
+
+.info{
+	grid-column:1/3;
+	display:grid;
+	grid-template-columns: 3fr 6fr;
+	padding: 1px;
+	grid-gap: 9px;
+}
+
+.general{
+	justify-self:left;
+}
+
+
+.one-line{
+	display:inline;
+}
+
+.info-header {
+	color:#f55211;
+	font-size:75%;
+}
+.info-text {
+	color:black;
+}
+.greyblue {
+	background-color: #f0f0f0;
+	padding:30px;
+	padding-top:5px;
+	padding-bottom:15px;
+}
+.lyrics {
+	font-style:italic;
+	color:#163b63;
+	font-size:90%;
+}
+
+
+.grey{
+	color:lightgrey;
+}
+
+.op {
+	opacity: 0.05;
+}
+
+img {
+	border-radius:3px;
+	height:300px;
+	object-fit:cover;
+	max-width:100%;
+	max-height:100%;
+}
+
+p {
+	padding: 0px;
+	margin: 0px;
+}
+
+hr {
+	border-top:3px solid black;
+	margin-top: 0px;
+}
+
+h3 {
+	padding: 0px;
+	margin: 0px;
+}
+
+</style>
+
+
+
+{% endblock %}
