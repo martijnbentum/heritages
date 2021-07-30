@@ -11,6 +11,8 @@ urlpatterns = [
 		name='detail_film_view'),
 	path('detail_music_view/<int:pk>',views.detail_music_view, 
 		name='detail_music_view'),
+	path('detail_text_view/<int:pk>',views.detail_text_view, 
+		name='detail_text_view'),
 	path('add_videogame/',views.edit_videogame, name='add_videogame'),
 	path('add_memorialsite/',views.edit_memorialsite, name='add_memorialsite'),
 	path('add_recordedspeech/',views.edit_recordedspeech, 
