@@ -12,7 +12,7 @@ class SimpleModel(models.Model):
 
 	@property
 	def title(self):
-		return name
+		return self.name
 
 	class Meta:
 		abstract=True
