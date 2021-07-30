@@ -144,7 +144,7 @@ class Source(models.Model):
 
 	@property
 	def detail_url(self):
-		detail_view_done ='image,film'.split(',')
+		detail_view_done ='image,film,music'.split(',')
 		if self._meta.model_name not in detail_view_done: 
 			return self.edit_url
 		return self._meta.app_label+':detail_'+self._meta.model_name+'_view' 
@@ -197,6 +197,19 @@ class Music(Source,info):
 	def icon(self):
 		return 'fas fa-music'
 
+	@property
+	def embed_video(self):
+		p = self.music_video_link
+		return link2embed_source(self,p) 
+
+	@property
+	def links(self):
+		o = {}
+		if self.source_link: o.update({'lyrics':self.source_link})
+		if self.music_video_link: o.update({'video':self.music_video_link})
+		if self.music_link: o.update({'music':self.music_link})
+		if o: return o
+		return ''
 
 	class Meta:
 		unique_together = [['title_original','date_released']]
@@ -233,7 +246,8 @@ class Film(Source, info):
 	
 	@property
 	def embed_video(self):
-		return link2embed_source(self)
+		p,s,t = self.video_link, self.video_part_link, self.source_link
+		return link2embed_source(self,p,s,t) 
 
 	@property
 	def links(self):
