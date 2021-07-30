@@ -11,6 +11,7 @@ from utilities.models import instance2map_buttons
 from utilities.models import instance2names
 from partial_date import PartialDateField
 from utils.link2embed_source import link2embed_source
+from utils.handle_file import handle_file
 
 
 def make_simple_model(name):
@@ -144,7 +145,7 @@ class Source(models.Model):
 
 	@property
 	def detail_url(self):
-		detail_view_done ='image,film,music'.split(',')
+		detail_view_done ='image,film,music,text'.split(',')
 		if self._meta.model_name not in detail_view_done: 
 			return self.edit_url
 		return self._meta.app_label+':detail_'+self._meta.model_name+'_view' 
@@ -409,6 +410,18 @@ class Text(Source,info):
 	@property
 	def icon(self):
 		return 'fas fa-file-alt'
+
+	@property
+	def links(self):
+		o = {}
+		if self.source_link: o.update({'lyrics':self.source_link})
+		if o: return o
+		return ''
+
+	@property
+	def text(self):
+		return handle_file(self,self.text_file)
+		
 	
 	class Meta:
 		unique_together = [['title_original','date_released']]
