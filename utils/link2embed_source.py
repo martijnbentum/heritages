@@ -69,7 +69,7 @@ def link2embed_source(film):
 		source_type = _check_source_is_supported(film.video_part_link)
 		print(source_type,2,supported_sources, film.video_part_link)
 		if source_type: source = film.video_part_link
-		else: _check_not_supported(self.video_part_link)
+		else: _check_not_supported(film.video_part_link)
 	print(source,999)
 	if source_type: return f[source_type](source)
 	else: return ''
