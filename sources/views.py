@@ -12,7 +12,7 @@ from .forms import RecordedspeechForm, BroadcastingStationForm, MemorialTypeForm
 from .forms import MemorialsiteForm, ArtefactForm, ArtefactTypeForm
 from .forms import PublishingOutletForm, TargetAudienceForm,VideogameForm
 from persons.forms import PersonForm
-from .models import Image, Film
+from .models import Image, Film, Music
 
 def index(request):
 	return HttpResponse('hello world')
@@ -33,6 +33,16 @@ def detail_image_view(request,pk):
 	args = {'instance':instance, 'page_name':instance.title,'creators':creators}
 	args.update({'locations':locations, 'settings':settings,'famines':famines})
 	return render(request,'sources/detail_image_view.html',args)
+
+def detail_music_view(request,pk):
+	instance = Music.objects.get(pk = pk)
+	composers= instance.composers.all()
+	settings= instance.setting.all()
+	famines = instance.famines.all()
+	languages= instance.languages.all()
+	args = {'instance':instance, 'page_name':instance.title,}
+	args.update({'settings':settings,'famines':famines,'languages':languages})
+	return render(request,'sources/detail_music_view.html',args)
 
 def detail_film_view(request,pk):
 	instance = Film.objects.get(pk = pk)
