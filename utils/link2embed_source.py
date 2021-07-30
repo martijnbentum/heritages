@@ -14,7 +14,7 @@ not_supported_sources = not_supported_sources.split(',')
 def handle_youtube(source):
 	print(source,9)
 	output = 'https://www.youtube.com/embed/'
-	o = re.search('v=[a-zA-Z0-9_]*',source)
+	o = re.search('v=\S*',source)
 	if o and o.group():
 		o =output + o.group().split('v=')[-1]
 		print('embed source link (youtube):',o)
