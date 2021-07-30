@@ -12,12 +12,16 @@ not_supported_sources += ',amazon,sonyclassics,npo'
 not_supported_sources = not_supported_sources.split(',')
 
 def handle_youtube(source):
+	print(source,9)
 	output = 'https://www.youtube.com/embed/'
 	o = re.search('v=[a-zA-Z0-9_]*',source)
 	if o and o.group():
-		return output + o.group().split('v=')[-1]
+		o =output + o.group().split('v=')[-1]
+		print('embed source link (youtube):',o)
+		return o
 	elif 'embed' not in source: 	
 		v= source.split('/')
+		print(v)
 		o = 'https://www.youtube.com/embed/' + v[-1]
 		print('embed source link (youtube):',o)
 		return o
@@ -56,23 +60,23 @@ def _check_source_is_supported(source):
 	return ''
 
 
-def link2embed_source(film):
-	source = ''
+def link2embed_source(instance, primary='', secondary='', tirtiary= ''):
+	'''maps link to embed code
+	primary - tirtiary 		links in descending order of importance
+	returns embed code for the first link that can be mapped to embed code
+	'''
 	source_type = ''
-	
-	if film.video_link: 
-		source_type = _check_source_is_supported(film.video_link)
-		print(source_type,1,supported_sources, film.video_link)
-		if not source_type: _check_not_supported(film.video_part_link)
-	if source_type: source = film.video_link	
-	elif film.video_part_link: 
-		source_type = _check_source_is_supported(film.video_part_link)
-		print(source_type,2,supported_sources, film.video_part_link)
-		if source_type: source = film.video_part_link
-		else: _check_not_supported(film.video_part_link)
-	print(source,999)
-	if source_type: return f[source_type](source)
-	else: return ''
+	for link in [primary, secondary, tirtiary]:
+		print('handling link:',link)
+		if not link: 
+			print('link field',link,'is empty')
+			continue
+		source_type = _check_source_is_supported(link)
+		if not source_type:
+			_check_source_is_supported(link)
+			continue
+		return f[source_type](link)
+	return ''
 
 
 	
