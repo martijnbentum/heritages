@@ -61,7 +61,7 @@ def detail_text_view(request,pk):
 	args.update({'settings':settings,'famines':famines,'languages':languages})
 	args.update({'original_languages':original_languages,'authors':authors})
 	args.update({'editors':editors,'publishers':publishers})
-	args.update({'locations':locations})
+	args.update({'locations':locations,'translators':translators})
 	return render(request,'sources/detail_text_view.html',args)
 
 def detail_film_view(request,pk):
