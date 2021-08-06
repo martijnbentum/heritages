@@ -33,95 +33,12 @@
 			<br>
 			{% endif %}
 
-			<div class = "one-line">
-				<span class = "info-header"> 
-					Author:</span>
-				{%if authors %}
-					<span class = "info-text">
-					{% for author in authors %}
-						{% if not forloop.last %}
-							{% if author.edit_url %}
-								<a class="info-text"
-								href = "{% url author.edit_url author.pk %}"
-								role="button">{{author.title}},</a>
-							{% else %}
-								{{author.title}}
-							{% endif %}
-						{% else %}
-							{% if author.edit_url %}
-								<a class="info-text"
-								href = "{% url author.edit_url author.pk %}"
-								role="button">{{author.title}}</a>
-							{% else %}
-								{{author.title}}
-							{% endif %}
-						{% endif %}
-					{% endfor %}
-				{% else %}
-					<span class = "grey">Unknown
-				{% endif %}
-				</span>
-			</div>
-			<br>
-			<div class = "one-line">
-				<span class = "info-header"> 
-					Editor:</span>
-				{%if editors%}
-					<span class = "info-text">
-					{% for editor in editors%}
-						{% if not forloop.last %}
-							<a class="info-text"
-							href = "{% url editor.edit_url editor.pk %}"
-							role="button">{{editor.title}},</a>
-						{% else %}
-							<a class="info-text"
-							href = "{% url editor.edit_url editor.pk %}"
-							role="button">{{editor.title}}</a>
-						{% endif %}
-					{% endfor %}
-				{% else %}
-					<span class = "grey">Unknown
-				{% endif %}
-				</span>
-			</div>
-			<br>
-			{%if translators%}
-				<div class = "one-line">
-					<span class = "info-header"> 
-					Translator:</span>
-					<span class = "info-text">
-					{% for translator in translators%}
-						{% if not forloop.last %}
-							<a class="info-text"
-							href = "{% url translator.edit_url translator.pk %}"
-							role="button">{{translator.title}},</a>
-						{% else %}
-							<a class="info-text"
-							href = "{% url translator.edit_url translator.pk %}"
-							role="button">{{translator.title}}</a>
-						{% endif %}
-					{% endfor %}
-					</span>
-				</div>
-				<br>
-			<div class = "one-line">
-				<span class = "info-header"> Publisher:</span>
-				{%if publishers%}
-					<span class = "info-text">
-					{% for publisher in publishers%}
-						{% if not forloop.last %}
-							{{publisher.name}},
-						{% else %}
-							{{publisher.name}}
-						{% endif %}
-					{% endfor %}
-				{% else %}
-					<span class = "grey">Unknown
-				{% endif %}
-				</span>
-			</div>
-			<br>
-			{% endif %}
+{% with info_url='utilities/detail_info.html' %}
+{% include info_url with name='Author:' others=authors unk='true' link='both'%}
+{% include info_url with name='Editor:' others=editors unk='true' link='yes'%}
+{% include info_url with name='Translator:' others=translators unk='false' link='yes'%}
+{% include info_url with name='Publisher:' others=publishers unk='true' link='no'%}
+
 			{% if instance.publishing_outlet%}
 			<div class = "one-line">
 				<span class = "info-header">Outlet:</span> 
@@ -129,77 +46,12 @@
 			</div>
 			<br>
 			{% endif %}
-			<div class = "one-line">
-				<span class = "info-header"> Language:</span>
-				{%if languages%}
-					<span class = "info-text">
-					{% for language in languages%}
-						{% if not forloop.last %}
-							{{language.name}},
-						{% else %}
-							{{language.name}}
-						{% endif %}
-					{% endfor %}
-				{% else %}
-					<span class = "grey">Unknown
-				{% endif %}
-				</span>
-			</div>
-			<br>
-			{%if original_languages%}
-				<div class = "one-line">
-					<span class = "info-header"> Original language:</span>
-					<span class = "info-text">
-					{% for language in original_languages%}
-						{% if not forloop.last %}
-							{{language.name}},
-						{% else %}
-							{{language.name}}
-						{% endif %}
-					{% endfor %}
-				</span>
-				</div>
-				<br>
-			{% endif %}
-			<div class = "one-line">
-				<span class = "info-header"> Famine:</span>
-				{%if famines %}
-					<span class = "info-text">
-					{% for famine in famines %}
-						{% if not forloop.last %}
-							<a class="info-text"
-							href = "{% url famine.edit_url famine.pk %}"
-							role="button">{{famine}},</a>
-						{% else %}
-							<a class="info-text"
-							href = "{% url famine.edit_url famine.pk %}"
-							role="button">{{famine}}</a>
-						{% endif %}
-					{% endfor %}
-				{% else %}
-					<span class = "grey">Unknown
-				{% endif %}
-				</span>
-			</div>
-			<br>
 
-			<div class = "one-line">
-				<span class = "info-header">Setting:</span>
-				{% if settings %}
-					<span class = "info-text">
-					{% for location in settings %}
-						{% if not forloop.last %}
-						  {{location.name}} <small>{{location.country}},</small>
-						{% else %}
-						  {{location.name}} <small>{{location.country}}</small>
-						{% endif %}
-					{% endfor %}
-				{% else %}
-					<span class = "grey">Unknown
-				{% endif %}
-				</span>
-			</div>
-			<br>
+{% include info_url with name='Language:' others=languages unk='true' link='no'%}
+{% include info_url with name='Original language:' others=original_languages unk='false' link='no'%}
+{% include info_url with name='Famine:' others=famines unk='true' link='yes'%}
+{% include info_url with name='Setting:' others=settings unk='true' link='loc' %}
+{% endwith %}
 
 			{% if instance.date_created %}
 			<div class = "one-line">

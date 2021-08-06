@@ -1,0 +1,87 @@
+{%if others and link == 'yes'%}
+	<div class = "one-line">
+		<span class = "info-header"> 
+		{{name}}</span>
+		<span class = "info-text">
+		{% for other in others %}
+			{% if not forloop.last %}
+				<a class="info-text"
+				href = "{% url other.edit_url other.pk %}"
+				role="button">{{other}},</a>
+			{% else %}
+				<a class="info-text"
+				href = "{% url other.edit_url other.pk %}"
+				role="button">{{other}}</a>
+			{% endif %}
+		{% endfor %}
+		</span>
+	</div>
+	<br>
+{%elif others and link == 'no'%}
+	<div class = "one-line">
+		<span class = "info-header"> {{name}}</span>
+		{%if others%}
+			<span class = "info-text">
+			{% for other in others%}
+				{% if not forloop.last %}
+					{{other}},
+				{% else %}
+					{{other}}
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+		</span>
+	</div>
+	<br>
+{%elif others and link == 'both'%}
+	<div class = "one-line">
+		<span class = "info-header"> 
+			{{name}}</span>
+		<span class = "info-text">
+		{% for other in others %}
+			{% if not forloop.last %}
+				{% if other.edit_url %}
+					<a class="info-text"
+					href = "{% url other.edit_url other.pk %}"
+					role="button">{{other}},</a>
+				{% else %}
+					{{other}}
+				{% endif %}
+			{% else %}
+				{% if other.edit_url %}
+					<a class="info-text"
+					href = "{% url other.edit_url other.pk %}"
+					role="button">{{other}}</a>
+				{% else %}
+					{{other}}
+				{% endif %}
+			{% endif %}
+		{% endfor %}
+	</div>
+	<br>
+{%elif others and link == 'loc'%}
+	<div class = "one-line">
+		<span class = "info-header">{{name}}</span>
+		{% if others %}
+			<span class = "info-text">
+			{% for other in others %}
+				{% if not forloop.last %}
+				  {{other.name}} <small>{{other.country}},</small>
+				{% else %}
+				  {{other.name}} <small>{{other.country}}</small>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+		</span>
+	</div>
+	<br>
+{% endif %}
+
+{% if not others and unk == 'true' %}
+	<div class = "one-line">
+		<span class = "info-header"> 
+		{{name}}</span>
+		<span class = "grey">Unknown</span>
+	</div>
+	<br>
+{% endif %}
