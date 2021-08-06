@@ -39,7 +39,7 @@ def detail_music_view(request,pk):
 	composers= instance.composers.all()
 	settings= instance.setting.all()
 	famines = instance.famines.all()
-	languages= instance.languages.all()
+	languages= instance.languages.all().order_by('name') 
 	args = {'instance':instance, 'page_name':instance.title,}
 	args.update({'settings':settings,'famines':famines,'languages':languages})
 	return render(request,'sources/detail_music_view.html',args)
@@ -55,8 +55,8 @@ def detail_text_view(request,pk):
 	locations= instance.locations.all()
 	settings= instance.setting.all()
 	famines = instance.famines.all()
-	languages= instance.languages.all()
-	original_languages= instance.original_languages.all()
+	languages= instance.languages.all().order_by('name') 
+	original_languages= instance.original_languages.all().order_by('name')
 	args = {'instance':instance, 'page_name':instance.title,}
 	args.update({'settings':settings,'famines':famines,'languages':languages})
 	args.update({'original_languages':original_languages,'authors':authors})
@@ -72,8 +72,8 @@ def detail_film_view(request,pk):
 	locations_shot= instance.locations_shot.all()
 	settings= instance.setting.all()
 	famines = instance.famines.all()
-	languages= instance.languages_original.all()
-	subtitles= instance.languages_subtitle.all()
+	languages= instance.languages_original.all().order_by('name')
+	subtitles= instance.languages_subtitle.all().order_by('name')
 	args = {'instance':instance, 'page_name':instance.title,'creators':creators}
 	args.update({'locations_shot':locations_shot, 'settings':settings})
 	args.update({'famines':famines, 'writers':writers, 'directors':directors})

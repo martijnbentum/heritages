@@ -108,19 +108,19 @@ class Source(models.Model):
 	
 	@property
 	def setting_names(self):
-		locations = self.setting.all() 
+		locations = self.setting.all().order_by('name') 
 		if locations: return ', '.join([l.name for l in locations])
 		else: return ''
 
 	@property
 	def famine_names(self):
-		famines= self.famines.all() 
+		famines= self.famines.all().order_by('name') 
 		if famines: return ', '.join([f.names_str for f in famines])
 		else: return ''
 
 	@property
 	def keyword_names(self):
-		keywords= self.keywords.all() 
+		keywords= self.keywords.all().order_by('name') 
 		if keywords: return ', '.join([k.name for k in keywords])
 		else: return ''
 
@@ -130,7 +130,7 @@ class Source(models.Model):
 			l = getattr(self,'languages_original')
 		elif hasattr(self,'languages'): l = getattr(self,'languages')
 		else: return ''
-		languages=  l.all()
+		languages=  l.all().order_by('name')  
 		if languages:
 			return ', '.join( [x.name for x in languages] )
 		return ''
