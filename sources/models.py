@@ -414,7 +414,9 @@ class Text(Source,info):
 	@property
 	def links(self):
 		o = {}
-		if self.source_link: o.update({'lyrics':self.source_link})
+		if self.source_link: o.update({'source':self.source_link})
+		if self.text_file: o.update({'text':self.text_file.url})
+		if self.excerpt_file: o.update({'excerpt':self.excerpt_file.url})
 		if o: return o
 		return ''
 
