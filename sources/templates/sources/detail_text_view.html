@@ -40,13 +40,21 @@
 					<span class = "info-text">
 					{% for author in authors %}
 						{% if not forloop.last %}
-							<a class="info-text"
-							href = "{% url author.edit_url author.pk %}"
-							role="button">{{author.title}},</a>
+							{% if author.edit_url %}
+								<a class="info-text"
+								href = "{% url author.edit_url author.pk %}"
+								role="button">{{author.title}},</a>
+							{% else %}
+								{{author.title}}
+							{% endif %}
 						{% else %}
-							<a class="info-text"
-							href = "{% url author.edit_url author.pk %}"
-							role="button">{{author.title}}</a>
+							{% if author.edit_url %}
+								<a class="info-text"
+								href = "{% url author.edit_url author.pk %}"
+								role="button">{{author.title}}</a>
+							{% else %}
+								{{author.title}}
+							{% endif %}
 						{% endif %}
 					{% endfor %}
 				{% else %}
