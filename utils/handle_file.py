@@ -25,11 +25,11 @@ def _open_text(url):
 	return open(url[1:]).read()
 
 def _check_file(file_field):
-	if not file_field: return False
-	file_type = file_field.name.split('.')[-1]
+	if not file_field: return ''
+	file_type = file_field.name.split('.')[-1].lower()
 	if file_type not in filetype2function.keys():
 		print(file_type,'not supported file type',filetype2function.keys())
-		return False
+		return ''
 	return file_type
 
 def handle_file(instance,file_field):

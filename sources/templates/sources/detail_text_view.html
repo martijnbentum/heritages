@@ -255,6 +255,9 @@
 				{% if instance.text.file_type == "text" %}
 					<p>{{instance.text.file| linebreaks}}</p>
 				</div>
+				{% elif instance.text.file_type == "image" %}
+					<img id='big-image' class="big-img" 
+						src="{{instance.text.file}}">  
 				{% endif %}
 			{% endif %}
 		</div>
