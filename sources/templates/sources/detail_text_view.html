@@ -38,7 +38,7 @@
 					Author:</span>
 				{%if authors %}
 					<span class = "info-text">
-					{% for author in author %}
+					{% for author in authors %}
 						{% if not forloop.last %}
 							<a class="info-text"
 							href = "{% url author.edit_url author.pk %}"
@@ -177,7 +177,7 @@
 
 			<div class = "one-line">
 				<span class = "info-header">Setting:</span>
-				{% if locations %}
+				{% if settings %}
 					<span class = "info-text">
 					{% for location in settings %}
 						{% if not forloop.last %}
