@@ -304,16 +304,16 @@ class Image(Source, info):
 
 	@property
 	def creator_occupation_name(self):
-		name = 'Creator'
+		name = 'Creator:'
 		if not self.image_type: return name
-		if self.image_type.name == 'drawings':name = 'Drawer'
-		if self.image_type.name == 'engravings':name = 'Engrapher'
-		if self.image_type.name == 'Etching':name = 'Graphic artist'
-		if self.image_type.name == 'lithographs':name = 'Graphic artist'
-		if self.image_type.name == 'paintings':name = 'Painter'
-		if self.image_type.name == 'poster':name = 'Graphic artist'
-		if self.image_type.name == 'photograph':name = 'Photographer'
-		if self.image_type.name == 'woodcuts':name = 'Graphic artist'
+		if self.image_type.name == 'drawings':name = 'Drawer:'
+		if self.image_type.name == 'engravings':name = 'Engrapher:'
+		if self.image_type.name == 'Etching':name = 'Graphic artist:'
+		if self.image_type.name == 'lithographs':name = 'Graphic artist:'
+		if self.image_type.name == 'paintings':name = 'Painter:'
+		if self.image_type.name == 'poster':name = 'Graphic artist:'
+		if self.image_type.name == 'photograph':name = 'Photographer:'
+		if self.image_type.name == 'woodcuts':name = 'Graphic artist:'
 		return name
 
 	@property
