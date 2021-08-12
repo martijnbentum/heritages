@@ -1,0 +1,21 @@
+{% if instance.links %}
+<div class = "one-line">
+	<span class = "info-header">Links:</span>
+		<span class = "info-text">
+		{% for name, link in instance.links.items%}
+			{% if not forloop.last %}
+				<a class="info-text"
+				href = "{{link}}"
+				target = "_blank"
+				role="button">{{name}},</a>
+			{% else %}
+				<a class="info-text"
+				href = "{{link}}"
+				target = "_blank"
+				role="button">{{name}}</a>
+			{% endif %}
+		{% endfor %}
+	</span>
+</div>
+<br>
+{% endif %}
