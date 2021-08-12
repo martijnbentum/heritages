@@ -56,10 +56,10 @@ def detail_text_view(request,pk):
 	settings= instance.setting.all()
 	famines = instance.famines.all()
 	languages= instance.languages.all().order_by('name') 
-	original_languages= instance.original_languages.all().order_by('name')
+	org_lang= instance.original_languages.all().order_by('name')
 	args = {'instance':instance, 'page_name':instance.title,}
 	args.update({'settings':settings,'famines':famines,'languages':languages})
-	args.update({'original_languages':original_languages,'authors':authors})
+	args.update({'org_lang':org_lang,'authors':authors})
 	args.update({'editors':editors,'publishers':publishers})
 	args.update({'locations':locations,'translators':translators})
 	return render(request,'sources/detail_text_view.html',args)
@@ -75,7 +75,7 @@ def detail_film_view(request,pk):
 	languages= instance.languages_original.all().order_by('name')
 	subtitles= instance.languages_subtitle.all().order_by('name')
 	args = {'instance':instance, 'page_name':instance.title,'creators':creators}
-	args.update({'locations_shot':locations_shot, 'settings':settings})
+	args.update({'loc_shot':locations_shot, 'settings':settings})
 	args.update({'famines':famines, 'writers':writers, 'directors':directors})
 	args.update({'languages':languages, 'subtitles':subtitles})
 	return render(request,'sources/detail_film_view.html',args)
