@@ -35,6 +35,10 @@
 
 	<div class="info">
 		<div class="grid-item general">
+
+{% with i='utilities/detail_info_single.html' %}
+{% with il='utilities/detail_info_loop.html' %}
+
 			{%if instance.image_type%}
 			<div class = "one-line">
 				<span class="info-header">Artefact type:</span>
