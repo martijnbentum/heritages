@@ -16,7 +16,7 @@
 				 src="media/no_image_available.png">
 		{% endif %}
 	</div>
-	<div class="grid-item">
+	<div class="grid-item wide">
 		<h3>{{instance.title_original}} 
 			<a class="btn btn-link btn-sm ml-auto"
 				href = "{% url instance.edit_url instance.pk %}"
@@ -34,116 +34,20 @@
 
 	<div class="info">
 		<div class="grid-item general">
-			{%if instance.image_type%}
-			<div class = "one-line">
-				<span class = "info-header">Image type:</span>
-				<span class = "info-text">{{instance.image_type}}</span>
-			</div>
-			<br>
-			{% endif %}
+{% with i='utilities/detail_info_single.html' %}
+{% with il='utilities/detail_info_loop.html' %}
 
-			<div class = "one-line">
-				<span class = "info-header"> 
-					{{instance.creator_occupation_name}}:</span>
-				{%if creators %}
-					<span class = "info-text">
-					{% for creator in creators %}
-						{% if not forloop.last %}
-							<a class="info-text"
-							href = "{% url creator.edit_url creator.pk %}"
-							role="button">{{creator.title}},</a>
-						{% else %}
-							<a class="info-text"
-							href = "{% url creator.edit_url creator.pk %}"
-							role="button">{{creator.title}}</a>
-						{% endif %}
-					{% endfor %}
-				{% else %}
-					<span class = "grey">Unknown
-				{% endif %}
-				</span>
-			</div>
-			<br>
+{% include i with name='Image type:' info=instance.image_type %}
 
-			<div class = "one-line">
-				<span class = "info-header"> Famine:</span>
-				{%if famines %}
-					<span class = "info-text">
-					{% for famine in famines %}
-						{% if not forloop.last %}
-							<a class="info-text"
-							href = "{% url famine.edit_url famine.pk %}"
-							role="button">{{famine}},</a>
-						{% else %}
-							<a class="info-text"
-							href = "{% url famine.edit_url famine.pk %}"
-							role="button">{{famine}}</a>
-						{% endif %}
-					{% endfor %}
-				{% else %}
-					<span class = "grey">Unknown
-				{% endif %}
-				</span>
-			</div>
-			<br>
+{% include il with name=instance.creator_occupation_name others=creators unk='true' link='yes'%}
+{% include il with name='Famine:' others=famines unk='true' link='no'%}
+{% include il with name='Location:' others=locations unk='false' link='loc'%}
+{% include il with name='Setting:' others=settings unk='true' link='loc'%}
+{% include i with name='Collection:' info=instance.collection%}
+{% include 'utilities/show_info_links.html' %}
 
-			<div class = "one-line">
-				<span class = "info-header">Location:</span>
-				{% if locations %}
-					<span class = "info-text">
-					{% for location in locations %}
-						{% if not forloop.last %}
-							{{location.name}} <small>{{location.country}},</small>
-						{% else %}
-							{{location.name}} <small>{{location.country}}</small>
-						{% endif %}
-					{% endfor %}
-				{% else %}
-					<span class = "grey">Unknown
-				{% endif %}
-				</span>
-			</div>
-			<br>
-
-			<div class = "one-line">
-				<span class = "info-header">Setting:</span>
-				{% if locations %}
-					<span class = "info-text">
-					{% for location in settings %}
-						{% if not forloop.last %}
-							{{location.name}} <small>{{location.country}},</small>
-						{% else %}
-							{{location.name}} <small>{{location.country}}</small>
-						{% endif %}
-					{% endfor %}
-				{% else %}
-					<span class = "grey">Unknown
-				{% endif %}
-				</span>
-			</div>
-			<br>
-
-			{% if instance.date_created %}
-			<div class = "one-line">
-				<span class = "info-header">Created:</span> 
-				<span class = "info-text"> {{instance.date_created}}</span>
-			</div>
-			<br>
-			{% endif %}
-			{% if instance.date_released%}
-			<div class = "one-line">
-				<span class = "info-header">Released:</span> 
-				<span class = "info-text">{{instance.date_released}}</span>
-			</div>
-			<br>
-			{% endif %}
-			{% if instance.keyword_names %}
-			<div class = "one-line">
-				<span class = "info-header">Keywords:</span> 
-				<span class = "info-text">{{instance.keyword_names}}</span>
-			</div>
-			<br>
-			{% endif %}
+{% endwith %}
+{% endwith %}
 		</div>
 
 		<div class="grid-item description">
@@ -151,64 +55,19 @@
 				{{instance.description }}
 			{% endif %}
 		</div>
-
 	</div>
-
 </div>
 
-
-
+{% include 'utilities/detail_style.html' %}
 
 <style>
 .grid-container {
 	display:grid;
+	grid-template-columns: 12fr;
 	padding: 1px;
 	grid-gap: 3px;
 	justify-items: left;
 	align-items: start;
-}
-.grid-item {
-	padding: 0px;
-	align-self:start;
-	justify-self:left;
-}
-
-.description { 
-	background-color: #f0f0f0;
-	padding: 3px;
-}
-
-.info{
-	display:grid;
-	grid-template-columns: 3fr 6fr;
-	padding: 1px;
-	grid-gap: 9px;
-	justify-items: center;
-	align-items: end;
-}
-
-.general{
-	justify-self:left;
-}
-
-.one-line{
-	display:inline;
-}
-
-.info-header {
-	color:#f55211;
-	font-size:75%;
-}
-.info-text {
-	color:black;
-}
-
-.grey{
-	color:lightgrey;
-}
-
-.op {
-	opacity: 0.05;
 }
 
 img {
@@ -219,23 +78,5 @@ img {
 	max-height:100%;
 }
 
-p {
-	padding: 0px;
-	margin: 0px;
-}
-
-hr {
-	border-top:3px solid black;
-	margin-top: 0px;
-}
-
-h3 {
-	padding: 0px;
-	margin: 0px;
-}
-
 </style>
-
-
-
 {% endblock %}

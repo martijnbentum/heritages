@@ -46,309 +46,43 @@
 
 	<div class="info">
 		<div class="grid-item general">
-			{%if instance.film_type%}
-			<div class = "one-line">
-				<span class = "info-header">Film type:</span>
-				<span class = "info-text">{{instance.film_type}}</span>
-			</div>
-			<br>
-			{% endif %}
 
-			<div class = "one-line">
-				<span class = "info-header"> 
-					Director:</span>
-				{%if directors %}
-					<span class = "info-text">
-					{% for director in directors %}
-						{% if not forloop.last %}
-							<a class="info-text"
-							href = "{% url directors.edit_url director.pk %}"
-							role="button">{{director.title}},</a>
-						{% else %}
-							<a class="info-text"
-							href = "{% url director.edit_url director.pk %}"
-							role="button">{{director.title}}</a>
-						{% endif %}
-					{% endfor %}
-				{% else %}
-					<span class = "grey">Unknown
-				{% endif %}
-				</span>
-			</div>
-			<br>
-			<div class = "one-line">
-				<span class = "info-header"> 
-					Writer:</span>
-				{%if writers %}
-					<span class = "info-text">
-					{% for writer in writers %}
-						{% if not forloop.last %}
-							<a class="info-text"
-							href = "{% url writer.edit_url writer.pk %}"
-							role="button">{{writer.title}},</a>
-						{% else %}
-							<a class="info-text"
-							href = "{% url writer.edit_url writer.pk %}"
-							role="button">{{writer.title}}</a>
-						{% endif %}
-					{% endfor %}
-				{% else %}
-					<span class = "grey">Unknown
-				{% endif %}
-				</span>
-			</div>
-			<br>
-			{%if creators %}
-			<div class = "one-line">
-				<span class = "info-header"> 
-					Creator:</span>
-					<span class = "info-text">
-					{% for creator in creators %}
-						{% if not forloop.last %}
-							<a class="info-text"
-							href = "{% url creator.edit_url creator.pk %}"
-							role="button">{{creator.title}},</a>
-						{% else %}
-							<a class="info-text"
-							href = "{% url creator.edit_url creator.pk %}"
-							role="button">{{creator.title}}</a>
-						{% endif %}
-					{% endfor %}
-				</span>
-			</div>
-			<br>
-			{% endif %}
+{% with i='utilities/detail_info_single.html' %}
+{% with il='utilities/detail_info_loop.html' %}
 
-			<div class = "one-line">
-				<span class = "info-header"> Language:</span>
-				{%if languages%}
-					<span class = "info-text">
-					{% for language in languages%}
-						{% if not forloop.last %}
-							{{language.name}},
-						{% else %}
-							{{language.name}}
-						{% endif %}
-					{% endfor %}
-				{% else %}
-					<span class = "grey">Unknown
-				{% endif %}
-				</span>
-			</div>
-			<br>
-			{%if subtitles %}
-			<div class = "one-line">
-				<span class = "info-header"> Subtitle:</span>
-					<span class = "info-text">
-					{% for language in subtitles%}
-						{% if not forloop.last %}
-							{{language.name}},
-						{% else %}
-							{{language.name}}
-						{% endif %}
-					{% endfor %}
-				</span>
-			</div>
-			<br>
-			{% endif %}
-			<div class = "one-line">
-				<span class = "info-header"> Famine:</span>
-				{%if famines %}
-					<span class = "info-text">
-					{% for famine in famines %}
-						{% if not forloop.last %}
-							<a class="info-text"
-							href = "{% url famine.edit_url famine.pk %}"
-							role="button">{{famine}},</a>
-						{% else %}
-							<a class="info-text"
-							href = "{% url famine.edit_url famine.pk %}"
-							role="button">{{famine}}</a>
-						{% endif %}
-					{% endfor %}
-				{% else %}
-					<span class = "grey">Unknown
-				{% endif %}
-				</span>
-			</div>
-			<br>
+{% include i with name='Film type:' info=instance.film_type %}
 
-			<div class = "one-line">
-				<span class = "info-header">Location:</span>
-				{% if locations_shot %}
-					<span class = "info-text">
-					{% for location in locations_shot %}
-						{% if not forloop.last %}
-						  {{location.name}} <small>{{location.country}},</small>
-						{% else %}
-						  {{location.name}} <small>{{location.country}}</small>
-						{% endif %}
-					{% endfor %}
-				{% else %}
-					<span class = "grey">Unknown
-				{% endif %}
-				</span>
-			</div>
-			<br>
+{% include il with name='Director:' others=directors unk='true' link='yes'%}
+{% include il with name='Writer:' others=writers unk='true' link='yes'%}
+{% include il with name='Creator:' others=creators unk='false' link='yes'%}
+{% include il with name='Language:' others=languages unk='true' link='no'%}
+{% include il with name='Subtitle:' others=subtitles unk='false' link='no'%}
+{% include il with name='Famine:' others=famines unk='true' link='no'%}
+{% include il with name='Location shot:' others=loc_shot unk='false' link='loc'%}
+{% include il with name='Setting:' others=settings unk='true' link='loc'%}
 
-			<div class = "one-line">
-				<span class = "info-header">Setting:</span>
-				{% if locations %}
-					<span class = "info-text">
-					{% for location in settings %}
-						{% if not forloop.last %}
-						  {{location.name}} <small>{{location.country}},</small>
-						{% else %}
-						  {{location.name}} <small>{{location.country}}</small>
-						{% endif %}
-					{% endfor %}
-				{% else %}
-					<span class = "grey">Unknown
-				{% endif %}
-				</span>
-			</div>
-			<br>
+{% include i with name='Created:' info=instance.date_created%}
+{% include i with name='Released:' info=instance.date_released%}
+{% include i with name='Keywords:' info=instance.keyword_names%}
+{% include i with name='Collection:' info=instance.collection%}
 
-			{% if instance.date_created %}
-			<div class = "one-line">
-				<span class = "info-header">Created:</span> 
-				<span class = "info-text"> {{instance.date_created}}</span>
-			</div>
-			<br>
-			{% endif %}
-			{% if instance.date_released%}
-			<div class = "one-line">
-				<span class = "info-header">Released:</span> 
-				<span class = "info-text">{{instance.date_released}}</span>
-			</div>
-			<br>
-			{% endif %}
-			{% if instance.keyword_names %}
-			<div class = "one-line">
-				<span class = "info-header">Keywords:</span> 
-				<span class = "info-text">{{instance.keyword_names}}</span>
-			</div>
-			<br>
-			{% endif %}
 
-			{% if instance.links %}
-			<div class = "one-line">
-				<span class = "info-header">Links:</span>
-					<span class = "info-text">
-					{% for name, link in instance.links.items%}
-						{% if not forloop.last %}
-							<a class="info-text"
-							href = "{{link}}"
-							target = "_blank"
-							role="button">{{name}},</a>
-						{% else %}
-							<a class="info-text"
-							href = "{{link}}"
-							target = "_blank"
-							role="button">{{name}}</a>
-						{% endif %}
-					{% endfor %}
-				</span>
-			</div>
-			<br>
-			{% endif %}
+{% endwith %}
+{% endwith %}
+
+{% include 'utilities/show_info_links.html' %}
 
 		</div>
+
 
 		<div class="grid-item description">
 			{% if instance.description %}
 				{{instance.description }}
 			{% endif %}
 		</div>
-
 	</div>
-
 </div>
 
-
-
-
-<style>
-.grid-container {
-	display:grid;
-	padding: 1px;
-	grid-template-columns: 3fr 6fr;
-	grid-gap: 9px;
-}
-.grid-item {
-	padding: 0px;
-	align-self:start;
-	justify-self:left;
-}
-
-.description { 
-	background-color: #f0f0f0;
-	padding: 3px;
-	justify-self:left;
-}
-
-.wide{
-	grid-column:1/3;
-}
-
-.info{
-	grid-column:1/3;
-	display:grid;
-	grid-template-columns: 3fr 6fr;
-	padding: 1px;
-	grid-gap: 9px;
-}
-
-.general{
-	justify-self:left;
-}
-
-
-.one-line{
-	display:inline;
-}
-
-.info-header {
-	color:#f55211;
-	font-size:75%;
-}
-.info-text {
-	color:black;
-}
-
-.grey{
-	color:lightgrey;
-}
-
-.op {
-	opacity: 0.05;
-}
-
-img {
-	border-radius:3px;
-	height:300px;
-	object-fit:cover;
-	max-width:100%;
-	max-height:100%;
-}
-
-p {
-	padding: 0px;
-	margin: 0px;
-}
-
-hr {
-	border-top:3px solid black;
-	margin-top: 0px;
-}
-
-h3 {
-	padding: 0px;
-	margin: 0px;
-}
-
-</style>
-
-
+{% include 'utilities/detail_style.html' %}
 
 {% endblock %}
