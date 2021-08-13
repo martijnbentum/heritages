@@ -73,16 +73,16 @@
 {% endwith %}
 		</div>
 
+		{% if instance.description %}
 		<div class="grid-item description">
-			{% if instance.description %}
 			<div> 
 			<span class = "info-header center">Description:</span>
 			<br>
 				{{instance.description }}
 			<br><br>
 			</div>
-			{% endif %}
 		</div>
+		{% endif %}
 	</div>
 </div>
 
