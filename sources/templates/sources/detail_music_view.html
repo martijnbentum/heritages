@@ -73,18 +73,20 @@
 		</div>
 
 		<div class="grid-item description">
+			{% if instance.description %}
 			<div> 
 			<span class = "info-header center">Description:</span>
 			<br>
-			{% if instance.description %}
 				{{instance.description }}
 			{% endif %}
-			<br><br>
-			<span class = "info-header center">Lyrics:</span>
-			</div>
-			<div class="lyrics"> 
-			<p>{{instance.lyrics | linebreaks}}</p>
-			</div>
+			{% if instance.lyrics%}
+				<br><br>
+				<span class = "info-header center">Lyrics:</span>
+				</div>
+				<div class="lyrics"> 
+				<p>{{instance.lyrics | linebreaks}}</p>
+				</div>
+			{% endif %}
 		</div>
 	</div>
 </div>
