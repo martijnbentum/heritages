@@ -5,6 +5,18 @@ from . import views
 app_name = 'sources'
 urlpatterns = [
 	path('',views.edit_film, name='add_film'),
+	path('detail_infographic_view/<int:pk>',views.detail_infographic_view, 
+		name='detail_infographic_view'),
+	path('detail_artefact_view/<int:pk>',views.detail_artefact_view, 
+		name='detail_artefact_view'),
+	path('detail_videogame_view/<int:pk>',views.detail_videogame_view, 
+		name='detail_videogame_view'),
+	path('detail_recordedspeech_view/<int:pk>',views.detail_recordedspeech_view, 
+		name='detail_recordedspeech_view'),
+	path('detail_memorialsite_view/<int:pk>',views.detail_memorialsite_view, 
+		name='detail_memorialsite_view'),
+	path('detail_picturestory_view/<int:pk>',views.detail_picturestory_view, 
+		name='detail_picturestory_view'),
 	path('detail_image_view/<int:pk>',views.detail_image_view, 
 		name='detail_image_view'),
 	path('detail_film_view/<int:pk>',views.detail_film_view, 
