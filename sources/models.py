@@ -145,9 +145,6 @@ class Source(models.Model):
 
 	@property
 	def detail_url(self):
-		detail_view_done ='image,film,music,text'.split(',')
-		if self._meta.model_name not in detail_view_done: 
-			return self.edit_url
 		return self._meta.app_label+':detail_'+self._meta.model_name+'_view' 
 		
 	@property
@@ -200,8 +197,7 @@ class Music(Source,info):
 
 	@property
 	def embed_video(self):
-		p = self.music_video_link
-		return link2embed_source(self,p) 
+		return link2embed_source(self,self.music_video_link)
 
 	@property
 	def links(self):
@@ -276,10 +272,17 @@ class Artefact(Source, info):
 	image_filename = models.CharField(max_length=500,default='',blank=True,
 		null=True)
 
-
 	@property
 	def icon(self):
 		return 'fas fa-utensil-spoon'
+
+	@property
+	def links(self):
+		o = {}
+		if self.source_link: o.update({'source':self.source_link})
+		if self.image_file: o.update({'image':self.image_file.url})
+		if o: return o
+		return ''
 
 	class Meta:
 		unique_together = [['title_original','date_created','image_filename']]
@@ -317,6 +320,14 @@ class Image(Source, info):
 		return name
 
 	@property
+	def links(self):
+		o = {}
+		if self.source_link: o.update({'source':self.source_link})
+		if self.image_file: o.update({'image':self.image_file.url})
+		if o: return o
+		return ''
+
+	@property
 	def pop_up(self):
 		m = self._pop_up
 		if self.image_file.name:
@@ -348,6 +359,14 @@ class Infographic(Source,info):
 	def icon(self):
 		return 'fas fa-chart-area'
 
+	@property
+	def links(self):
+		o = {}
+		if self.source_link: o.update({'source':self.source_link})
+		if self.image_file: o.update({'image':self.image_file.url})
+		if o: return o
+		return ''
+
 	class Meta:
 		unique_together = [['title_original','image_filename']]
 
@@ -375,6 +394,20 @@ class PictureStory(Source,info):
 	location_field = 'locations'
 	image_filename = models.CharField(max_length=500,default='',
 		blank=True,null=True)
+
+	@property
+	def links(self):
+		o = {}
+		if self.source_link: o.update({'source':self.source_link})
+		if self.image_file: o.update({'image':self.image_file.url})
+		if self.excerpt_file: o.update({'excerpt':self.excerpt_file.url})
+		if o: return o
+		return ''
+
+	@property
+	def picture_story(self):
+		return handle_file(self,self.excerpt_file)
+
 
 	@property
 	def icon(self):
@@ -446,6 +479,18 @@ class Videogame(Source,info):
 	def icon(self):
 		return 'fas fa-gamepad'
 
+	@property
+	def embed_video(self):
+		return link2embed_source(self,self.video_link) 
+
+	@property
+	def links(self):
+		o = {}
+		if self.source_link: o.update({'source':self.source_link})
+		if self.video_link: o.update({'video':self.video_link})
+		if o: return o
+		return ''
+
 	class Meta:
 		unique_together = [['title_original','date_released']]
 
@@ -468,6 +513,14 @@ class Recordedspeech(Source,info):
 	@property
 	def icon(self):
 		return 'far fa-comments'
+
+	@property
+	def links(self):
+		o = {}
+		if self.source_link: o.update({'source':self.source_link})
+		if self.audio_link: o.update({'audio':self.audio_link})
+		if o: return o
+		return ''
 
 	class Meta:
 		unique_together = [['title_original','date_released']]
@@ -505,6 +558,24 @@ class Memorialsite(Source,info):
 	@property
 	def icon(self):
 		return 'fas fa-monument'
+
+	@property
+	def links(self):
+		o = {}
+		if self.image_file1: o.update({'image 1':self.image_file1.url})
+		if self.image_file2: o.update({'image 2':self.image_file2.url})
+		if self.image_file3: o.update({'image 3':self.image_file3.url})
+		if self.video_link: o.update({'video':self.video_link})
+		if o: return o
+		return ''
+
+	@property
+	def image_count(self):
+		a = bool(self.image_file1) 
+		b = bool(self.image_file2)
+		c = bool(self.image_file3)
+		return sum([a,b,c])
 	
 	class Meta:
 		unique_together = [['title_original','date_released']]
+
