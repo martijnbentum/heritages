@@ -11,8 +11,11 @@
 		{% if instance.image_file %}
 			<img id='big-image' class="big-img" 
 				src="{{instance.image_file.url}}">  
+		{% elif instance.thumbnail%}
+			<img id='big-image' class="sml-img"
+				 src="{{instance.thumbnail.url}}">
 		{% else %}
-			<img id='big-image' class="big-img op"
+			<img id='big-image' class="sml-img op"
 				 src="media/no_image_available.png">
 		{% endif %}
 	</div>
@@ -43,6 +46,10 @@
 {% include il with name='Famine:' others=famines unk='true' link='no'%}
 {% include il with name='Location:' others=locations unk='false' link='loc'%}
 {% include il with name='Setting:' others=settings unk='true' link='loc'%}
+
+{% include i with name='Created:' info=instance.date_created%}
+{% include i with name='Released:' info=instance.date_released%}
+{% include i with name='Keywords:' info=instance.keyword_names%}
 {% include i with name='Collection:' info=instance.collection%}
 {% include 'utilities/show_info_links.html' %}
 
@@ -52,7 +59,12 @@
 
 		<div class="grid-item description">
 			{% if instance.description %}
+			<div> 
+			<span class = "info-header center">Description:</span>
+			<br>
 				{{instance.description }}
+			<br><br>
+			</div>
 			{% endif %}
 		</div>
 	</div>
@@ -68,6 +80,10 @@
 	grid-gap: 3px;
 	justify-items: left;
 	align-items: start;
+}
+
+.sml-img {
+	height:200px;
 }
 
 img {
