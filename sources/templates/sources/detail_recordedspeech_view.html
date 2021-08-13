@@ -8,14 +8,11 @@
 
 <div class="grid-container"> 
 	<div class="grid-item">
-		{% if instance.image_file %}
+		{% if instance.thumbnail %}
 			<img id='big-image' class="big-img" 
-				src="{{instance.image_file.url}}">  
-		{% elif instance.thumbnail%}
-			<img id='big-image' class="sml-img"
-				 src="{{instance.thumbnail.url}}">
+				src="{{instance.thumbnail.url}}">  
 		{% else %}
-			<img id='big-image' class="sml-img op"
+			<img id='big-image' class="big-img op"
 				 src="media/no_image_available.png">
 		{% endif %}
 	</div>
@@ -35,14 +32,19 @@
 		<hr>
 	</div>
 
+
 	<div class="info">
 		<div class="grid-item general">
 {% with i='utilities/detail_info_single.html' %}
 {% with il='utilities/detail_info_loop.html' %}
 
-{% include i with name='Artefact type:' info=instance.artefact_type %}
+{% include i with name='Speech type:' info=instance.recordedspeech_type%}
 
-{% include il with name='Creator:' others=creators unk='true' link='yes'%}
+{% include il with name='Creator:' others=creators unk='false' link='yes'%}
+{% include il with name='Speakers:' others=speakers unk='true' link='yes'%}
+{% include i with name='Broadcaster:' info=instance.broadcasting_station%}
+
+{% include il with name='Language:' others=languages unk='true' link='no'%}
 {% include il with name='Famine:' others=famines unk='true' link='no'%}
 {% include il with name='Location:' others=locations unk='false' link='loc'%}
 {% include il with name='Setting:' others=settings unk='true' link='loc'%}
@@ -51,48 +53,46 @@
 {% include i with name='Released:' info=instance.date_released%}
 {% include i with name='Keywords:' info=instance.keyword_names%}
 {% include i with name='Collection:' info=instance.collection%}
+
+{% endwith %}
+{% endwith %}
+
 {% include 'utilities/show_info_links.html' %}
 
-{% endwith %}
-{% endwith %}
 		</div>
 
+		{% if instance.description %}
 		<div class="grid-item description">
-			{% if instance.description %}
 			<div> 
 			<span class = "info-header center">Description:</span>
 			<br>
 				{{instance.description }}
-			<br><br>
-			</div>
-			{% endif %}
 		</div>
+		{% endif %}
 	</div>
 </div>
 
 {% include 'utilities/detail_style.html' %}
 
 <style>
-.grid-container {
-	display:grid;
-	grid-template-columns: 12fr;
-	padding: 1px;
-	grid-gap: 3px;
-	justify-items: left;
-	align-items: start;
+
+
+.description { 
+	background-color: #f0f0f0;
+	padding: 30px;
+	padding-top: 5px;
+	padding-bottom: 15px;
+	justify-self:left;
 }
 
-.sml-img {
-	height:200px;
-}
-
-img {
-	border-radius:3px;
-	height:500px;
-	object-fit:cover;
-	max-width:100%;
-	max-height:100%;
+.lyrics {
+	font-style:italic;
+	color:#163b63;
+	font-size:90%;
 }
 
 </style>
+
+
+
 {% endblock %}

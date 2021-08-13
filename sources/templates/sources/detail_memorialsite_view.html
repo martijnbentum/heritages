@@ -7,18 +7,31 @@
 {% block content %}
 
 <div class="grid-container"> 
-	<div class="grid-item">
-		{% if instance.image_file %}
-			<img id='big-image' class="big-img" 
-				src="{{instance.image_file.url}}">  
-		{% elif instance.thumbnail%}
-			<img id='big-image' class="sml-img"
-				 src="{{instance.thumbnail.url}}">
-		{% else %}
+{% with i=instance  %}
+	<div class="image-container wide"> 
+		{% if i.image_file1 %}
+			<div class="grid-item">
+				<img id='big-image' class="" 
+					src="{{i.image_file1.url}}">  
+			</div>
+		{% endif %}
+		{% if i.image_file2 %}
+			<div class="grid-item">
+				<img id='big-image' class="" 
+					src="{{i.image_file2.url}}">  
+			</div>
+		{% endif %}
+		{% if i.image_file3 %}
+			<div class="grid-item">
+				<img id='big-image' class="" 
+					src="{{i.image_file3.url}}">  
+			</div>
+		{% endif %}
+		{% if i.image_count == 0 %}
 			<img id='big-image' class="sml-img op"
 				 src="media/no_image_available.png">
 		{% endif %}
-	</div>
+{% endwith %}
 	<div class="grid-item wide">
 		<h3>{{instance.title_original}} 
 			<a class="btn btn-link btn-sm ml-auto"
@@ -40,9 +53,12 @@
 {% with i='utilities/detail_info_single.html' %}
 {% with il='utilities/detail_info_loop.html' %}
 
-{% include i with name='Artefact type:' info=instance.artefact_type %}
-
+{% include i with name='Memorial type:' info=instance.memorial_type %}
 {% include il with name='Creator:' others=creators unk='true' link='yes'%}
+{% include il with name='Artist:' others=artists unk='true' link='yes'%}
+{% include il with name='Donor:' others=donors unk='false' link='both'%}
+{% include il with name='Commissioned by:' others=commissioners unk='false' link='both'%}
+{% include il with name='Language:' others=languages unk='true' link='no'%}
 {% include il with name='Famine:' others=famines unk='true' link='no'%}
 {% include il with name='Location:' others=locations unk='false' link='loc'%}
 {% include il with name='Setting:' others=settings unk='true' link='loc'%}
@@ -73,17 +89,44 @@
 {% include 'utilities/detail_style.html' %}
 
 <style>
-.grid-container {
+	{% if instance.image_count == 3 %}
+		.image-container {
+			display:grid;
+			grid-template-columns: 4fr 4fr 4fr;
+			padding: 1px;
+			grid-gap: 3px;
+			justify-items: left;
+			align-items: start;
+		}
+	{% elif instance.image_count == 2 %}
+		.image-container {
+			display:grid;
+			grid-template-columns: 6fr 6fr;
+			padding: 1px;
+			grid-gap: 3px;
+			justify-items: left;
+			align-items: start;
+		}
+	{% else %}
+		.image-container {
+			display:grid;
+			grid-template-columns: 12fr;
+			padding: 1px;
+			grid-gap: 3px;
+			justify-items: left;
+			align-items: start;
+		}
+	{% endif %}
+.info{
+	grid-column:1/4;
 	display:grid;
-	grid-template-columns: 12fr;
+	grid-template-columns: 4fr 8fr;
 	padding: 1px;
-	grid-gap: 3px;
-	justify-items: left;
-	align-items: start;
+	grid-gap: 9px;
 }
 
 .sml-img {
-	height:200px;
+	height:150px;
 }
 
 img {

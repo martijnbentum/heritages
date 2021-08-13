@@ -40,9 +40,13 @@
 {% with i='utilities/detail_info_single.html' %}
 {% with il='utilities/detail_info_loop.html' %}
 
-{% include i with name='Artefact type:' info=instance.artefact_type %}
+{% include i with name='type:' info=instance.infographic_type%}
 
 {% include il with name='Creator:' others=creators unk='true' link='yes'%}
+
+{% include i with name='Outlet:' info=instance.publishing_outlet%}
+
+{% include il with name='Language:' others=languages unk='true' link='no'%}
 {% include il with name='Famine:' others=famines unk='true' link='no'%}
 {% include il with name='Location:' others=locations unk='false' link='loc'%}
 {% include il with name='Setting:' others=settings unk='true' link='loc'%}

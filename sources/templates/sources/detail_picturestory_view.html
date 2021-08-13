@@ -11,11 +11,11 @@
 		{% if instance.image_file %}
 			<img id='big-image' class="big-img" 
 				src="{{instance.image_file.url}}">  
-		{% elif instance.thumbnail%}
-			<img id='big-image' class="sml-img"
-				 src="{{instance.thumbnail.url}}">
+		{% elif instance.thumbnail %}
+			<img id='sml-image' class="sml-img" 
+				src="{{instance.thumbnail.url}}">  
 		{% else %}
-			<img id='big-image' class="sml-img op"
+			<img id='sml-image' class="sml-img op"
 				 src="media/no_image_available.png">
 		{% endif %}
 	</div>
@@ -40,9 +40,15 @@
 {% with i='utilities/detail_info_single.html' %}
 {% with il='utilities/detail_info_loop.html' %}
 
-{% include i with name='Artefact type:' info=instance.artefact_type %}
+{% include i with name='Picture story type:' info=instance.picture_story_type %}
 
-{% include il with name='Creator:' others=creators unk='true' link='yes'%}
+{% include il with name='Author:' others=authors unk='true' link='yes'%}
+{% include il with name='Artist:' others=artists unk='true' link='yes'%}
+{% include il with name='Publisher:' others=publishers unk='true' link='no'%}
+
+{% include i with name='Outlet:' info=instance.publishing_outlet%}
+
+{% include il with name='Language:' others=languages unk='true' link='no'%}
 {% include il with name='Famine:' others=famines unk='true' link='no'%}
 {% include il with name='Location:' others=locations unk='false' link='loc'%}
 {% include il with name='Setting:' others=settings unk='true' link='loc'%}
@@ -51,12 +57,15 @@
 {% include i with name='Released:' info=instance.date_released%}
 {% include i with name='Keywords:' info=instance.keyword_names%}
 {% include i with name='Collection:' info=instance.collection%}
+
 {% include 'utilities/show_info_links.html' %}
 
 {% endwith %}
 {% endwith %}
+
 		</div>
 
+		{% if instance.description or instance.picture_story%}
 		<div class="grid-item description">
 			{% if instance.description %}
 			<div> 
@@ -66,7 +75,22 @@
 			<br><br>
 			</div>
 			{% endif %}
+			{% if instance.picture_story%}
+				{% if instance.picture_story.file_type == "text" %}
+				<span class = "info-header center">Text:</span>
+				<div class="text"> 
+					<p>{{instance.picture_story.file| linebreaks}}</p>
+				</div>
+				{% endif %}
+			{% endif %}
 		</div>
+		{% endif %}
+		{% if instance.picture_story.file_type == "image" %}
+			<div class="grid-item text-img-div wide">
+				<img id='text-img' class="text-img" 
+					src="{{instance.picture_story.file}}">  
+			</div>
+		{% endif %}
 	</div>
 </div>
 
@@ -83,7 +107,7 @@
 }
 
 .sml-img {
-	height:200px;
+	height:150px;
 }
 
 img {

@@ -8,15 +8,24 @@
 
 <div class="grid-container"> 
 	<div class="grid-item">
-		{% if instance.image_file %}
+		{% if instance.thumbnail %}
 			<img id='big-image' class="big-img" 
-				src="{{instance.image_file.url}}">  
-		{% elif instance.thumbnail%}
-			<img id='big-image' class="sml-img"
-				 src="{{instance.thumbnail.url}}">
+				src="{{instance.thumbnail.url}}">  
 		{% else %}
-			<img id='big-image' class="sml-img op"
+			<img id='big-image' class="big-img op"
 				 src="media/no_image_available.png">
+		{% endif %}
+	</div>
+	<div class="grid-item">
+		{% if instance.embed_video %}	
+			<iframe width="500" height="300" 
+				src="{{instance.embed_video}}" 
+				title="video player" 
+				frameborder="0" 
+				allow="accelerometer; autoplay; clipboard-write; 
+					encrypted-media; gyroscope; picture-in-picture" 
+				 allowfullscreen>
+			</iframe>
 		{% endif %}
 	</div>
 	<div class="grid-item wide">
@@ -37,25 +46,31 @@
 
 	<div class="info">
 		<div class="grid-item general">
+
 {% with i='utilities/detail_info_single.html' %}
 {% with il='utilities/detail_info_loop.html' %}
 
-{% include i with name='Artefact type:' info=instance.artefact_type %}
+{% include i with name='Game type:' info=instance.game_type%}
 
-{% include il with name='Creator:' others=creators unk='true' link='yes'%}
+{% include il with name='Studio:' others=studios unk='true' link='no'%}
+{% include il with name='Language:' others=languages unk='true' link='no'%}
+{% include il with name='Subtitle:' others=subtitles unk='false' link='no'%}
 {% include il with name='Famine:' others=famines unk='true' link='no'%}
-{% include il with name='Location:' others=locations unk='false' link='loc'%}
 {% include il with name='Setting:' others=settings unk='true' link='loc'%}
 
 {% include i with name='Created:' info=instance.date_created%}
 {% include i with name='Released:' info=instance.date_released%}
 {% include i with name='Keywords:' info=instance.keyword_names%}
 {% include i with name='Collection:' info=instance.collection%}
-{% include 'utilities/show_info_links.html' %}
+
 
 {% endwith %}
 {% endwith %}
+
+{% include 'utilities/show_info_links.html' %}
+
 		</div>
+
 
 		<div class="grid-item description">
 			{% if instance.description %}
@@ -63,8 +78,6 @@
 			<span class = "info-header center">Description:</span>
 			<br>
 				{{instance.description }}
-			<br><br>
-			</div>
 			{% endif %}
 		</div>
 	</div>
@@ -72,27 +85,4 @@
 
 {% include 'utilities/detail_style.html' %}
 
-<style>
-.grid-container {
-	display:grid;
-	grid-template-columns: 12fr;
-	padding: 1px;
-	grid-gap: 3px;
-	justify-items: left;
-	align-items: start;
-}
-
-.sml-img {
-	height:200px;
-}
-
-img {
-	border-radius:3px;
-	height:500px;
-	object-fit:cover;
-	max-width:100%;
-	max-height:100%;
-}
-
-</style>
 {% endblock %}
