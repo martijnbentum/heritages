@@ -167,7 +167,7 @@ def make_models_image_file_dict(only_image_fields=False):
 			d[app_name, model_name] = file_field_names
 	return d
 
-def get_all_instances(model_names = '',flag_filter_person = True):
+def get_all_models(model_names=''):
 	n = 'Image,PictureStory,Infographic,Film,Music,Text,Videogame'
 	n += ',Recordedspeech,Memorialsite,Artefact,Person'
 	if not model_names: model_names = n.split(',')
@@ -177,9 +177,14 @@ def get_all_instances(model_names = '',flag_filter_person = True):
 	for model_name in model_names:
 		for model in all_models:
 			if model._meta.model_name == model_name: models.append(model)
+	return models
+
+def get_all_instances(model_names = '',flag_filter_person = True):
+	models = get_all_models(model_names=model_names)
 	instances = []
 	for x in models:
-		if x._meta.model_name == 'person': instances.extend(x.objects.filter(flag = True))
+		if x._meta.model_name == 'person' and flag_filter_person: 
+			instances.extend(x.objects.filter(flag = True))
 		else:instances.extend(x.objects.all())
 	return instances
 
