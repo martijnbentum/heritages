@@ -2,19 +2,17 @@
 	<div class = "one-line">
 		<span class = "info-header"> 
 		{{name}}</span>
-		<span class = "info-text">
 		{% for other in others %}
 			{% if not forloop.last %}
-				<a class="info-text"
+				<a class="link-color"
 				href = "{% url other.edit_url other.pk %}"
 				role="button">{{other}},</a>
 			{% else %}
-				<a class="info-text"
+				<a class="link-color"
 				href = "{% url other.edit_url other.pk %}"
 				role="button">{{other}}</a>
 			{% endif %}
 		{% endfor %}
-		</span>
 	</div>
 	<br>
 {%elif others and link == 'no'%}
@@ -37,11 +35,10 @@
 	<div class = "one-line">
 		<span class = "info-header"> 
 			{{name}}</span>
-		<span class = "info-text">
 		{% for other in others %}
 			{% if not forloop.last %}
 				{% if other.edit_url %}
-					<a class="info-text"
+					<a class="link-color"
 					href = "{% url other.edit_url other.pk %}"
 					role="button">{{other}},</a>
 				{% else %}
@@ -49,7 +46,7 @@
 				{% endif %}
 			{% else %}
 				{% if other.edit_url %}
-					<a class="info-text"
+					<a class="link-color"
 					href = "{% url other.edit_url other.pk %}"
 					role="button">{{other}}</a>
 				{% else %}
