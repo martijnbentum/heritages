@@ -114,7 +114,7 @@ class Source(models.Model):
 
 	@property
 	def famine_names(self):
-		famines= self.famines.all().order_by('name') 
+		famines= self.famines.all()
 		if famines: return ', '.join([f.names_str for f in famines])
 		else: return ''
 
