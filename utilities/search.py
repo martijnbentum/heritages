@@ -273,11 +273,13 @@ def link2name():
 	m += ',publishing_outlet,collection,commissioned_by,image_type,locations'
 	m += ',creators,infographic_type,languages,music_type,composers'
 	m += ',picture_story_type,authors,translators,publishers,artists'
-	m += ',institution_authors,production_studio,game_type, text_type'
+	m += ',institution_authors,production_studio,game_type,text_type'
 	m += ',recordedspeech_type,speakers,locations_recorded,setting'
 	m += ',broadcasting_station,commissioning_persons,commissioning_institutions'
 	m += ',donor_persons,donor_institutions,memorial_type,artefact_type'
-	m += ',keywords,target_audience,available,permission,rated'
+	m += ',keywords,target_audience,available,permission,rated,editors'
+	m += ',original_languages,names,causal_triggers,gender,nationality'
+	m += ',location_of_birth,location_of_death,affiliation,occupation'
 	return m.split(',')
 
 
