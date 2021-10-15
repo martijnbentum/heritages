@@ -2,6 +2,12 @@ from django.apps import apps
 from django.db.models.functions import Lower
 from django.db.models import Q
 
+class SearchAll:
+	def __init__(self,request = None, models = [], query = None, 
+		max_entries=500):
+		pass
+
+
 class Search:
 	'''search a django model on all fields or a subset with Q objects'''
 	def __init__(self,request=None, model_name='',app_name='',query=None, 
@@ -86,6 +92,7 @@ class Search:
 			if self.and_or == 'and': self.q &= qobject
 			else: self.q |= qobject
 			
+		print(self.q)
 		self.result = self.model.objects.filter(self.q)
 		self.check_completeness_approval()
 		self.set_ordering_and_direction()
@@ -115,7 +122,8 @@ class Query:
 			self.query = query
 		else:
 			self.order = Order(request,model_name)
-			self.query = self.order.query
+			if hasattr(self.order,'query'):self.query = self.order.query
+			else: self.query = ''
 		self.query_words = self.query.split(' ')
 		self.words = self.query_words
 		self.query_terms = [w for w in self.words if w and w[0] not in ['*','$']]
@@ -144,7 +152,8 @@ class Query:
 	
 			
 class Field:
-	def __init__(self,name,description):
+	def __init__(self,name,description,model):
+		self.model = model
 		self.name = name
 		self.description = description
 		self.set_field_type()
@@ -179,6 +188,8 @@ class Field:
 			if self.name in fkd.keys(): 
 				self.related_name = fkd[self.name]
 				self.full_name = self.name +'__' + self.related_name
+			elif self.name in link2name():
+				self.full_name = self.name + '__name'
 			else: 
 				print('could not find related name of relational field',
 					self.name,self.description)
@@ -233,7 +244,7 @@ def get_fields(model_name,app_name):
 	o = []
 	for f in model._meta.get_fields():
 		if hasattr(f,'description'): # skips ManyToOneRel
-			o.append(Field(f.name,f.description))
+			o.append(Field(f.name,f.description,model))
 	return o
 
 
@@ -250,11 +261,25 @@ def get_foreign_keydict():
 	m = 'film:title_english,music:title_english,image:title_english'
 	m += ',text:title_english'
 	m += ',infographic:title_english,picturestory:title_english,person:name'
-	m += ',famine:names'
+	m += ',famine:names,famines:names__name'
 	m += ',location:name,keyword:name,videogame:title_english'
 	m += ',recordedspeech:title_english'
 	m += ',memorialsite:title_english,artefact:title_english'
 	return make_dict(m)
+
+def link2name():
+	m = 'writers,directors,film_companies,locations_shot,locations_released'
+	m += ',languages_subtitle,languages_original,setting,keyword,film_type'
+	m += ',publishing_outlet,collection,commissioned_by,image_type,locations'
+	m += ',creators,infographic_type,languages,music_type,composers'
+	m += ',picture_story_type,authors,translators,publishers,artists'
+	m += ',institution_authors,production_studio,game_type, text_type'
+	m += ',recordedspeech_type,speakers,locations_recorded,setting'
+	m += ',broadcasting_station,commissioning_persons,commissioning_institutions'
+	m += ',donor_persons,donor_institutions,memorial_type,artefact_type'
+	m += ',keywords,target_audience,available,permission,rated'
+	return m.split(',')
+
 
 
 '''
