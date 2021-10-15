@@ -19,6 +19,11 @@
 
 	<style>
 		body {overflow-x:hidden;}
+		.row {
+		  transition: margin-left .5s;
+		  margin-left: 25px;
+		  margin-right: 25px;
+		}
 	</style>
 	{% block head %}
 	{% endblock %}
@@ -56,24 +61,27 @@
 
 	{% if user.username == '' %}
 	{% else %}
-		<div class="row">
-		<div class="col-1">
-			{% block left %}
+		{% block sidebar %}
+		{% endblock %}
+
+		<div class="row" id="content">
+			<div>
+				{% block left %}
 
 
-			{% endblock %}
-		</div>
+				{% endblock %}
+			</div>
 
-		<div class="col-10">
-			{% block content %}
+			<div class="col-12">
+				{% block content %}
 
-			{% endblock %}
-		</div>
+				{% endblock %}
+			</div>
 
-		<div class="col-1">
-			{% block right %}
-			{% endblock %}
-		</div>
+			<div>
+				{% block right %}
+				{% endblock %}
+			</div>
 		</div>
 
 		</body>
