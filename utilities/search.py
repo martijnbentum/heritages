@@ -4,7 +4,8 @@ from django.db.models import Q
 
 class Search:
 	'''search a django model on all fields or a subset with Q objects'''
-	def __init__(self,request=None, model_name='',app_name='',query=None, max_entries=500):
+	def __init__(self,request=None, model_name='',app_name='',query=None, 
+		max_entries=500):
 		'''search object to filter django models
 		query 				search terms provided by user
 		search_fields 		field set to restrict search (obsolete?)
@@ -24,7 +25,8 @@ class Search:
 		self.model = apps.get_model(app_name,model_name)
 		self.fields = get_fields(model_name,app_name)
 		self.select_fields()
-		self.notes = 'Search Fields: (' + ','.join([f.name for f in self.fields if f.include]) + ')'
+		self.notes = 'Search Fields: (' 
+		self.notes += ','.join([f.name for f in self.fields if f.include]) + ')'
 
 	def select_fields(self):
 		if self.query.fields:
@@ -42,7 +44,9 @@ class Search:
 		self.combine = self.query.combine if combine == None else combine
 		if self.combine:
 			self.notes += '\ncombined query term: ' + self.query.clean_query
-		else: self.notes += '\nseperate query terms: ' + ', '.join(self.query.query_terms)
+		else: 
+			self.notes += '\nseperate query terms: ' 
+			self.notes += ', '.join(self.query.query_terms)
 
 	def check_completeness_approval(self):
 		if self.query.completeness != None: 
@@ -63,7 +67,8 @@ class Search:
 		'''method to create q objects and filter instance from the database
 		option 		search term for filtering, default capital insensitive search
 		and_or 		whether q objects have an and/or relation
-		seperate 	whether the words in the query should be searched seperately or not
+		seperate 	whether the words in the query should be searched seperately
+					or not
 		'''
 		self.check_and_or(and_or)
 		self.check_combine(combine)
@@ -87,7 +92,8 @@ class Search:
 		self.nentries_found = self.result.count()
 		self.nentries = '# Entries: ' + str(self.nentries_found) 
 		if self.nentries_found > self.max_entries:
-			self.nentries += ' (truncated at ' + str(self.max_entries) + ' entries)'
+			self.nentries += ' (truncated at ' + str(self.max_entries) 
+			self.nentries += ' entries)'
 		return self.result[:self.max_entries]
 
 	@property
@@ -97,7 +103,8 @@ class Search:
 
 
 class Query:
-	'''class to parse a http request extract query and extract relevant information.'''
+	'''class to parse a http request extract query and extract relevant 
+	information.'''
 	def __init__(self,request=None, model_name='',query=''):
 		'''individual words and special terms are extracted from the query.
 		a clean version of the query (without special terms) is constructed.
@@ -124,7 +131,8 @@ class Query:
 			else: self.fields.append(term.lower())
 
 	def extract_special_terms(self):
-		self.special_terms = [w[1:].lower() for w in self.words if len(w) > 1 and w[0] == '*']
+		st = [w[1:].lower() for w in self.words if len(w) > 1 and w[0] == '*']
+		self.special_terms = st
 		if 'complete' in self.special_terms: self.completeness = True
 		elif 'incomplete' in self.special_terms: self.completeness = False
 		else: self.completeness = None
@@ -148,7 +156,8 @@ class Field:
 
 	def set_include(self, value = None):
 		self.include = True 
-		if self.name == 'id' or self.bool or self.file or self.image: self.include = False 
+		if self.name == 'id' or self.bool or self.file or self.image: 
+			self.include = False 
 		if value != None and value in [True,False]: self.include = value
 
 
@@ -160,9 +169,10 @@ class Field:
 			setattr(self,ftd[name],v)
 
 	def check_relation(self):
-		'''checks whether a field is a foreign key or m2m and creates the full name
-		variable to end up with a field to be filtered on (whether it is a relational
-		field or not.'''
+		'''checks whether a field is a foreign key or m2m and creates the full 
+		name
+		variable to end up with a field to be filtered on 
+		(whether it is a relational field or not.'''
 		self.relation = True if self.fk or self.m2m else False
 		fkd = get_foreign_keydict()
 		if self.relation:
@@ -189,7 +199,7 @@ class Order:
 		else:
 			self.request = request
 			self.model_name = model_name
-			self.set_values()
+			if request:self.set_values()
 
 	def set_values(self):
 		temp = self.request.GET.get('order_by')
@@ -197,7 +207,8 @@ class Order:
 		if temp: 
 			order_by,old_order,old_direction,tquery = temp.split(',')
 			if order_by == old_order:
-				direction = 'descending' if old_direction == 'ascending' else 'ascending'
+				if old_direction == 'ascending': direction = 'descending'
+				else: direction = 'ascending'
 			else: direction = 'ascending'
 		else: 
 			order_by = get_foreign_keydict()[self.model_name.lower()]
@@ -236,9 +247,12 @@ def get_field_typesdict():
 	
 
 def get_foreign_keydict():
-	m = 'film:title_english,music:title_english,image:title_english,text:title_english'
-	m += ',infographic:title_english,picturestory:title_english,person:name,famine:names'
-	m += ',location:name,keyword:name,videogame:title_english,recordedspeech:title_english'
+	m = 'film:title_english,music:title_english,image:title_english'
+	m += ',text:title_english'
+	m += ',infographic:title_english,picturestory:title_english,person:name'
+	m += ',famine:names'
+	m += ',location:name,keyword:name,videogame:title_english'
+	m += ',recordedspeech:title_english'
 	m += ',memorialsite:title_english,artefact:title_english'
 	return make_dict(m)
 
