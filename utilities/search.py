@@ -44,7 +44,7 @@ class Search:
 		if and_or == '': 
 			self.and_or = 'and' if 'and' in self.query.special_terms else 'or'
 		if self.and_or == 'and': self.notes += '\nall fields should match query'
-		else: self.notes += '\none ore more fields should match query'
+		else: self.notes += '\none or more fields should match query'
 
 	def check_combine(self, combine):
 		self.combine = self.query.combine if combine == None else combine
@@ -53,6 +53,16 @@ class Search:
 		else: 
 			self.notes += '\nseperate query terms: ' 
 			self.notes += ', '.join(self.query.query_terms)
+
+	def check_exact(self, exact):
+		self.exact = self.query.exact if exact == None else exact
+		if self.exact:
+			self.notes += '\nsearching for the exact query term: '
+			self.notes += self.query.clean_query
+		else:
+			self.notes += '\nsearching for fields that contain query term: '
+			self.notes += self.query.clean_query
+				
 
 	def check_completeness_approval(self):
 		if self.query.completeness != None: 
@@ -69,15 +79,17 @@ class Search:
 			self.result= self.result.reverse()
 		self.notes += '\nordered in ' + self.order.direction + ' order'
 
-	def filter(self, option = 'icontains',and_or='',combine= None):
+	def filter(self, option = 'icontains',and_or='',combine= None,exact = None):
 		'''method to create q objects and filter instance from the database
 		option 		search term for filtering, default capital insensitive search
 		and_or 		whether q objects have an and/or relation
-		seperate 	whether the words in the query should be searched seperately
+		combine 	whether the words in the query should be searched seperately
 					or not
 		'''
 		self.check_and_or(and_or)
 		self.check_combine(combine)
+		self.check_exact(exact)
+		if self.exact: option = 'iexact'
 		self.qs = []
 		for field in self.fields:
 			if field.include: 
@@ -148,6 +160,7 @@ class Query:
 		elif 'unapproved' in self.special_terms: self.approval = False
 		else: self.approval = None
 		self.combine = 'True' if 'combine' in self.special_terms else False
+		self.exact = 'True' if 'exact' in self.special_terms else False
 			
 	
 			
