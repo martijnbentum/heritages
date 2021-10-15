@@ -43,6 +43,9 @@ def _handle_fieldnames(field_names):
 		field_dict[name] = hname
 	return field_dict
 
+def sidebar(request):
+	var = {'page_name':'sidebar'}
+	return render(request,'utilities/sidebar.html',var)
 
 def tile_view(request):
 	# instances= [instance for instance in get_all_instances() if instance.thumbnail]

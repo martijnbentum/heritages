@@ -1,0 +1,114 @@
+
+<style>
+
+.sidebar {
+	height: 100%;
+	width: 0;
+	position: fixed;
+	z-index: 1;
+	top: 30;
+	left: 0;
+	background-color: lightgrey;
+	overflow-x: hidden;
+	transition: 0.5s;
+	padding-top: 10px;
+}
+
+.searchbox{
+	width: 300px;
+	height:0px;
+	position: fixed;
+	z-index: 1;
+	top: 30;
+	left: 0;
+	background-color: red;
+	overflow-x: hidden;
+	transition: 0.5s;
+}
+
+.sidebar a {
+	padding: 8px 8px 8px 32px;
+	text-decoration: none;
+	color: #818181;
+	display: block;
+	transition: 0.5s;
+}
+
+.sidebar a:hover {
+	color: black;
+}
+
+.sidebar .closebtn {
+	position: absolute;
+	top: 0;
+	right: 0px;
+	font-size: 30px;
+	margin-left: 50px;
+	padding-top:0px;
+}
+
+.openbtn {
+	font-size: 25px;
+	cursor: pointer;
+	color: grey;
+}
+
+.openbtn:focus{
+	outline:0;
+}
+
+.openbtn:hover {
+	text-decoration:none;
+	color: black;
+}
+
+.searchbar {
+	margin-left:25px;
+	transition: margin-left .5s;
+}
+
+
+</style>
+
+<div id="mySidebar" class="sidebar">
+	<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+	<a href="#">About</a>
+	<a href="javascript:void(0)" 
+		onclick="openSearchbox()">location</a>
+	<div id="searchbox" class="searchbox">
+		<a href="javascript:void(0)" class="closebtn" 
+			onclick="closeSearchbox()">x</a>
+
+	</div>
+</div>
+
+<div class = "row">
+	<a href="javascript:void(0)" class="openbtn" onclick="openNav()">&#65291;</a>
+	<p class="searchbar" id="searchbar">	search</p>
+</div>
+
+<script>
+function openNav() {
+document.getElementById("mySidebar").style.width = "320px";
+document.getElementById("content").style.marginLeft = "320px";
+document.getElementById("searchbar").style.marginLeft = "320px";
+}
+
+function openSearchbox() {
+document.getElementById("searchbox").style.height= "300px";
+}
+
+function closeNav() {
+document.getElementById("mySidebar").style.width = "";
+document.getElementById("content").style.marginLeft= "25px";
+document.getElementById("searchbar").style.marginLeft = "25px";
+}
+
+function closeSearchbox() {
+	document.getElementById("searchbox").style.height= "0px";
+}
+
+</script>
+
+
+
