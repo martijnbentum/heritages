@@ -49,6 +49,7 @@ def sidebar(request):
 
 def tile_view(request, query = ''):
 	# instances= [instance for instance in get_all_instances() if instance.thumbnail]
+	if 'tile_view' in request.META['HTTP_REFERER']: query = None
 	if not query or query == ' ': query = None
 	print('received query:',[query])
 	print('using query in search:',[query])
@@ -69,6 +70,7 @@ def tile_view(request, query = ''):
 	
 def row_view(request , query=''):
 	'''list view of a model.'''
+	if 'row_view' in request.META['HTTP_REFERER']: query = None
 	if not query or query == 'no_query': query == None
 	s = SearchAll(request, query = query)
 	instances= list(set(s.filter()))
