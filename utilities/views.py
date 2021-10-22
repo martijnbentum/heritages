@@ -12,7 +12,7 @@ from utils import view_util, help_util
 from utils.view_util import Crud, Cruds, make_tabs, FormsetFactoryManager
 from utils.model_util import copy_complete, get_all_instances
 # from .models import copy_complete
-from utilities.search import Search
+from utilities.search import Search, SearchAll
 from .models import Protocol
 from .forms import ProtocolForm
 import time
@@ -47,36 +47,49 @@ def sidebar(request):
 	var = {'page_name':'sidebar'}
 	return render(request,'utilities/sidebar.html',var)
 
-def tile_view(request):
+def tile_view(request, query = ''):
 	# instances= [instance for instance in get_all_instances() if instance.thumbnail]
-	instances = get_all_instances()
+	if not query or query == ' ': query = None
+	print('received query:',[query])
+	print('using query in search:',[query])
+	s = SearchAll(request, query = query)
+	instances= list(set(s.filter()))
+	# removing double entries from search results, necessary??
+	nentries = '# Entries: ' + str(len(instances))
 	print(len(instances),'ninstances')
-	var = {'page_name':'tile view','instances':instances}
+	query = s.query if s.query else ' '
+	print('search query:',[s.query])
+	print('pushing query:',[query])
+	var = {'page_name':'tile view',
+		'instances':instances,
+		'query':query, 'nentries':nentries
+	}
 	return render(request,'utilities/tile_view.html',var)
 		
 	
-def row_view(request ):
+def row_view(request , query=''):
 	'''list view of a model.'''
-	instances = get_all_instances()
+	if not query or query == 'no_query': query == None
+	s = SearchAll(request, query = query)
+	instances= list(set(s.filter()))
+	# removing double entries from search results, necessary??
+	nentries = '# Entries: ' + str(len(instances))
 	html_name = 'utilities/row_view.html'
 	name = 'row view'
+	query = s.query if s.query else ' '
 	var = {'page_name':'row view',
-		'name':name,'instances':instances}
+		'name':name,
+		'instances':instances,
+		'query':query, 'nentries':nentries
+	}
+	print('query:',query)
 	r =  render(request, html_name,var)
 	return r
 
-def all_list_view(request = None):
-	n = 'Image,Infographic,Film,Music,PictureStory,Text,Videogame,Recordedspeech,Memorialsite'
-	models = [apps.get_model('sources',name) for name in n.split(',')]
-	models.append(apps.get_model('persons','Person'))
-	instances = []
-	for x in models:
-		instances.extend(x.objects.all())
-	print(models)
-	return instances
 	
 
-def list_view(request, model_name, app_name,html_name='',field_names = '',max_entries=200):
+def list_view(request, model_name, app_name,html_name='',field_names = '',
+	max_entries=200):
 	'''list view of a model.'''
 	print(max_entries)
 	if field_names == '': field_names = field_names_dict[model_name.lower()]
