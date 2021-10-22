@@ -13,6 +13,7 @@ class SearchAll:
 			an, mn = instance2names(model)
 			s = Search(request,mn,an,query,max_entries,do_ordering=False)
 			self.searches.append(s)
+		self.query = self.searches[0].query.query
 
 	def filter(self):
 		if hasattr(self,'_instances'): return self._instances
