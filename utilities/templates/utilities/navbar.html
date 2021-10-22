@@ -9,8 +9,10 @@
     <ul class="navbar-nav mr-auto">
 
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          View
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" 
+			role="button" data-toggle="dropdown" aria-haspopup="true" 
+			aria-expanded="false">
+			View
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href=
@@ -26,18 +28,24 @@
           <a class="dropdown-item" href=
 			"{% url 'sources:text' %}">text</a>
           <a class="dropdown-item" href=
-			"{% url 'utilities:list_view' 'Videogame' 'sources' %}">video game</a>
+			"{% url 'utilities:list_view' 'Videogame' 'sources' %}">
+				video game</a>
           <a class="dropdown-item" href=
-			"{% url 'utilities:list_view' 'recordedspeech' 'sources' %}">recorded speech</a>
+			"{% url 'utilities:list_view' 'recordedspeech' 'sources' %}">
+				recorded speech</a>
           <a class="dropdown-item" href=
-			"{% url 'utilities:list_view' 'memorialsite' 'sources' %}">memorial site</a>
+			"{% url 'utilities:list_view' 'memorialsite' 'sources' %}">
+				memorial site</a>
           <a class="dropdown-item" href=
-			"{% url 'utilities:list_view' 'Artefact' 'sources' %}">material artefact</a>
+			"{% url 'utilities:list_view' 'Artefact' 'sources' %}">
+				material artefact</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href=
-			"{% url 'utilities:list_view' 'Famine' 'misc' %}">famine</a>
+			"{% url 'utilities:list_view' 'Famine' 'misc' %}">
+				famine</a>
           <a class="dropdown-item" href=
-			"{% url 'utilities:list_view' 'Location' 'locations' 50 %}">location</a>
+			"{% url 'utilities:list_view' 'Location' 'locations' 50 %}">
+				location</a>
           <a class="dropdown-item" href=
 			"{% url 'utilities:list_view' 'Person' 'persons' %}">person</a>
 		{% if request.user|has_group:"typemaster" %}
@@ -61,8 +69,10 @@
       </li>
 
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Add
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" 
+			role="button" data-toggle="dropdown" aria-haspopup="true" 
+			aria-expanded="false">
+          	Add
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href=
@@ -98,14 +108,20 @@
 		{% endif %}
         </div>
       </li>
-
-
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#"></a>
-      </li>
     </ul>
 
+
+	<ul class = "navbar-nav">
+	</ul>
+
 	<ul class = "navbar-nav navbar-right">
+
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'utilities:tile_view' %}">
+			<i class="fas fa-search"></i>
+		</a>
+      </li>
+
 		<li class ="nav-item">
 		  {% if user.username == '' %}
 			<a class="nav-link" href="{% url 'login' %}">
@@ -121,7 +137,9 @@
 		  {% if user.username == '' %}
 		  {% else %}
 			<a class="nav-link" href="{% url 'logout' %}">
-			<i class="fas fa-sign-out-alt"></i><span class="sr-only">(current)</span></a>
+				<i class="fas fa-sign-out-alt"></i>
+				<span class="sr-only">(current)</span>
+			</a>
 		  {% endif %}
 		</li>
 	</ul>
@@ -130,4 +148,15 @@
 
   </div>
 </nav>
+<style>
 
+i {
+	margin-left:5px;
+}
+
+a {
+	display:inline-block;
+	color:black;
+	margin-left:5px;
+}
+</style>
