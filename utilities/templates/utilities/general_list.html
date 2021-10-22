@@ -4,52 +4,50 @@
 	<title>{{page_name}}</title>
 {% endblock %}
 
-
 {% block content %}
 {% load getattribute %}
 <div class="d-flex">
-{% include 'utilities/list_search_bar.html' %} 
-{% with app_name|add:":add_"|add:name as add_instance%}
-<a class ="btn btn-link ml-auto text-dark " href="{% url add_instance  %}"
-role="button"><strong>Add {{name}}</strong></a>
-{% endwith %}
+	{% include 'utilities/list_search_bar.html' %} 
+	{% with app_name|add:":add_"|add:name as add_instance%}
+		<a class ="btn btn-link ml-auto text-dark " href="{% url add_instance  %}"
+			role="button"><strong>Add {{name}}</strong></a>
+	{% endwith %}
 </div>
 
 {% if list %}
-
-
-
 <div class="d-flex">
-<table class="table table-hover">
-	<tr>
-	{% for key, value in fields %}
-	<th><a class="text-dark" href="?order_by={{key}},{{order}},{{direction}},{{query}}"
-		style="text-decoration:none;">{{value}}</a></th>
-	{% endfor %}
-	<th></th>
-	</tr>
-	{% for item in list %}
-	<tr>
+	<table class="table table-hover">
+		<tr>
 		{% for key, value in fields %}
-			<td>{{item|getattribute:key|default_if_none:""}}</td>
+			<th><a class="text-dark" 
+				href="?order_by={{key}},{{order}},{{direction}},{{query}}"
+				style="text-decoration:none;">{{value}}</a></th>
 		{% endfor %}
-
-		<td style="white-space:nowrap;"><a class="btn btn-link btn-sm ml-auto"
-		href = "{% url delete item.pk name|title %}"
-		role="button"><i class="fa fa-trash text-secondary"></i></a></td>
-
-		<td style="white-space:nowrap;"><a class="btn btn-link btn-sm ml-auto"
-		href = "{% url edit item.pk %}"
-		role="button"><i class="far fa-edit text-secondary"></i></a></td>
-	</tr>
-	{% endfor %}
-</table>
-
-		
-
-	
+		<th></th>
+		</tr>
+		{% for item in list %}
+			<tr>
+				{% for key, value in fields %}
+					<td>{{item|getattribute:key|default_if_none:""}}</td>
+				{% endfor %}
+				<td style="white-space:nowrap;">
+					<a class="btn btn-link btn-sm ml-auto"
+						href = "{% url delete item.pk name|title %}"
+						role="button">
+							<i class="fa fa-trash text-secondary"></i>
+					</a>
+				</td>
+				<td style="white-space:nowrap;">
+					<a class="btn btn-link btn-sm ml-auto"
+						href = "{% url edit item.pk %}"
+						role="button">
+							<i class="far fa-edit text-secondary"></i>
+					</a>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
 </div>
-
 {% else %}
 	<p>no {{name}} available</p>
 {% endif %}
