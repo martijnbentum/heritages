@@ -5,7 +5,7 @@ from utils.model_util import get_all_models, instance2names
 
 class SearchAll:
 	def __init__(self,request = None, models = [], query = None, 
-		max_entries=500):
+		max_entries=False):
 		if not models: models = get_all_models()
 		self.models = models
 		self.searches = []
@@ -31,6 +31,9 @@ class Search:
 		search_fields 		field set to restrict search (obsolete?)
 		model_name 			name of the django model
 		app_name 			name of the app of the model
+		max_entries 		number of entries to return
+							will not truncate entries if 0 or False
+		do_ordering 		whether to order the results
 		'''
 		if query:
 			self.query = Query(query=query)
@@ -125,10 +128,11 @@ class Search:
 		if self.do_ordering:self.set_ordering_and_direction()
 		self.nentries_found = self.result.count()
 		self.nentries = '# Entries: ' + str(self.nentries_found) 
-		if self.nentries_found > self.max_entries:
+		if self.max_entries and self.nentries_found > self.max_entries:
 			self.nentries += ' (truncated at ' + str(self.max_entries) 
 			self.nentries += ' entries)'
-		return self.result[:self.max_entries]
+			self.result[:self.max_entries]
+		return self.result
 
 	@property
 	def n(self):
