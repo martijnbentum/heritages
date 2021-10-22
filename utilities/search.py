@@ -1,17 +1,31 @@
 from django.apps import apps
 from django.db.models.functions import Lower
 from django.db.models import Q
+from utils.model_util import get_all_models, instance2names
 
 class SearchAll:
 	def __init__(self,request = None, models = [], query = None, 
 		max_entries=500):
-		pass
+		if not models: models = get_all_models()
+		self.models = models
+		self.searches = []
+		for model in self.models:
+			an, mn = instance2names(model)
+			s = Search(request,mn,an,query,max_entries,do_ordering=False)
+			self.searches.append(s)
+
+	def filter(self):
+		if hasattr(self,'_instances'): return self._instances
+		self._instances = []
+		for s in self.searches:
+			self._instances.extend(s.filter())
+		return self._instances
 
 
 class Search:
 	'''search a django model on all fields or a subset with Q objects'''
 	def __init__(self,request=None, model_name='',app_name='',query=None, 
-		max_entries=500):
+		max_entries=500, do_ordering= True):
 		'''search object to filter django models
 		query 				search terms provided by user
 		search_fields 		field set to restrict search (obsolete?)
@@ -25,6 +39,7 @@ class Search:
 			self.request = request
 			self.query = Query(request,model_name)
 			self.order = self.query.order
+		self.do_ordering = do_ordering
 		self.max_entries = max_entries
 		self.model_name = model_name
 		self.app_name = app_name
@@ -107,7 +122,7 @@ class Search:
 		print(self.q)
 		self.result = self.model.objects.filter(self.q)
 		self.check_completeness_approval()
-		self.set_ordering_and_direction()
+		if self.do_ordering:self.set_ordering_and_direction()
 		self.nentries_found = self.result.count()
 		self.nentries = '# Entries: ' + str(self.nentries_found) 
 		if self.nentries_found > self.max_entries:
