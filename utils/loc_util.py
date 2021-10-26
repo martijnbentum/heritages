@@ -1,6 +1,7 @@
 from misc.models import Language
 from django import db
-from locations.models import Location, LocationType, LocationStatus, LocationPrecision
+from locations.models import Location, LocationType, LocationStatus
+from locations.models import LocationPrecision
 from locations.models import LocationRelation 
 import pandas as pd
 from utils.model_util import info
