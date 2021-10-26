@@ -8,7 +8,8 @@ from .model_util import compare_instances, instance2names
 from partial_date.partial_date import PartialDate
 import json
 
-exclude_apps = 'admin,auth,contenttypes,django,sessions,utilities,easyaudit'.split(',')
+exclude_apps = 'admin,auth,contenttypes,django,sessions,utilities,easyaudit'
+exclude_apps = exclude_apps.split(',')
 non_primary_apps = ['locations']
 all_models = apps.get_models()
 selected_models = []
@@ -21,14 +22,19 @@ class Exports:
 	def __init__(self, model_names= []):
 		'''export all instances of all or a set of model names
 		export_all 		export all models in the selected_models 
-						this excludes models from the exclude apps and non_primary apps
-						instance from the non_primary apps are still included if they are
+						this excludes models from the exclude apps 
+						and non_primary apps
+						instance from the non_primary apps are still 
+						included if they are
 						linked to included instances
 		model_names 	export all instances from each model in model_names 
-						instances of other models linked to these are also include
+						instances of other models linked to 
+						these are also include
 		'''
 		self.export_all = True if not model_names else False
-		if model_names:models = [m for m in all_models if instance2names(m)[1] in model_names]
+		if model_names:
+			t = [m for m in all_models if instance2names(m)[1] in model_names]
+			models = t
 		else: model_names = [instance2names(m)[1] for m in selected_models]
 		self.model_names = model_names
 		self.models = selected_models if self.export_all else models
@@ -76,8 +82,10 @@ class Export:
 	def __init__(self,instances, recursive = False):
 		'''export instances to json, xml or excel
 		instances 		list or queryset with instances to be exported
-		recurive 		linked instances are automatically loaded, instance linked
-						to the linked instances are also loaded when recursive is True
+		recurive 		linked instances are automatically loaded, 
+						instance linked
+						to the linked instances are also loaded 
+						when recursive is True
 		'''
 		self.recursive = recursive
 		self.connection_set = ConnectionSet()
@@ -93,7 +101,8 @@ class Export:
 		m += '[...]'
 
 	def to_excel(self,filename='default.xlsx', save =True):
-		'''Stores the instance information in an excel workbook, each sheet contains
+		'''Stores the instance information in an excel workbook, 
+		each sheet contains
 		instances of a specific model
 		the sheet fieldtype holds all column names and field types for each model
 		'''
@@ -106,7 +115,8 @@ class Export:
 
 	@property
 	def instances(self):
-		'''returns all instances (these also include instance related to the original set'''
+		'''returns all instances (these also include instance 
+		related to the original set'''
 		return self.connection_set.instances
 
 	@property
@@ -131,7 +141,8 @@ class Export:
 	@property
 	def json_str(self):
 		''' returns a str version of the json representation of the instances'''
-		if not self.newly_added and hasattr(self,'_json_str'):return self._json_str
+		if not self.newly_added and hasattr(self,'_json_str'):
+			return self._json_str
 		self._json_str = serializers.serialize('json',self.instances)
 		return self._json_str
 
@@ -146,7 +157,8 @@ class Export:
 class Relations:
 	'''finds all models that have a relation with this models.
 	there are three types of relations:
-		-a relation model (connecting this models with another models with potential other fields
+		-a relation model (connecting this models with 
+		another models with potential other fields
 		-a foreign key, a relation to another model
 		-m2m, a relation to 1 one or more instances of another model
 	these relation type are stored seperatly
@@ -154,16 +166,20 @@ class Relations:
 	'''
 	def __init__(self,model):
 		self.app_name, self.model_name = instance2names(model)
-		#retrieve all relation model ie model:Text -> TextPublication relation etc.
-		self.relation_fields=[f for f in model._meta.get_fields() if f.one_to_many]
-		self.relation_fields_str=[f.get_accessor_name() for f in self.relation_fields]
+		#retrieve all relation model
+		temp = [f for f in model._meta.get_fields() if f.one_to_many]
+		self.relation_fields=temp
+		temp=[f.get_accessor_name() for f in self.relation_fields]
+		self.relation_fields_str=temp
 		self.relation_models = [f.related_model for f in self.relation_fields]
 		#retrieve all foreign key fields and related models
 		self.fk_fields = [f for f in model._meta.local_fields if f.is_relation]
 		self.fk_fields_str= [f.get_cache_name() for f in self.fk_fields]
 		self.fk_models = [f.related_model for f in self.fk_fields]
 		#retrieve m2m fields and models
-		self.m2m_fields = [f for f in model._meta.local_many_to_many if f.related_model != model]
+		m2m = model._meta.local_many_to_many
+		temp = [f for f in m2m if f.related_model!=model]
+		self.m2m_fields =temp 
 		self.m2m_fields_str = [f.get_attname() for f in self.m2m_fields]
 		self.m2m_models = [f.related_model for f in self.m2m_fields]
 
@@ -176,7 +192,8 @@ class Relations:
 	def __str__(self):
 		m = 'app: '+self.app_name +'\n'
 		m += 'model: '+self.model_name +'\n'
-		m += 'relation models:\n\t' + model_list2str(self.relation_models,'\n\t') + '\n\n'
+		m += 'relation models:\n\t' 
+		m += model_list2str(self.relation_models,'\n\t') + '\n\n'
 		m += 'fk models:\n\t' + model_list2str(self.fk_models,'\n\t') + '\n\n'
 		m += 'm2m models:\n\t' + model_list2str(self.m2m_models, '\n\t')+'\n\n'
 		return m
@@ -185,7 +202,8 @@ class Relations:
 class ConnectionSet:
 	'''collect all connections for one or more instances.
 	can also recursively collect all connections for one or more instances
-	i.e. find all connections for instances connected to the original set of instances
+	i.e. find all connections for instances connected to the 
+	original set of instances
 	'''
 	def __init__(self):
 		self.pk = Pk()
@@ -218,7 +236,8 @@ class ConnectionSet:
 	def _run_recursive(self):
 		self.counter += 1
 		dif = list(set(self.instances) - set(self.input_instances))
-		print('finding connections recursively, order:',self.counter,'instances:',len(dif),dif[:30])
+		print('finding connections recursively')
+		print('order:',self.counter,'instances:',len(dif),dif[:30])
 		if dif: self.add_instances(dif,True)
 		
 	@property
@@ -228,16 +247,19 @@ class ConnectionSet:
 
 
 class Connections:
-	'''find all pk, app_name and model name of all connected instances of a given instance.'''
+	'''find all pk, app_name and model name of 
+	all connected instances of a given instance.'''
 	def __init__(self,instance):
 		self.instance = instance
 		self.app_name, self.model_name = instance2names(instance)
 		self.name = self.app_name + ' ' + self.model_name
-		#retrieve all relation model ie model:Text -> TextPublication relation etc.
+		#retrieve all relation model ie model
 		self.relations = Relations(instance)
 		self.pk = Pk()
 		self.pk.add_instance(instance)
-		for f in self.relations.relation_fields_str + self.relations.m2m_fields_str:
+		relations = self.relations
+		fields = relations.relation_fields_str + relations.m2m_fields_str:
+		for f in fields:
 			rm = getattr(instance,f)
 			self.pk.add_qeuryset(rm.all())
 		for f in self.relations.fk_fields_str:
@@ -325,7 +347,8 @@ def getlongeststr(lines):
 
 def format_dict(d, extra = 3):
 	longest = getlongeststr(list(d.keys())) + extra
-	return '\n'.join([key.ljust(longest) + val.__repr__() for key,val in d.items()])
+	m = [key.ljust(longest) + val.__repr__() for key,val in d.items()]
+	return '\n'.join(m)
 
 class XmlModelObject:
 	def __init__(self,xml):
@@ -385,15 +408,18 @@ class XmlModelObject:
 	def _set_fieldtypes(self):
 		if not 'fieldtypes' in self.wb.sheetnames:
 			self.fieldtype_sheet = self.wb.create_sheet('fieldtypes')
-			for i, val in enumerate('app_name,model_name,fieldname,fieldtype,to'.split(',')):
+			values = 'app_name,model_name,fieldname,fieldtype,to'.split(',')
+			for i, val in enumerate(values):
 				self.fieldtype_sheet.cell(row=1,column=i+1,value = val)
 				column = get_column_letter(i+1)
 				self.fieldtype_sheet.column_dimensions[column].width = 22
 		else: self.fieldtype_sheet = self.wb['fieldtypes']
 		self.current_type_row = self.fieldtype_sheet.max_row +1
 		for f in self.fields:
-			for i, val in enumerate([self.app_name,self.model_name]+f.field_type_values):
-				self.fieldtype_sheet.cell(row=self.current_type_row,column=i+1,value =val)
+			values = [self.app_name,self.model_name]+f.field_type_values
+			for i, val in enumerate(values):
+				self.fieldtype_sheet.cell(row=self.current_type_row,
+					column=i+1,value =val)
 			self.current_type_row +=1
 			
 		
@@ -427,7 +453,8 @@ class XmlFieldObject:
 		self.field_type_values = [self.name,self.type,self.to]
 
 		if self.type == 'ManyToManyRel':
-			self.value = ';'.join([c.attrib['pk'] for c in self.xml.getchildren()])
+			v =';'.join([c.attrib['pk'] for c in self.xml.getchildren()])
+			self.value = value
 			self.column_value =self.value
 		else: 
 			self.value = str(xml.text) if xml.text else ''
