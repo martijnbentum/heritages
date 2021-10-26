@@ -258,7 +258,7 @@ class Connections:
 		self.pk = Pk()
 		self.pk.add_instance(instance)
 		relations = self.relations
-		fields = relations.relation_fields_str + relations.m2m_fields_str:
+		fields = relations.relation_fields_str + relations.m2m_fields_str
 		for f in fields:
 			rm = getattr(instance,f)
 			self.pk.add_qeuryset(rm.all())
@@ -454,7 +454,7 @@ class XmlFieldObject:
 
 		if self.type == 'ManyToManyRel':
 			v =';'.join([c.attrib['pk'] for c in self.xml.getchildren()])
-			self.value = value
+			self.value = v
 			self.column_value =self.value
 		else: 
 			self.value = str(xml.text) if xml.text else ''
