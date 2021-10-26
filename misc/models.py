@@ -3,7 +3,9 @@ from locations.models import Location
 from utilities.models import SimpleModel, expose_m2m
 from utils.model_util import info
 from utils.map_util import instance2related_locations, field2locations
-from utilities.models import instance2name, instance2color, instance2icon, instance2map_buttons
+from utilities.models import instance2name, instance2color 
+from utilities.models import instance2icon, instance2map_buttons
+from utils.instance2countries import instance2countries
 
 
 
@@ -79,6 +81,13 @@ class Famine(models.Model, info):
 
 	def __str__(self):
 		return self.names_str
+
+	def save(self,*args,**kwargs):
+		super(Famine,self).save(*args,**kwargs)
+		old_country_field = self.country_field
+		self.country_field = instance2countries(self)
+		if old_country_field!= self.country_field: 
+			super(Famine,self).save(*args,**kwargs)
 
 	@property
 	def names_str(self):

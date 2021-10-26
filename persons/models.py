@@ -1,6 +1,7 @@
 from django.db import models
 from utilities.models import SimpleModel
 from utils.model_util import info
+from utils.instance2countries import instance2countries
 from misc.models import Keyword, Famine
 from locations.models import Location
 from utils.map_util import instance2related_locations, field2locations
@@ -45,6 +46,13 @@ class Person(models.Model, info):
 
 	def __str__(self):
 		return self.name
+
+	def save(self,*args,**kwargs):
+		super(Person,self).save(*args,**kwargs)
+		old_country_field = self.country_field
+		self.country_field = instance2countries(self)
+		if old_country_field!= self.country_field: 
+			super(Person,self).save(*args,**kwargs)
 
 	@property
 	def icon(self):

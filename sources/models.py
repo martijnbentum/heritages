@@ -12,6 +12,7 @@ from utilities.models import instance2names
 from partial_date import PartialDateField
 from utils.link2embed_source import link2embed_source
 from utils.handle_file import handle_file
+from utils.instance2countries import instance2countries
 
 
 def make_simple_model(name):
@@ -59,6 +60,7 @@ class Source(models.Model):
 	def save(self,*args,**kwargs):
 		super(Source,self).save(*args,**kwargs)
 		old_country_field = self.country_field
+		self.country_field = instance2countries(self)
 		if old_country_field!= self.country_field: 
 			super(Source,self).save(*args,**kwargs)
 
