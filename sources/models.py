@@ -56,6 +56,12 @@ class Source(models.Model):
 	class Meta:
 		abstract = True
 
+	def save(self,*args,**kwargs):
+		super(Source,self).save(*args,**kwargs)
+		old_country_field = self.country_field
+		if old_country_field!= self.country_field: 
+			super(Source,self).save(*args,**kwargs)
+
 	def __str__(self):
 		if self.title_original:
 			return self.title_original
