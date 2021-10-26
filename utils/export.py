@@ -11,12 +11,18 @@ import json
 exclude_apps = 'admin,auth,contenttypes,django,sessions,utilities,easyaudit'
 exclude_apps = exclude_apps.split(',')
 non_primary_apps = ['locations']
-all_models = apps.get_models()
-selected_models = []
-for m in all_models:
-	app_name, model_name = instance2names(m)
-	if app_name in exclude_apps or app_name in non_primary_apps: continue
-	selected_models.append(m)
+
+def get_all_models():
+	return apps.get_models()
+
+def get_selected_models():
+	all_models = apps.get_models()
+	selected_models = []
+	for m in all_models:
+		app_name, model_name = instance2names(m)
+		if app_name in exclude_apps or app_name in non_primary_apps: continue
+		selected_models.append(m)
+	return selected_models
 		
 class Exports:
 	def __init__(self, model_names= []):
@@ -33,9 +39,12 @@ class Exports:
 		'''
 		self.export_all = True if not model_names else False
 		if model_names:
+			all_models = get_all_models()
 			t = [m for m in all_models if instance2names(m)[1] in model_names]
 			models = t
-		else: model_names = [instance2names(m)[1] for m in selected_models]
+		else: 
+			selected_models = get_selected_models()
+			model_names = [instance2names(m)[1] for m in selected_models]
 		self.model_names = model_names
 		self.models = selected_models if self.export_all else models
 		self.exports = []
