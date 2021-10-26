@@ -51,6 +51,7 @@ class Source(models.Model):
 	setting = models.ManyToManyField(Location,blank=True)
 	release_date_precedent = models.BooleanField(default=False)
 	location_field = 'setting'
+	country_field = models.CharField(max_length=1000,default='')
 
 	class Meta:
 		abstract = True

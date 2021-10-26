@@ -74,6 +74,7 @@ class Famine(models.Model, info):
 	keywords= models.ManyToManyField(Keyword,blank=True)
 	location_field = 'locations'
 	thumbnail = models.ImageField(upload_to='media/',blank=True,null=True)
+	country_field = models.CharField(max_length=1000,default='')
 
 	def __str__(self):
 		return self.names_str

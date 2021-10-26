@@ -41,6 +41,7 @@ class Person(models.Model, info):
 	thumbnail = models.ImageField(upload_to='thumbnail/',blank=True,null=True)
 	viaf = models.CharField(max_length=1000,default='')
 	famines = models.ManyToManyField(Famine, blank=True)
+	country_field = models.CharField(max_length=1000,default='')
 
 	def __str__(self):
 		return self.name
