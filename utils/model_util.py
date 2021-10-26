@@ -151,8 +151,9 @@ def make_models_image_file_dict(only_image_fields=False):
 	key 		app_name, model name (tuple)
 	value 		list of field_names (can either be image or file field
 	'''
-	from .export import all_models, selected_models
-	
+	from .export import get_all_models, get_selected_models
+	all_models = get_all_models()
+	selected_models = get_selected_models()
 	d = {}
 	for model in selected_models:
 		fields = model._meta.get_fields()
@@ -199,10 +200,5 @@ def instance2image_urls(instance):
 				o.append(x.url)
 	return ','.join(o)
 
-def instance2countries(instance, all_location_fields = False):
-	'''returns a comma seperated string of countries.'''
-	fields = []
-	if hasattr(instance,'location_field'):
-		fields.append(getattr(instance,'location_field'))
 	
 
