@@ -402,6 +402,142 @@ def check_region_present(filename = 'data/region_names.xlsx', cities = None):
 	return missing_countries,country2missing_region,country2present_region
 		
 		
+# add missing region locations (only mentioned in geoinformation) to db
+def find_locations_region_not_in_db():
+	l = Location.objects.all()
+	linked_to_region = [x for x in l if x.region and not x.contained_by_region]
+	return linked_to_region
+
+def find_locations_country_not_in_db():
+	l = Location.objects.all()
+	linked_to_country=[x for x in l if x.country and not x.contained_by_country]
+	return linked_to_country
+
+def add_country_and_link(country_name,location, verbose = True):
+	country = Location.objects.filter(name=country_name,
+		location_type__name = 'country')
+	location_type = LocationType.objects.get(name = 'country')
+	if len(country) < 1:
+		if verbose:print('adding',country_name,'to db')
+		country = Location(name= country_name, location_type=location_type)
+		country.save()
+	elif len(country) > 1:
+		raise ValueError('found multiple entries in db',country)
+	else: country = country[0]
+	add_relation(container=country, contained = location, 
+		container_type = 'country')
+	
+	
+
+def add_region_and_link(region_name,location, verbose = True):
+	'''adding a region location to database'''
+	region = Location.objects.filter(name=region_name, 
+		location_type__name='region')
+	location_type = LocationType.objects.get(name='region')
+	if len(region) < 1:
+		# if the region is not in the database add it
+		if verbose:print('adding',region_name,'to db')
+		region= Location(name = region_name,location_type = location_type)
+		region.save()
+		if location.country:
+			# if the location has country information add it to the region
+			country = Location.objects.get(name = location.country,
+				location_type__name='country')
+			lr = LocationRelation(container=country, contained=region)
+			lr.save()
+		print('adding region country relation to db:',lr)
+	elif len(region) > 1: 
+		# if there are multiple regions with the same name, select one with same 
+		# country
+		print('found multiple regions:',region)
+		r = False
+		if location.country:
+			for reg in region:
+				if reg.country == location.country: r = reg
+		else:  
+			for reg in region:
+				if reg.country == '': r = reg
+		if not r: raise ValueError('could not match region',region)
+		else: 
+			print('selected region linked to country:',region.country)
+			print('identical to location country:',location.country)
+			region = r
+	else:
+		region = region[0]
+		add_relation(container = region, contained = location, 
+			container_type = 'region')
+
+def add_relation(container,contained,container_type,verbose=True):
+	lr_check = LocationRelation.objects.filter(container=container,
+		contained=contained)
+	if lr_check:
+		print(container_type,'location relation already exists in db:',lr_check)
+		return
+	lr = LocationRelation(container=container, contained=contained)
+	lr.save()
+	if verbose:
+		print('adding',container_type,'location relation to db:')
+		print(lr)
+	
+def add_location_region_to_db(location,verbose = True):
+	''' add region relation to this location if it is not present in the 
+	database and if there is region information on this location.'''
+	if location.contained_by_region: # this check database region relation
+		if verbose:
+			print(location,'region relation:',location.region, 'already in db')
+		return
+	if not location.region: 
+		# this falls back to geo information and uses region info
+		# potentially not in the database
+		if verbose:print('no region associated with location:',location)
+		return
+	# there is region information not in database, adding this to database
+	region_name = location.region
+	add_region_and_link(region_name,location,verbose)
+
+def add_location_country_to_db(location,verbose = True):
+	if location.contained_by_country:
+		if verbose:
+			print(location,'country relation:',location.region, 'already in db')
+		return
+	if not location.region:
+		if verbose:print('no country associated with location:',location)
+		return
+	country_name = location.country
+	add_country_and_link(country_name,location,verbose)
+
+
+def add_all_location_countries_to_db(verbose = True, locations = None):
+	if not locations: locations =Location.objects.all()
+	nlocations = locations.count()
+	error = []
+	for i, location in enumerate(locations):
+		if not location.location_type:
+			error.append(location)
+			continue
+		if location.location_type.name == 'city':
+			print('handling',i,nlocations,location)
+			add_location_country_to_db(location,verbose)
+	return error
+	
+
+def add_all_location_regions_to_db(verbose = True, add_countries = False):
+	''' add all region location relation to the database. '''
+	locations =Location.objects.all()
+	region_error, country_error = [], []
+	if add_countries: 
+		country_error = add_all_location_countries_to_db(verbose,locations)
+	nlocations = locations.count()
+	for i,location in enumerate(locations):
+		if not location.location_type:
+			region_error.append(location)
+			continue
+		if location.location_type.name == 'city':
+			print('handling',location,i,nlocations)
+			add_location_region_to_db(location)
+		else:print('skipping',location,location)
+	if add_countries: return region_error, country_error
+	return region_error
 
 '''
 city_info attribute name legend
