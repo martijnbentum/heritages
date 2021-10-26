@@ -199,3 +199,10 @@ def instance2image_urls(instance):
 				o.append(x.url)
 	return ','.join(o)
 
+def instance2countries(instance, all_location_fields = False):
+	'''returns a comma seperated string of countries.'''
+	fields = []
+	if hasattr(instance,'location_field'):
+		fields.append(getattr(instance,'location_field'))
+	
+
