@@ -64,7 +64,8 @@ class Famine(models.Model, info):
 	names = models.ManyToManyField(FamineName, blank=True)
 	start_year= 1
 	end_year= 1
-	locations= models.ManyToManyField(Location,blank=True,related_name='famine_locations')
+	locations= models.ManyToManyField(Location,blank=True,
+		related_name='famine_locations')
 	estimated_excess_mortality = models.IntegerField(blank=True,null=True)
 	excess_mortality_description = models.TextField(default='')
 	causal_triggers = models.ManyToManyField(CausalTrigger, blank=True,
@@ -102,11 +103,13 @@ class Famine(models.Model, info):
 	def pop_up(self):
 		m = ''
 		if self.thumbnail.name:
-			m += '<img src="'+self.thumbnail.url+'" width="200" style="border-radius:3%">'
+			m += '<img src="'+self.thumbnail.url
+			m +='" width="200" style="border-radius:3%">'
 		m += instance2icon(self)
 		m += '<p class="h6 mb-0 mt-1" style="color:'+instance2color(self)+';">'
 		m += self.names_str+'</p>'
-		m += '<hr class="mt-1 mb-0" style="border:1px solid '+instance2color(self)+';">'
+		m += '<hr class="mt-1 mb-0" style="border:1px solid '
+		m +=instance2color(self)+';">'
 		m += '<p class="mt-2 mb-0">'+self.description+'</p>'
 
 		m += instance2map_buttons(self)
@@ -131,9 +134,12 @@ class KeywordRelation(models.Model, info):
 
 	def __str__(self):
 		'''deleting a Location can resultin an error due to the easy audit app.
-		it needed the string representation of this model, while the Location instance
+		it needed the string representation of this model, 
+		while the Location instance
 		did not exist anymore '''
-		try:return self.contained.name + ' is a member of: ' + self.container.name
+		try:
+			m = self.contained.name + ' is a member of: ' + self.container.name
+			return m
 		except:return ''
 
 	class Meta:
