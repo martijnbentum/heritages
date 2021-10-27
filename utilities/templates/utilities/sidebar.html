@@ -3,28 +3,17 @@
 
 .sidebar {
 	height: 100%;
-	width: 0;
+	width: 400px;
 	position: fixed;
 	z-index: 1;
 	top: 30;
 	left: 0;
-	background-color: lightgrey;
+	background-color: #e4e6eb;
 	overflow-x: hidden;
 	transition: 0.5s;
 	padding-top: 10px;
 }
 
-.searchbox{
-	width: 300px;
-	height:0px;
-	position: fixed;
-	z-index: 1;
-	top: 30;
-	left: 0;
-	background-color: red;
-	overflow-x: hidden;
-	transition: 0.5s;
-}
 
 .sidebar a {
 	padding: 8px 8px 8px 32px;
@@ -38,26 +27,18 @@
 	color: black;
 }
 
-.sidebar .closebtn {
-	position: absolute;
-	top: 0;
-	right: 0px;
+.togglebtn {
 	font-size: 30px;
-	margin-left: 50px;
-	padding-top:0px;
-}
-
-.openbtn {
-	font-size: 25px;
 	cursor: pointer;
 	color: grey;
+	margin-left: 0px;
 }
 
-.openbtn:focus{
+.togglebtn:focus{
 	outline:0;
 }
 
-.openbtn:hover {
+.togglebtn:hover {
 	text-decoration:none;
 	color: black;
 }
@@ -71,42 +52,46 @@
 </style>
 
 <div id="mySidebar" class="sidebar">
-	<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
 	<a href="#">About</a>
-	<a href="javascript:void(0)" 
-		onclick="openSearchbox()">location</a>
-	<div id="searchbox" class="searchbox">
-		<a href="javascript:void(0)" class="closebtn" 
-			onclick="closeSearchbox()">x</a>
-
-	</div>
 </div>
 
 <div class = "row">
-	<a href="javascript:void(0)" class="openbtn" onclick="openNav()">&#65291;</a>
-	<p class="searchbar" id="searchbar">	search</p>
+	<a href="javascript:void(0)" 
+		id="togglebtn" 
+		class="togglebtn" onclick="toggle_sidebar()">
+			<span>&#43;</span>
+	</a>
 </div>
 
 <script>
-function openNav() {
-document.getElementById("mySidebar").style.width = "320px";
-document.getElementById("content").style.marginLeft = "320px";
-document.getElementById("searchbar").style.marginLeft = "320px";
+var sidebar_state = 'closed';
+var btn = document.getElementById("togglebtn")
+document.getElementById("content").style.marginLeft = "390px";
+
+function toggle_sidebar() {
+	if (sidebar_state == 'closed') {
+		open_sidebar()
+		sidebar_state = 'open';
+		btn.innerHTML = '<span>&#215;</span>'
+	} else {
+		close_sidebar()
+		sidebar_state = 'closed';
+		btn.innerHTML = '<span>&#43;</span>'
+			
+	}
 }
 
-function openSearchbox() {
-document.getElementById("searchbox").style.height= "300px";
+function open_sidebar() {
+document.getElementById("mySidebar").style.width = "400px";
+document.getElementById("content").style.marginLeft = "390px";
 }
 
-function closeNav() {
-document.getElementById("mySidebar").style.width = "";
+
+function close_sidebar() {
+document.getElementById("mySidebar").style.width = "0px";
 document.getElementById("content").style.marginLeft= "25px";
-document.getElementById("searchbar").style.marginLeft = "25px";
 }
 
-function closeSearchbox() {
-	document.getElementById("searchbox").style.height= "0px";
-}
 
 </script>
 
