@@ -4,7 +4,7 @@
 <div class="d-flex">
 	{% include 'utilities/list_search_bar.html' %} 
 	<a class ="btn btn-link ml-auto text-dark " 
-		href="{% url 'utilities:tile_view' query %}"
+		href="{% url 'utilities:search_view' 'tile_view' query %}"
 		role="button">
 			<i class="fas fa-th fa-lg" aria-hidden="true"></i>
 	</a>

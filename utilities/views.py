@@ -47,6 +47,30 @@ def sidebar(request):
 	var = {'page_name':'sidebar'}
 	return render(request,'utilities/sidebar.html',var)
 
+def search_view(request, view_type = 'tile_view', query = ' '):
+	'''
+		view_type 		whether the results are shown in tile or row format
+		query 			passing a query between view types, overwrites the
+						query in the request
+	'''
+	if view_type in request.META['HTTP_REFERER']: query = None
+	if query == ' ': query = None
+	s = SearchAll(request, query = query)
+	instances= list(set(s.filter()))
+	nentries = '# Entries: ' + str(len(instances))
+	print(len(instances),'ninstances')
+	query = s.query if s.query else ' '
+	print('search query:',[s.query])
+	print('pushing query:',[query])
+	var = {'page_name':'tile view',
+		'instances':instances,
+		'query':query, 'nentries':nentries
+	}
+	if view_type == 'tile_view':
+		return render(request,'utilities/tile_view.html',var)
+	else:
+		return render(request,'utilities/row_view.html',var)
+
 def tile_view(request, query = ''):
 	# instances= [instance for instance in get_all_instances() if instance.thumbnail]
 	if 'tile_view' in request.META['HTTP_REFERER']: query = None
