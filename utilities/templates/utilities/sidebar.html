@@ -3,7 +3,7 @@
 
 .sidebar {
 	height: 100%;
-	width: 400px;
+	width: 0px;
 	position: fixed;
 	z-index: 1;
 	top: 30;
@@ -66,7 +66,6 @@
 <script>
 var sidebar_state = 'closed';
 var btn = document.getElementById("togglebtn")
-document.getElementById("content").style.marginLeft = "390px";
 
 function toggle_sidebar() {
 	if (sidebar_state == 'closed') {
