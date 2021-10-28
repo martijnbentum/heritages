@@ -5,13 +5,14 @@ from utils.model_util import get_all_models, instance2names
 
 class SearchAll:
 	def __init__(self,request = None, models = [], query = None, 
-		max_entries=False):
+		max_entries=False, special_terms = None):
 		if not models: models = get_all_models()
 		self.models = models
 		self.searches = []
 		for model in self.models:
 			an, mn = instance2names(model)
-			s = Search(request,mn,an,query,max_entries,do_ordering=False)
+			s = Search(request,mn,an,query,max_entries,do_ordering=True,
+				special_terms = special_terms)
 			self.searches.append(s)
 		self.query = self.searches[0].query.query
 
@@ -19,14 +20,16 @@ class SearchAll:
 		if hasattr(self,'_instances'): return self._instances
 		self._instances = []
 		for s in self.searches:
+			s.n
 			self._instances.extend(s.filter())
+			s.n
 		return self._instances
 
 
 class Search:
 	'''search a django model on all fields or a subset with Q objects'''
 	def __init__(self,request=None, model_name='',app_name='',query=None, 
-		max_entries=500, do_ordering= True):
+		max_entries=500, do_ordering= True, special_terms =None):
 		'''search object to filter django models
 		query 				search terms provided by user
 		search_fields 		field set to restrict search (obsolete?)
@@ -37,11 +40,11 @@ class Search:
 		do_ordering 		whether to order the results
 		'''
 		if query:
-			self.query = Query(query=query)
+			self.query = Query(query=query, special_terms=special_terms)
 			self.order = Order(order=get_foreign_keydict()[model_name.lower()])
 		else:
 			self.request = request
-			self.query = Query(request,model_name)
+			self.query = Query(request,model_name,special_terms=special_terms)
 			self.order = self.query.order
 		self.do_ordering = do_ordering
 		self.max_entries = max_entries
@@ -123,7 +126,6 @@ class Search:
 			if self.and_or == 'and': self.q &= qobject
 			else: self.q |= qobject
 			
-		print(self.q)
 		self.result = self.model.objects.filter(self.q)
 		self.check_completeness_approval()
 		if self.do_ordering:self.set_ordering_and_direction()
@@ -144,24 +146,25 @@ class Search:
 class Query:
 	'''class to parse a http request extract query and extract relevant 
 	information.'''
-	def __init__(self,request=None, model_name='',query=''):
+	def __init__(self,request=None, model_name='',query='', special_terms = None):
 		'''individual words and special terms are extracted from the query.
 		a clean version of the query (without special terms) is constructed.
 		$ 	symbol prepended to field names
 		* 	symbol prepended to special terms such as and/or
 		'''
-		if query:
-			self.query = query
-		else:
-			self.order = Order(request,model_name)
-			if hasattr(self.order,'query'):self.query = self.order.query
-			else: self.query = ''
+		self.request = request
+		if 'query' in self.request.GET.keys():
+			tquery = self.request.GET['query']
+		else: tquery = ''
+		if query: self.query = query
+		else: self.query = tquery
+		self.order = Order(request,model_name)
 		self.query_words = self.query.split(' ')
 		self.words = self.query_words
 		self.query_terms = [w for w in self.words if w and w[0] not in ['*','$']]
 		self.clean_query = ' '.join(self.query_terms)
 		self.extract_field_names()
-		self.extract_special_terms()
+		self.extract_special_terms(special_terms)
 
 	def extract_field_names(self):
 		temp= [w[1:] for w in self.words if len(w) > 1 and w[0] == '$']
@@ -170,9 +173,18 @@ class Query:
 			if ':' in term:self.field_term.append(term.split(':'))
 			else: self.fields.append(term.lower())
 
-	def extract_special_terms(self):
+	def extract_special_terms(self, special_terms):
+		if 'combine' in self.request.GET.keys():
+			combine = self.request.GET['combine']
+		else: combine = ''
+		if 'exact' in self.request.GET.keys():
+			exact= self.request.GET['exact']
+		else: exact= ''
 		st = [w[1:].lower() for w in self.words if len(w) > 1 and w[0] == '*']
 		self.special_terms = st
+		if combine: self.special_terms.append(combine)
+		if exact: self.special_terms.append(exact)
+		if special_terms: self.special_terms.extend(special_terms)
 		if 'complete' in self.special_terms: self.completeness = True
 		elif 'incomplete' in self.special_terms: self.completeness = False
 		else: self.completeness = None
@@ -181,6 +193,28 @@ class Query:
 		else: self.approval = None
 		self.combine = 'True' if 'combine' in self.special_terms else False
 		self.exact = 'True' if 'exact' in self.special_terms else False
+		print(self.special_terms,'<9--------')
+
+
+
+class Order:
+	def __init__(self,request=None, model_name=None,order=''):
+		self.request = request
+		self.model_name = model_name
+		if order: self.order_by = order
+		else:self.order_by = get_foreign_keydict()[self.model_name.lower()]
+		self.direction = 'ascending'
+		self.set_values()
+
+
+	def set_values(self):
+		if self.request:
+			if 'direction' in self.request.GET.keys():
+				temp = self.request.GET['direction']
+				if temp in ['descending','ascending']: self.direction = temp
+
+	def __repr__(self):
+		return self.order_by + ', ' + self.direction
 			
 	
 			
@@ -235,38 +269,6 @@ class Field:
 		return self.q
 		
 
-class Order:
-	def __init__(self,request=None, model_name=None,order=''):
-		if order:
-			self.order_by = order
-			self.direction = 'ascending'
-		else:
-			self.request = request
-			self.model_name = model_name
-			if request:self.set_values()
-
-	def set_values(self):
-		temp = self.request.GET.get('order_by')
-		tquery = self.request.GET.get('query')
-		if temp: 
-			order_by,old_order,old_direction,tquery = temp.split(',')
-			if order_by == old_order:
-				if old_direction == 'ascending': direction = 'descending'
-				else: direction = 'ascending'
-			else: direction = 'ascending'
-		else: 
-			order_by = get_foreign_keydict()[self.model_name.lower()]
-			direction = 'ascending'
-			
-		if tquery == None: query = ''
-		else: query =tquery
-
-		self.order_by = order_by
-		self.query = query
-		self.direction = direction
-
-	def __repr__(self):
-		return self.order_by + ', ' + self.direction
 
 
 def get_fields(model_name,app_name):
