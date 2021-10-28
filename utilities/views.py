@@ -55,6 +55,17 @@ def search_view(request, view_type = 'tile_view', query = ' '):
 	'''
 	if view_type in request.META['HTTP_REFERER']: query = None
 	if query == ' ': query = None
+	print(request.GET.keys(),'<-------')
+	if 'combine' in request.GET.keys():
+		combine = request.GET['combine']
+	else: combine = ''
+	# main_search_options = request.GET['main_search_options']
+	if 'direction' in request.GET.keys():
+		direction = request.GET['direction']
+	else: direction= 'ascending'
+	if 'exact' in request.GET.keys():
+		exact= request.GET['exact']
+	else: exact = ''
 	s = SearchAll(request, query = query)
 	instances= list(set(s.filter()))
 	nentries = '# Entries: ' + str(len(instances))
@@ -62,9 +73,26 @@ def search_view(request, view_type = 'tile_view', query = ' '):
 	query = s.query if s.query else ' '
 	print('search query:',[s.query])
 	print('pushing query:',[query])
+	if direction == 'ascending':sorting_icon = 'fas fa-sort-alpha-down'
+	else:sorting_icon = 'fas fa-sort-alpha-up'
+	
+	if view_type == 'tile_view':
+		view_type_link = 'row_view'
+		view_type_icon=  'fas fa-align-justify fa-lg'
+	else:
+		view_type_link = 'tile_view'
+		view_type_icon=  'fas fa-th fa-lg'
 	var = {'page_name':'tile view',
 		'instances':instances,
-		'query':query, 'nentries':nentries
+		'query':query, 
+		'nentries':nentries,
+		'view_type_icon':view_type_icon,
+		'view_type_link':view_type_link,
+		'combine':combine,
+		'direction':direction,
+		'sorting_icon':sorting_icon,
+		'exact':exact,
+		# 'main_search_options':main_search_options,
 	}
 	if view_type == 'tile_view':
 		return render(request,'utilities/tile_view.html',var)
