@@ -1,9 +1,39 @@
 
 <style>
+.search_button {
+	border: none;
+	color: black;
+	background-color:white;
+	padding: 2px 4px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 10px;
+	margin-left:15px;
+	transition-duration: 0.4s;
+	cursor: pointer;
+	border-radius: 3px;
+	border: 1px solid black;
+} 
+
+.extra_search_options {
+	margin-left:5px;
+	margin-top:5px;
+	padding:0px;
+	height:20px;
+}
+
+.select_label {
+	margin-left:20px;
+}
+
+.search_button:focus {
+	outline:0;
+}
 
 .sidebar {
 	height: 100%;
-	width: 0px;
+	width: 400px;
 	position: fixed;
 	z-index: 1;
 	top: 30;
@@ -16,7 +46,6 @@
 
 
 .sidebar a {
-	padding: 8px 8px 8px 32px;
 	text-decoration: none;
 	color: #818181;
 	display: block;
@@ -27,11 +56,23 @@
 	color: black;
 }
 
+.sorting {
+	font-size:20px;
+	color:black;
+	margin-left:15px;
+}
+.sorting:hover {
+	text-decoration:none;
+	color: black;
+}
+	
+
 .togglebtn {
 	font-size: 30px;
 	cursor: pointer;
-	color: grey;
-	margin-left: 0px;
+	color: black;
+	margin-top: 0px;
+	padding-top:0px;
 }
 
 .togglebtn:focus{
@@ -43,29 +84,93 @@
 	color: black;
 }
 
-.searchbar {
-	margin-left:25px;
-	transition: margin-left .5s;
-}
 
 
 </style>
 
-<div id="mySidebar" class="sidebar">
-	<a href="#">About</a>
-</div>
+<form>
+<div class="d-flex">
+	<div id="mySidebar" class="sidebar">
+		<a href="#">About</a>
+	</div>
 
-<div class = "row">
 	<a href="javascript:void(0)" 
 		id="togglebtn" 
 		class="togglebtn" onclick="toggle_sidebar()">
-			<span>&#43;</span>
+			<span class="toggle">&#43;</span>
 	</a>
+
+	<a class ="btn btn-link ml-auto mt-2 text-dark " 
+		href="{% url 'utilities:search_view' view_type_link query %}"
+		role="button">
+			<i class="{{view_type_icon}}" aria-hidden="true"></i>
+	</a>
+ 
+
+	<div class="col-11">
+		<div class="d-flex">
+			<input id="exampleFormControlInput1" type="text" 
+				name="query" placeholder=Search
+				class="col-9 mb-1" 
+				style="border-width:0;border-bottom-width:1px;" 
+				value="{{query}}">
+			<button class="text-dark btn btn-link" type="submit">
+				<i class="fas fa-search"></i>
+			</button>
+			<input type="hidden" name="order" id="order" value="{{order}}" />
+			<input type="hidden" name="direction" 
+				id="direction" value="{{direction}}" />
+			<input type="hidden" name="combine" id="combine" 
+				value="{{combine}}" />
+			<input type="hidden" name="exact" id="exact" 
+				value="{{exact}}" />
+		</div>
+			<div class="d-flex">
+				<p class="text-secondary small ml-3 mt-1 mb-3" >{{nentries}}<p>
+				<div id="extended_search_list"></div>
+				<a href="javascript:void(0)" 
+					id="sorting" 
+					class="sorting" onclick="toggle_sorting()">
+					<i class="{{sorting_icon}}"></i>
+				</a>
+			<!--
+				<label class=" select_label extra_search_options small" 
+					for="main_search_options">
+					search:
+				</label>
+				<select class="small extra_search_options" 
+					id="main_search_options" 
+					name="main_search_options">
+					<option value="all">all</option>
+					<option value="all">title/name</option>
+					<option value="all">description</option>
+				</select>
+			-->
+			</div>	
+	</div>
 </div>
+</form>
+
+
+
 
 <script>
 var sidebar_state = 'closed';
 var btn = document.getElementById("togglebtn")
+document.getElementById("content").style.marginLeft = "390px";
+var combine = document.getElementById('combine')
+var exact = document.getElementById('exact')
+if (combine.value == '') {
+	make_button('OR','special_term');
+} else {
+	make_button('AND','special_term');
+}
+if (exact.value == 'contains') {
+	make_button('CONTAINS','special_term');
+} else {
+	make_button('EXACT','special_term');
+}
+	
 
 function toggle_sidebar() {
 	if (sidebar_state == 'closed') {
@@ -76,7 +181,6 @@ function toggle_sidebar() {
 		close_sidebar()
 		sidebar_state = 'closed';
 		btn.innerHTML = '<span>&#43;</span>'
-			
 	}
 }
 
@@ -90,6 +194,58 @@ function close_sidebar() {
 document.getElementById("mySidebar").style.width = "0px";
 document.getElementById("content").style.marginLeft= "25px";
 }
+
+function make_button(name, button_type) {
+	//creates a button to indicate search field or special term
+	var button = document.createElement('button'); 
+	button.innerHTML = name;
+	button.name = name;
+	button.id = name + '_button';
+	button.type = 'button';
+	button.classList.add('search_button')
+	button.classList.add(button_type)
+	button.addEventListener('click',toggle_button);
+	var button_location = document.getElementById('extended_search_list')
+	button_location.append(button)
+}
+
+function toggle_button(event) {
+	button = event.target;
+	console.log(button.innerHTML);
+
+	if (button.innerHTML == 'AND') {
+		button.innerHTML = 'OR'
+		combine.value = ''
+	} else if (button.innerHTML == 'OR') {
+		button.innerHTML = 'AND'
+		combine.value = 'combine'
+	}
+	if (button.innerHTML == 'EXACT') {
+		button.innerHTML = 'CONTAINS'
+		exact.value = 'contains'
+	} else if (button.innerHTML == 'CONTAINS') {
+		button.innerHTML = 'EXACT'
+		exact.value = 'exact'
+	}
+}
+
+function toggle_sorting() {
+	var ascending = '<i class="fas fa-sort-alpha-down"></i>'
+	var descending= '<i class="fas fa-sort-alpha-up"></i>'
+	console.log('sorting')
+	var button = document.getElementById('sorting')
+	var direction= document.getElementById('direction')
+	console.log(button.innerHTML);
+	if (button.innerHTML.includes(ascending)) {
+		button.innerHTML = descending;
+		direction.value = 'descending'
+	} else if (button.innerHTML.includes(descending)) {
+		button.innerHTML = ascending;
+		direction.value = 'ascending'
+	}
+		
+}
+
 
 
 </script>
