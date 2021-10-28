@@ -2,16 +2,8 @@
 
 
 {% block content %}
-<div class="d-flex">
-	{% include 'utilities/sidebar.html' %}
-	{% include 'utilities/list_search_bar.html' %} 
-	<a class ="btn btn-link ml-auto text-dark " 
-		href="{% url 'utilities:search_view' 'row_view' query %}"
-		role="button">
-			<i class="fas fa-align-justify fa-lg" aria-hidden="true"></i>
-	</a>
-</div>
  
+{% include 'utilities/sidebar.html' %}
 
 {% for instance in instances %}
 	<div class="tile">
