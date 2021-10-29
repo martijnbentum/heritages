@@ -56,6 +56,7 @@ class SearchAll:
 			self._instances = []
 			for s in self.searches:
 				self._instances.extend(s.filter())
+			if self.direction == 'descending':self._instances=self._instances[::-1]
 		if verbose:self.searches[0].n
 		return self._instances
 
@@ -63,8 +64,14 @@ class SearchAll:
 		instances = []
 		for key, value in self._instances.items():
 			app_name, model_name = key
-			name = get_foreign_keydict()[model_name.lower()]
+			if self.sorting_option == 'title - name':
+				name = get_foreign_keydict()[model_name.lower()]
+			if self.sorting_option == 'location': name = 'country_field'
+			if self.sorting_option == 'chronological': name = 'date_field'
+			if self.sorting_option == 'famine': name = 'famine_names'
 			instances.extend([[i, getattr(i,name)] for i in value])
+		if self.sorting_option in ['location','chronological','famine']:
+			instances = [x for x in instances if x[1]]
 		reverse = True if self.direction == 'descending' else False
 		t = sorted(instances,key=lambda x:x[1],reverse=reverse)
 		self._instances = [x[0] for x in t]
@@ -370,6 +377,7 @@ def link2name():
 	m += ',location_of_birth,location_of_death,affiliation,occupation'
 	return m.split(',')
 
+	
 
 
 '''
