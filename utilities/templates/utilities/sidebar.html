@@ -101,8 +101,8 @@
 	</a>
 
 	<a class ="btn btn-link ml-auto mt-2 text-dark " 
-		href="{% url 'utilities:search_view' view_type_link query %}"
-		role="button">
+	href="{% url 'utilities:search_view' vtl query combine exact direction%}"
+	role="button">
 			<i class="{{view_type_icon}}" aria-hidden="true"></i>
 	</a>
  
@@ -160,15 +160,15 @@ var btn = document.getElementById("togglebtn")
 document.getElementById("content").style.marginLeft = "25px";
 var combine = document.getElementById('combine')
 var exact = document.getElementById('exact')
-if (combine.value == '') {
-	make_button('OR','special_term');
-} else {
+if (combine.value == 'combine') {
 	make_button('AND','special_term');
-}
-if (exact.value == 'contains') {
-	make_button('CONTAINS','special_term');
 } else {
+	make_button('OR','special_term');
+}
+if (exact.value == 'exact') {
 	make_button('EXACT','special_term');
+} else {
+	make_button('CONTAINS','special_term');
 }
 	
 
@@ -215,7 +215,7 @@ function toggle_button(event) {
 
 	if (button.innerHTML == 'AND') {
 		button.innerHTML = 'OR'
-		combine.value = ''
+		combine.value = ' '
 	} else if (button.innerHTML == 'OR') {
 		button.innerHTML = 'AND'
 		combine.value = 'combine'

@@ -47,27 +47,29 @@ def sidebar(request):
 	var = {'page_name':'sidebar'}
 	return render(request,'utilities/sidebar.html',var)
 
-def search_view(request, view_type = 'tile_view', query = ' '):
+def search_view(request, view_type = 'tile_view', query = ' ', combine = ' ',
+	exact = 'contains', direction = 'ascending'):
 	'''
 		view_type 		whether the results are shown in tile or row format
 		query 			passing a query between view types, overwrites the
 						query in the request
 	'''
+	print('parameters:',view_type,query,combine,exact)
 	if view_type in request.META['HTTP_REFERER']: query = None
 	if query == ' ': query = None
 	print(request.GET.keys(),'<-------')
 	if 'combine' in request.GET.keys():
 		combine = request.GET['combine']
-	else: combine = ''
 	# main_search_options = request.GET['main_search_options']
 	if 'direction' in request.GET.keys():
 		direction = request.GET['direction']
-	else: direction= 'ascending'
 	if 'exact' in request.GET.keys():
 		exact= request.GET['exact']
-	else: exact = ''
-	s = SearchAll(request, query = query)
-	instances= list(set(s.filter()))
+	special_terms = [combine,exact]
+	print('query',query)
+	s = SearchAll(request, query = query,direction = direction,
+		special_terms = special_terms)
+	instances= s.filter()
 	nentries = '# Entries: ' + str(len(instances))
 	print(len(instances),'ninstances')
 	query = s.query if s.query else ' '
@@ -87,13 +89,14 @@ def search_view(request, view_type = 'tile_view', query = ' '):
 		'query':query, 
 		'nentries':nentries,
 		'view_type_icon':view_type_icon,
-		'view_type_link':view_type_link,
+		'vtl':view_type_link,
 		'combine':combine,
 		'direction':direction,
 		'sorting_icon':sorting_icon,
 		'exact':exact,
 		# 'main_search_options':main_search_options,
 	}
+	print('-->',var)
 	if view_type == 'tile_view':
 		return render(request,'utilities/tile_view.html',var)
 	else:

@@ -4,6 +4,9 @@ from . import views
 
 
 app_name = 'utilities'
+search_path_complete ='search_view/<str:view_type>/'
+search_path_complete +='<str:query>/<str:combine>/<str:exact>/<str:direction>/'
+
 urlpatterns = [
 	path('close/',views.close,name='close'),
 	path('list_view/<str:model_name>/<str:app_name>/',
@@ -23,6 +26,7 @@ urlpatterns = [
 		views.search_view,name='search_view'),
 	path('search_view/<str:view_type>/<str:query>/',
 		views.search_view,name='search_view'),
+	path(search_path_complete,views.search_view,name='search_view'),
 	path('ajax_instance_info/<str:identifier>/',views.ajax_instance_info, 
 		name='ajax_instance_info'),
 	path('ajax_instance_info/<str:identifier>/<str:fields>/',

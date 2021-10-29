@@ -5,14 +5,16 @@ from utils.model_util import get_all_models, instance2names
 
 class SearchAll:
 	def __init__(self,request = None, models = [], query = None, 
-		max_entries=False, special_terms = None):
+		max_entries=False, special_terms = None, order_by = None, 
+		direction = None):
 		if not models: models = get_all_models()
 		self.models = models
 		self.searches = []
 		for model in self.models:
 			an, mn = instance2names(model)
 			s = Search(request,mn,an,query,max_entries,do_ordering=True,
-				special_terms = special_terms)
+				special_terms = special_terms, order_by = order_by,
+				direction = direction)
 			self.searches.append(s)
 		self.query = self.searches[0].query.query
 
@@ -29,7 +31,8 @@ class SearchAll:
 class Search:
 	'''search a django model on all fields or a subset with Q objects'''
 	def __init__(self,request=None, model_name='',app_name='',query=None, 
-		max_entries=500, do_ordering= True, special_terms =None):
+		max_entries=500, do_ordering= True, special_terms =None,
+		order_by = None, direction = None):
 		'''search object to filter django models
 		query 				search terms provided by user
 		search_fields 		field set to restrict search (obsolete?)
@@ -39,13 +42,10 @@ class Search:
 							will not truncate entries if 0 or False
 		do_ordering 		whether to order the results
 		'''
-		if query:
-			self.query = Query(query=query, special_terms=special_terms)
-			self.order = Order(order=get_foreign_keydict()[model_name.lower()])
-		else:
-			self.request = request
-			self.query = Query(request,model_name,special_terms=special_terms)
-			self.order = self.query.order
+		self.request = request
+		self.query = Query(request,model_name,query = query,
+			special_terms=special_terms)
+		self.order = Order(request,model_name,order_by,direction)
 		self.do_ordering = do_ordering
 		self.max_entries = max_entries
 		self.model_name = model_name
@@ -53,8 +53,10 @@ class Search:
 		self.model = apps.get_model(app_name,model_name)
 		self.fields = get_fields(model_name,app_name)
 		self.select_fields()
-		self.notes = 'Search Fields: (' 
-		self.notes += ','.join([f.name for f in self.fields if f.include]) + ')'
+		self.notes = 'Search Fields: ' 
+		self.notes += ', '.join([f.name for f in self.fields if f.include]) 
+		self.notes = '\nSpecial terms detected: ' 
+		self.notes += ', '.join(self.query.special_terms)
 
 	def select_fields(self):
 		if self.query.fields:
@@ -101,6 +103,11 @@ class Search:
 			self.result= self.result.reverse()
 		self.notes += '\nordered in ' + self.order.direction + ' order'
 
+	def remove_double(self):
+		self.result = self.result.distinct()
+			
+			
+
 	def filter(self, option = 'icontains',and_or='',combine= None,exact = None):
 		'''method to create q objects and filter instance from the database
 		option 		search term for filtering, default capital insensitive search
@@ -129,6 +136,7 @@ class Search:
 		self.result = self.model.objects.filter(self.q)
 		self.check_completeness_approval()
 		if self.do_ordering:self.set_ordering_and_direction()
+		self.remove_double()
 		self.nentries_found = self.result.count()
 		self.nentries = '# Entries: ' + str(self.nentries_found) 
 		if self.max_entries and self.nentries_found > self.max_entries:
@@ -153,12 +161,11 @@ class Query:
 		* 	symbol prepended to special terms such as and/or
 		'''
 		self.request = request
-		if 'query' in self.request.GET.keys():
+		if request and 'query' in self.request.GET.keys():
 			tquery = self.request.GET['query']
 		else: tquery = ''
 		if query: self.query = query
 		else: self.query = tquery
-		self.order = Order(request,model_name)
 		self.query_words = self.query.split(' ')
 		self.words = self.query_words
 		self.query_terms = [w for w in self.words if w and w[0] not in ['*','$']]
@@ -174,16 +181,16 @@ class Query:
 			else: self.fields.append(term.lower())
 
 	def extract_special_terms(self, special_terms):
-		if 'combine' in self.request.GET.keys():
-			combine = self.request.GET['combine']
-		else: combine = ''
-		if 'exact' in self.request.GET.keys():
-			exact= self.request.GET['exact']
-		else: exact= ''
+		exact, combine = ' ',' '
+		if self.request:
+			if 'combine' in self.request.GET.keys():
+				combine = self.request.GET['combine']
+			if 'exact' in self.request.GET.keys():
+				exact= self.request.GET['exact']
 		st = [w[1:].lower() for w in self.words if len(w) > 1 and w[0] == '*']
 		self.special_terms = st
 		if combine: self.special_terms.append(combine)
-		if exact: self.special_terms.append(exact)
+		if exact:  self.special_terms.append(exact)
 		if special_terms: self.special_terms.extend(special_terms)
 		if 'complete' in self.special_terms: self.completeness = True
 		elif 'incomplete' in self.special_terms: self.completeness = False
@@ -193,25 +200,27 @@ class Query:
 		else: self.approval = None
 		self.combine = 'True' if 'combine' in self.special_terms else False
 		self.exact = 'True' if 'exact' in self.special_terms else False
-		print(self.special_terms,'<9--------')
 
 
 
 class Order:
-	def __init__(self,request=None, model_name=None,order=''):
+	def __init__(self,request=None, model_name=None,order_by=None, 
+		direction = None):
 		self.request = request
 		self.model_name = model_name
-		if order: self.order_by = order
+		if order_by: self.order_by = order_by
 		else:self.order_by = get_foreign_keydict()[self.model_name.lower()]
-		self.direction = 'ascending'
+		self.direction = direction
 		self.set_values()
 
 
 	def set_values(self):
-		if self.request:
+		if self.request and not self.direction: 
 			if 'direction' in self.request.GET.keys():
 				temp = self.request.GET['direction']
 				if temp in ['descending','ascending']: self.direction = temp
+		if self.direction not in ['descending','ascending']:
+			self.direction = 'ascending'
 
 	def __repr__(self):
 		return self.order_by + ', ' + self.direction
@@ -293,13 +302,13 @@ def get_field_typesdict():
 	
 
 def get_foreign_keydict():
-	m = 'film:title_english,music:title_english,image:title_english'
-	m += ',text:title_english'
-	m += ',infographic:title_english,picturestory:title_english,person:name'
+	m = 'film:title_original,music:title_original,image:title_original'
+	m += ',text:title_original'
+	m += ',infographic:title_original,picturestory:title_original,person:name'
 	m += ',famine:names,famines:names__name'
-	m += ',location:name,keyword:name,videogame:title_english'
-	m += ',recordedspeech:title_english'
-	m += ',memorialsite:title_english,artefact:title_english'
+	m += ',location:name,keyword:name,videogame:title_original'
+	m += ',recordedspeech:title_original'
+	m += ',memorialsite:title_original,artefact:title_original'
 	return make_dict(m)
 
 def link2name():
