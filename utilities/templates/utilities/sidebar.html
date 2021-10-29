@@ -101,7 +101,7 @@
 	</a>
 
 	<a class ="btn btn-link ml-auto mt-2 text-dark " 
-	href="{% url 'utilities:search_view' vtl query combine exact direction%}"
+href="{% url 'utilities:search_view' vtl query combine exact direction sorting_option%}"
 	role="button">
 			<i class="{{view_type_icon}}" aria-hidden="true"></i>
 	</a>
@@ -141,12 +141,14 @@
 			-->
 				<select class="small sorting_option" 
 					id="sorting_option" 
-					name="sorting_option">
-					<option value="all">title/name</option>
-					<option value="all">chronological</option>
-					<option value="all">famine</option>
-					<option value="all">category</option>
-					<option value="all">location</option>
+					name="sorting_option"
+					value="category">
+		<!-- the {} variable contains selected or '' to set selected value -->
+					<option value="title - name" {{t}}>title - name</option>
+					<option value="chronological" {{c}}>chronological</option>
+					<option value="famine" {{f}}>famine</option>
+					<option value="category" {{ca}}>category</option>
+					<option value="location" {{l}}>location</option>
 				</select>
 			</div>	
 	</div>
