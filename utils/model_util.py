@@ -172,6 +172,7 @@ def get_all_models(model_names=''):
 	n = 'Image,PictureStory,Infographic,Film,Music,Text,Videogame'
 	n += ',Recordedspeech,Memorialsite,Artefact,Person'
 	if not model_names: model_names = n.split(',')
+	model_names.sort()
 	model_names = [n.lower() for n in model_names]
 	all_models = apps.get_models()
 	models = []
