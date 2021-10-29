@@ -53,6 +53,7 @@ class Source(models.Model):
 	release_date_precedent = models.BooleanField(default=False)
 	location_field = 'setting'
 	country_field = models.CharField(max_length=1000,default='')
+	date_field = PartialDateField(null=True,blank=True)
 
 	class Meta:
 		abstract = True
@@ -61,7 +62,9 @@ class Source(models.Model):
 		super(Source,self).save(*args,**kwargs)
 		old_country_field = self.country_field
 		self.country_field = instance2countries(self)
-		if old_country_field!= self.country_field: 
+		old_date= self.date_field
+		self.date_field = self.date
+		if old_country_field!= self.country_field or old_date != self.date_field: 
 			super(Source,self).save(*args,**kwargs)
 
 	def __str__(self):
