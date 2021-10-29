@@ -6,9 +6,35 @@ from utils.model_util import get_all_models, instance2names
 class SearchAll:
 	def __init__(self,request = None, models = [], query = None, 
 		max_entries=False, special_terms = None, order_by = None, 
-		direction = None):
+		direction = None, sorting_option = None):
+		'''searches all (specified/relevant) models. 
+		request  		contains query, direction, sorting_option which
+						can be overwritten by the parameters
+		models 			list of models to search by default it contains
+						all relevant models defined in model_util
+		query 			parameter to directly pass a query overwrites
+						query passed in the request. A query is a string
+						with optional special terms starting with $ or *
+		special_terms 	parameter to pass optional special terms such as combine
+		order_by 		a specific field name of model to order the results
+						this orders instance on a per category basis
+						by default the field for each model is defined in 
+						get_foreign_key_dict
+		direction 		ascending or descending overwrites the value defined in
+						request. sets the direction of ordering
+		sorting_option 	sorting on an overall basis,how to sort the results
+						of this all search options: title/name, time, 
+						category (ie. model), country. It is sorty that cannot
+						be achieved by order_by because it is supra model
+		'''
+							
 		if not models: models = get_all_models()
 		self.models = models
+		self.query =query
+		self.special_terms = special_terms
+		self.order_by = order_by
+		self.direction = direction
+		self.sorting_option = sorting_option
 		self.searches = []
 		for model in self.models:
 			an, mn = instance2names(model)
@@ -18,14 +44,32 @@ class SearchAll:
 			self.searches.append(s)
 		self.query = self.searches[0].query.query
 
-	def filter(self):
+	def filter(self, verbose= False, separate = False):
 		if hasattr(self,'_instances'): return self._instances
-		self._instances = []
-		for s in self.searches:
-			s.n
-			self._instances.extend(s.filter())
-			s.n
+		if separate or self.sorting_option not in [None,'category','']:
+			self._instances = {}
+			for s in self.searches:
+				name = s.app_name,s.model_name
+				self._instances[name] = s.filter()
+			self._order()
+		else:
+			self._instances = []
+			for s in self.searches:
+				self._instances.extend(s.filter())
+		if verbose:self.searches[0].n
 		return self._instances
+
+	def _order(self):
+		instances = []
+		for key, value in self._instances.items():
+			app_name, model_name = key
+			name = get_foreign_keydict()[model_name.lower()]
+			instances.extend([[i, getattr(i,name)] for i in value])
+		reverse = True if self.direction == 'descending' else False
+		t = sorted(instances,key=lambda x:x[1],reverse=reverse)
+		self._instances = [x[0] for x in t]
+
+			
 
 
 class Search:
