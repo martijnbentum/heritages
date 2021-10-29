@@ -43,6 +43,7 @@ class Person(models.Model, info):
 	viaf = models.CharField(max_length=1000,default='')
 	famines = models.ManyToManyField(Famine, blank=True)
 	country_field = models.CharField(max_length=1000,default='')
+	date_field = PartialDateField(null=True,blank=True)
 
 	def __str__(self):
 		return self.name
@@ -51,7 +52,9 @@ class Person(models.Model, info):
 		super(Person,self).save(*args,**kwargs)
 		old_country_field = self.country_field
 		self.country_field = instance2countries(self)
-		if old_country_field!= self.country_field: 
+		old_date= self.date_field
+		self.date_field = self._make_date_field()
+		if old_country_field!= self.country_field or old_date != self.date_field: 
 			super(Person,self).save(*args,**kwargs)
 
 	@property
@@ -117,6 +120,10 @@ class Person(models.Model, info):
 		age = str(self.age)
 		if age: m += ' (' + age + ')'
 		return m
+
+	def _make_date_field(self):
+		if self.date_of_birth: return self.date_of_birth
+		return self.date_of_death
 	
 	@property
 	def famine_names(self):
