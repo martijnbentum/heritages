@@ -48,7 +48,7 @@ def sidebar(request):
 	return render(request,'utilities/sidebar.html',var)
 
 def search_view(request, view_type = 'tile_view', query = ' ', combine = ' ',
-	exact = 'contains', direction = 'ascending'):
+	exact = 'contains', direction = 'ascending', sorting_option = 'title/name'):
 	'''
 		view_type 		whether the results are shown in tile or row format
 		query 			passing a query between view types, overwrites the
@@ -60,15 +60,16 @@ def search_view(request, view_type = 'tile_view', query = ' ', combine = ' ',
 	print(request.GET.keys(),'<-------')
 	if 'combine' in request.GET.keys():
 		combine = request.GET['combine']
-	# main_search_options = request.GET['main_search_options']
+	if 'sorting_option' in request.GET.keys():
+		sorting_option = request.GET['sorting_option']
 	if 'direction' in request.GET.keys():
 		direction = request.GET['direction']
 	if 'exact' in request.GET.keys():
 		exact= request.GET['exact']
 	special_terms = [combine,exact]
-	print('query',query)
+	print('query',query,'sorting_option',sorting_option)
 	s = SearchAll(request, query = query,direction = direction,
-		special_terms = special_terms)
+		special_terms = special_terms,sorting_option = sorting_option)
 	instances= s.filter()
 	nentries = '# Entries: ' + str(len(instances))
 	print(len(instances),'ninstances')
