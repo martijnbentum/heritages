@@ -48,7 +48,7 @@ def sidebar(request):
 	return render(request,'utilities/sidebar.html',var)
 
 def search_view(request, view_type = 'tile_view', query = ' ', combine = ' ',
-	exact = 'contains', direction = 'ascending', sorting_option = 'title/name'):
+	exact = 'contains', direction = 'ascending', sorting_option = 'title - name'):
 	'''
 		view_type 		whether the results are shown in tile or row format
 		query 			passing a query between view types, overwrites the
@@ -78,7 +78,10 @@ def search_view(request, view_type = 'tile_view', query = ' ', combine = ' ',
 	print('pushing query:',[query])
 	if direction == 'ascending':sorting_icon = 'fas fa-sort-alpha-down'
 	else:sorting_icon = 'fas fa-sort-alpha-up'
-	
+	d = {'title - name':'t','chronological':'c','famine':'f','category':'ca'}
+	d.update({'location':'l'})
+	if sorting_option in d.keys(): select_sorting_option = d[sorting_option]
+	else: select_sorting_option = 't'
 	if view_type == 'tile_view':
 		view_type_link = 'row_view'
 		view_type_icon=  'fas fa-align-justify fa-lg'
@@ -95,6 +98,8 @@ def search_view(request, view_type = 'tile_view', query = ' ', combine = ' ',
 		'direction':direction,
 		'sorting_icon':sorting_icon,
 		'exact':exact,
+		'sorting_option':sorting_option,
+		select_sorting_option:'selected',
 		# 'main_search_options':main_search_options,
 	}
 	print('-->',var)

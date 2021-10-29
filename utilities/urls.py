@@ -6,6 +6,7 @@ from . import views
 app_name = 'utilities'
 search_path_complete ='search_view/<str:view_type>/'
 search_path_complete +='<str:query>/<str:combine>/<str:exact>/<str:direction>/'
+search_path_complete +='<str:sorting_option>/'
 
 urlpatterns = [
 	path('close/',views.close,name='close'),
