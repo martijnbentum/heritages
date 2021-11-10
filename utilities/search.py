@@ -6,7 +6,8 @@ from utils.model_util import get_all_models, instance2names
 class SearchAll:
 	def __init__(self,request = None, models = [], query = None, 
 		max_entries=False, special_terms = None, order_by = None, 
-		direction = None, sorting_option = None):
+		direction = None, sorting_option = None, enforce_flag = False,
+		enforce_person_flag = True):
 		'''searches all (specified/relevant) models. 
 		request  		contains query, direction, sorting_option which
 						can be overwritten by the parameters
@@ -26,6 +27,8 @@ class SearchAll:
 						of this all search options: title/name, time, 
 						category (ie. model), country. It is sorty that cannot
 						be achieved by order_by because it is supra model
+		enforce_flag 	only show items that are flagged
+		enforce_per... 	only show persons that are flagged
 		'''
 							
 		if not models: models = get_all_models()
@@ -38,9 +41,10 @@ class SearchAll:
 		self.searches = []
 		for model in self.models:
 			an, mn = instance2names(model)
+			if mn == 'Person': enforce_flag = enforce_person_flag
 			s = Search(request,mn,an,query,max_entries,do_ordering=True,
 				special_terms = special_terms, order_by = order_by,
-				direction = direction)
+				direction = direction, enforce_flag = enforce_flag)
 			self.searches.append(s)
 		self.query = self.searches[0].query.query
 
@@ -83,7 +87,7 @@ class Search:
 	'''search a django model on all fields or a subset with Q objects'''
 	def __init__(self,request=None, model_name='',app_name='',query=None, 
 		max_entries=500, do_ordering= True, special_terms =None,
-		order_by = None, direction = None):
+		order_by = None, direction = None, enforce_flag = False):
 		'''search object to filter django models
 		query 				search terms provided by user
 		search_fields 		field set to restrict search (obsolete?)
@@ -92,7 +96,9 @@ class Search:
 		max_entries 		number of entries to return
 							will not truncate entries if 0 or False
 		do_ordering 		whether to order the results
+		enforce_flag 	only show items that are flagged
 		'''
+		self.enforce_flag = enforce_flag
 		self.request = request
 		self.query = Query(request,model_name,query = query,
 			special_terms=special_terms)
@@ -185,6 +191,7 @@ class Search:
 			else: self.q |= qobject
 			
 		self.result = self.model.objects.filter(self.q)
+		if self.enforce_flag: self.result = self.result.filter(flag = True)
 		self.check_completeness_approval()
 		if self.do_ordering:self.set_ordering_and_direction()
 		self.remove_double()
