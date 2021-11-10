@@ -84,7 +84,7 @@ def detail_memorialsite_view(request,pk):
 	settings= instance.setting.all()
 	famines = instance.famines.all()
 	args = {'instance':instance, 'page_name':instance.title,'creators':creators}
-	args.update({'donors':donors, 'commissioners':commissioners})
+	args.update({'donors':donors, 'commissioners':commissioners,'artists':artists})
 	args.update({'locations':locations, 'settings':settings,'famines':famines})
 	args.update({'languages':languages})
 	return render(request,'sources/detail_memorialsite_view.html',args)
