@@ -30,6 +30,7 @@ def get_countries(model_names = ''):
 	for key, val in countries_dict.items():
 		temp.append([key, round(val /total * 100,2)])
 	temp = sorted(temp, key=lambda x: x[1],reverse = True)
+	countries_dict = dict(temp)
 	return countries_dict
 
 			
