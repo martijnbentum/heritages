@@ -11,7 +11,7 @@ from django.urls import reverse
 from utils import view_util, help_util
 from utils.view_util import Crud, Cruds, make_tabs, FormsetFactoryManager
 from utils.model_util import copy_complete, get_all_instances
-from utils.get_totals import get_totals, get_countries
+from utils.get_totals import get_totals, get_countries, get_perc_female_persons
 # from .models import copy_complete
 from utilities.search import Search, SearchAll
 from .models import Protocol
@@ -47,10 +47,11 @@ def _handle_fieldnames(field_names):
 def overview(request):
 	totals = get_totals()
 	countries = get_countries()
+	perc_females = get_perc_female_persons()
 	print(totals)
 	total = sum(totals.values())
 	var = {'page_name':'overview','totals':totals,'total':total}
-	var.update({'countries':countries})
+	var.update({'countries':countries, 'perc_females':perc_females})
 	return render(request,'utilities/overview.html',var)
 
 def sidebar(request):

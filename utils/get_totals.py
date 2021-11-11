@@ -34,3 +34,10 @@ def get_countries(model_names = ''):
 	return countries_dict
 
 			
+def get_perc_female_persons():
+	Person = apps.get_model('persons','Person')
+	p = Person.objects.all()
+	npersons = p.count()
+	nfemales = len([x for x in p if x.gender == 'female'])
+	perc_females = round(nfemales / npersons * 100, 2)
+	return perc_females
