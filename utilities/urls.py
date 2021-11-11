@@ -34,4 +34,5 @@ urlpatterns = [
 		views.ajax_instance_info, name='ajax_instance_info'),
 	path('add_protocol/<str:app_name>/<str:model_name>',
 		views.edit_protocol,name='add_protocol'),
+	path('overview/',views.overview,name='overview'),
 ]
