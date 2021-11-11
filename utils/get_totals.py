@@ -22,11 +22,14 @@ def get_countries(model_names = ''):
 	for instance in instances:
 		countries = instance.country_field.split(',')
 		for country in countries:
+			if country == '': continue
 			if country not in countries_dict.keys():countries_dict[country] = 1
 			else: countries_dict[country] += 1
 	total = sum(countries_dict.values())
+	temp = []
 	for key, val in countries_dict.items():
-		countries_dict[key] = round(val /total * 100,2)
+		temp.append([key, round(val /total * 100,2)])
+	temp = sorted(temp, key=lambda x: x[1],reverse = True)
 	return countries_dict
 
 			
