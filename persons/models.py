@@ -46,7 +46,7 @@ class Person(models.Model, info):
 	date_field = PartialDateField(null=True,blank=True)
 
 	def __str__(self):
-		return title
+		return self.title
 
 	def save(self,*args,**kwargs):
 		super(Person,self).save(*args,**kwargs)
