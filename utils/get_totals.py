@@ -42,6 +42,7 @@ def _make_type_dict(model,skip_unknown = False):
 			d['unknown'] += 1
 		elif attr.name not in d.keys(): d[attr.name] = 1
 		else: d[attr.name] += 1
+	d = count_dict_to_percentage_dict(d,sum(d.values()))
 	return d
 		
 
