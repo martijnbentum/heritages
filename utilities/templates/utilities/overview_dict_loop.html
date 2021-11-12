@@ -1,0 +1,7 @@
+{% for key, value in d.items %}
+	{% if not forloop.last %}
+		{{key}} <small>({{value}}%)</small>,
+	{% else %}
+		{{key}} <small>({{value}}%)</small>
+	{% endif %}
+{%endfor%}
