@@ -69,7 +69,8 @@ def search_view(request, view_type = 'tile_view', query = ' ', combine = ' ',
 						query in the request
 	'''
 	print('parameters:',view_type,query,combine,exact)
-	if view_type in request.META['HTTP_REFERER']: query = None
+	if 'HTTP_REFERER' not in request.META.keys(): query = None
+	elif view_type in request.META['HTTP_REFERER']: query = None
 	if query == ' ': query = None
 	print(request.GET.keys(),'<-------')
 	if 'combine' in request.GET.keys():
@@ -124,7 +125,8 @@ def search_view(request, view_type = 'tile_view', query = ' ', combine = ' ',
 
 def tile_view(request, query = ''):
 	# instances= [instance for instance in get_all_instances() if instance.thumbnail]
-	if 'tile_view' in request.META['HTTP_REFERER']: query = None
+	if 'HTTP_REFERER' not in request.META.keys(): query = None
+	elif 'tile_view' in request.META['HTTP_REFERER']: query = None
 	if not query or query == ' ': query = None
 	print('received query:',[query])
 	print('using query in search:',[query])

@@ -21,7 +21,7 @@ urlpatterns = [
 	path('sidebar/',views.sidebar,name='sidebar'),
 	path('row_view/',views.row_view,name='row_view'),
 	path('row_view/<str:query>',views.row_view,name='row_view'),
-	path('',views.tile_view,name='tile_view'),
+	path('',views.search_view,name='search_view'),
 	path('tile_view/',views.tile_view,name='tile_view'),
 	path('tile_view/<str:query>',views.tile_view,name='tile_view'),
 	path('search_view/<str:view_type>/',
