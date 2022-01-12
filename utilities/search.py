@@ -41,12 +41,18 @@ class SearchAll:
 		self.searches = []
 		for model in self.models:
 			an, mn = instance2names(model)
-			if mn == 'Person': enforce_flag = enforce_person_flag
+			if mn == 'Person': ef = enforce_person_flag
+			else: ef= enforce_flag
 			s = Search(request,mn,an,query,max_entries,do_ordering=True,
 				special_terms = special_terms, order_by = order_by,
-				direction = direction, enforce_flag = enforce_flag)
+				direction = direction, enforce_flag = ef)
 			self.searches.append(s)
 		self.query = self.searches[0].query.query
+
+	def __repr__(self):
+		m = 'Search all object\n'
+		m += '\n'.join([x.__repr__() for x in self.searches])
+		return m
 
 	def filter(self, verbose= False, separate = False):
 		if hasattr(self,'_instances'): return self._instances
@@ -114,6 +120,13 @@ class Search:
 		self.notes += ', '.join([f.name for f in self.fields if f.include]) 
 		self.notes = '\nSpecial terms detected: ' 
 		self.notes += ', '.join(self.query.special_terms)
+
+	def __repr__(self):
+		m = self.app_name + ' ' + self.model_name 
+		m = m.ljust(23) +  ' | query: "' + self.query.clean_query + '"'
+		if hasattr(self,'result'):
+			m += ' | ninstances: ' + str(len(self.result))
+		return m
 
 	def select_fields(self):
 		if self.query.fields:
