@@ -115,6 +115,10 @@ def search_view(request, view_type = 'tile_view', query = ' ', combine = ' ',
 		'exact':exact,
 		'sorting_option':sorting_option,
 		select_sorting_option:'selected',
+		'country_counts':s.country_counts,
+		'keyword_category_counts':s.keyword_category_counts,
+		'model_counts':s.model_counts,
+		'century_counts':s.century_counts,
 		# 'main_search_options':main_search_options,
 	}
 	print('-->',var)
