@@ -3,6 +3,7 @@ from django.db.models.fields.files import ImageFileDescriptor, ImageField
 import random
 import string
 import itertools
+from utils.general import sort_count_dict, make_century_dict, sort_dict_on_keys
 
 
 
@@ -190,7 +191,6 @@ def get_all_instances(model_names = '',flag_filter_person = True):
 		else:instances.extend(x.objects.all())
 	return instances
 
-
 def instance2image_urls(instance):
 	'''returns all urls of an instance to all attached images (i.e. ImageFields).'''
 	o = []
@@ -199,6 +199,77 @@ def instance2image_urls(instance):
 			x= getattr(instance,field.name)
 			if x.name:
 				o.append(x.url)
+	return ','.join(o)
+
+def instances2country_counts(instances):
+	'''names and counts of countries that are linked to a list of instance.'''
+	count_d = {}
+	instances_d = {}
+	for instance in instances:
+		if instance.country_field:
+			countries = instance.country_field.split(',')
+			_add_to_count_instance_dict(count_d,instances_d,countries,instance)
+	count_d = sort_count_dict(count_d)
+	return count_d, instances_d
+
+def instances2keyword_category_counts(instances):
+	'''names and counts of category keywords that are linked to a list of instance.'''
+	count_d = {}
+	instances_d = {}
+	for instance in instances:
+		if instance.keyword_category_field:
+			keywords = instance.keyword_category_field.split(',')
+			_add_to_count_instance_dict(count_d,instances_d,keywords,instance)
+	count_d = sort_count_dict(count_d)
+	return count_d, instances_d
+
+def instances2model_counts(instances):
+	'''names and counts of models that are linked to a list of instance.'''
+	count_d = {}
+	instances_d = {}
+	map_names = {'Recordedspeech':'Recorded speech','Memorialsite':'Memorial site'}
+	map_names.update({'PictureStory':'Picture story'})
+	for instance in instances:
+		name = instance2name(instance)
+		if name in map_names.keys(): name = map_names[name]
+		_add_to_count_instance_dict(count_d,instances_d,[name],instance)
+	count_d = sort_count_dict(count_d)
+	return count_d, instances_d
+
+def instances2century_counts(instances):
+	count_d = {}
+	instances_d = {}
+	century_dict = make_century_dict()
+	for instance in instances:
+		if not instance.date_field: continue
+		name = century_dict[int(instance.date_field.year/100)]
+		_add_to_count_instance_dict(count_d,instances_d,[name],instance)
+	count_d = sort_dict_on_keys(count_d)
+	return count_d, instances_d
+	
+def _add_to_count_instance_dict(count_d,instances_d,names, instance):
+	for name in names:
+		if name not in count_d.keys(): count_d[name] ,instances_d[name] = 0, []
+		count_d[name] +=1
+		instances_d[name].append(instance)
+
+def instance2keyword_categories(instance):
+	'''return all category keywords linked to a given instance in csv format.'''
+	kws = instance.keywords.all()
+	o = []
+	for kw in kws:
+		name = kw.category
+		if not name: continue
+		if name not in o:o.append(name)
+	return ','.join(o)
+		
+def instance2keyword_detail(instance):
+	'''return all non category keywords linked to a given instance in csv format.'''
+	kws = instance.keywords.all()
+	o = []
+	for kw in kws:
+		if kw.category_keyword: continue
+		if kw.name not in o:o.append(kw.name)
 	return ','.join(o)
 
 	
