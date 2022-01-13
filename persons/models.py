@@ -1,6 +1,6 @@
 from django.db import models
 from utilities.models import SimpleModel
-from utils.model_util import info
+from utils.model_util import info, instance2keyword_categories, instance2keyword_detail
 from utils.instance2countries import instance2countries
 from misc.models import Keyword, Famine
 from locations.models import Location
@@ -43,6 +43,8 @@ class Person(models.Model, info):
 	viaf = models.CharField(max_length=1000,default='')
 	famines = models.ManyToManyField(Famine, blank=True)
 	country_field = models.CharField(max_length=1000,default='')
+	keyword_category_field = models.CharField(max_length=1000,default='')
+	keyword_detail_field = models.CharField(max_length=1000,default='')
 	date_field = PartialDateField(null=True,blank=True)
 
 	def __str__(self):
@@ -50,11 +52,19 @@ class Person(models.Model, info):
 
 	def save(self,*args,**kwargs):
 		super(Person,self).save(*args,**kwargs)
+		old_keyword_category_field = self.keyword_category_field
+		self.keyword_category_field = instance2keyword_categories(self)
+		old_keyword_detail_field = self.keyword_detail_field
+		self.keyword_detail_field = instance2keyword_detail(self)
 		old_country_field = self.country_field
 		self.country_field = instance2countries(self)
 		old_date= self.date_field
 		self.date_field = self._make_date_field()
-		if old_country_field!= self.country_field or old_date != self.date_field: 
+		new_country =old_country_field!= self.country_field 
+		new_date = old_date != self.date_field
+		new_keyword_c = old_keyword_category_field != self.keyword_category_field
+		new_keyword_d = old_keyword_detail_field != self.keyword_detail_field
+		if new_country or new_date or new_keyword_c or new_keyword_d:
 			super(Person,self).save(*args,**kwargs)
 
 	@property
@@ -66,6 +76,12 @@ class Person(models.Model, info):
 		if self.pseudonym_precedent and self.pseudonyms: return self.pseudonyms
 		if not self.name and self.pseudonyms: return self.pseudonyms
 		return self.name
+
+	@property
+	def keyword_names(self):
+		keywords= self.keywords.all().order_by('name') 
+		if keywords: return ', '.join([k.name for k in keywords])
+		else: return ''
 
 	@property
 	def occupations_str(self):
