@@ -1,5 +1,10 @@
 
 <style>
+hr {
+	margin-top:0px;
+	margin-bottom:3px;
+}
+
 .search_button {
 	border: none;
 	color: black;
@@ -10,7 +15,7 @@
 	display: inline-block;
 	font-size: 10px;
 	margin-left:15px;
-	transition-duration: 0.4s;
+	transition-duration: 0.3s;
 	cursor: pointer;
 	border-radius: 3px;
 	border: 1px solid black;
@@ -38,7 +43,7 @@
 	z-index: 1;
 	top: 30;
 	left: 0;
-	background-color: #e4e6eb;
+	background-color: #edf1f7;
 	overflow-x: hidden;
 	transition: 0.5s;
 	padding-top: 10px;
@@ -47,9 +52,10 @@
 
 .sidebar a {
 	text-decoration: none;
-	color: #818181;
+	color: #585e66;
 	display: block;
 	transition: 0.5s;
+	font-size: 14px;
 }
 
 .sidebar a:hover {
@@ -91,7 +97,34 @@
 <form>
 <div class="d-flex">
 	<div id="mySidebar" class="sidebar">
-		<a href="#">About</a>
+		<a>Categories</a>
+		<hr>
+		{% for key, value in model_counts.items %}
+			<a>{{key}} <small>({{value}})</small></a>
+		{%endfor%}
+		<br>
+		<a>Tags</a>
+		<hr>
+		{% for key, value in keyword_category_counts.items %}
+			<a>{{key}} <small>({{value}})</small></a>
+		{%endfor%}
+		<br>
+		<a>Date</a>
+		<hr>
+		{% for key, value in century_counts.items %}
+			<a>{{key}} <small>({{value}})</small></a>
+		{%endfor%}
+		<br>
+		<a>Location</a>
+		<hr>
+		{% for key, value in country_counts.items %}
+			<a>{{key}} <small>({{value}})</small></a>
+		{%endfor%}
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
 	</div>
 
 	<a href="javascript:void(0)" 
@@ -160,6 +193,7 @@ href="{% url 'utilities:search_view' vtl query combine exact direction sorting_o
 
 <script>
 var sidebar_state = 'closed';
+toggle_sidebar();
 var btn = document.getElementById("togglebtn")
 document.getElementById("content").style.marginLeft = "25px";
 var combine = document.getElementById('combine')
@@ -189,8 +223,8 @@ function toggle_sidebar() {
 }
 
 function open_sidebar() {
-document.getElementById("mySidebar").style.width = "400px";
-document.getElementById("content").style.marginLeft = "390px";
+document.getElementById("mySidebar").style.width = "230px";
+document.getElementById("content").style.marginLeft = "220px";
 }
 
 
