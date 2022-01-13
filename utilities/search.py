@@ -1,7 +1,9 @@
 from django.apps import apps
 from django.db.models.functions import Lower
 from django.db.models import Q
-from utils.model_util import get_all_models, instance2names
+from utils.model_util import get_all_models, instance2names, instances2country_counts 
+from utils.model_util import instances2keyword_category_counts, instances2model_counts
+from utils.model_util import instances2century_counts
 
 class SearchAll:
 	def __init__(self,request = None, models = [], query = None, 
@@ -85,6 +87,69 @@ class SearchAll:
 		reverse = True if self.direction == 'descending' else False
 		t = sorted(instances,key=lambda x:x[1],reverse=reverse)
 		self._instances = [x[0] for x in t]
+
+	def country_filter(self, countries = []):
+		if not hasattr(self,'instances'):self.filter()
+		if not hasattr(self,'_country_counts'):
+			i = self._instances
+			self._country_counts, self._country_instances= instances2country_counts(i)
+		if countries:
+			instances = filter_on_list(self._country_instances, countries)
+			return instances
+
+	def keyword_category_filter(self, keywords = []):
+		if not hasattr(self,'instances'):self.filter()
+		if not hasattr(self,'_keyword_category_counts'):
+			c,i = instances2keyword_category_counts(self._instances)
+			self._keyword_category_counts, self._keyword_category_instances= c,i
+		if keywords:
+			instances = filter_on_list(self._keyword_category_instances, keywords)
+			return instances
+
+	def model_filter(self, model_names = []):
+		if not hasattr(self,'instances'): self.filter()
+		if not hasattr(self,'_model_counts'):
+			c,i = instances2model_counts(self._instances)
+			self._model_counts, self._model_instances = c,i
+		if model_names:
+			instances = filter_on_list(self._model_instances, model_names)
+			return instances
+
+	def century_filter(self, centuries = []):
+		if not hasattr(self,'instances'): self.filter()
+		if not hasattr(self,'_century_counts'):
+			c,i = instances2century_counts(self._instances)
+			self._model_counts, self._model_instances = c,i
+		century_names = _handle_centuries_input(centuries)
+		if century_names:
+			instances = filter_on_list(self._century_instances, century_names)
+			return instances
+		
+
+	@property
+	def country_counts(self):
+		if not hasattr(self,'_country_counts'):self.country_filter()
+		return self._country_counts
+
+	@property
+	def keyword_category_counts(self):
+		if not hasattr(self,'_keyword_category_counts'):self.keyword_category_filter()
+		return self._keyword_category_counts
+
+	@property
+	def model_counts(self):
+		if not hasattr(self,'_model_counts'):self.model_filter()
+		return self._model_counts
+
+	@property
+	def century_counts(self):
+		if not hasattr(self,'_century_counts'):self.century_filter()
+		return self._model_counts
+
+
+
+		
+		
 
 			
 
@@ -405,3 +470,29 @@ def link2name():
 		Q(title__icontains=query) | eval('Q(form__name__icontains=query)') |
 		Q(publisher__name__icontains=query) | Q(location__name__icontains=query)).order_by(Lower(order_by))
 '''
+
+def filter_on_list(instance_dict, filter_list):
+	instances = []
+	for key,inst in instance_dict.items():
+		if key in filter_list:
+			for instance in insts:
+				if instance not in instances: instances.append(instance)
+	return instances
+
+def _handle_centuries_input(centuries):
+	m = 'provide century integers e.g. 19 for 20th century, or string "20th century"'
+	if len(centuries) == 0: return []
+	if type(centuries[0]) == str:
+		if not 'century' in centuries[0]: raise ValueError(m)
+		else: return centuries
+	if type(centuries[0]) == int:
+		century_dict = make_century_dict()
+		century_names = []
+		for n in centuries:
+			name = century_dict[n]
+			if name not in century_names: century_names.append(name)
+		return century_names
+	raise ValueError(m)
+
+		
+
