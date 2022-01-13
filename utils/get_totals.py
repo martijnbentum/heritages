@@ -1,5 +1,6 @@
 from django.apps import apps
 from utils.model_util import get_all_models, get_all_instances
+from utils.general import count_dict_to_percentage_dict
 
 def get_totals(model_names = ''):
 	o = {}
@@ -16,15 +17,6 @@ def get_totals(model_names = ''):
 		o[name] = model.objects.all().count()
 	return o
 
-def count_dict_to_percentage_dict(d,total, sort = True, remove_empty = True):
-	temp = []
-	for key, val in d.items():
-		if remove_empty and val == 0: continue
-		temp.append([key, round(val /total * 100,2)])
-	if sort:
-		temp = sorted(temp, key=lambda x: x[1],reverse = True)
-	d = dict(temp)
-	return d
 
 def _make_type_dict(model,skip_unknown = False):
 	if skip_unknown: d = {}
@@ -42,7 +34,7 @@ def _make_type_dict(model,skip_unknown = False):
 			d['unknown'] += 1
 		elif attr.name not in d.keys(): d[attr.name] = 1
 		else: d[attr.name] += 1
-	d = count_dict_to_percentage_dict(d,sum(d.values()))
+	d = count_dict_to_percentage_dict(d)
 	return d
 		
 
@@ -71,8 +63,7 @@ def get_countries(model_names = ''):
 			if country == '': countries_dict['unknown'] += 1
 			elif country not in countries_dict.keys():countries_dict[country] = 1
 			else: countries_dict[country] += 1
-	total = sum(countries_dict.values())
-	countries_dict = count_dict_to_percentage_dict(countries_dict,total)
+	countries_dict = count_dict_to_percentage_dict(countries_dict)
 	return countries_dict
 
 def get_gender():
@@ -85,6 +76,6 @@ def get_gender():
 		elif person.gender.name not in gender_dict.keys():
 			gender_dict[person.gender.name] = 1
 		else: gender_dict[person.gender.name] +=1
-	gender_dict = count_dict_to_percentage_dict(gender_dict,npersons,sort=False)
+	gender_dict = count_dict_to_percentage_dict(gender_dict,sort=False)
 	return gender_dict
 			
