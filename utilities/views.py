@@ -119,6 +119,7 @@ def search_view(request, view_type = 'tile_view', query = ' ', combine = ' ',
 		'keyword_category_counts':s.keyword_category_counts,
 		'model_counts':s.model_counts,
 		'century_counts':s.century_counts,
+		'famine_counts':s.famine_counts,
 		# 'main_search_options':main_search_options,
 	}
 	print('-->',var)
