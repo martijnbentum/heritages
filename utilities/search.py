@@ -3,7 +3,7 @@ from django.db.models.functions import Lower
 from django.db.models import Q
 from utils.model_util import get_all_models, instance2names, instances2country_counts 
 from utils.model_util import instances2keyword_category_counts, instances2model_counts
-from utils.model_util import instances2century_counts
+from utils.model_util import instances2century_counts, instances2famine_counts
 
 class SearchAll:
 	def __init__(self,request = None, models = [], query = None, 
@@ -124,7 +124,15 @@ class SearchAll:
 		if century_names:
 			instances = filter_on_list(self._century_instances, century_names)
 			return instances
-		
+
+	def famine_filter(self, famine_names = []):
+		if not hasattr(self,'instances'): self.filter()
+		if not hasattr(self,'_famine_counts'):
+			c,i = instances2famine_counts(self._instances)
+			self._famine_counts, self._famine_instances = c,i
+		if famine_names:
+			instances = filter_on_list(self._famine_instances, famine_names)
+			return instances
 
 	@property
 	def country_counts(self):
@@ -146,6 +154,10 @@ class SearchAll:
 		if not hasattr(self,'_century_counts'):self.century_filter()
 		return self._model_counts
 
+	@property
+	def famine_counts(self):
+		if not hasattr(self,'_famine_counts'):self.famine_filter()
+		return self._famine_counts
 
 
 		
