@@ -246,6 +246,16 @@ def instances2century_counts(instances):
 		_add_to_count_instance_dict(count_d,instances_d,[name],instance)
 	count_d = sort_dict_on_keys(count_d)
 	return count_d, instances_d
+
+def instances2famine_counts(instances):
+	count_d = {}
+	instances_d = {}
+	for instance in instances:
+		if instance.famine_field:
+			famines = instance.famine_field.split(',')
+			_add_to_count_instance_dict(count_d,instances_d,famines,instance)
+	count_d = sort_count_dict(count_d)
+	return count_d, instances_d
 	
 def _add_to_count_instance_dict(count_d,instances_d,names, instance):
 	for name in names:
@@ -272,5 +282,14 @@ def instance2keyword_detail(instance):
 		if kw.name not in o:o.append(kw.name)
 	return ','.join(o)
 
+def instance2famines(instance):
+	famines = instance.famines.all()
+	o =[]
+	for famine in famines:
+		names = famine.names.all()
+		if names: 
+			name = names[0].name
+			if name not in o: o.append(name)
+	return ','.join(o)
 	
 
