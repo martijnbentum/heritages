@@ -1,6 +1,7 @@
 from django.db import models
 from utilities.models import SimpleModel
 from utils.model_util import info, instance2keyword_categories, instance2keyword_detail
+from utils.model_util import instance2famines
 from utils.instance2countries import instance2countries
 from misc.models import Keyword, Famine
 from locations.models import Location
@@ -46,6 +47,7 @@ class Person(models.Model, info):
 	keyword_category_field = models.CharField(max_length=1000,default='')
 	keyword_detail_field = models.CharField(max_length=1000,default='')
 	date_field = PartialDateField(null=True,blank=True)
+	famine_field = models.CharField(max_length=1000,default='')
 
 	def __str__(self):
 		return self.title
@@ -58,13 +60,16 @@ class Person(models.Model, info):
 		self.keyword_detail_field = instance2keyword_detail(self)
 		old_country_field = self.country_field
 		self.country_field = instance2countries(self)
+		old_famine_field = self.famine_field
+		self.famine_field = instance2famines(self)
 		old_date= self.date_field
 		self.date_field = self._make_date_field()
 		new_country =old_country_field!= self.country_field 
 		new_date = old_date != self.date_field
 		new_keyword_c = old_keyword_category_field != self.keyword_category_field
 		new_keyword_d = old_keyword_detail_field != self.keyword_detail_field
-		if new_country or new_date or new_keyword_c or new_keyword_d:
+		new_famine = old_famine_field != self.famine_field
+		if new_country or new_date or new_keyword_c or new_keyword_d or new_famine:
 			super(Person,self).save(*args,**kwargs)
 
 	@property
@@ -118,8 +123,7 @@ class Person(models.Model, info):
 	
 	@property
 	def identifier(self):
-		m = self._meta.app_label + '_' + self._meta.model_name + '_'  
-		m += str( self.pk )
+		return self._meta.app_label+'_'+self._meta.model_name+'_'+str( self.pk )
 
 	@property
 	def age(self):

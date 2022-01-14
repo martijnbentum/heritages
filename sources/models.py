@@ -3,6 +3,7 @@ from django.db.models.fields.files import ImageField
 from persons.models import Person
 from utilities.models import SimpleModel
 from utils.model_util import info, instance2keyword_categories, instance2keyword_detail
+from utils.model_util import instance2famines
 from utils.map_util import instance2related_locations, field2locations
 from misc.models import Keyword, Language,Famine
 from locations.models import Location
@@ -56,6 +57,7 @@ class Source(models.Model):
 	date_field = PartialDateField(null=True,blank=True)
 	keyword_category_field = models.CharField(max_length=1000,default='')
 	keyword_detail_field = models.CharField(max_length=1000,default='')
+	famine_field = models.CharField(max_length=1000,default='')
 
 	class Meta:
 		abstract = True
@@ -70,11 +72,14 @@ class Source(models.Model):
 		self.country_field = instance2countries(self)
 		old_date= self.date_field
 		self.date_field = self.date
+		old_famine_field = self.famine_field
+		self.famine_field = instance2famines(self)
 		new_country =old_country_field!= self.country_field 
 		new_date = old_date != self.date_field
 		new_keyword_c = old_keyword_category_field != self.keyword_category_field
 		new_keyword_d = old_keyword_detail_field != self.keyword_detail_field
-		if new_country or new_date or new_keyword_c or new_keyword_d:
+		new_famine = old_famine_field != self.famine_field
+		if new_country or new_date or new_keyword_c or new_keyword_d or new_famine:
 			super(Source,self).save(*args,**kwargs)
 
 	def __str__(self):
