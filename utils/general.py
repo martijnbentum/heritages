@@ -25,7 +25,7 @@ def make_century_dict():
 	d = {}
 	for i in range(0,30):
 		century_name = str(i+1)
-		if century_name == '1': add = 'st'
+		if century_name[-1] == '1': add = 'st'
 		elif century_name == '2': add = 'nd'
 		elif century_name == '3': add = 'rd'
 		else: add = 'th'
@@ -41,3 +41,7 @@ def sort_dict_on_keys(d) :
 	d = dict(temp)
 	return d
 		
+def remove_keys_from_dict(d,keys):
+	for key in keys:
+		if not key in d.keys(): continue
+		del d[key]
