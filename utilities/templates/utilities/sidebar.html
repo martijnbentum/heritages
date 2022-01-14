@@ -103,15 +103,21 @@ hr {
 			<a>{{key}} <small>({{value}})</small></a>
 		{%endfor%}
 		<br>
-		<a>Tags</a>
+		<a>Famines</a>
 		<hr>
-		{% for key, value in keyword_category_counts.items %}
+		{% for key, value in famine_counts.items %}
 			<a>{{key}} <small>({{value}})</small></a>
 		{%endfor%}
 		<br>
 		<a>Date</a>
 		<hr>
 		{% for key, value in century_counts.items %}
+			<a>{{key}} <small>({{value}})</small></a>
+		{%endfor%}
+		<br>
+		<a>Tags</a>
+		<hr>
+		{% for key, value in keyword_category_counts.items %}
 			<a>{{key}} <small>({{value}})</small></a>
 		{%endfor%}
 		<br>
