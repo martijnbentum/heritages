@@ -93,6 +93,7 @@ hr {
 
 
 </style>
+{{id_dict|json_script:"id-dict"}}
 
 <form>
 <div class="d-flex">
@@ -202,6 +203,7 @@ var found_tiles = document.getElementsByClassName('tile-item');
 var found_rows = document.getElementsByClassName('row-item');
 console.log('tiles1:',found_tiles);
 console.log('rows1:',found_rows);
+var id_dict= JSON.parse(document.getElementById('id-dict').textContent);
 var sidebar_state = 'closed';
 var btn = document.getElementById("togglebtn")
 document.getElementById("content").style.marginLeft = "25px";
