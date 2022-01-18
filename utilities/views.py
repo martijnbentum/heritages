@@ -13,6 +13,7 @@ from utils.view_util import Crud, Cruds, make_tabs, FormsetFactoryManager
 from utils.model_util import copy_complete, get_all_instances
 from utils.get_totals import get_totals, get_countries, get_types
 from utils.get_totals import get_gender
+from utils.search_view_helper import SearchView
 # from .models import copy_complete
 from utilities.search import Search, SearchAll
 from .models import Protocol
@@ -63,114 +64,11 @@ def sidebar(request):
 
 def search_view(request, view_type = 'tile_view', query = ' ', combine = ' ',
 	exact = 'contains', direction = 'ascending', sorting_option = 'title - name'):
-	'''
-		view_type 		whether the results are shown in tile or row format
-		query 			passing a query between view types, overwrites the
-						query in the request
-	'''
-	print('parameters:',view_type,query,combine,exact)
-	if 'HTTP_REFERER' not in request.META.keys(): query = None
-	elif view_type in request.META['HTTP_REFERER']: query = None
-	if query == ' ': query = None
-	print(request.GET.keys(),'<-------')
-	if 'combine' in request.GET.keys():
-		combine = request.GET['combine']
-	if 'sorting_option' in request.GET.keys():
-		sorting_option = request.GET['sorting_option']
-	if 'direction' in request.GET.keys():
-		direction = request.GET['direction']
-	if 'exact' in request.GET.keys():
-		exact= request.GET['exact']
-	special_terms = [combine,exact]
-	print('query',query,'sorting_option',sorting_option)
-	s = SearchAll(request, query = query,direction = direction,
-		special_terms = special_terms,sorting_option = sorting_option)
-	instances= s.filter()
-	nentries = '# Entries: ' + str(len(instances))
-	print(len(instances),'ninstances')
-	query = s.query if s.query else ' '
-	print('search query:',[s.query])
-	print('pushing query:',[query])
-	if direction == 'ascending':sorting_icon = 'fas fa-sort-alpha-down'
-	else:sorting_icon = 'fas fa-sort-alpha-up'
-	d = {'title - name':'t','chronological':'c','famine':'f','category':'ca'}
-	d.update({'location':'l'})
-	if sorting_option in d.keys(): select_sorting_option = d[sorting_option]
-	else: select_sorting_option = 't'
+	s = SearchView(request, view_type, query, combine, exact, direction, sorting_option)
 	if view_type == 'tile_view':
-		view_type_link = 'row_view'
-		view_type_icon=  'fas fa-align-justify fa-lg'
+		return render(request,'utilities/tile_view.html',s.var)
 	else:
-		view_type_link = 'tile_view'
-		view_type_icon=  'fas fa-th fa-lg'
-	var = {'page_name':'tile view',
-		'instances':instances,
-		'query':query, 
-		'nentries':nentries,
-		'view_type_icon':view_type_icon,
-		'vtl':view_type_link,
-		'combine':combine,
-		'direction':direction,
-		'sorting_icon':sorting_icon,
-		'exact':exact,
-		'sorting_option':sorting_option,
-		select_sorting_option:'selected',
-		'country_counts':s.country_counts,
-		'keyword_category_counts':s.keyword_category_counts,
-		'model_counts':s.model_counts,
-		'century_counts':s.century_counts,
-		'famine_counts':s.famine_counts,
-		# 'main_search_options':main_search_options,
-	}
-	print('-->',var)
-	if view_type == 'tile_view':
-		return render(request,'utilities/tile_view.html',var)
-	else:
-		return render(request,'utilities/row_view.html',var)
-
-def tile_view(request, query = ''):
-	# instances= [instance for instance in get_all_instances() if instance.thumbnail]
-	if 'HTTP_REFERER' not in request.META.keys(): query = None
-	elif 'tile_view' in request.META['HTTP_REFERER']: query = None
-	if not query or query == ' ': query = None
-	print('received query:',[query])
-	print('using query in search:',[query])
-	s = SearchAll(request, query = query)
-	instances= list(set(s.filter()))
-	# removing double entries from search results, necessary??
-	nentries = '# Entries: ' + str(len(instances))
-	print(len(instances),'ninstances')
-	query = s.query if s.query else ' '
-	print('search query:',[s.query])
-	print('pushing query:',[query])
-	var = {'page_name':'tile view',
-		'instances':instances,
-		'query':query, 'nentries':nentries
-	}
-	return render(request,'utilities/tile_view.html',var)
-		
-	
-def row_view(request , query=''):
-	'''list view of a model.'''
-	if 'row_view' in request.META['HTTP_REFERER']: query = None
-	if not query or query == 'no_query': query == None
-	s = SearchAll(request, query = query)
-	instances= list(set(s.filter()))
-	# removing double entries from search results, necessary??
-	nentries = '# Entries: ' + str(len(instances))
-	html_name = 'utilities/row_view.html'
-	name = 'row view'
-	query = s.query if s.query else ' '
-	var = {'page_name':'row view',
-		'name':name,
-		'instances':instances,
-		'query':query, 'nentries':nentries
-	}
-	print('query:',query)
-	r =  render(request, html_name,var)
-	return r
-
-	
+		return render(request,'utilities/row_view.html',s.var)
 
 def list_view(request, model_name, app_name,html_name='',field_names = '',
 	max_entries=200):
