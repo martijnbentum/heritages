@@ -93,6 +93,7 @@ class SearchAll:
 		if not hasattr(self,'_country_counts'):
 			i = self._instances
 			self._country_counts, self._country_instances= instances2country_counts(i)
+			self._country_identifiers=_instance2identifier_dict(self._country_instances)
 		if countries:
 			instances = filter_on_list(self._country_instances, countries)
 			return instances
@@ -102,6 +103,7 @@ class SearchAll:
 		if not hasattr(self,'_keyword_category_counts'):
 			c,i = instances2keyword_category_counts(self._instances)
 			self._keyword_category_counts, self._keyword_category_instances= c,i
+			self._keyword_identifiers=_instance2identifier_dict(i)
 		if keywords:
 			instances = filter_on_list(self._keyword_category_instances, keywords)
 			return instances
@@ -111,6 +113,7 @@ class SearchAll:
 		if not hasattr(self,'_model_counts'):
 			c,i = instances2model_counts(self._instances)
 			self._model_counts, self._model_instances = c,i
+			self._model_identifiers=_instance2identifier_dict(i)
 		if model_names:
 			instances = filter_on_list(self._model_instances, model_names)
 			return instances
@@ -119,7 +122,8 @@ class SearchAll:
 		if not hasattr(self,'instances'): self.filter()
 		if not hasattr(self,'_century_counts'):
 			c,i = instances2century_counts(self._instances)
-			self._model_counts, self._model_instances = c,i
+			self._century_counts, self._century_instances = c,i
+			self._century_identifiers=_instance2identifier_dict(i)
 		century_names = _handle_centuries_input(centuries)
 		if century_names:
 			instances = filter_on_list(self._century_instances, century_names)
@@ -130,6 +134,7 @@ class SearchAll:
 		if not hasattr(self,'_famine_counts'):
 			c,i = instances2famine_counts(self._instances)
 			self._famine_counts, self._famine_instances = c,i
+			self._famine_identifiers=_instance2identifier_dict(i)
 		if famine_names:
 			instances = filter_on_list(self._famine_instances, famine_names)
 			return instances
@@ -506,5 +511,13 @@ def _handle_centuries_input(centuries):
 		return century_names
 	raise ValueError(m)
 
+def _instance2identifier_dict(d):
+	o = {}
+	for key,instances in d.items():
+		o[key] = [x.identifier for x in instances]
+	o['all'] = []
+	for ids in o.values():
+		o['all'].extend(ids)
+	return o
 		
 
