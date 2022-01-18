@@ -157,7 +157,7 @@ class SearchAll:
 	@property
 	def century_counts(self):
 		if not hasattr(self,'_century_counts'):self.century_filter()
-		return self._model_counts
+		return self._century_counts
 
 	@property
 	def famine_counts(self):
