@@ -6,7 +6,7 @@
 {% include 'utilities/sidebar.html' %}
 
 {% for instance in instances %}
-	<div class="tile">
+	<div class="tile tile-item" id='{{instance.identifier}}'>
 		{% if instance.thumbnail %}
 		<img id='{{instance.identifier}}' class="tile-img" 
 			src="{{instance.thumbnail.url}}" alt="" 
