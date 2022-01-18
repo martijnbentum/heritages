@@ -47,7 +47,7 @@ class SearchView:
 			self.sorting_option = self.request.GET['sorting_option']
 		if 'direction' in self.request.GET.keys():
 			self.direction = self.request.GET['direction']
-		if 'exact' in request.GET.keys():
+		if 'exact' in self.request.GET.keys():
 			self.exact= self.request.GET['exact']
 
 	def handle_options(self):
@@ -83,11 +83,19 @@ class SearchView:
 			'model_counts':self.search.model_counts,
 			'century_counts':self.search.century_counts,
 			'famine_counts':self.search.famine_counts,
+			'id_dict':self.id_dict,
 		}
 
-class test:
-	def __init__(self):
-		self.a =1
+	@property
+	def id_dict(self):
+		d = {
+			'country_id':self.search._country_identifiers,
+			'keyword_id':self.search._keyword_identifiers,
+			'model_id':self.search._model_identifiers,
+			'century_id':self.search._century_identifiers,
+			'famine_d':self.search._famine_identifiers,
+		}
+		return d
 
 def to_json(search_view_helper, filename = None):
 	d = _prepare_search_view_helper_dict(search_view_helper)
@@ -95,14 +103,15 @@ def to_json(search_view_helper, filename = None):
 		with open(filename,'w') as fout:
 			json.dump(d,fout)
 	return json.dumps(d)
+
+def to_dict(search_view_helper):
+	return _prepare_search_view_helper_dict(search_view_helper)
 	
 
 def _prepare_search_view_helper_dict(search_view_helper):
-	remove_keys = ['search','instances']
+	remove_keys = ['search','instances','var','request']
 	d = copy.copy(search_view_helper.__dict__)
 	remove_keys_from_dict(d,remove_keys)
-	var = copy.copy(d['var'])
-	d['var'] = remove_keys_from_dict(var,['instances'])
 	return d
 
 
