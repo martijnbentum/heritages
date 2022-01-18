@@ -198,8 +198,11 @@ href="{% url 'utilities:search_view' vtl query combine exact direction sorting_o
 
 
 <script>
+var found_tiles = document.getElementsByClassName('tile-item');
+var found_rows = document.getElementsByClassName('row-item');
+console.log('tiles1:',found_tiles);
+console.log('rows1:',found_rows);
 var sidebar_state = 'closed';
-toggle_sidebar();
 var btn = document.getElementById("togglebtn")
 document.getElementById("content").style.marginLeft = "25px";
 var combine = document.getElementById('combine')
@@ -215,6 +218,22 @@ if (exact.value == 'exact') {
 	make_button('CONTAINS','special_term');
 }
 	
+toggle_sidebar();
+function toggle_instances(identifiers) {
+	identifiers = eval(identifiers)
+	for (i=0;i<found_tiles.length;i++) {
+		tile = found_tiles[i]
+		for (j=0;j<identifiers.length;j++) {
+			if (tile.id == identifiers[j]) {
+				if (tile.style.display != "none") {
+					tile.style.display = "none";
+				} else {
+					tile.style.display = ""
+				}
+			}
+		}
+	}
+}
 
 function toggle_sidebar() {
 	if (sidebar_state == 'closed') {
