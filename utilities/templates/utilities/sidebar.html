@@ -127,14 +127,9 @@ href="{% url 'utilities:search_view' vtl query combine exact direction sorting_o
 </div>
 </form>
 
-
-
-
 <script>
 var found_tiles = document.getElementsByClassName('tile-item');
 var found_rows = document.getElementsByClassName('row-item');
-console.log('tiles1:',found_tiles);
-console.log('rows1:',found_rows);
 var count_dict = {};
 var id_dict= JSON.parse(document.getElementById('id-dict').textContent);
 var active_ids = id_dict['all']
@@ -145,6 +140,7 @@ var btn = document.getElementById("togglebtn")
 document.getElementById("content").style.marginLeft = "25px";
 var combine = document.getElementById('combine')
 var exact = document.getElementById('exact')
+var selected_filters = [];
 if (combine.value == 'combine') {
 	make_button('AND','special_term');
 } else {
@@ -158,53 +154,21 @@ if (exact.value == 'exact') {
 	
 toggle_sidebar();
 
-function show_hide_instances(identifiers, set='active') {
-	identifiers = eval(identifiers)
+function update_hide_show_instances() {
+	// hide or show instances based on active_ids array
 	for (let i=0;i<found_tiles.length;i++) {
 		tile = found_tiles[i]
-		for (j=0;j<identifiers.length;j++) {
-			identifier = identifiers[j]
-			if (tile.id == identifier) {
-				if (set == "active") {
-					tile.style.display = "";
-					if (!active_ids.includes(identifier)) {
-						active_ids.push(identifier);
-					}
-				} else {
-					tile.style.display = "none"
-					if (active_ids.includes(identifier)) {
-						active_ids.splice(active_ids.indexOf(identifier),1);
-					}
-				}
-			}
+		if (active_ids.includes(tile.id)) {
+			tile.style.display = "";
+		} else {
+			tile.style.display = "none"
 		}
 	}
 }
 
-function not_in_first_array(array1,array2) {
-	var output = []
-	for (let i=0;i<array2.length;i++) {
-		var item = array2[i];
-		if (!array1.includes(item)) { output.push(item) }
-	}
-	return output;
-}
-
-function count_array_overlap(a1,a2) {
-	n= 0;
-	for (let i=0;i<a2.length;i++) {
-		item = a2[i]
-		if (a1.includes(item)) { n++; }
-	}
-	return n 
-}
-
-
-
 function update_sidebar() {
+	//update the filters in the sidebar to show the current state
 	var fad_keys = Object.keys(filter_active_dict);
-	var inactive_category = ''
-	update_count_dict();
 	for (let i=0;i<fad_keys.length;i++) {
 		var key = fad_keys[i];
 		var filter_btn= document.getElementById(key)
@@ -213,22 +177,20 @@ function update_sidebar() {
 		var updated = false
 		var active = count_dict[key]['active']
 		var inactive = count_dict[key]['inactive']
+		var filtered_inactive = count_dict[key]['filtered_inactive']
 		var t = filter_btn.innerText;
-
 		if (filter_active_dict[category_name] == 'active') {
-			//var identifiers = id_dict[category_name][filter_name];
-			//var overlap = count_array_overlap(active_ids,identifiers);
 			if (active == 0) {
 					filter_btn.style.color='#bec4cf';
 					updated = true;
-					r = '('+inactive+')';
-		//			filter_btn.style.display='none';
+					r = '(0)';
+					filter_btn.style.display='none';
 			}
 			else { 
 				r = '('+active+')';
 				filter_btn.style.color='black'; 
 				updated = true;
-		//		filter_btn.style.display='';
+				filter_btn.style.display='';
 			}
 			filter_btn.innerText= t.replace(/\(.*\)/,r);
 		}
@@ -238,12 +200,13 @@ function update_sidebar() {
 		if (filter_active_dict[key] == 'active' && filter_btn) {
 			r = '('+active+')';
 			filter_btn.style.color='black';
-		//	filter_btn.style.display='';
 		}
 		if (filter_active_dict[key] == 'inactive' && filter_btn) {
-			r = '('+inactive+')';
+			//this should take into account filters from other categories
+			r = '('+filtered_inactive+')';
 			filter_btn.style.color='#bec4cf';
-	//		filter_btn.style.display='none';
+			if (filtered_inactive == 0) {filter_btn.style.display='none';}
+			else {filter_btn.style.display='';}
 		}
 		filter_btn.innerText= t.replace(/\(.*\)/,r);
 	}
@@ -261,23 +224,113 @@ function set_filter_active_dict(active=NaN, inactive=NaN,category_name=NaN) {
 		else if (key.includes(inactive)) {
 			filter_active_dict[key] = 'inactive';
 		}
+		// count the number of active filters in a category
 		if (key.includes(category_name) && key != category_name) {
 			if (filter_active_dict[key] == 'active') {active_count ++;}
 			if (filter_active_dict[key] == 'inactive') {inactive_count ++;}
-			console.log('<',filter_active_dict[key],key,2);
 		}
 	}
-	console.log('inactive_count:',inactive_count);
-	console.log('active_count:',active_count);
-	console.log('category_name:',category_name);
-	console.log('inactive_name:',inactive);
-	console.log('active_name:',active);
+	//if there are no inactive filters in an category, the category is active
 	if (inactive_count == 0){ filter_active_dict[category_name] = 'active'; }
 	else if (active_count == 0) {
+		//if there are no active filters, the last active filters is turned off
+		//all filters in the category should be turned on
 		set_filter_active_dict(active=category_name,
 			inactive=NaN, category_name=category_name)
 	}
+	//there are one or more (but not all) filters active in a category
+	//category is inactive
 	else {filter_active_dict[category_name] = 'inactive'; }
+}
+
+function update_count_dict() {
+	// count dict contains the active and non active instances for each filter
+	// this is needed to update the state of the sidebar
+	keys = Object.keys(filter_active_dict);
+	count = 0;
+	for (let i = 0;i<keys.length; i++) {
+		key = keys[i]	
+		var [category_name,filter_name] = key.split(',');
+		if (category_name && filter_name) {
+			var [active,inactive,f_inactive]=count_instances(category_name,filter_name);
+			count_dict[key] =  {}
+			count_dict[key]['active'] = active;
+			count_dict[key]['inactive'] = inactive;
+			count_dict[key]['filtered_inactive'] = f_inactive;
+		}
+	}
+}
+
+function get_ids_from_selected_filters_in_category(category) {
+	//get all ids from selected filters in a category
+	var category_ids = [];
+	for (let i=0;i<selected_filters.length;i++) {
+		var name= selected_filters[i];
+		var [category_name,filter_name] = name.split(',');
+		if (category != category_name) { continue; }
+		var identifiers = id_dict[category_name][filter_name];
+		category_ids.push(...identifiers);
+	}
+	return category_ids	
+}
+
+function update_active_ids() {
+	var temp = [];
+	if (selected_filters.length == 0) {
+		active_ids = id_dict['all']
+		return
+	}
+	category_names = Object.keys(id_dict);
+	for (let i=0;i<category_names.length;i++) {
+		var name= category_names[i];
+		if (name == 'all') {continue;}
+		var identifiers = get_ids_from_selected_filters_in_category(name)
+		if (identifiers.length == 0) { continue; }
+		temp.push(identifiers);
+	}
+	if (temp.length == 1) { active_ids = Array.from(...temp);}
+	else {active_ids = intersection(temp);}
+}
+
+function update_selected_filters(name) {
+	// the intersection of all instances linked to all selected filters
+	// are the shown instances
+	if (selected_filters.includes(name)) {
+		selected_filters.splice(selected_filters.indexOf(name),1)
+	}
+	else {selected_filters.push(name); }
+}
+
+function toggle_filter(name) {
+	//handles clicking a filter in the sidebar
+	[category_name,filter_name] = name.split(',');
+	if (filter_active_dict[category_name] == 'active') {
+		//first filter term in a category is activated,
+		//set all other terms 
+		set_filter_active_dict(active=name, inactive=category_name, 
+			category_name=category_name);
+	}
+	else if (filter_active_dict[name] == 'active') {
+		//this filter name is active and possibly one ore other more filter names 
+		//in this category are active
+		set_filter_active_dict(active=NaN,inactive=name,category_name=category_name)
+	}
+	else {
+		//current filter name is inactive, activate it and linked instances.
+		set_filter_active_dict(active=name,inactive=NaN,category_name=category_name);
+	}
+	update_selected_filters(name);
+	update_active_ids();
+	update_count_dict();
+	update_sidebar();
+	update_hide_show_instances()
+	set_nentries();
+}
+
+function intersection(array_of_arrays) {
+	var data = array_of_arrays;
+	var result = data.reduce( (a, b) => a.filter( c => b.includes(c) ) );
+	return result 
 }
 
 function count_inactive_categories() {
@@ -293,85 +346,57 @@ function count_inactive_categories() {
 	return count
 }
 
+function make_ids_omiting_one_category(category) {
+	var temp = [];
+	category_names = Object.keys(id_dict);
+	for (let i=0;i<category_names.length;i++) {
+		var name= category_names[i];
+		if (name == 'all' || category == name) {continue;}
+		var identifiers = get_ids_from_selected_filters_in_category(name)
+		if (identifiers.length == 0) { continue; }
+		temp.push(identifiers);
+	}
+	if (temp.length == 0) { var ids = id_dict['all'];}
+	else if (temp.length == 1) { var ids = Array.from(...temp);}
+	else {ids = intersection(temp);}
+	return ids
+}
+	
+
 function count_instances(category_name,filter_name) {
+	//count number of active and inactive instances in a category
 	var identifiers = id_dict[category_name][filter_name];
 	var active= count_array_overlap(active_ids,identifiers);
-	var inactive = identifiers.length - active
-	return [active, inactive]
+	var inactive = identifiers.length - active;
+	var ids = make_ids_omiting_one_category(category_name);
+	var filtered_inactive = count_array_overlap(ids,identifiers);
+	return [active, inactive,filtered_inactive]
 }
 
 
-
-function update_count_dict() {
-	keys = Object.keys(filter_active_dict);
-	count = 0;
-	for (let i = 0;i<keys.length; i++) {
-		key = keys[i]	
-		var [category_name,filter_name] = key.split(',');
-		if (category_name && filter_name) {
-			var [active,inactive] = count_instances(category_name,filter_name);
-			count_dict[key] =  {}
-			count_dict[key]['active'] = active;
-			count_dict[key]['inactive'] = inactive;
-		}
+function not_in_first_array(array1,array2) {
+	//select all instance that are not in the first array
+	var output = [];
+	for (let i=0;i<array2.length;i++) {
+		var item = array2[i];
+		if (!array1.includes(item)) { output.push(item) }
 	}
+	return output;
 }
 
-
-function toggle_filter(name) {
-	[category_name,filter_name] = name.split(',');
-	console.log(name.split(','))
-	console.log(category_name,filter_name);
-	console.log(filter_active_dict[category_name],filter_active_dict[name]);
-	if (filter_active_dict[category_name] == 'active') {
-		//first filter term in a category is activated,
-		//set all other terms (and linked instances to inactive
-		var active_array = id_dict[category_name][filter_name];
-		var category_array = id_dict[category_name]['all'];
-		var other_array = id_dict[category_name]['other'];
-		var hide_array = not_in_first_array(active_array,category_array);
-		hide_array = hide_array.concat(other_array);
-		console.log('active-array:',active_array)
-		console.log('hide-array:',hide_array)
-		show_hide_instances(hide_array,set='inactive')
-		set_filter_active_dict(active=name, inactive=category_name, 
-			category_name=category_name);
-		console.log('one active',filter_name,filter_active_dict);
+function count_array_overlap(a1,a2) {
+	//count the overlapping items from array 2 in array 1
+	n= 0;
+	for (let i=0;i<a2.length;i++) {
+		item = a2[i]
+		if (a1.includes(item)) { n++; }
 	}
-	else if (filter_active_dict[name] == 'active') {
-		//this filter name is active and possibly one ore other more filter names 
-		//in this category are active
-		set_filter_active_dict(active=NaN,inactive=name,category_name=category_name)
-		if (filter_active_dict[name] == 'active') {
-			//only this filter term was active, activate all terms in this category
-			//and all linked instances
-			var active_array = id_dict[category_name]['all'];
-			show_hide_instances(active_array);
-			console.log('all active',filter_active_dict,category_name)
-		}		
-		else {
-			//one or more filter terms besides this term is active
-			//deactivate this term and linked instances
-			var inactive_array = id_dict[category_name][filter_name];
-			show_hide_instances(inactive_array,set='inactive');
-			console.log('term deactivate',filter_name,filter_active_dict);
-		}		
-	}
-	else {
-		//current filter name is inactive, activate it and linked instances.
-		var active_array = id_dict[category_name][filter_name];
-		console.log('active',active_array);
-		show_hide_instances(active_array);
-		set_filter_active_dict(active=name,inactive=NaN,category_name=category_name);
-		console.log('term activate',filter_name,filter_active_dict);
-	}
-	set_nentries();
-	update_sidebar();
+	return n 
 }
+
 
 function set_nentries() { 
 	var nentries = document.getElementById('nentries');
-	console.log(nentries);
 	nentries.innerText = '# Entries ' + active_ids.length;
 }
 
