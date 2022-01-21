@@ -1,131 +1,62 @@
-
-<style>
-hr {
-	margin-top:0px;
-	margin-bottom:3px;
-}
-
-.search_button {
-	border: none;
-	color: black;
-	background-color:white;
-	padding: 2px 4px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 10px;
-	margin-left:15px;
-	transition-duration: 0.3s;
-	cursor: pointer;
-	border-radius: 3px;
-	border: 1px solid black;
-} 
-
-.sorting_option{
-	margin-left:5px;
-	margin-top:5px;
-	padding:0px;
-	height:20px;
-}
-
-.select_label {
-	margin-left:20px;
-}
-
-.search_button:focus {
-	outline:0;
-}
-
-.sidebar {
-	height: 100%;
-	width: 0px;
-	position: fixed;
-	z-index: 1;
-	top: 30;
-	left: 0;
-	background-color: #edf1f7;
-	overflow-x: hidden;
-	transition: 0.5s;
-	padding-top: 10px;
-}
-
-
-.sidebar a {
-	text-decoration: none;
-	color: #585e66;
-	display: block;
-	transition: 0.5s;
-	font-size: 14px;
-}
-
-.sidebar a:hover {
-	color: black;
-}
-
-.sorting {
-	font-size:20px;
-	color:black;
-	margin-left:15px;
-}
-.sorting:hover {
-	text-decoration:none;
-	color: black;
-}
-	
-
-.togglebtn {
-	font-size: 30px;
-	cursor: pointer;
-	color: black;
-	margin-top: 0px;
-	padding-top:0px;
-}
-
-.togglebtn:focus{
-	outline:0;
-}
-
-.togglebtn:hover {
-	text-decoration:none;
-	color: black;
-}
-
-
-
-</style>
+{% include 'utilities/sideb_style.html' %}
 {{id_dict|json_script:"id-dict"}}
-
+{{filter_active_dict|json_script:"filter-active-dict"}}
 <form>
 <div class="d-flex">
-	<div id="mySidebar" class="sidebar">
+	<div id="mySidebar" class="sidebar bg-light">
 		<a>Categories</a>
 		<hr>
 		{% for key, value in model_counts.items %}
-			<a>{{key}} <small>({{value}})</small></a>
+			<a 
+				href="javascript:void(0)"
+				id='model,{{key}}'
+				onclick="toggle_filter('model,{{key}}')">
+					{{key}} <small>({{value}})</small>
+			</a>
 		{%endfor%}
 		<br>
 		<a>Famines</a>
 		<hr>
 		{% for key, value in famine_counts.items %}
-			<a>{{key}} <small>({{value}})</small></a>
+			<a 
+				href="javascript:void(0)"
+				id='famine,{{key}}'
+				onclick="toggle_filter('famine,{{key}}')">
+					{{key}} <small>({{value}})</small>
+			</a>
 		{%endfor%}
 		<br>
 		<a>Date</a>
 		<hr>
 		{% for key, value in century_counts.items %}
-			<a>{{key}} <small>({{value}})</small></a>
+			<a 
+				href="javascript:void(0)"
+				id='century,{{key}}'
+				onclick="toggle_filter('century,{{key}}')">
+					{{key}} <small>({{value}})</small>
+			</a>
 		{%endfor%}
 		<br>
 		<a>Tags</a>
 		<hr>
 		{% for key, value in keyword_category_counts.items %}
-			<a>{{key}} <small>({{value}})</small></a>
+			<a 
+				href="javascript:void(0)"
+				id='keyword,{{key}}'
+				onclick="toggle_filter('keyword,{{key}}')">
+					{{key}} <small>({{value}})</small>
+			</a>
 		{%endfor%}
 		<br>
 		<a>Location</a>
 		<hr>
 		{% for key, value in country_counts.items %}
-			<a>{{key}} <small>({{value}})</small></a>
+			<a 
+				href="javascript:void(0)"
+				id='location,{{key}}'
+				onclick="toggle_filter('location,{{key}}')">
+					{{key}} <small>({{value}})</small>
+			</a>
 		{%endfor%}
 		<br>
 		<br>
@@ -166,7 +97,8 @@ href="{% url 'utilities:search_view' vtl query combine exact direction sorting_o
 				value="{{exact}}" />
 		</div>
 			<div class="d-flex">
-				<p class="text-secondary small ml-3 mt-1 mb-3" >{{nentries}}<p>
+				<p class="text-secondary small ml-3 mt-1 mb-3" 
+					id='nentries'>{{nentries}}<p>
 				<div id="extended_search_list"></div>
 				<a href="javascript:void(0)" 
 					id="sorting" 
@@ -203,7 +135,11 @@ var found_tiles = document.getElementsByClassName('tile-item');
 var found_rows = document.getElementsByClassName('row-item');
 console.log('tiles1:',found_tiles);
 console.log('rows1:',found_rows);
+var count_dict = {};
 var id_dict= JSON.parse(document.getElementById('id-dict').textContent);
+var active_ids = id_dict['all']
+var temp =document.getElementById('filter-active-dict').textContent;
+var filter_active_dict = JSON.parse(temp);
 var sidebar_state = 'closed';
 var btn = document.getElementById("togglebtn")
 document.getElementById("content").style.marginLeft = "25px";
@@ -221,20 +157,222 @@ if (exact.value == 'exact') {
 }
 	
 toggle_sidebar();
-function toggle_instances(identifiers) {
+
+function show_hide_instances(identifiers, set='active') {
 	identifiers = eval(identifiers)
-	for (i=0;i<found_tiles.length;i++) {
+	for (let i=0;i<found_tiles.length;i++) {
 		tile = found_tiles[i]
 		for (j=0;j<identifiers.length;j++) {
-			if (tile.id == identifiers[j]) {
-				if (tile.style.display != "none") {
-					tile.style.display = "none";
+			identifier = identifiers[j]
+			if (tile.id == identifier) {
+				if (set == "active") {
+					tile.style.display = "";
+					if (!active_ids.includes(identifier)) {
+						active_ids.push(identifier);
+					}
 				} else {
-					tile.style.display = ""
+					tile.style.display = "none"
+					if (active_ids.includes(identifier)) {
+						active_ids.splice(active_ids.indexOf(identifier),1);
+					}
 				}
 			}
 		}
 	}
+}
+
+function not_in_first_array(array1,array2) {
+	var output = []
+	for (let i=0;i<array2.length;i++) {
+		var item = array2[i];
+		if (!array1.includes(item)) { output.push(item) }
+	}
+	return output;
+}
+
+function count_array_overlap(a1,a2) {
+	n= 0;
+	for (let i=0;i<a2.length;i++) {
+		item = a2[i]
+		if (a1.includes(item)) { n++; }
+	}
+	return n 
+}
+
+
+
+function update_sidebar() {
+	var fad_keys = Object.keys(filter_active_dict);
+	var inactive_category = ''
+	update_count_dict();
+	for (let i=0;i<fad_keys.length;i++) {
+		var key = fad_keys[i];
+		var filter_btn= document.getElementById(key)
+		if (!filter_btn) {continue;}
+		var [category_name,filter_name] = key.split(',');
+		var updated = false
+		var active = count_dict[key]['active']
+		var inactive = count_dict[key]['inactive']
+		var t = filter_btn.innerText;
+
+		if (filter_active_dict[category_name] == 'active') {
+			//var identifiers = id_dict[category_name][filter_name];
+			//var overlap = count_array_overlap(active_ids,identifiers);
+			if (active == 0) {
+					filter_btn.style.color='#bec4cf';
+					updated = true;
+					r = '('+inactive+')';
+		//			filter_btn.style.display='none';
+			}
+			else { 
+				r = '('+active+')';
+				filter_btn.style.color='black'; 
+				updated = true;
+		//		filter_btn.style.display='';
+			}
+			filter_btn.innerText= t.replace(/\(.*\)/,r);
+		}
+
+		if (updated) {continue;}
+
+		if (filter_active_dict[key] == 'active' && filter_btn) {
+			r = '('+active+')';
+			filter_btn.style.color='black';
+		//	filter_btn.style.display='';
+		}
+		if (filter_active_dict[key] == 'inactive' && filter_btn) {
+			r = '('+inactive+')';
+			filter_btn.style.color='#bec4cf';
+	//		filter_btn.style.display='none';
+		}
+		filter_btn.innerText= t.replace(/\(.*\)/,r);
+	}
+}
+
+function set_filter_active_dict(active=NaN, inactive=NaN,category_name=NaN) {
+	var d_keys = Object.keys(filter_active_dict);
+	var active_count=0 
+	var inactive_count=0 ;
+	for (let i=0;i<d_keys.length;i++) {
+		var key = d_keys[i];
+		if (key.includes(active)) {
+			filter_active_dict[key] = 'active';
+		}
+		else if (key.includes(inactive)) {
+			filter_active_dict[key] = 'inactive';
+		}
+		if (key.includes(category_name) && key != category_name) {
+			if (filter_active_dict[key] == 'active') {active_count ++;}
+			if (filter_active_dict[key] == 'inactive') {inactive_count ++;}
+			console.log('<',filter_active_dict[key],key,2);
+		}
+	}
+	console.log('inactive_count:',inactive_count);
+	console.log('active_count:',active_count);
+	console.log('category_name:',category_name);
+	console.log('inactive_name:',inactive);
+	console.log('active_name:',active);
+	if (inactive_count == 0){ filter_active_dict[category_name] = 'active'; }
+	else if (active_count == 0) {
+		set_filter_active_dict(active=category_name,
+			inactive=NaN, category_name=category_name)
+	}
+	else {filter_active_dict[category_name] = 'inactive'; }
+}
+
+function count_inactive_categories() {
+	keys = Object.keys(id_dict);
+	count = 0;
+	for (let i = 0;i<keys.length; i++) {
+		key = keys[i]	
+		if (key == 'all') {continue;}
+		if (filter_active_dict[key] == 'inactive') {
+			count ++;
+		}
+	}
+	return count
+}
+
+function count_instances(category_name,filter_name) {
+	var identifiers = id_dict[category_name][filter_name];
+	var active= count_array_overlap(active_ids,identifiers);
+	var inactive = identifiers.length - active
+	return [active, inactive]
+}
+
+
+
+function update_count_dict() {
+	keys = Object.keys(filter_active_dict);
+	count = 0;
+	for (let i = 0;i<keys.length; i++) {
+		key = keys[i]	
+		var [category_name,filter_name] = key.split(',');
+		if (category_name && filter_name) {
+			var [active,inactive] = count_instances(category_name,filter_name);
+			count_dict[key] =  {}
+			count_dict[key]['active'] = active;
+			count_dict[key]['inactive'] = inactive;
+		}
+	}
+}
+
+
+function toggle_filter(name) {
+	[category_name,filter_name] = name.split(',');
+	console.log(name.split(','))
+	console.log(category_name,filter_name);
+	console.log(filter_active_dict[category_name],filter_active_dict[name]);
+	if (filter_active_dict[category_name] == 'active') {
+		//first filter term in a category is activated,
+		//set all other terms (and linked instances to inactive
+		var active_array = id_dict[category_name][filter_name];
+		var category_array = id_dict[category_name]['all'];
+		var other_array = id_dict[category_name]['other'];
+		var hide_array = not_in_first_array(active_array,category_array);
+		hide_array = hide_array.concat(other_array);
+		console.log('active-array:',active_array)
+		console.log('hide-array:',hide_array)
+		show_hide_instances(hide_array,set='inactive')
+		set_filter_active_dict(active=name, inactive=category_name, 
+			category_name=category_name);
+		console.log('one active',filter_name,filter_active_dict);
+	}
+	else if (filter_active_dict[name] == 'active') {
+		//this filter name is active and possibly one ore other more filter names 
+		//in this category are active
+		set_filter_active_dict(active=NaN,inactive=name,category_name=category_name)
+		if (filter_active_dict[name] == 'active') {
+			//only this filter term was active, activate all terms in this category
+			//and all linked instances
+			var active_array = id_dict[category_name]['all'];
+			show_hide_instances(active_array);
+			console.log('all active',filter_active_dict,category_name)
+		}		
+		else {
+			//one or more filter terms besides this term is active
+			//deactivate this term and linked instances
+			var inactive_array = id_dict[category_name][filter_name];
+			show_hide_instances(inactive_array,set='inactive');
+			console.log('term deactivate',filter_name,filter_active_dict);
+		}		
+	}
+	else {
+		//current filter name is inactive, activate it and linked instances.
+		var active_array = id_dict[category_name][filter_name];
+		console.log('active',active_array);
+		show_hide_instances(active_array);
+		set_filter_active_dict(active=name,inactive=NaN,category_name=category_name);
+		console.log('term activate',filter_name,filter_active_dict);
+	}
+	set_nentries();
+	update_sidebar();
+}
+
+function set_nentries() { 
+	var nentries = document.getElementById('nentries');
+	console.log(nentries);
+	nentries.innerText = '# Entries ' + active_ids.length;
 }
 
 function toggle_sidebar() {
