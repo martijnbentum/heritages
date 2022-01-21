@@ -1,19 +1,21 @@
 from utilities.search import SearchAll
 from utils.general import remove_keys_from_dict
-import json
 import copy
+import json
+import time
 
 class SearchView:
 	'''stores options for view template.'''
 	def __init__(self, request = None,view_type = 'tile_view', query = ' ', 
 		combine = ' ',exact = 'contains', direction = 'ascending', 
-		sorting_option = 'title - name'):
+		sorting_option = 'title - name', verbose = False):
 		'''
 		request 		django object
 		view_type 		whether the results are shown in tile or row format
 		query 			passing a query between view types, overwrites the
 						query in the request
 		'''
+		self.start = time.time()
 		self.request = request
 		self.view_type = view_type
 		self.query = query
@@ -22,10 +24,15 @@ class SearchView:
 		self.direction = direction
 		self.sorting_option = sorting_option
 		self.special_terms = [self.combine,self.exact]
+		if verbose:print('start',delta(self.start))
 		self.handle_request()
+		if verbose:print('request',delta(self.start))
 		self.make_search()
+		if verbose:print('search',delta(self.start))
 		self.handle_options()
+		if verbose:print('options',delta(self.start))
 		self.make_var()
+		if verbose:print('var',delta(self.start))
 
 	def make_search(self):
 		self.search = SearchAll(self.request, query = self.query,
@@ -84,18 +91,41 @@ class SearchView:
 			'century_counts':self.search.century_counts,
 			'famine_counts':self.search.famine_counts,
 			'id_dict':self.id_dict,
+			'filter_active_dict':self.filter_active_dict,
 		}
 
 	@property
 	def id_dict(self):
-		d = {
-			'country_id':self.search._country_identifiers,
-			'keyword_id':self.search._keyword_identifiers,
-			'model_id':self.search._model_identifiers,
-			'century_id':self.search._century_identifiers,
-			'famine_d':self.search._famine_identifiers,
+		if hasattr(self,'_id_dict'): return self._id_dict
+		self._id_dict = {
+			'location':self.search._country_identifiers,
+			'keyword':self.search._keyword_identifiers,
+			'model':self.search._model_identifiers,
+			'century':self.search._century_identifiers,
+			'famine':self.search._famine_identifiers,
 		}
-		return d
+		all_ids = _get_all_non_dict_values_from_dict(self._id_dict)
+		for key in self._id_dict:
+			all_ids_category = self._id_dict[key]['all']
+			other_ids = list(set(all_ids) - set(all_ids_category))
+			self._id_dict[key]['other'] = other_ids
+		self._id_dict['all'] = all_ids
+		return self._id_dict
+
+	@property
+	def filter_active_dict(self):
+		o = {}
+		for category_key, d in self.id_dict.items():
+			if category_key == 'all': continue
+			o[category_key] = 'active'
+			for key in d.keys():
+				if key == 'all' or key == 'other': continue
+				o[category_key+','+key] = 'active'
+		return o
+
+
+			
+		
 
 def to_json(search_view_helper, filename = None):
 	d = _prepare_search_view_helper_dict(search_view_helper)
@@ -114,5 +144,17 @@ def _prepare_search_view_helper_dict(search_view_helper):
 	remove_keys_from_dict(d,remove_keys)
 	return d
 
+def delta(t):
+	return time.time() -t
 
 	
+def _get_all_non_dict_values_from_dict(d, values = [], unique = True):
+	for value in d.values():
+		if type(value) == dict: 
+			temp = _get_all_non_dict_values_from_dict(value)
+		elif type(value) != list: temp = [value]
+		else: temp = value
+		values.extend(temp)
+	if unique: values = list(set(values))
+	return values
+
