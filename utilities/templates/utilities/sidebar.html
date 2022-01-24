@@ -154,14 +154,21 @@ if (exact.value == 'exact') {
 	
 toggle_sidebar();
 
+
 function update_hide_show_instances() {
 	// hide or show instances based on active_ids array
-	for (let i=0;i<found_tiles.length;i++) {
-		tile = found_tiles[i]
-		if (active_ids.includes(tile.id)) {
-			tile.style.display = "";
+	_update_instances(found_tiles);
+	_update_instances(found_rows);
+}
+
+function _update_instances(items) {
+	// helper function to hide & show instances for both tile and row view
+	for (let i=0;i<items.length;i++) {
+		item = items[i]
+		if (active_ids.includes(item.id)) {
+			item.style.display = "";
 		} else {
-			tile.style.display = "none"
+			item.style.display = "none"
 		}
 	}
 }
@@ -194,9 +201,20 @@ function update_sidebar() {
 			}
 			filter_btn.innerText= t.replace(/\(.*\)/,r);
 		}
-
+		//console.log(key,selected_filters,333, filter_btn)
+		// mark selected filters with a dot
+		var t = filter_btn.innerText;
+		if (selected_filters.includes(key)) {
+			if (!t.includes('•')) {
+				filter_btn.innerText= '•' + t;
+			}	
+		}
+		else { 
+			filter_btn.innerText= t.replace('•','');
+		}
 		if (updated) {continue;}
 
+		var t = filter_btn.innerText;
 		if (filter_active_dict[key] == 'active' && filter_btn) {
 			r = '('+active+')';
 			filter_btn.style.color='black';
@@ -211,6 +229,7 @@ function update_sidebar() {
 		filter_btn.innerText= t.replace(/\(.*\)/,r);
 	}
 }
+
 
 function set_filter_active_dict(active=NaN, inactive=NaN,category_name=NaN) {
 	var d_keys = Object.keys(filter_active_dict);
