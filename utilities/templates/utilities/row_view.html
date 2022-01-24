@@ -6,7 +6,7 @@
 
 {% for instance in instances %}
 
-	<div class="grid-container row row-item" id='{{instance.identifier}}_row_container'>
+	<div class="grid-container row row-item" id='{{instance.identifier}}'>
 		<div class="grid-item icon">
 			<i class="{{instance.icon}} fa-lg" aria-hidden="true"></i> 
 		</div>
@@ -70,7 +70,6 @@
 			{% endif %}
 		</div>  
 	</div>
-	<hr>
 {% endfor %}
 
 <script>
