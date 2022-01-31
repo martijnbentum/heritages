@@ -106,10 +106,12 @@ def make_file_backup_postsave_receiver(app_name,model_name):
 		print('-'*90)
 
 
-d = make_models_image_file_dict()
-for k in d:
-	app_name, model_name = k
-	make_file_backup_postsave_receiver(app_name,model_name)
+if not settings.MEDIA_ROOT.startswith('/Users/u050158/'):
+	d = make_models_image_file_dict()
+	for k in d:
+		print('setting',k)
+		app_name, model_name = k
+		make_file_backup_postsave_receiver(app_name,model_name)
 		
 
 def extract_filename_and_path(name):
