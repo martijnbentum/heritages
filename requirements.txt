@@ -1,4 +1,4 @@
-django==2.2.24
+django==2.2.27
 django_select2
 Pillow>=6.2.2
 python-decouple
