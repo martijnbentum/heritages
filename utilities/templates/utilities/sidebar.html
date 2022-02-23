@@ -141,16 +141,6 @@ document.getElementById("content").style.marginLeft = "25px";
 var combine = document.getElementById('combine')
 var exact = document.getElementById('exact')
 var selected_filters = [];
-if (combine.value == 'combine') {
-	make_button('AND','special_term');
-} else {
-	make_button('OR','special_term');
-}
-if (exact.value == 'exact') {
-	make_button('EXACT','special_term');
-} else {
-	make_button('CONTAINS','special_term');
-}
 	
 toggle_sidebar();
 
