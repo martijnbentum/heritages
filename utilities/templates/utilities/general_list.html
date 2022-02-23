@@ -8,10 +8,14 @@
 {% load getattribute %}
 <div class="d-flex">
 	{% include 'utilities/list_search_bar.html' %} 
-	{% with app_name|add:":add_"|add:name as add_instance%}
-		<a class ="btn btn-link ml-auto text-dark " href="{% url add_instance  %}"
-			role="button"><strong>Add {{name}}</strong></a>
-	{% endwith %}
+
+	{% if not typemaster or request.user|has_group:"typemaster"%}
+	<!-- only add new instance if no typemaster is needed or user is typemaster -->
+		{% with app_name|add:":add_"|add:name as add_instance%}
+			<a class ="btn btn-link ml-auto text-dark " href="{% url add_instance  %}"
+				role="button"><strong>Add {{name}}</strong></a>
+		{% endwith %}
+	{% endif %}
 </div>
 
 {% if list %}
@@ -30,20 +34,23 @@
 				{% for key, value in fields %}
 					<td>{{item|getattribute:key|default_if_none:""}}</td>
 				{% endfor %}
-				<td style="white-space:nowrap;">
-					<a class="btn btn-link btn-sm ml-auto"
-						href = "{% url delete item.pk name|title %}"
-						role="button">
-							<i class="fa fa-trash text-secondary"></i>
-					</a>
-				</td>
-				<td style="white-space:nowrap;">
-					<a class="btn btn-link btn-sm ml-auto"
-						href = "{% url edit item.pk %}"
-						role="button">
-							<i class="far fa-edit text-secondary"></i>
-					</a>
-				</td>
+				{% if not typemaster or request.user|has_group:"typemaster"%}
+<!-- only edit/delete instance if no typemaster is needed or user is typemaster -->
+					<td style="white-space:nowrap;">
+						<a class="btn btn-link btn-sm ml-auto"
+							href = "{% url delete item.pk name|title %}"
+							role="button">
+								<i class="fa fa-trash text-secondary"></i>
+						</a>
+					</td>
+					<td style="white-space:nowrap;">
+						<a class="btn btn-link btn-sm ml-auto"
+							href = "{% url edit item.pk %}"
+							role="button">
+								<i class="far fa-edit text-secondary"></i>
+						</a>
+					</td>
+				{% endif %}
 			</tr>
 		{% endfor %}
 	</table>

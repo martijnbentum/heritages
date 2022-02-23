@@ -73,9 +73,14 @@ def search_view(request, view_type = 'tile_view', query = ' ', combine = ' ',
 def list_view(request, model_name, app_name,html_name='',field_names = '',
 	max_entries=200):
 	'''list view of a model.'''
-	print(max_entries)
+	print(max_entries, html_name,app_name)
 	if field_names == '': field_names = field_names_dict[model_name.lower()]
 	if html_name == '': html_name = 'utilities/general_list.html'
+	if html_name == 'typemaster': 
+		html_name = 'utilities/general_list.html'
+		typemaster=True
+	else: typemaster = False
+	print(typemaster,'<---')
 	s = Search(request,model_name,app_name,max_entries=max_entries)
 	instances= s.filter()
 	# removing double entries from search results, necessary??
@@ -86,7 +91,8 @@ def list_view(request, model_name, app_name,html_name='',field_names = '',
 		'order':s.order.order_by,'direction':s.order.direction,
 		'query':s.query.query,'nentries':s.nentries, 'list':instances,'name':name,
 		'type_name':name+'_type','app_name':app_name,'fields':field_dict.items(),
-		'delete':app_name+':delete','edit':app_name+':edit_'+name}
+		'delete':app_name+':delete','edit':app_name+':edit_'+name,
+		'typemaster':typemaster}
 	r =  render(request, html_name.replace('$','/'),var)
 	return r
 

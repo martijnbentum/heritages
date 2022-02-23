@@ -48,10 +48,8 @@
 				location</a>
           <a class="dropdown-item" href=
 			"{% url 'utilities:list_view' 'Person' 'persons' %}">person</a>
-		{% if request.user|has_group:"typemaster" %}
           <a class="dropdown-item" href=
-			"{% url 'utilities:list_view' 'Keyword' 'misc' %}">keyword</a>
-		{% endif %}
+			"{% url 'utilities:list_view' 'Keyword' 'misc' 'typemaster'%}">keyword</a>
 			<div class="dropdown-divider"></div> 
           <a class="dropdown-item" href=
 			
