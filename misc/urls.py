@@ -24,5 +24,7 @@ urlpatterns = [
 	path('add_keyword/',views.edit_keyword, name='add_keyword'),
 	path('add_keyword/<str:view>',views.edit_keyword, name='add_keyword'),
 	path('delete/<int:pk>/<str:model_name>',views.delete,name='delete'),
+	path('detail_famine_view/<int:pk>',views.detail_famine_view, 
+		name='detail_famine_view'),
 ]
 

@@ -1,0 +1,79 @@
+{% extends "utilities/base.html" %}
+
+{% block head %}
+	<title>{{page_name}}</title>
+{% endblock %}
+
+{% block content %}
+
+<div class="grid-container"> 
+	<div class="grid-item">
+		{% if instance.thumbnail%}
+			<img id='big-image' class="sml-img"
+				 src="{{instance.thumbnail.url}}">
+		{% endif %}
+	</div>
+	<div class="grid-item wide">
+		<h3>{{instance.names_str}} 
+			<a class="btn btn-link btn-sm ml-auto"
+				href = "{% url instance.edit_url instance.pk %}"
+				role="button"><i class="far fa-edit text-secondary"></i></a>
+		</h3>
+		<hr>
+	</div>
+
+	<div class="info">
+		<div class="grid-item general">
+{% with i='utilities/detail_info_single.html' %}
+{% with il='utilities/detail_info_loop.html' %}
+
+
+{% include il with name='Location:' others=instance.location_list unk='false' link='loc'%}
+{% include i with name='Excess death:' info=instance.estimated_excess_mortality%}
+{% include il with name='Causal trigger:' others=instance.causal_trigger_list unk='True' link='no'%}
+{% include i with name='Keywords:' info=instance.keyword_names%}
+{% include 'utilities/show_info_links.html' %}
+
+{% endwith %}
+{% endwith %}
+		</div>
+
+		{% if instance.description %}
+			<div class="grid-item description">
+				<div> 
+				<span class = "info-header center">Description:</span>
+				<br>
+					{{instance.description }}
+				<br><br>
+				</div>
+			</div>
+		{% endif %}
+	</div>
+</div>
+
+{% include 'utilities/detail_style.html' %}
+
+<style>
+.grid-container {
+	display:grid;
+	grid-template-columns: 12fr;
+	padding: 1px;
+	grid-gap: 3px;
+	justify-items: left;
+	align-items: start;
+}
+
+.sml-img {
+	height:200px;
+}
+
+img {
+	border-radius:3px;
+	height:500px;
+	object-fit:cover;
+	max-width:100%;
+	max-height:100%;
+}
+
+</style>
+{% endblock %}

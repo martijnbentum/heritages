@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .forms import FamineForm,FamineNameForm,LanguageForm
 from .forms import CausalTriggerForm,KeywordForm, keywordkeyword_formset
+from .models import Famine
 from utilities.views import edit_model, add_simple_model, list_view, delete_model
 
 
@@ -41,4 +42,8 @@ def add_keyword(request):
 def delete(request, pk, model_name):
 	return delete_model(request, __name__, model_name,'misc',pk)
 
+def detail_famine_view(request,pk):
+	instance = Famine.objects.get(pk = pk)
+	args = {'instance':instance, 'page_name':instance.names_str}
+	return render(request,'misc/detail_famine_view.html',args)
 

@@ -98,6 +98,14 @@ class Famine(models.Model, info):
 		return expose_m2m(self,'locations','name')
 
 	@property
+	def location_list(self):
+		return list(self.locations.all())
+
+	@property
+	def causal_trigger_list(self):
+		return list(self.causal_triggers.all())
+
+	@property
 	def latlng(self):
 		if self.location_field:
 			locations = field2locations(self,self.location_field)
@@ -107,6 +115,16 @@ class Famine(models.Model, info):
 	@property
 	def edit_url(self):
 		return self._meta.app_label + ':edit_' + self._meta.model_name 
+
+	@property
+	def detail_url(self):
+		return self._meta.app_label + ':detail_' + self._meta.model_name +'_view'
+
+	@property
+	def keyword_names(self):
+		keywords= self.keywords.all().order_by('name') 
+		if keywords: return ', '.join([k.name for k in keywords])
+		else: return ''
 
 	@property
 	def pop_up(self):
