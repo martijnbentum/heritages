@@ -5,11 +5,11 @@
 		{% for other in others %}
 			{% if not forloop.last %}
 				<a class="link-color"
-				href = "{% url other.edit_url other.pk %}"
+				href = "{% url other.detail_url other.pk %}"
 				role="button">{{other}},</a>
 			{% else %}
 				<a class="link-color"
-				href = "{% url other.edit_url other.pk %}"
+				href = "{% url other.detail_url other.pk %}"
 				role="button">{{other}}</a>
 			{% endif %}
 		{% endfor %}
@@ -37,17 +37,17 @@
 			{{name}}</span>
 		{% for other in others %}
 			{% if not forloop.last %}
-				{% if other.edit_url %}
+				{% if other.detail_url %}
 					<a class="link-color"
-					href = "{% url other.edit_url other.pk %}"
+					href = "{% url other.detail_url other.pk %}"
 					role="button">{{other}},</a>
 				{% else %}
 					{{other}}
 				{% endif %}
 			{% else %}
-				{% if other.edit_url %}
+				{% if other.detail_url %}
 					<a class="link-color"
-					href = "{% url other.edit_url other.pk %}"
+					href = "{% url other.detail_url other.pk %}"
 					role="button">{{other}}</a>
 				{% else %}
 					{{other}}
