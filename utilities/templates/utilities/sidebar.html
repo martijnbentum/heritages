@@ -4,60 +4,105 @@
 <form>
 <div class="d-flex">
 	<div id="mySidebar" class="sidebar bg-light">
-		<a>Categories</a>
-		<hr>
-		{% for key, value in model_counts.items %}
-			<a 
-				href="javascript:void(0)"
-				id='model,{{key}}'
-				onclick="toggle_filter('model,{{key}}')">
-					{{key}} <small>({{value}})</small>
-			</a>
-		{%endfor%}
+		<a 
+			href="javascript:void(0)"
+			id='catalogue-filter'
+			onclick="toggle_filters_visibile('catalogue')"
+			>
+			Categories
+		</a>
+		<div id = 'catalogue-filters'>
+			<hr>
+			{% for key, value in model_counts.items %}
+				<a 
+					class='indent'
+					href="javascript:void(0)"
+					id='model,{{key}}'
+					onclick="toggle_filter('model,{{key}}')">
+						{{key}} <small>({{value}})</small>
+				</a>
+			{%endfor%}
+		</div>
 		<br>
-		<a>Famines</a>
-		<hr>
-		{% for key, value in famine_counts.items %}
-			<a 
-				href="javascript:void(0)"
-				id='famine,{{key}}'
-				onclick="toggle_filter('famine,{{key}}')">
-					{{key}} <small>({{value}})</small>
-			</a>
-		{%endfor%}
+		<a
+			href="javascript:void(0)"
+			id='famines-filter'
+			onclick="toggle_filters_visibile('famines')"
+			>
+			Famines
+		</a>
+		<div id = 'famines-filters'>
+			<hr>
+			{% for key, value in famine_counts.items %}
+				<a 
+					class='indent'
+					href="javascript:void(0)"
+					id='famine,{{key}}'
+					onclick="toggle_filter('famine,{{key}}')">
+						{{key}} <small>({{value}})</small>
+				</a>
+			{%endfor%}
+		</div>
 		<br>
-		<a>Date</a>
-		<hr>
-		{% for key, value in century_counts.items %}
-			<a 
-				href="javascript:void(0)"
-				id='century,{{key}}'
-				onclick="toggle_filter('century,{{key}}')">
-					{{key}} <small>({{value}})</small>
-			</a>
-		{%endfor%}
+		<a
+			href="javascript:void(0)"
+			id='date-filter'
+			onclick="toggle_filters_visibile('date')"
+			>
+			Date
+		</a>
+		<div id = 'date-filters'>
+			<hr>
+			{% for key, value in century_counts.items %}
+				<a 
+					class='indent'
+					href="javascript:void(0)"
+					id='century,{{key}}'
+					onclick="toggle_filter('century,{{key}}')">
+						{{key}} <small>({{value}})</small>
+				</a>
+			{%endfor%}
+		</div>
 		<br>
-		<a>Tags</a>
-		<hr>
-		{% for key, value in keyword_category_counts.items %}
-			<a 
-				href="javascript:void(0)"
-				id='keyword,{{key}}'
-				onclick="toggle_filter('keyword,{{key}}')">
-					{{key}} <small>({{value}})</small>
-			</a>
-		{%endfor%}
+		<a
+			href="javascript:void(0)"
+			id='tags-filter'
+			onclick="toggle_filters_visibile('tags')"
+			>
+			Tags
+		</a>
+		<div id = 'tags-filters'>
+			<hr>
+			{% for key, value in keyword_category_counts.items %}
+				<a 
+					class='indent'
+					href="javascript:void(0)"
+					id='keyword,{{key}}'
+					onclick="toggle_filter('keyword,{{key}}')">
+						{{key}} <small>({{value}})</small>
+				</a>
+			{%endfor%}
+		</div>
 		<br>
-		<a>Location</a>
-		<hr>
-		{% for key, value in country_counts.items %}
-			<a 
-				href="javascript:void(0)"
-				id='location,{{key}}'
-				onclick="toggle_filter('location,{{key}}')">
-					{{key}} <small>({{value}})</small>
-			</a>
-		{%endfor%}
+		<a
+			href="javascript:void(0)"
+			id='location-filter'
+			onclick="toggle_filters_visibile('location')"
+			>
+			Location
+		</a>
+		<div id = 'location-filters'>
+			<hr>
+			{% for key, value in country_counts.items %}
+				<a 
+					class='indent'
+					href="javascript:void(0)"
+					id='location,{{key}}'
+					onclick="toggle_filter('location,{{key}}')">
+						{{key}} <small>({{value}})</small>
+				</a>
+			{%endfor%}
+		</div>
 		<br>
 		<br>
 		<br>
@@ -161,6 +206,19 @@ function _update_instances(items) {
 			item.style.display = "none"
 		}
 	}
+}
+
+function toggle_filters_visibile(name) {
+	var filter_set = document.getElementById(name+'-filters');
+	var filter_name = document.getElementById(name+'-filter');
+	if (filter_set.style.display == "") {
+		filter_set.style.display = 'none';
+		filter_name.style.color = 'lightgrey';
+	} else {
+		filter_set.style.display = '';
+		filter_name.style.color = '#585e66';
+	}
+
 }
 
 function update_sidebar() {
