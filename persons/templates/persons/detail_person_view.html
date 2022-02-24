@@ -1,0 +1,96 @@
+{% extends "utilities/base.html" %}
+
+{% block head %}
+	<title>{{page_name}}</title>
+{% endblock %}
+
+{% block content %}
+
+<div class="grid-container"> 
+	<div class="grid-item">
+		{% if instance.thumbnail%}
+			<img id='big-image' class="sml-img"
+				 src="{{instance.thumbnail.url}}">
+		{% endif %}
+	</div>
+	<div class="grid-item wide">
+		<h3>{{instance.title}} 
+			<a class="btn btn-link btn-sm ml-auto"
+				href = "{% url instance.edit_url instance.pk %}"
+				role="button"><i class="far fa-edit text-secondary"></i></a>
+		</h3>
+		<small>{{instance.date}}</small>
+		<hr>
+	</div>
+
+	<div class="info">
+		<div class="grid-item general">
+{% with i='utilities/detail_info_single.html' %}
+{% with il='utilities/detail_info_loop.html' %}
+
+{% include il with name='occupation:' others=instance.occupations unk='true' link='no'%}
+{% include i with name='keywords:' info=instance.keyword_names%}
+{% include 'utilities/show_info_links.html' %}
+
+{% endwith %}
+{% endwith %}
+
+			{% for key,linked_instances in instance.linked_instances_dict.items%}
+				<div class = "one-line">
+					<span class = "info-header"> 
+					{{key}}:</span>
+					{% for linked_instance in linked_instances %}
+						{% if not forloop.last %}
+							<a class="link-color"
+							href = "{% url linked_instance.detail_url linked_instance.pk %}"
+							role="button">{{linked_instance}},</a>
+						{% else %}
+							<a class="link-color"
+							href = "{% url linked_instance.detail_url linked_instance.pk %}"
+							role="button">{{linked_instance}}</a>
+						{% endif %}
+					{% endfor %}
+				</div>
+				<br>
+			{% endfor %}
+		</div>
+
+		<div class="grid-item description">
+			{% if instance.description %}
+			<div> 
+			<span class = "info-header center">Description:</span>
+			<br>
+				{{instance.description }}
+			<br><br>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+{% include 'utilities/detail_style.html' %}
+
+<style>
+.grid-container {
+	display:grid;
+	grid-template-columns: 12fr;
+	padding: 1px;
+	grid-gap: 3px;
+	justify-items: left;
+	align-items: start;
+}
+
+.sml-img {
+	height:200px;
+}
+
+img {
+	border-radius:3px;
+	height:500px;
+	object-fit:cover;
+	max-width:100%;
+	max-height:100%;
+}
+
+</style>
+{% endblock %}

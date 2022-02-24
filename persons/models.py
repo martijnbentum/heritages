@@ -120,6 +120,10 @@ class Person(models.Model, info):
 	@property
 	def edit_url(self):
 		return self._meta.app_label + ':edit_' + self._meta.model_name 
+
+	@property
+	def detail_url(self):
+		return self._meta.app_label+':detail_'+self._meta.model_name+'_view' 
 	
 	@property
 	def identifier(self):
@@ -135,8 +139,8 @@ class Person(models.Model, info):
 	@property
 	def date(self):
 		m = ''
-		if self.date_of_birth:m += str(self.date_of_birth)
-		if self.date_of_death:m += ' - ' + str(self.date_of_death)
+		if self.date_of_birth:m += str(self.date_of_birth.year)
+		if self.date_of_death:m += ' - ' + str(self.date_of_death.year)
 		age = str(self.age)
 		if age: m += ' (' + age + ')'
 		return m
@@ -150,5 +154,41 @@ class Person(models.Model, info):
 		famines= self.famines.all() 
 		if famines: return ', '.join([f.names_str for f in famines])
 		else: return ''
+
+	@property
+	def occupations(self):
+		if hasattr(self,'_occupations'): return self._occupations
+		self._occupations = list(self.occupation.all())
+		return self._occupations
+
+	@property
+	def linked_instances_dict(self):
+		creator= 'image_creators_set,infographic_creators_set,memorialsite_creators_set'
+		creator += ',recordedspeech_creators_set,film_creators_set,artefact_creators_set'
+		artist = 'picture_story_artist_set,memorialsite_artists_set'
+		author = 'text_author_set,picture_story_author_set,film_writers_set'
+		translator = 'text_translator_set,picture_story_translator_set'
+		editor = 'text_editor_set'
+		commisioner = 'memorialsite_person_commissioning_set'
+		donor = 'memorialsite_person_donors_set'
+		director = 'film_directors_set'
+		composer = 'music_composer_set'
+		field_name_sets = [creator,artist,author,translator,editor,commisioner,
+			donor,director,composer]
+		names = 'creator,artist,author,translator,editor,commisioner,donor,director,composer'
+		names = names.split(',')
+		d = {}
+		for name, field_name_set in zip(names,field_name_sets):
+			for field_name in field_name_set.split(','):
+				field = getattr(self,field_name)
+				for instance in field.all():
+					if name not in d.keys(): d[name] = []
+					if instance not in d[name]: d[name].append(instance)
+		return d
+			
+		
+
+		
+
 		
 		

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .forms import PersonForm,GenderForm,NationalityForm,OccupationForm
 from .forms import AffiliationForm,LocationForm,KeywordForm
 from utilities.views import edit_model, add_simple_model, list_view, delete_model
+from .models import Person
 
 
 
@@ -9,6 +10,20 @@ from utilities.views import edit_model, add_simple_model, list_view, delete_mode
 def add_Gender(request):
 	return add_simple_model(request,__name__,'Gender','persons','add gender')
 '''
+
+def detail_person_view(request,pk):
+	instance = Person.objects.get(pk = pk)
+	'''
+	creators= instance.creators.all()
+	languages= instance.languages.all().order_by('name') 
+	locations= instance.locations.all()
+	settings= instance.setting.all()
+	famines = instance.famines.all()
+	args.update({'creators':creators, 'settings':settings,'famines':famines})
+	args.update({'locations':locations, 'languages':languages})
+	'''
+	args = {'instance':instance, 'page_name':instance.title}
+	return render(request,'persons/detail_person_view.html',args)
 
 def create_simple_view(name):
 	'''Create a simple view based on the Model name. 

@@ -18,4 +18,6 @@ urlpatterns = [
 	path('edit_person/<int:pk>/',views.edit_person, name='edit_person'),
 	path('edit_person/<int:pk>/<str:focus>/',views.edit_person, name='edit_person'),
 	path('delete/<int:pk>/<str:model_name>',views.delete,name='delete'),
+	path('detail_person_view/<int:pk>',views.detail_person_view, 
+		name='detail_person_view'),
 ]
