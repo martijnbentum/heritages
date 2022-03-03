@@ -3,6 +3,7 @@ from utils.general import remove_keys_from_dict
 import copy
 import json
 import time
+import os
 
 class SearchView:
 	'''stores options for view template.'''
@@ -104,7 +105,8 @@ class SearchView:
 			'century':self.search._century_identifiers,
 			'famine':self.search._famine_identifiers,
 		}
-		all_ids = _get_all_non_dict_values_from_dict(self._id_dict)
+		# all_ids = _get_all_non_dict_values_from_dict(self._id_dict)
+		all_ids = [x.identifier for x in self.instances]
 		for key in self._id_dict:
 			all_ids_category = self._id_dict[key]['all']
 			other_ids = list(set(all_ids) - set(all_ids_category))
@@ -123,6 +125,50 @@ class SearchView:
 				o[category_key+','+key] = 'active'
 		return o
 
+
+
+class UserSearch:
+	'''loads information about latest search by a user if available
+	the information can be used to reload search view with all the settings
+	corresponding to the search
+	'''
+	def __init__(self,request = None, user = ''):
+		self.request = request
+		if user: self.user = user
+		if request: self.user = request.user.username
+		self.directory = 'user_search_requests/' + self.user +'/'
+		self.filename = self.directory + 'search'
+		self.dict = None
+		if os.path.isfile(self.filename): self.set_info()
+		if not self.dict or self.to_old: self.useable = False
+		else: self.useable = True
+
+	def __repr__(self):
+		m = 'UserSearch | '
+		if self.dict:
+			m += 'active ids: ' + str(self.nactive_ids) 
+			m += ' | delta time: ' + str(self.delta_time)
+			if self.query != ' ':m += ' | query: ' + str(self.query)
+			m += ' | '
+		m += 'useable: ' + str(self.useable)
+		return m
+
+	def set_info(self):
+		self.dict = json.load(open(self.filename))
+		for key,value in self.dict.items():
+			setattr(self,key,value)
+		self.nactive_ids = len(self.active_ids)
+
+	@property
+	def delta_time(self):
+		return int(time.time() - self.time)
+
+	@property
+	def to_old(self):
+		return self.delta_time > 3600 * 4
+
+	
+		
 
 			
 		
@@ -157,4 +203,7 @@ def _get_all_non_dict_values_from_dict(d, values = [], unique = True):
 		values.extend(temp)
 	if unique: values = list(set(values))
 	return values
+
+
+
 
