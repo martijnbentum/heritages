@@ -18,6 +18,7 @@ from utils.search_view_helper import SearchView
 from utilities.search import Search, SearchAll
 from .models import Protocol
 from .forms import ProtocolForm
+import os
 import time
 
 te = 'title_original,title_english'
@@ -69,6 +70,23 @@ def search_view(request, view_type = 'tile_view', query = ' ', combine = ' ',
 		return render(request,'utilities/tile_view.html',s.var)
 	else:
 		return render(request,'utilities/row_view.html',s.var)
+
+def get_ajax_search_requests(request):
+	result = request.GET.get('result',None)
+	print(request.__dict__)
+	print(result,11111)
+	print('>>>')
+	return HttpResponse('done', content_type='text/plain')
+	
+def get_user_search_requests(request):
+	directory = 'user_search_requests/' + request.user.username +'/'
+	if not os.path.isdir(directory): os.mkdir(directory)
+	print(directory)
+	print(list(request.FILES['file'].chunks())[0].decode('utf-8'))
+	o = list(request.FILES['file'].chunks())[0].decode('utf-8')
+	with open(directory + 'search','w') as fout:
+		fout.write(o)
+	return HttpResponse('done', content_type='text/plain')
 
 def list_view(request, model_name, app_name,html_name='',field_names = '',
 	max_entries=200):

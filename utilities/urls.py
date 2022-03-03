@@ -32,4 +32,8 @@ urlpatterns = [
 	path('add_protocol/<str:app_name>/<str:model_name>',
 		views.edit_protocol,name='add_protocol'),
 	path('overview/',views.overview,name='overview'),
+	path('get_user_search_requests/',views.get_user_search_requests,
+		name='get_user_search_requests'),
+	path('get_ajax_search_requests/',views.get_ajax_search_requests,
+		name='get_ajax_search_requests')
 ]
