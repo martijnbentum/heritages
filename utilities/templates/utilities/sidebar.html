@@ -1,6 +1,7 @@
 {% include 'utilities/sideb_style.html' %}
 {{id_dict|json_script:"id-dict"}}
 {{filter_active_dict|json_script:"filter-active-dict"}}
+{% csrf_token %}
 <form>
 <div class="d-flex">
 	<div id="mySidebar" class="sidebar bg-light">
@@ -188,6 +189,26 @@ var exact = document.getElementById('exact')
 var selected_filters = [];
 	
 toggle_sidebar();
+
+function send_data() {
+	const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+	var output = {};
+	output['active_ids']=active_ids
+	output['filters']=selected_filters
+	output['query'] = '{{query}}'
+	output['time'] = Date.now()/1000;
+	output['sorting_direction'] = get_sorting_direction();
+	output['sorting_category'] = get_sorting_category();
+	var d = new FormData();
+	var blob = new Blob([JSON.stringify(output)],{type:'application/json'})
+	d.append('file',blob,'active_ids.txt')
+	var client = new XMLHttpRequest();
+	client.open('post', '/utilities/get_user_search_requests/');
+	client.setRequestHeader("X-CSRFToken", csrftoken);
+	client.send(d);
+}
+
+window.onbeforeunload = function(){send_data();};
 
 
 function update_hide_show_instances() {
@@ -541,6 +562,17 @@ function toggle_sorting() {
 		
 }
 
+function get_sorting_direction() {
+	var ascending = '<i class="fas fa-sort-alpha-down"></i>'
+	var button = document.getElementById('sorting')
+	if (button.innerHTML.includes(ascending)) { return 'ascending';}
+	else { return 'descending';}
+}
+
+function get_sorting_category() {
+	var sort_menu= document.getElementById('sorting_option');
+	return sort_menu.value;
+}
 
 
 </script>
