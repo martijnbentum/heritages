@@ -1,5 +1,6 @@
 from utilities.search import SearchAll
 from utils.general import remove_keys_from_dict
+from utils.model_util import identifier2instance
 import copy
 import json
 import time
@@ -150,12 +151,14 @@ class UserSearch:
 			m += ' | delta time: ' + str(self.delta_time)
 			if self.query != ' ':m += ' | query: ' + str(self.query)
 			m += ' | '
+			if self.index: m + ' | index: ' + str(self.index)
 		m += 'useable: ' + str(self.useable)
 		return m
 
 	def set_info(self):
 		self.dict = json.load(open(self.filename))
 		for key,value in self.dict.items():
+			if key in ['index','number']:continue
 			setattr(self,key,value)
 		self.nactive_ids = len(self.active_ids)
 
@@ -167,11 +170,58 @@ class UserSearch:
 	def to_old(self):
 		return self.delta_time > 3600 * 4
 
-	
+	@property
+	def index(self):
+		if hasattr(self,'current_instance') and self.current_instance in self.active_ids:
+			return self.active_ids.index(self.current_instance)
+		else: return None
+
+	@property
+	def number(self):
+		index = self.index
+		if index: return index + 1
+		return None
+
+	def save(self):
+		with open(self.filename,'w') as fout:
+			self.dict['index'] = self.index
+			self.dict['number'] = self.number
+			self.dict['nactive_ids'] = self.nactive_ids
+			json.dump(self.dict,fout)
+
+	def set_current_instance(self, identifier):
+		if self.identifier_part_of_search_results(identifier):
+			self.current_instance = identifier
+			self.dict['current_instance'] = identifier
+			self.save()
+			print('current instance:',identifier, 'saved to file:',self.filename)
+		else:
+			print(identifier,'not in active_ids doing nothing')
+
+	def identifier_part_of_search_results(self,identifier):
+		return hasattr(self,'current_instance') and identifier in self.active_ids
+
+	@property
+	def next_instance(self):
+		if not self._iterating_possible: return None
+		if self.index == self.nactive_ids -1: identifier = self.active_ids[0]
+		else: identifier = self.active_ids[self.index+1]
+		return identifier2instance(identifier)
+
+	@property
+	def previous_instance(self):
+		if not self._iterating_possible: return None
+		identifier = self.active_ids[self.index-1]
+		return identifier2instance(identifier)
 		
 
-			
+	def _iterating_possible(self):
+		if not self.useable or not hasattr(self,'current_instance'): return False
+		if self.nactive_ids == 1: return False
+		if self.index == None: return False
+		return True
 		
+
 
 def to_json(search_view_helper, filename = None):
 	d = _prepare_search_view_helper_dict(search_view_helper)
