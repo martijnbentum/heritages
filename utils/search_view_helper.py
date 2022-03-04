@@ -8,7 +8,7 @@ import os
 
 class SearchView:
 	'''stores options for view template.'''
-	def __init__(self, request = None,view_type = 'tile_view', query = ' ', 
+	def __init__(self, request = None,view_type = '', query = ' ', 
 		combine = ' ',exact = 'contains', direction = 'ascending', 
 		sorting_option = 'title - name', verbose = False):
 		'''
@@ -19,6 +19,7 @@ class SearchView:
 		'''
 		self.start = time.time()
 		self.request = request
+		self.user_search = UserSearch(request)
 		self.view_type = view_type
 		self.query = query
 		self.combine = combine
@@ -47,17 +48,19 @@ class SearchView:
 
 	def handle_request(self):
 		if not self.request: return
+		usu = self.user_search.useable
 		if 'HTTP_REFERER' not in self.request.META.keys(): self.query = None
 		elif self.view_type in self.request.META['HTTP_REFERER']: self.query = None
 		if self.query == ' ': self.query = None
-		if 'combine' in self.request.GET.keys():
-			self.combine = self.request.GET['combine']
-		if 'sorting_option' in self.request.GET.keys():
-			self.sorting_option = self.request.GET['sorting_option']
-		if 'direction' in self.request.GET.keys():
-			self.direction = self.request.GET['direction']
-		if 'exact' in self.request.GET.keys():
-			self.exact= self.request.GET['exact']
+		if not self.query and hasattr(self.user_search, 'query') and usu:
+			self.query = self.user_search.query
+		if hasattr(self.user_search, 'sorting_category') and usu:
+			self.sorting_option = self.user_search.sorting_category
+		if hasattr(self.user_search, 'sorting_direction') and usu: 
+			self.sorting_direction = self.user_search.sorting_direction
+		if not self.view_type and hasattr(self.user_search,'view_type') and usu: 
+			self.view_type = self.user_search.view_type
+		else: self.view_type = 'tile_view'
 
 	def handle_options(self):
 		if self.direction == 'ascending':self.sorting_icon = 'fas fa-sort-alpha-down'
@@ -94,6 +97,7 @@ class SearchView:
 			'famine_counts':self.search.famine_counts,
 			'id_dict':self.id_dict,
 			'filter_active_dict':self.filter_active_dict,
+			'us':self.user_search,
 		}
 
 	@property
@@ -106,7 +110,6 @@ class SearchView:
 			'century':self.search._century_identifiers,
 			'famine':self.search._famine_identifiers,
 		}
-		# all_ids = _get_all_non_dict_values_from_dict(self._id_dict)
 		all_ids = [x.identifier for x in self.instances]
 		for key in self._id_dict:
 			all_ids_category = self._id_dict[key]['all']
