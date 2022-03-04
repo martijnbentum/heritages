@@ -119,7 +119,8 @@
 	</a>
 
 	<a class ="btn btn-link ml-auto mt-2 text-dark " 
-href="{% url 'utilities:search_view' vtl query combine exact direction sorting_option%}"
+href="{% url 'utilities:search_view' %}"
+	onclick="set_new_view_type()"
 	role="button">
 			<i class="{{view_type_icon}}" aria-hidden="true"></i>
 	</a>
@@ -132,7 +133,9 @@ href="{% url 'utilities:search_view' vtl query combine exact direction sorting_o
 				class="col-9 mb-1" 
 				style="border-width:0;border-bottom-width:1px;" 
 				value="{{query}}">
-			<button class="text-dark btn btn-link" type="submit">
+			<button class="text-dark btn btn-link" type="submit"
+				onclick="set_new_query()"
+				>
 				<i class="fas fa-search"></i>
 			</button>
 			<input type="hidden" name="order" id="order" value="{{order}}" />
@@ -189,11 +192,25 @@ document.getElementById("content").style.marginLeft = "25px";
 var combine = document.getElementById('combine')
 var exact = document.getElementById('exact')
 var selected_filters = [];
+var new_query = 'false';
 	
 toggle_sidebar();
 
 if (us.useable) {
-	//selected_filters = us.filters;
+	selected_filters = us.filters;
+	console.log(selected_filters)
+}
+
+function set_new_query() {
+	new_query = 'true';
+}
+
+function set_new_view_type() {
+	if (view_type == 'tile_view') {
+		view_type = 'row_view'
+	} else {
+		view_type = 'tile_view'
+	}
 }
 
 function send_data() {
@@ -201,13 +218,14 @@ function send_data() {
 	var output = {};
 	output['active_ids']=active_ids
 	output['filters']=selected_filters
-	output['query'] = '{{query}}'
+	output['query'] = get_query();
 	output['time'] = Date.now()/1000;
 	output['sorting_direction'] = get_sorting_direction();
 	output['sorting_category'] = get_sorting_category();
 	output['current_instance'] = clicked_instance;
 	output['view_type'] = view_type;
 	output['filter_active_dict'] = filter_active_dict;
+	output['new_query'] = new_query;
 	var d = new FormData();
 	var blob = new Blob([JSON.stringify(output)],{type:'application/json'})
 	d.append('file',blob,'active_ids.txt')
@@ -564,9 +582,11 @@ function toggle_sorting() {
 	if (button.innerHTML.includes(ascending)) {
 		button.innerHTML = descending;
 		direction.value = 'descending'
+		sorting_direction = 'descending'
 	} else if (button.innerHTML.includes(descending)) {
 		button.innerHTML = ascending;
 		direction.value = 'ascending'
+		sorting_direction = 'ascending'
 	}
 		
 }
@@ -583,6 +603,10 @@ function get_sorting_category() {
 	return sort_menu.value;
 }
 
+function get_query() {
+	var query = document.getElementById('exampleFormControlInput1');
+	return query.value;
+}
 
 </script>
 
