@@ -195,11 +195,13 @@ var selected_filters = [];
 var new_query = 'false';
 	
 toggle_sidebar();
+window.onbeforeunload = function(){send_data();};
+console.log(123)
 
-if (us.useable) {
-	selected_filters = us.filters;
-	console.log(selected_filters)
-}
+//if (us && us.useable) {
+//	selected_filters = us.filters;
+//	console.log(selected_filters)
+//}
 
 function set_new_query() {
 	new_query = 'true';
@@ -235,7 +237,6 @@ function send_data() {
 	client.send(d);
 }
 
-window.onbeforeunload = function(){send_data();};
 
 
 function update_hide_show_instances() {
