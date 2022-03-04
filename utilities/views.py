@@ -71,13 +71,6 @@ def search_view(request, view_type = 'tile_view', query = ' ', combine = ' ',
 	else:
 		return render(request,'utilities/row_view.html',s.var)
 
-def get_ajax_search_requests(request):
-	result = request.GET.get('result',None)
-	print(request.__dict__)
-	print(result,11111)
-	print('>>>')
-	return HttpResponse('done', content_type='text/plain')
-	
 def get_user_search_requests(request):
 	directory = 'user_search_requests/' + request.user.username +'/'
 	if not os.path.isdir(directory): os.mkdir(directory)
