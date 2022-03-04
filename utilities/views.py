@@ -66,7 +66,7 @@ def sidebar(request):
 def search_view(request, view_type = '', query = ' ', combine = ' ',
 	exact = 'contains', direction = '', sorting_option = 'title - name'):
 	s = SearchView(request, view_type, query, combine, exact, direction, sorting_option)
-	print(dir(s.user_search),1234) # useable is not part of usersearch object passed to template
+	# print(dir(s.user_search),1234) # useable is not part of usersearch object passed to template
 	if s.view_type == 'tile_view':
 		return render(request,'utilities/tile_view.html',s.var)
 	else:
