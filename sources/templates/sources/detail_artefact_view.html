@@ -1,10 +1,11 @@
-{% extends "utilities/base.html" %}
-
+{% extends "utilities/base.html" %} 
 {% block head %}
 	<title>{{page_name}}</title>
 {% endblock %}
 
+
 {% block content %}
+{% include 'utilities/detail_search_iterator.html' %}
 
 <div class="grid-container"> 
 	<div class="grid-item">
@@ -93,6 +94,6 @@ img {
 	max-width:100%;
 	max-height:100%;
 }
-
 </style>
+
 {% endblock %}
