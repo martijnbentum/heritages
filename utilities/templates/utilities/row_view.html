@@ -12,7 +12,8 @@
 		</div>
 		<div class="grid-item title">
 			<a class = "btn btn-link btn-sm ml-auto nostyle p-title"
-				href = "{% url instance.edit_url instance.pk %}"
+				href = "{% url instance.detail_url instance.pk %}"
+				onclick='set_clicked_instance("{{instance.identifier}}")'
 				role = "button">
 				<p class="p-title">{{instance.title}}</p>
 			</a>
@@ -73,6 +74,13 @@
 {% endfor %}
 
 <script>
+
+var clicked_instance = '';
+var view_type = 'row_view';
+
+function set_clicked_instance(identifier) {
+	clicked_instance = identifier;
+}
 
 
 var descriptions = document.getElementsByClassName('p-description')
