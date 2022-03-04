@@ -64,9 +64,10 @@ def sidebar(request):
 	return render(request,'utilities/sidebar.html',var)
 
 def search_view(request, view_type = '', query = ' ', combine = ' ',
-	exact = 'contains', direction = 'ascending', sorting_option = 'title - name'):
+	exact = 'contains', direction = '', sorting_option = 'title - name'):
 	s = SearchView(request, view_type, query, combine, exact, direction, sorting_option)
-	if view_type == 'tile_view':
+	print(dir(s.user_search),1234) # useable is not part of usersearch object passed to template
+	if s.view_type == 'tile_view':
 		return render(request,'utilities/tile_view.html',s.var)
 	else:
 		return render(request,'utilities/row_view.html',s.var)
@@ -74,7 +75,6 @@ def search_view(request, view_type = '', query = ' ', combine = ' ',
 def get_user_search_requests(request):
 	directory = 'user_search_requests/' + request.user.username +'/'
 	if not os.path.isdir(directory): os.mkdir(directory)
-	print(directory)
 	print(list(request.FILES['file'].chunks())[0].decode('utf-8'))
 	o = list(request.FILES['file'].chunks())[0].decode('utf-8')
 	with open(directory + 'search','w') as fout:
