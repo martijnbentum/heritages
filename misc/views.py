@@ -3,6 +3,7 @@ from .forms import FamineForm,FamineNameForm,LanguageForm
 from .forms import CausalTriggerForm,KeywordForm, keywordkeyword_formset
 from .models import Famine
 from utilities.views import edit_model, add_simple_model, list_view, delete_model
+from utils import search_view_helper
 
 
 def create_simple_view(name):
@@ -44,6 +45,8 @@ def delete(request, pk, model_name):
 
 def detail_famine_view(request,pk):
 	instance = Famine.objects.get(pk = pk)
-	args = {'instance':instance, 'page_name':instance.names_str}
+	us = search_view_helper.UserSearch(request)
+	us.set_current_instance(instance.identifier)
+	args = {'instance':instance, 'page_name':instance.names_str,'us':us}
 	return render(request,'misc/detail_famine_view.html',args)
 

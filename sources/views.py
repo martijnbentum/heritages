@@ -14,6 +14,7 @@ from .forms import PublishingOutletForm, TargetAudienceForm,VideogameForm
 from persons.forms import PersonForm
 from .models import Image, Film, Music, Text, PictureStory, Memorialsite
 from .models import Recordedspeech, Videogame, Artefact, Infographic
+from utils import search_view_helper
 
 def index(request):
 	return HttpResponse('hello world')
@@ -27,6 +28,8 @@ def make_fname(name):
 
 def detail_infographic_view(request,pk):
 	instance = Infographic.objects.get(pk = pk)
+	us = search_view_helper.UserSearch(request)
+	us.set_current_instance(instance.identifier)
 	creators= instance.creators.all()
 	languages= instance.languages.all().order_by('name') 
 	locations= instance.locations.all()
@@ -34,43 +37,51 @@ def detail_infographic_view(request,pk):
 	famines = instance.famines.all()
 	args = {'instance':instance, 'page_name':instance.title}
 	args.update({'creators':creators, 'settings':settings,'famines':famines})
-	args.update({'locations':locations, 'languages':languages})
+	args.update({'locations':locations, 'languages':languages,'us':us})
 	return render(request,'sources/detail_infographic_view.html',args)
 
 def detail_artefact_view(request,pk):
 	instance = Artefact.objects.get(pk = pk)
+	us = search_view_helper.UserSearch(request)
+	us.set_current_instance(instance.identifier)
 	creators= instance.creators.all()
 	locations= instance.locations.all()
 	settings= instance.setting.all()
 	famines = instance.famines.all()
 	args = {'instance':instance, 'page_name':instance.title}
 	args.update({'creators':creators, 'settings':settings,'famines':famines})
-	args.update({'locations':locations})
+	args.update({'locations':locations, 'us':us})
 	return render(request,'sources/detail_artefact_view.html',args)
 
 def detail_videogame_view(request,pk):
 	instance = Videogame.objects.get(pk = pk)
+	us = search_view_helper.UserSearch(request)
+	us.set_current_instance(instance.identifier)
 	studios= instance.production_studio.all()
 	settings= instance.setting.all()
 	famines = instance.famines.all()
 	languages= instance.languages_original.all().order_by('name') 
 	subtitles= instance.languages_subtitle.all().order_by('name')
 	args = {'instance':instance, 'page_name':instance.title,'studios':studios}
-	args.update({'subtitles':subtitles, 'settings':settings,'famines':famines})
+	args.update({'subtitles':subtitles, 'settings':settings,'famines':famines,'us':us})
 	return render(request,'sources/detail_videogame_view.html',args)
 
 def detail_image_view(request,pk):
 	instance = Image.objects.get(pk = pk)
+	us = search_view_helper.UserSearch(request)
+	us.set_current_instance(instance.identifier)
 	creators = instance.creators.all()
 	locations= instance.locations.all()
 	settings= instance.setting.all()
 	famines = instance.famines.all()
 	args = {'instance':instance, 'page_name':instance.title,'creators':creators}
-	args.update({'locations':locations, 'settings':settings,'famines':famines})
+	args.update({'locations':locations, 'settings':settings,'famines':famines,'us':us})
 	return render(request,'sources/detail_image_view.html',args)
 
 def detail_memorialsite_view(request,pk):
 	instance = Memorialsite.objects.get(pk = pk)
+	us = search_view_helper.UserSearch(request)
+	us.set_current_instance(instance.identifier)
 	creators = instance.creators.all()
 	artists = instance.artists.all()
 	donors = list(instance.donor_persons.all())
@@ -85,23 +96,27 @@ def detail_memorialsite_view(request,pk):
 	famines = instance.famines.all()
 	args = {'instance':instance, 'page_name':instance.title,'creators':creators}
 	args.update({'donors':donors, 'commissioners':commissioners,'artists':artists})
-	args.update({'locations':locations, 'settings':settings,'famines':famines})
+	args.update({'locations':locations, 'settings':settings,'famines':famines,'us':us})
 	args.update({'languages':languages})
 	return render(request,'sources/detail_memorialsite_view.html',args)
 
 def detail_music_view(request,pk):
 	instance = Music.objects.get(pk = pk)
+	us = search_view_helper.UserSearch(request)
+	us.set_current_instance(instance.identifier)
 	composers= instance.composers.all()
 	settings= instance.setting.all()
 	famines = instance.famines.all()
 	languages= instance.languages.all().order_by('name') 
 	args = {'instance':instance, 'page_name':instance.title}
 	args.update({'composers':composers})
-	args.update({'settings':settings,'famines':famines,'languages':languages})
+	args.update({'settings':settings,'famines':famines,'languages':languages,'us':us})
 	return render(request,'sources/detail_music_view.html',args)
 
 def detail_recordedspeech_view(request,pk):
 	instance = Recordedspeech.objects.get(pk = pk)
+	us = search_view_helper.UserSearch(request)
+	us.set_current_instance(instance.identifier)
 	creators= instance.creators.all()
 	locations= instance.locations_recorded.all()
 	speakers= instance.speakers.all()
@@ -109,13 +124,15 @@ def detail_recordedspeech_view(request,pk):
 	famines = instance.famines.all()
 	languages= instance.languages.all().order_by('name') 
 	args = {'instance':instance, 'page_name':instance.title,}
-	args.update({'settings':settings,'famines':famines,'languages':languages})
+	args.update({'settings':settings,'famines':famines,'languages':languages,'us':us})
 	args.update({'creators':creators,'locations':locations})
 	args.update({'speakers':speakers})
 	return render(request,'sources/detail_recordedspeech_view.html',args)
 
 def detail_picturestory_view(request,pk):
 	instance = PictureStory.objects.get(pk = pk)
+	us = search_view_helper.UserSearch(request)
+	us.set_current_instance(instance.identifier)
 	authors = instance.authors.all()
 	artists= instance.authors.all()
 	publishers = instance.publishers.all()
@@ -126,11 +143,13 @@ def detail_picturestory_view(request,pk):
 	args = {'instance':instance, 'page_name':instance.title,}
 	args.update({'settings':settings,'famines':famines,'languages':languages})
 	args.update({'authors':authors,'publishers':publishers})
-	args.update({'locations':locations,'artists':artists})
+	args.update({'locations':locations,'artists':artists,'us':us})
 	return render(request,'sources/detail_picturestory_view.html',args)
 
 def detail_text_view(request,pk):
 	instance = Text.objects.get(pk = pk)
+	us = search_view_helper.UserSearch(request)
+	us.set_current_instance(instance.identifier)
 	authors = list(instance.authors.all())
 	temp= list(instance.institution_authors.all())
 	if temp:authors += temp
@@ -146,11 +165,13 @@ def detail_text_view(request,pk):
 	args.update({'settings':settings,'famines':famines,'languages':languages})
 	args.update({'org_lang':org_lang,'authors':authors})
 	args.update({'editors':editors,'publishers':publishers})
-	args.update({'locations':locations,'translators':translators})
+	args.update({'locations':locations,'translators':translators,'us':us})
 	return render(request,'sources/detail_text_view.html',args)
 
 def detail_film_view(request,pk):
 	instance = Film.objects.get(pk = pk)
+	us = search_view_helper.UserSearch(request)
+	us.set_current_instance(instance.identifier)
 	directors = instance.directors.all()
 	writers= instance.writers.all()
 	creators = instance.creators.all()
@@ -162,7 +183,7 @@ def detail_film_view(request,pk):
 	args = {'instance':instance, 'page_name':instance.title,'creators':creators}
 	args.update({'loc_shot':locations_shot, 'settings':settings})
 	args.update({'famines':famines, 'writers':writers, 'directors':directors})
-	args.update({'languages':languages, 'subtitles':subtitles})
+	args.update({'languages':languages, 'subtitles':subtitles, 'us':us})
 	return render(request,'sources/detail_film_view.html',args)
 	pass
 
