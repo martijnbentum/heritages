@@ -75,7 +75,7 @@ def search_view(request, view_type = '', query = ' ', combine = ' ',
 def get_user_search_requests(request):
 	directory = 'user_search_requests/' + request.user.username +'/'
 	if not os.path.isdir(directory): os.mkdir(directory)
-	print(list(request.FILES['file'].chunks())[0].decode('utf-8'))
+	print(list(request.FILES['file'].chunks())[0].decode('utf-8'),'<----')
 	o = list(request.FILES['file'].chunks())[0].decode('utf-8')
 	with open(directory + 'search','w') as fout:
 		fout.write(o)
