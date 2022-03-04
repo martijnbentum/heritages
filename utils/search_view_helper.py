@@ -9,7 +9,7 @@ import os
 class SearchView:
 	'''stores options for view template.'''
 	def __init__(self, request = None,view_type = '', query = ' ', 
-		combine = ' ',exact = 'contains', direction = 'ascending', 
+		combine = ' ',exact = 'contains', direction = '', 
 		sorting_option = 'title - name', verbose = False):
 		'''
 		request 		django object
@@ -53,11 +53,13 @@ class SearchView:
 		elif self.view_type in self.request.META['HTTP_REFERER']: self.query = None
 		if self.query == ' ': self.query = None
 		if not self.query and hasattr(self.user_search, 'query') and usu:
-			self.query = self.user_search.query
+			if self.user_search.new_query == 'false':
+				self.query = self.user_search.query
 		if hasattr(self.user_search, 'sorting_category') and usu:
 			self.sorting_option = self.user_search.sorting_category
-		if hasattr(self.user_search, 'sorting_direction') and usu: 
-			self.sorting_direction = self.user_search.sorting_direction
+		if not self.direction and hasattr(self.user_search, 'sorting_direction') and usu: 
+			self.direction = self.user_search.sorting_direction
+		else: self.direction = 'ascending'
 		if not self.view_type and hasattr(self.user_search,'view_type') and usu: 
 			self.view_type = self.user_search.view_type
 		else: self.view_type = 'tile_view'
@@ -190,6 +192,7 @@ class UserSearch:
 			self.dict['index'] = self.index
 			self.dict['number'] = self.number
 			self.dict['nactive_ids'] = self.nactive_ids
+			self.dict['useable'] = self.useable
 			json.dump(self.dict,fout)
 
 	def set_current_instance(self, identifier):
