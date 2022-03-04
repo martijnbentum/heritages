@@ -1,0 +1,74 @@
+{{us.dict|json_script:"usjs"}}
+<div class="d-flex">
+	<div id="left_sidebar" class="left-sidebar sidebar bg-light">
+		<a 
+			href="{% url us.previous_instance.detail_url us.previous_instance.pk %}"
+			id='left_sidebar_button'
+			>
+			<i class="fa fa-arrow-left fa-2x"></i>
+		</a>
+	</div>
+	
+</div>
+
+<div class="d-flex">
+	<div id="right_sidebar" class="right-sidebar sidebar bg-light">
+		<a 
+			href="{% url us.next_instance.detail_url us.next_instance.pk %}"
+			id='right_sidebar_button'
+			>
+			<i class="fa fa-arrow-right fa-2x"></i>
+		</a>
+		<p id="i_of_n" class="instance-counter">30 / 300</p>
+	</div>
+</div>
+
+<style>
+.left-sidebar{
+	left: 0;
+}
+.right-sidebar{
+	right: 0;
+}
+
+.sidebar {
+	height: 100%;
+	width: 36px;
+	position: fixed;
+	z-index: 1;
+	top: 30;
+	overflow-x: hidden;
+	transition: 0.5s;
+	padding-top: 10px;
+}
+
+.sidebar a {
+	text-decoration: none;
+	color: #585e66;
+	display: block;
+	transition: 0.5s;
+	font-size: 14px;
+	margin-left:0px;
+	margin-top: 300px;
+}
+
+.sidebar a:hover {
+	color: black;
+}
+
+.instance-counter {
+	font-size:11px;
+	color: grey;
+	margin-left: 6px;
+	margin-top:9px;
+}
+
+
+</style>
+<script>
+var us= JSON.parse(document.getElementById('usjs').textContent);
+var search_counter = document.getElementById('i_of_n')
+if (us.index == 0 || us.index) {
+	search_counter.innerText= (us.index + 1) + ' / ' + us.nactive_ids;
+}
+</script>
