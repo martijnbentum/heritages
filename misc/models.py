@@ -89,9 +89,12 @@ class Famine(models.Model, info):
 		if old_country_field!= self.country_field: 
 			super(Famine,self).save(*args,**kwargs)
 
+	def identifier(self):
+		return self._meta.app_label+'_'+self._meta.model_name+'_'+str( self.pk )
+
 	@property
 	def names_str(self):
-		return expose_m2m(self,'names','name')
+		return expose_m2m(self,'names','name').replace(',',', ')
 
 	@property
 	def locations_str(self):
