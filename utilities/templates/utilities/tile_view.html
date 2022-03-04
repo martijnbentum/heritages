@@ -24,6 +24,7 @@
 				{% else %}
 					href = "{% url instance.edit_url instance.pk %}"
 				{% endif %}
+				onclick='set_clicked_instance("{{instance.identifier}}")'
 				role = "button">
 				{{instance.title|truncatechars:31}}
 			</a>
@@ -81,6 +82,13 @@
 <script>
 document.onkeydown = checkKey;
 
+var clicked_instance = '';
+
+function set_clicked_instance(identifier) {
+	clicked_instance = identifier;
+}
+
+
 function checkKey(e) {
 	//handle keyboard input, escape key to exit model
 	//right and down arrow keys to go forward
@@ -95,7 +103,6 @@ function checkKey(e) {
 	} else if (e.keyCode == 39 || e.keyCode == 40) {
 		next_prev_picture('forward')
 	}
-	console.log(e.keyCode);
 }
 
 function next_prev_picture(direction) {
