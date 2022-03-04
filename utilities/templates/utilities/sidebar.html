@@ -199,6 +199,7 @@ function send_data() {
 	output['time'] = Date.now()/1000;
 	output['sorting_direction'] = get_sorting_direction();
 	output['sorting_category'] = get_sorting_category();
+	output['current_instance'] = clicked_instance;
 	var d = new FormData();
 	var blob = new Blob([JSON.stringify(output)],{type:'application/json'})
 	d.append('file',blob,'active_ids.txt')
