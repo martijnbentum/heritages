@@ -34,6 +34,4 @@ urlpatterns = [
 	path('overview/',views.overview,name='overview'),
 	path('get_user_search_requests/',views.get_user_search_requests,
 		name='get_user_search_requests'),
-	path('get_ajax_search_requests/',views.get_ajax_search_requests,
-		name='get_ajax_search_requests')
 ]
