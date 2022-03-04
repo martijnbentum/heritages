@@ -292,4 +292,8 @@ def instance2famines(instance):
 			if name not in o: o.append(name)
 	return ','.join(o)
 	
+def identifier2instance(identifier):
+	app_name, model_name, pk = identifier.split('_')
+	model = apps.get_model(app_name,model_name)
+	return model.objects.get(pk=pk)
 
