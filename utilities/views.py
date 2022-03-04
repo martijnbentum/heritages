@@ -13,7 +13,7 @@ from utils.view_util import Crud, Cruds, make_tabs, FormsetFactoryManager
 from utils.model_util import copy_complete, get_all_instances
 from utils.get_totals import get_totals, get_countries, get_types
 from utils.get_totals import get_gender
-from utils.search_view_helper import SearchView
+from utils.search_view_helper import SearchView, UserSearch
 # from .models import copy_complete
 from utilities.search import Search, SearchAll
 from .models import Protocol
@@ -63,7 +63,7 @@ def sidebar(request):
 	var = {'page_name':'sidebar'}
 	return render(request,'utilities/sidebar.html',var)
 
-def search_view(request, view_type = 'tile_view', query = ' ', combine = ' ',
+def search_view(request, view_type = '', query = ' ', combine = ' ',
 	exact = 'contains', direction = 'ascending', sorting_option = 'title - name'):
 	s = SearchView(request, view_type, query, combine, exact, direction, sorting_option)
 	if view_type == 'tile_view':
