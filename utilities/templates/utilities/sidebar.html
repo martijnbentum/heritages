@@ -1,5 +1,6 @@
 {% include 'utilities/sideb_style.html' %}
 {{id_dict|json_script:"id-dict"}}
+{{us.dict|json_script:"usjs"}}
 {{filter_active_dict|json_script:"filter-active-dict"}}
 {% csrf_token %}
 <form>
@@ -174,6 +175,7 @@ href="{% url 'utilities:search_view' vtl query combine exact direction sorting_o
 </form>
 
 <script>
+var us= JSON.parse(document.getElementById('usjs').textContent);
 var found_tiles = document.getElementsByClassName('tile-item');
 var found_rows = document.getElementsByClassName('row-item');
 var count_dict = {};
@@ -190,6 +192,10 @@ var selected_filters = [];
 	
 toggle_sidebar();
 
+if (us.useable) {
+	//selected_filters = us.filters;
+}
+
 function send_data() {
 	const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
 	var output = {};
@@ -201,6 +207,7 @@ function send_data() {
 	output['sorting_category'] = get_sorting_category();
 	output['current_instance'] = clicked_instance;
 	output['view_type'] = view_type;
+	output['filter_active_dict'] = filter_active_dict;
 	var d = new FormData();
 	var blob = new Blob([JSON.stringify(output)],{type:'application/json'})
 	d.append('file',blob,'active_ids.txt')
