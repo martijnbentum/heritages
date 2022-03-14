@@ -19,7 +19,7 @@ class SearchView:
 		'''
 		self.start = time.time()
 		self.request = request
-		self.user_search = UserSearch(request, wait_for_ready = False)
+		self.user_search = UserSearch(request)
 		self.view_type = view_type
 		self.query = query
 		self.combine = combine
@@ -139,10 +139,11 @@ class UserSearch:
 	the information can be used to reload search view with all the settings
 	corresponding to the search
 	'''
-	def __init__(self,request = None, user = '', wait_for_ready = True):
+	def __init__(self,request = None, user = ''):
 		self.request = request
+		self.wait_for_ready = True if 'search_view' in request.META['HTTP_REFERER'] else False
+		self.time_out = False
 		if user: self.user = user
-		self.wait_for_ready = wait_for_ready
 		if request: self.user = request.user.username
 		self.directory = 'user_search_requests/' + self.user +'/'
 		self.filename = self.directory + 'search'
@@ -153,17 +154,20 @@ class UserSearch:
 		if os.path.isfile(self.filename): self.set_info()
 		if not self.dict or self.to_old: self.useable = False
 		else: self.useable = True
-		# print(self,self.wait_attempts,self.time_out)
+		print(self)
 
 	def __repr__(self):
-		m = 'UserSearch | '
+		m = 'UserSearch'
 		if self.dict:
-			m += 'active ids: ' + str(self.nactive_ids) 
+			m += ' | active ids: ' + str(self.nactive_ids) 
 			m += ' | delta time: ' + str(self.delta_time)
 			if self.query != ' ':m += ' | query: ' + str(self.query)
-			m += ' | '
 			if self.index: m + ' | index: ' + str(self.index)
-		m += 'useable: ' + str(self.useable)
+			m += ' | wait ' + str(self.wait_for_ready)
+			if self.wait_for_ready:
+				m += ' | attempts ' + str(self.wait_attempts)
+				m += ' | time out ' + str(self.time_out)
+		m += ' | useable: ' + str(self.useable)
 		return m
 
 	def set_info(self):
@@ -174,11 +178,12 @@ class UserSearch:
 		self.nactive_ids = len(self.active_ids)
 
 	def wait_for_data(self):
-		if time.time() - self.start > 0.6: self.time_out = True
 		if self.ready: 
-			self.time_out = False
 			os.remove(self.directory + 'ready')
 			print('wait attemtps:',self.wait_attempts)
+		elif time.time() - self.start > 0.9: 
+			self.time_out = True
+			print('timed out waiting for user search request data')
 		else:
 			time.sleep(0.05)
 			self.wait_attempts += 1
