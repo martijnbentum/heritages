@@ -232,7 +232,7 @@ function send_data() {
 	var blob = new Blob([JSON.stringify(output)],{type:'application/json'})
 	d.append('file',blob,'active_ids.txt')
 	var client = new XMLHttpRequest();
-	client.open('post', '/utilities/get_user_search_requests/');
+	client.open('post','/utilities/get_user_search_requests/');
 	client.setRequestHeader("X-CSRFToken", csrftoken);
 	client.send(d);
 }

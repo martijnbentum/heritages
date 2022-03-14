@@ -82,6 +82,8 @@ def get_user_search_requests(request):
 	with open(directory + 'search','w') as fout:
 		fout.write(o)
 	print('  file written\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
+	with open(directory + 'ready', 'w') as fout:
+		pass
 	return HttpResponse('done', content_type='text/plain')
 
 def list_view(request, model_name, app_name,html_name='',field_names = '',

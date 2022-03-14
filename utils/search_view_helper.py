@@ -139,16 +139,21 @@ class UserSearch:
 	the information can be used to reload search view with all the settings
 	corresponding to the search
 	'''
-	def __init__(self,request = None, user = ''):
+	def __init__(self,request = None, user = '', wait_for_ready = True):
 		self.request = request
 		if user: self.user = user
+		self.wait_for_ready = wait_for_ready
 		if request: self.user = request.user.username
 		self.directory = 'user_search_requests/' + self.user +'/'
 		self.filename = self.directory + 'search'
 		self.dict = None
+		self.start = time.time()
+		self.wait_attempts = 0
+		if self.wait_for_ready: self.wait_for_data()
 		if os.path.isfile(self.filename): self.set_info()
 		if not self.dict or self.to_old: self.useable = False
 		else: self.useable = True
+		# print(self,self.wait_attempts,self.time_out)
 
 	def __repr__(self):
 		m = 'UserSearch | '
@@ -167,6 +172,21 @@ class UserSearch:
 			if key in ['index','number']:continue
 			setattr(self,key,value)
 		self.nactive_ids = len(self.active_ids)
+
+	def wait_for_data(self):
+		if time.time() - self.start > 0.6: self.time_out = True
+		if self.ready: 
+			self.time_out = False
+			os.remove(self.directory + 'ready')
+			print('wait attemtps:',self.wait_attempts)
+		else:
+			time.sleep(0.05)
+			self.wait_attempts += 1
+			self.wait_for_data()
+		
+	@property
+	def ready(self):
+		return os.path.isfile(self.directory + 'ready')
 
 	@property
 	def delta_time(self):
