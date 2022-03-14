@@ -20,6 +20,7 @@ urlpatterns = [
 		views.list_view,name='list_view_general'),
 	path('sidebar/',views.sidebar,name='sidebar'),
 	path('search_view',views.search_view,name='search_view'),
+	path('',views.search_view,name='search_view'),
 	path('search_view/<str:view_type>/',
 		views.search_view,name='search_view'),
 	path('search_view/<str:view_type>/<str:query>/',
