@@ -15,6 +15,7 @@ from persons.forms import PersonForm
 from .models import Image, Film, Music, Text, PictureStory, Memorialsite
 from .models import Recordedspeech, Videogame, Artefact, Infographic
 from utils import search_view_helper
+import time
 
 def index(request):
 	return HttpResponse('hello world')
@@ -27,6 +28,7 @@ def make_fname(name):
 	return o.lower()
 
 def detail_infographic_view(request,pk):
+	print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
 	instance = Infographic.objects.get(pk = pk)
 	us = search_view_helper.UserSearch(request)
 	us.set_current_instance(instance.identifier)
@@ -41,6 +43,7 @@ def detail_infographic_view(request,pk):
 	return render(request,'sources/detail_infographic_view.html',args)
 
 def detail_artefact_view(request,pk):
+	print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
 	instance = Artefact.objects.get(pk = pk)
 	us = search_view_helper.UserSearch(request)
 	us.set_current_instance(instance.identifier)
@@ -54,6 +57,7 @@ def detail_artefact_view(request,pk):
 	return render(request,'sources/detail_artefact_view.html',args)
 
 def detail_videogame_view(request,pk):
+	print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
 	instance = Videogame.objects.get(pk = pk)
 	us = search_view_helper.UserSearch(request)
 	us.set_current_instance(instance.identifier)
@@ -67,6 +71,7 @@ def detail_videogame_view(request,pk):
 	return render(request,'sources/detail_videogame_view.html',args)
 
 def detail_image_view(request,pk):
+	print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
 	instance = Image.objects.get(pk = pk)
 	us = search_view_helper.UserSearch(request)
 	us.set_current_instance(instance.identifier)
@@ -79,6 +84,7 @@ def detail_image_view(request,pk):
 	return render(request,'sources/detail_image_view.html',args)
 
 def detail_memorialsite_view(request,pk):
+	print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
 	instance = Memorialsite.objects.get(pk = pk)
 	us = search_view_helper.UserSearch(request)
 	us.set_current_instance(instance.identifier)
@@ -101,6 +107,7 @@ def detail_memorialsite_view(request,pk):
 	return render(request,'sources/detail_memorialsite_view.html',args)
 
 def detail_music_view(request,pk):
+	print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
 	instance = Music.objects.get(pk = pk)
 	us = search_view_helper.UserSearch(request)
 	us.set_current_instance(instance.identifier)
@@ -114,6 +121,7 @@ def detail_music_view(request,pk):
 	return render(request,'sources/detail_music_view.html',args)
 
 def detail_recordedspeech_view(request,pk):
+	print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
 	instance = Recordedspeech.objects.get(pk = pk)
 	us = search_view_helper.UserSearch(request)
 	us.set_current_instance(instance.identifier)
@@ -130,6 +138,7 @@ def detail_recordedspeech_view(request,pk):
 	return render(request,'sources/detail_recordedspeech_view.html',args)
 
 def detail_picturestory_view(request,pk):
+	print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
 	instance = PictureStory.objects.get(pk = pk)
 	us = search_view_helper.UserSearch(request)
 	us.set_current_instance(instance.identifier)
@@ -147,6 +156,7 @@ def detail_picturestory_view(request,pk):
 	return render(request,'sources/detail_picturestory_view.html',args)
 
 def detail_text_view(request,pk):
+	print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
 	instance = Text.objects.get(pk = pk)
 	us = search_view_helper.UserSearch(request)
 	us.set_current_instance(instance.identifier)
@@ -169,6 +179,7 @@ def detail_text_view(request,pk):
 	return render(request,'sources/detail_text_view.html',args)
 
 def detail_film_view(request,pk):
+	print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
 	instance = Film.objects.get(pk = pk)
 	us = search_view_helper.UserSearch(request)
 	us.set_current_instance(instance.identifier)
@@ -185,7 +196,6 @@ def detail_film_view(request,pk):
 	args.update({'famines':famines, 'writers':writers, 'directors':directors})
 	args.update({'languages':languages, 'subtitles':subtitles, 'us':us})
 	return render(request,'sources/detail_film_view.html',args)
-	pass
 
 def create_simple_view(name):
 	'''Create a simple view based on the Model name. 

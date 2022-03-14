@@ -4,9 +4,11 @@ from .forms import AffiliationForm,LocationForm,KeywordForm
 from utilities.views import edit_model, add_simple_model, list_view, delete_model
 from .models import Person
 from utils import search_view_helper
+import time
 
 
 def detail_person_view(request,pk):
+	print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
 	instance = Person.objects.get(pk = pk)
 	us = search_view_helper.UserSearch(request)
 	us.set_current_instance(instance.identifier)

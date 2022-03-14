@@ -4,6 +4,7 @@ from .forms import CausalTriggerForm,KeywordForm, keywordkeyword_formset
 from .models import Famine
 from utilities.views import edit_model, add_simple_model, list_view, delete_model
 from utils import search_view_helper
+import time
 
 
 def create_simple_view(name):
@@ -44,6 +45,7 @@ def delete(request, pk, model_name):
 	return delete_model(request, __name__, model_name,'misc',pk)
 
 def detail_famine_view(request,pk):
+	print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
 	instance = Famine.objects.get(pk = pk)
 	us = search_view_helper.UserSearch(request)
 	us.set_current_instance(instance.identifier)

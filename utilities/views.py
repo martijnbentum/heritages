@@ -65,6 +65,7 @@ def sidebar(request):
 
 def search_view(request, view_type = '', query = ' ', combine = ' ',
 	exact = 'contains', direction = '', sorting_option = 'title - name'):
+	print('  search start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+' ' +'\033[0m')
 	s = SearchView(request, view_type, query, combine, exact, direction, sorting_option)
 	# print(dir(s.user_search),1234) # useable is not part of usersearch object passed to template
 	if s.view_type == 'tile_view':
@@ -75,10 +76,12 @@ def search_view(request, view_type = '', query = ' ', combine = ' ',
 def get_user_search_requests(request):
 	directory = 'user_search_requests/' + request.user.username +'/'
 	if not os.path.isdir(directory): os.mkdir(directory)
-	print(list(request.FILES['file'].chunks())[0].decode('utf-8'),'<----')
+	# print(list(request.FILES['file'].chunks())[0].decode('utf-8'),'<----')
+	print('  user req received\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
 	o = list(request.FILES['file'].chunks())[0].decode('utf-8')
 	with open(directory + 'search','w') as fout:
 		fout.write(o)
+	print('  file written\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
 	return HttpResponse('done', content_type='text/plain')
 
 def list_view(request, model_name, app_name,html_name='',field_names = '',
