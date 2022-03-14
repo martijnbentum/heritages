@@ -54,8 +54,7 @@ class SearchView:
 		if self.query == ' ': self.query = None
 		if not self.query and hasattr(self.user_search, 'query') and usu:
 			# if self.user_search.new_query == 'false':
-			# self.query = self.user_search.query
-			pass
+			self.query = self.user_search.query
 		if hasattr(self.user_search, 'sorting_category') and usu:
 			self.sorting_option = self.user_search.sorting_category
 		if not self.direction and hasattr(self.user_search, 'sorting_direction') and usu: 
