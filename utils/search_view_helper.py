@@ -19,7 +19,7 @@ class SearchView:
 		'''
 		self.start = time.time()
 		self.request = request
-		self.user_search = UserSearch(request)
+		self.user_search = UserSearch(request, wait_for_ready = False)
 		self.view_type = view_type
 		self.query = query
 		self.combine = combine
