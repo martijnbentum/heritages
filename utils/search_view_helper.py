@@ -140,7 +140,8 @@ class UserSearch:
 	'''
 	def __init__(self,request = None, user = ''):
 		self.request = request
-		self.wait_for_ready = True if 'search_view' in request.META['HTTP_REFERER'] else False
+		if 'HTTP_REFERER' not in self.request.META.keys(): self.wait_for_ready = False
+		else: self.wait_for_ready = True if 'search_view' in request.META['HTTP_REFERER'] else False
 		self.time_out = False
 		if user: self.user = user
 		if request: self.user = request.user.username
