@@ -196,12 +196,7 @@ var new_query = 'false';
 	
 toggle_sidebar();
 window.onbeforeunload = function(){send_data();};
-console.log(123)
 
-//if (us && us.useable) {
-//	selected_filters = us.filters;
-//	console.log(selected_filters)
-//}
 
 function set_new_query() {
 	new_query = 'true';
@@ -608,6 +603,19 @@ function get_query() {
 	var query = document.getElementById('exampleFormControlInput1');
 	return query.value;
 }
+
+window.addEventListener('DOMContentLoaded', function () {
+	console.log(us,us.useable)
+	if (us && us.useable) {
+		var filters = us.filters;
+		for (let i=0;i<filters.length;i++) {
+			filter = filters[i];
+			console.log(filter);
+			toggle_filter(filter)
+		}
+		console.log('filters',filters,selected_filters)
+	}
+})
 
 </script>
 
