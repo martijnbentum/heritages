@@ -153,6 +153,7 @@ class UserSearch:
 		if os.path.isfile(self.filename): self.set_info()
 		if not self.dict or self.to_old: self.useable = False
 		else: self.useable = True
+		self.dict['useable'] = self.useable
 		print(self)
 
 	def __repr__(self):
@@ -175,6 +176,10 @@ class UserSearch:
 			if key in ['index','number']:continue
 			setattr(self,key,value)
 		self.nactive_ids = len(self.active_ids)
+		self.dict['index'] = self.index
+		self.dict['number'] = self.number
+		self.dict['nactive_ids'] = self.nactive_ids
+		
 
 	def wait_for_data(self):
 		if self.ready: 
@@ -214,10 +219,6 @@ class UserSearch:
 
 	def save(self):
 		with open(self.filename,'w') as fout:
-			self.dict['index'] = self.index
-			self.dict['number'] = self.number
-			self.dict['nactive_ids'] = self.nactive_ids
-			self.dict['useable'] = self.useable
 			json.dump(self.dict,fout)
 
 	def set_current_instance(self, identifier):
