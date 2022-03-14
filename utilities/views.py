@@ -67,7 +67,6 @@ def search_view(request, view_type = '', query = ' ', combine = ' ',
 	exact = 'contains', direction = '', sorting_option = 'title - name'):
 	print('  search start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+' ' +'\033[0m')
 	s = SearchView(request, view_type, query, combine, exact, direction, sorting_option)
-	# print(dir(s.user_search),1234) # useable is not part of usersearch object passed to template
 	if s.view_type == 'tile_view':
 		return render(request,'utilities/tile_view.html',s.var)
 	else:
