@@ -219,6 +219,9 @@ class UserSearch:
 		return None
 
 	def save(self):
+		self.dict['index'] = self.index
+		self.dict['number'] = self.number
+		self.dict['nactive_ids'] = self.nactive_ids
 		with open(self.filename,'w') as fout:
 			json.dump(self.dict,fout)
 
