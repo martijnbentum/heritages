@@ -154,7 +154,7 @@ class UserSearch:
 		if os.path.isfile(self.filename): self.set_info()
 		if not self.dict or self.to_old: self.useable = False
 		else: self.useable = True
-		if hasattr(self,'dict'): self.dict['useable'] = self.useable
+		if self.dict is not None: self.dict['useable'] = self.useable
 		print(self)
 
 	def __repr__(self):
