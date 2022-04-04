@@ -140,8 +140,9 @@ class UserSearch:
 	'''
 	def __init__(self,request = None, user = ''):
 		self.request = request
-		if 'HTTP_REFERER' not in self.request.META.keys(): self.wait_for_ready = False
-		else: self.wait_for_ready = True if 'search_view' in request.META['HTTP_REFERER'] else False
+		self.wait_for_ready = False
+		if request and 'HTTP_REFERER' in self.request.META.keys(): 
+		 	if 'search_view' in request.META['HTTP_REFERER']: self.wait_for_ready
 		self.time_out = False
 		if user: self.user = user
 		if request: self.user = request.user.username
@@ -171,8 +172,15 @@ class UserSearch:
 		m += ' | useable: ' + str(self.useable)
 		return m
 
+	def _load_json_search_data(self):
+		try: self.dict = json.load(open(self.filename))
+		except json.decoder.JSONDecodeError: self.dict = None
+		if type(self.dict) != dict:self.dict = None
+			
+
 	def set_info(self):
-		self.dict = json.load(open(self.filename))
+		self._load_json_search_data()
+		if not self.dict: return
 		for key,value in self.dict.items():
 			if key in ['index','number']:continue
 			setattr(self,key,value)
