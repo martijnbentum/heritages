@@ -149,7 +149,7 @@ class UserSearch:
 		self.filename = self.directory + 'search'
 		self.dict = None
 		self.start = time.time()
-		self.wait_attempts = 0
+		self.wait_attemps = 0
 		if self.wait_for_ready: self.wait_for_data()
 		if os.path.isfile(self.filename): self.set_info()
 		if not self.dict or self.to_old: self.useable = False
@@ -166,7 +166,7 @@ class UserSearch:
 			if self.index: m + ' | index: ' + str(self.index)
 			m += ' | wait ' + str(self.wait_for_ready)
 			if self.wait_for_ready:
-				m += ' | attempts ' + str(self.wait_attempts)
+				m += ' | attemps ' + str(self.wait_attemps)
 				m += ' | time out ' + str(self.time_out)
 		m += ' | useable: ' + str(self.useable)
 		return m
@@ -185,13 +185,13 @@ class UserSearch:
 	def wait_for_data(self):
 		if self.ready: 
 			os.remove(self.directory + 'ready')
-			print('wait attemtps:',self.wait_attempts)
+			print('wait attemps:',self.wait_attemps)
 		elif time.time() - self.start > 0.9: 
 			self.time_out = True
 			print('timed out waiting for user search request data')
 		else:
 			time.sleep(0.05)
-			self.wait_attempts += 1
+			self.wait_attemps += 1
 			self.wait_for_data()
 		
 	@property
