@@ -1,4 +1,9 @@
 {% extends "utilities/base.html" %}
+{% load static %}
+
+{% block head %}
+	<link rel="stylesheet" href="{% static 'utilities/search_row.css' %}" />
+{% endblock %}
 
 {% block content %}
 
@@ -11,234 +16,31 @@
 			<i class="{{instance.icon}} fa-lg" aria-hidden="true"></i> 
 		</div>
 		<div class="grid-item title">
-			<a class = "btn btn-link btn-sm ml-auto nostyle p-title"
+			<a class = "p-title"
 				href = "{% url instance.detail_url instance.pk %}"
 				onclick='set_clicked_instance("{{instance.identifier}}")'
 				role = "button">
-				<p class="p-title">{{instance.title}}</p>
+				{{instance.title|truncatechars:110}}
 			</a>
 		</div>
 		<div class="grid-item year">
-			{% if instance.date %}
-				<p class="p-year blue">{{instance.date}}</p>
-			{% endif %}
-		</div>  
-		<div class="grid-item plus">
-			{% if instance.info_available %}
-			<a class = "btn btn-link btn-sm ml-auto text-dark" 
-				href = "#." onclick="toggle_row_view('{{instance.identifier}}')"
-				role="button">
-					<i class="fas fa-chevron-down" 
-					   id='{{instance.identifier}}_plus'></i>
-			</a>
-			{% endif %}
+			<p class="p-year">{{instance.date}}</>
 		</div>
 		<div class="grid-item description">
 			{% if instance.description %}
-			<p class="p-description grey" id = '{{instance.identifier}}_description'>
-				{{instance.description}}</p>
+			<a class="p-description grey" 
+				href="javascript:void(0)" 
+				onclick="toggle_row_view('{{instance.identifier}}')"
+				id = '{{instance.identifier}}_description'
+				role="button">
+				{{instance.description|truncatechars:180}}
+			</a>
 			{% endif %}
 		</div>
-		<div class="grid-item info" id='{{instance.identifier}}_info-toggle'>
-			<div class="nested grid-item info-famine">
-				{% if instance.famine_names %}
-				<p class="p-info small">Famine:</p>
-				<p class="p-info blue normal p-info-famine"> 
-					{{instance.famine_names|truncatechars:33}}
-				</p>
-				{% endif %}
-			</div>
-			<div class="nested grid-item info-keywords">
-				{% if instance.keyword_names %}
-				<p class="p-info small">Keywords:</p>
-				<p class="p-info blue normal p-info-keyword"> 
-					{{instance.keyword_names|truncatechars:33}}
-				</p>
-				{% endif %}
-			</div>
-			<div class="nested grid-item info-location">
-				{% if instance.setting_names %}
-				<p class="p-info small">Location:</p>
-				<p class="p-info blue normal p-info-location"> 
-					{{instance.setting_names|truncatechars:33}}
-				</p>
-				{% endif %}
-			</div>
-		</div>
-		<div class="grid-item image toggle" id='{{instance.identifier}}_image-toggle'>
-			{% if instance.thumbnail %}
-				<img src="{{instance.thumbnail.url}}" alt="" height="150">
-			{% endif %}
-		</div>  
 	</div>
 {% endfor %}
 
-<script>
 
-var clicked_instance = '';
-var view_type = 'row_view';
-
-function set_clicked_instance(identifier) {
-	clicked_instance = identifier;
-}
-
-
-var descriptions = document.getElementsByClassName('p-description')
-var description_dict = {}
-for ( i =0; i < descriptions.length; i++ ){
-	description = descriptions[i];
-	var d ={}
-	d.text = description.innerHTML;
-	if (d.text.length > 165) {
-		d.truncated_text = d.text.substring(0,165) + ' ...';
-	} else { d.truncated_text = d.text; }
-	description_dict[description.id] = d;
-	description.innerHTML = d.truncated_text;
-}
-console.log(descriptions);
-console.log(1);
-console.log(description_dict);
-
-function toggle_row_view(identifier) {
-	var [app, model, pk] = identifier.split("_")
-	console.log(app,model,pk)
-	var description = document.getElementById(identifier + '_description')
-	var info = document.getElementById(identifier + "_info-toggle");
-	var image= document.getElementById(identifier + "_image-toggle");
-	var plus= document.getElementById(identifier + "_plus");
-	console.log(identifier,model,pk);
-	if (image.style.display == 'inline') {
-		info.style.display = 'None';
-		image.style.display = 'None';
-		plus.classList.remove('fa-chevron-up'); 
-		plus.classList.add('fa-chevron-down'); 
-		if (identifier + '_description' in description_dict) {
-			description.innerHTML = description_dict[identifier + '_description'].truncated_text;
-		}
-	} else {
-		info.style.display = 'grid';
-		image.style.display = 'inline';
-		plus.classList.remove('fa-chevron-down'); 
-		plus.classList.add('fa-chevron-up'); 
-		if (identifier + '_description' in description_dict) {
-			description.innerHTML = description_dict[identifier + '_description'].text;
-		}
-	}
-}
-		
-
-
-</script>
-
-
-<style>
-hr {
-	margin-bottom:0px;
-	padding-bottom:0px;
-}
-
-a {
-	margin-bottom:0px;
-	padding-bottom:0px;
-}
-
-p {
-	margin-bottom:0px;
-	font-family: "Georgia", serif;
-	font-size: small;
-}
-
-.p-title {
-	font-size: 110%;
-	text-decoration: underline;
-	color: black;
-	padding-bottom:0px;
-}
-
-.p-year{
-	font-size: 90%;
-	text-align: center;
-	margin-top: 8px;
-}
-.p-description{
-	font-size: 90%;
-}
-
-.p-info{
-	display:inline;
-}
-
-.small{
-	font-size: 75%;
-}
-
-.normal{
-	font-size: 90%;
-}
-
-.blue{
-	color: #56c1e8;
-}
-
-.grey{
-	color: #918f87;
-}
-
-.grid-container {
-	display:grid;
-	grid-template-columns: 1fr 1fr 8fr 8fr 4fr;
-	padding: 1px;
-	grid-gap: 3px;
-	justify-items: center;
-	align-items: top;
-}
-
-.grid-item {
-	/*background-color: #f0f0f0;*/
-	padding: 0px;
-	text-align: justify;
-}
-
-.title {
-	grid-column:3/5;
-	grid-row:1;
-	justify-self:left;
-}
-.plus{
-	grid-column:1;
-	grid-row:1;
-	align-self:start;
-}
-
-.description{
-	grid-column:3/5;
-	justify-self:left;
-}
-
-.year{
-	grid-column:5;
-	grid-row:1/3;
-}
-
-.info{
-	grid-gap: 15px;
-	grid-column:3;
-	align-times:center;
-	justify-self:left;
-	display:None;
-}
-
-.image{
-	grid-column:4;
-	justify-self:right;
-	display:None;
-}
-
-.icon{
-	margin-top:8px;
-	grid-column:2;
-	grid-row:1;
-}
-</style>
+<script src="{% static 'utilities/search_row.js' %}"></script>
 
 {% endblock %}
