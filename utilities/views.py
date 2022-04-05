@@ -65,7 +65,8 @@ def sidebar(request):
 
 def search_view(request, view_type = '', query = ' ', combine = ' ',
 	exact = 'contains', direction = '', sorting_option = 'title - name'):
-	print('  search start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+' ' +'\033[0m')
+	print('  search start\n','\033[91m'+time.strftime("%H:%M:%S"))
+	print(str(time.time()).split('.')[-1]+' ' +'\033[0m')
 	s = SearchView(request, view_type, query, combine, exact, direction, sorting_option)
 	if s.view_type == 'tile_view':
 		return render(request,'utilities/tile_view.html',s.var)
@@ -255,7 +256,7 @@ def ajax_instance_info(request,identifier,fields = 'all'):
 	instance = model.objects.get(pk=int(pk))
 	print(instance,1234)
 	if fields == 'all': 
-		return JsonResponse(serializers.serialize('json',[instance]),safe=False)
+		fields = instance.__dict__.keys()
 	if ',' in fields: fields = fields.split(',')
 	else: fields = [fields]
 	d = {}
