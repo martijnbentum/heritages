@@ -12,12 +12,12 @@
 {% for instance in instances %}
 	<div class="tile tile-item" id='{{instance.identifier}}'>
 		{% if instance.thumbnail %}
-		<img id='{{instance.identifier}}' class="tile-img" 
+		<img id='{{instance.identifier}}-img' class="tile-img" 
 			src="{{instance.thumbnail.url}}" alt="" 
 			onclick="display_large_image('{{instance.identifier}}')"> 
 		{% else %}
-		<img id='{{instance.identifier}}' class="tile-img op" 
-			src="media/no_image_available.png" alt="" 
+		<img id='{{instance.identifier}}-img' class="tile-img op small-img" 
+			src="{{instance.icon_svg}}" alt="" 
 			onclick="display_large_image('{{instance.identifier}}')"> 
 		{% endif %}
 		<p class="p-title">
@@ -64,7 +64,7 @@
 
   <div class="modal-content">
 	<img id="modal-img" class="big-img" src="" 
-		alt="media/no_image_available.png">
+		alt="">
 
 	<a  id="modal-edit-link" class="modal-edit-link"
 		href = ""
