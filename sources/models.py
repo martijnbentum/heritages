@@ -223,6 +223,10 @@ class Music(Source,info):
 		return 'fas fa-music'
 
 	@property
+	def icon_svg(self):
+		return '/media/icons/music-solid.svg'
+
+	@property
 	def embed_video(self):
 		return link2embed_source(self,self.music_video_link)
 
@@ -267,7 +271,11 @@ class Film(Source, info):
 	@property
 	def icon(self):
 		return 'fa fa-film'
-	
+
+	@property
+	def icon_svg(self):
+		return '/media/icons/film-solid.svg'
+
 	@property
 	def embed_video(self):
 		p,s,t = self.video_link, self.video_part_link, self.source_link
@@ -304,6 +312,10 @@ class Artefact(Source, info):
 		return 'fas fa-utensil-spoon'
 
 	@property
+	def icon_svg(self):
+		return '/media/icons/spoon-solid.svg'
+
+	@property
 	def links(self):
 		o = {}
 		if self.source_link: o.update({'source':self.source_link})
@@ -331,6 +343,10 @@ class Image(Source, info):
 	@property
 	def icon(self):
 		return 'fas fa-image'
+
+	@property
+	def icon_svg(self):
+		return '/media/icons/image-solid.svg'
 
 	@property
 	def creator_occupation_name(self):
@@ -387,6 +403,10 @@ class Infographic(Source,info):
 		return 'fas fa-chart-area'
 
 	@property
+	def icon_svg(self):
+		return '/media/icons/chart-area-solid.svg'
+
+	@property
 	def links(self):
 		o = {}
 		if self.source_link: o.update({'source':self.source_link})
@@ -440,6 +460,10 @@ class PictureStory(Source,info):
 	def icon(self):
 		return 'fas fa-book-open'
 
+	@property
+	def icon_svg(self):
+		return '/media/icons/book-open-solid.svg'
+
 	class Meta:
 		unique_together = [['title_original','image_filename']]
 
@@ -470,6 +494,10 @@ class Text(Source,info):
 	@property
 	def icon(self):
 		return 'fas fa-file-alt'
+
+	@property
+	def icon_svg(self):
+		return '/media/icons/file-lines-solid.svg'
 
 	@property
 	def links(self):
@@ -507,6 +535,10 @@ class Videogame(Source,info):
 		return 'fas fa-gamepad'
 
 	@property
+	def icon_svg(self):
+		return '/media/icons/gamepad-solid.svg'
+
+	@property
 	def embed_video(self):
 		return link2embed_source(self,self.video_link) 
 
@@ -540,6 +572,10 @@ class Recordedspeech(Source,info):
 	@property
 	def icon(self):
 		return 'far fa-comments'
+
+	@property
+	def icon_svg(self):
+		return '/media/icons/comments-regular.svg'
 
 	@property
 	def links(self):
@@ -585,6 +621,10 @@ class Memorialsite(Source,info):
 	@property
 	def icon(self):
 		return 'fas fa-monument'
+
+	@property
+	def icon_svg(self):
+		return '/media/icons/monument-solid.svg'
 
 	@property
 	def links(self):
