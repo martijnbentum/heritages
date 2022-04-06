@@ -26,39 +26,38 @@ function checkKey(e) {
 
 function next_prev_picture(direction) {
 	if (!in_modal_state) {return}
-	i = find_identifier_index(current_img_identifier);
-	console.log('next_prev_picture');
+	i = find_identifier_index(current_identifier);
+	console.log('next_prev_picture',i,current_identifier);
 	if (direction == 'back' || direction == 'prev') {
-		if (i == 0) {i = tiles.length -1;}
+		if (i == 0) {i = active_ids.length -1;}
 		else { i -= 1;}
 	}
 	if (direction == 'forward' || direction == 'next') {
-		if (i == tiles.length -1) { i = 0; }
+		if (i == active_ids.length -1) { i = 0; }
 		else { i += 1;}
 	}
-	console.log(i)
-	display_large_image(tiles[i].id);
+	display_large_image(active_ids[i]);
 }
 
 
-var tiles= document.getElementsByClassName('tile-img')
+var tiles= document.getElementsByClassName('tile')
 for ( i =0; i < tiles.length; i++ ){
 	tile= tiles[i];
 	//console.log(tile);
 }
 
 function find_identifier_index(identifier) {
-	for ( i =0; i < tiles.length; i++ ){
-		tile= tiles[i];
-		//console.log(tile);
-		if (tile.id == identifier) {return i;}
+	for ( i =0; i < active_ids.length; i++ ){
+		active_id= active_ids[i];
+		//console.log(tile,'tile');
+		if (active_id == identifier) {return i;}
 	}
 }
 	
 // whether the large image is shown in the modal
 var in_modal_state = false;
 // identifier of the instance of which the image is shown
-var current_img_identifier= '';
+var current_identifier= '';
 // Get the modal
 var modal = document.getElementById("myModal");
 //elements that display the image, title and date
@@ -75,6 +74,29 @@ var next_modal= document.getElementById("next_modal");
 var image_reel_on = false;
 var one_of_x = document.getElementById('one_of_x');
 
+function _handle_image_urls(d) {
+	// d contains field image_urls, a sting of comma seperated image urls
+	// creates an array with image urls and excludes the thumbnail url from the list
+	var image_urls = d.image_urls.split(',')
+	if ( image_urls.length == 1 && typeof(image_urls[0]) == 'string') {return []}
+	var thumbnail = d.thumbnail
+	var index = image_urls.indexOf(thumbnail)
+	if ( index == -1 ) { return image_urls }
+	image_urls.splice(index,1)
+	return image_urls
+}
+
+function _get_image_url(image_urls) {
+	if (image_urls.length == 0) {
+		var image_url = '';
+	} else if (image_urls.length > 0) {
+		var image_url = '/media/' +image_urls[0];
+	} else { 
+		var image_url = '/media/' + d['thumbnail'];
+	}
+	return image_url
+}
+
 async function get_instance_info(identifier,fields= false) {
 	//gets information of an instance, instance is loaded based on 
 	//the identifier field
@@ -89,22 +111,21 @@ async function get_instance_info(identifier,fields= false) {
 	return instance_info;
 }
 
+
 async function display_large_image(identifier) {
 	//displays large image of a given instance (identified with identifier)
 	image_reel_on = false;
 	one_of_x.innerText= '';
 	fields = 'thumbnail,edit_url,title,pk,date,icon,image_urls,detail_url'
 	var d  = await get_instance_info(identifier,fields)
+	console.log(d)
 	in_modal_state = true;
-	current_img_identifier = identifier;
+	current_identifier = identifier;
 	modal_title.innerText = d['title'];
-	//console.log(modal_icon);
 	modal_icon.className=d['icon'] + ' fa-2x modal-icon';
-	//console.log(modal_icon);
 	modal_date.innerText = d['date'];
-	image_urls = get_image_urls(d['image_urls'].split(','));
-	if (image_urls.length > 0) {image_url = '/media/' +image_urls[0];}
-	else { image_url = '/media/' + d['thumbnail'];}
+	var image_urls = _handle_image_urls(d);
+	var image_url = _get_image_url(image_urls)
 	modal_img.src = image_url
 	modal_edit.href = "/" +d['detail_url'].replace(':','/') + "/" + d['pk'] 
 	modal.style.display = "block";
@@ -113,25 +134,15 @@ async function display_large_image(identifier) {
 			setTimeout(switch_images,2100,image_urls,image_urls[0],identifier)
 			image_reel_on = true;
 	}
-	
 }
 
-function get_image_urls(image_urls) {
-	//remove thumbnail image from image_urls
-	var output = [];
-	for (i = 0; i < image_urls.length; i++) {
-		url = image_urls[i];
-		if (!(url.includes('thumbnail'))) {output.push(url);}
-	}
-	return output
-}
 
 function switch_images(image_urls,current_image, identifier) {
 	console.log(image_urls,current_image,image_reel_on);
 	var next_modal= document.getElementById("");
 	var index = 0;
 	if (in_modal_state && image_reel_on 
-		&& current_img_identifier == identifier) {
+		&& current_identifier == identifier) {
 		for ( i =0; i < image_urls.length; i++ ){
 			url= image_urls[i];
 			if (url  == current_image) {
