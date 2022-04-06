@@ -27,7 +27,6 @@ function checkKey(e) {
 function next_prev_picture(direction) {
 	if (!in_modal_state) {return}
 	i = find_identifier_index(current_identifier);
-	console.log('next_prev_picture',i,current_identifier);
 	if (direction == 'back' || direction == 'prev') {
 		if (i == 0) {i = active_ids.length -1;}
 		else { i -= 1;}
@@ -43,13 +42,11 @@ function next_prev_picture(direction) {
 var tiles= document.getElementsByClassName('tile')
 for ( i =0; i < tiles.length; i++ ){
 	tile= tiles[i];
-	//console.log(tile);
 }
 
 function find_identifier_index(identifier) {
 	for ( i =0; i < active_ids.length; i++ ){
 		active_id= active_ids[i];
-		//console.log(tile,'tile');
 		if (active_id == identifier) {return i;}
 	}
 }
@@ -86,13 +83,13 @@ function _handle_image_urls(d) {
 	return image_urls
 }
 
-function _get_image_url(image_urls) {
-	if (image_urls.length == 0) {
-		var image_url = '';
-	} else if (image_urls.length > 0) {
+function _get_image_url(image_urls,d) {
+	if (image_urls.length > 0) {
 		var image_url = '/media/' +image_urls[0];
-	} else { 
+	} else if (d['thumbnail']) { 
 		var image_url = '/media/' + d['thumbnail'];
+	} else {
+		var image_url = '';
 	}
 	return image_url
 }
@@ -118,14 +115,13 @@ async function display_large_image(identifier) {
 	one_of_x.innerText= '';
 	fields = 'thumbnail,edit_url,title,pk,date,icon,image_urls,detail_url'
 	var d  = await get_instance_info(identifier,fields)
-	console.log(d)
 	in_modal_state = true;
 	current_identifier = identifier;
 	modal_title.innerText = d['title'];
 	modal_icon.className=d['icon'] + ' fa-2x modal-icon';
 	modal_date.innerText = d['date'];
 	var image_urls = _handle_image_urls(d);
-	var image_url = _get_image_url(image_urls)
+	var image_url = _get_image_url(image_urls,d)
 	modal_img.src = image_url
 	modal_edit.href = "/" +d['detail_url'].replace(':','/') + "/" + d['pk'] 
 	modal.style.display = "block";
@@ -138,7 +134,6 @@ async function display_large_image(identifier) {
 
 
 function switch_images(image_urls,current_image, identifier) {
-	console.log(image_urls,current_image,image_reel_on);
 	var next_modal= document.getElementById("");
 	var index = 0;
 	if (in_modal_state && image_reel_on 
@@ -146,14 +141,11 @@ function switch_images(image_urls,current_image, identifier) {
 		for ( i =0; i < image_urls.length; i++ ){
 			url= image_urls[i];
 			if (url  == current_image) {
-				console.log(url,i,image_urls.length);
 				if (i == (image_urls.length -1)) {index = 0;}
 				else {index = i + 1;}
-				console.log(index)
 				modal_img.src = '/media/' +image_urls[index]
 			}
 		}
-		console.log(image_urls,image_urls[index],index);
 		one_of_x.innerText= (index +1) + '/' + image_urls.length;
 		
 		setTimeout(switch_images,3000,image_urls,image_urls[index],identifier);
@@ -170,7 +162,6 @@ prev_modal.onclick = function() {
 	next_prev_picture('prev');
 }
 next_modal.onclick = function() {
-	console.log('hello');
 	next_prev_picture('next');
 }
 
