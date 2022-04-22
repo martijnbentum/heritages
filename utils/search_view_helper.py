@@ -79,6 +79,12 @@ class SearchView:
 			self.view_type_link = 'tile_view'
 			self.view_type_icon=  'fas fa-th fa-lg'
 
+	def get_date_range(self):
+		years = [x.year for x in self.instances]
+		years = [x for x in years if x]
+		self.earliest_date = min(years)
+		self.latest_date = max(years)
+
 	def make_var(self):
 		self.var = {'page_name':self.view_type.replace('_',' '),
 			'instances':self.instances,
@@ -100,6 +106,8 @@ class SearchView:
 			'id_dict':self.id_dict,
 			'filter_active_dict':self.filter_active_dict,
 			'us':self.user_search,
+			'earliest_date':self.earliest_date
+			'latest_date':self.latest_date
 		}
 
 	@property
