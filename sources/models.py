@@ -184,6 +184,25 @@ class Source(models.Model):
 		else: return ''
 
 	@property
+	def year(self):
+		date = self.date
+		if date == '': return ''
+		return date.year
+
+	@property
+	def year_range(self):
+		if hasattr(self,'_year_range'): return self._year_range
+		dates = []
+		if self.date_created: dates.append(self.date_created.year)
+		if self.date_released: dates.append( self.date_released.year )
+
+		if len(dates) == 0: yr = ''
+		elif len(dates) == 1: yr = dates * 2
+		else: yr = sorted(dates)
+		self._year_range = ','.join(map(str,yr))
+		return self._year_range
+
+	@property
 	def image_urls(self):
 		'''returns a string of comma seperated urls to images.'''
 		o = []

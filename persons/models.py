@@ -149,6 +149,28 @@ class Person(models.Model, info):
 		if age: m += ' (' + age + ')'
 		return m
 
+	@property
+	def year(self):
+		if self.date_of_birth: return self.date_of_birth.year
+		if self.date_of_death: return self.date_of_death.year
+		return ''
+
+	@property
+	def year_range(self):
+		if hasattr(self,'_year_range'): return self._year_range
+		lower,higher = None,None
+		if self.date_of_birth: lower = self.date_of_birth.year
+		if self.date_of_death: higher = self.date_of_death.year
+
+		if lower and higher: yr = [lower,higher]
+		elif lower: yr = [lower,lower]
+		elif higher: yr = [higher,higher]
+		else: yr=''
+		self._year_range = ','.join(map(str,yr))
+		return self._year_range
+	
+		
+
 	def _make_date_field(self):
 		if self.date_of_birth: return self.date_of_birth
 		return self.date_of_death
