@@ -1,8 +1,17 @@
 {% load static %}
+<link rel="stylesheet" 
+	  href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css"
+	  integrity=""
+		crossorigin=""/>
 <link rel="stylesheet" href="{% static 'utilities/sidebar.css' %}" />
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js">
+</script>
+	
 
 {{id_dict|json_script:"id-dict"}}
 {{us.dict|json_script:"usjs"}}
+{{date_range|json_script:"date_range"}}
 {{filter_active_dict|json_script:"filter-active-dict"}}
 {% csrf_token %}
 <form>
@@ -57,6 +66,11 @@
 		</a>
 		<div id = 'date-filters'>
 			<hr>
+			<div class="date_years">
+				<span id='event-start' class="date_year">{{earliest_date}}</span>
+				<span id='event-end' class="date_year right-align">{{latest_date}}</span>
+			</div>
+			<div id="years" class="date-slider"></div>
 			{% for key, value in century_counts.items %}
 				<a 
 					class='indent'

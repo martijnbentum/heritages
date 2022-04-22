@@ -31,6 +31,7 @@ class SearchView:
 		self.handle_request()
 		if verbose:print('request',delta(self.start))
 		self.make_search()
+		self.get_date_range()
 		if verbose:print('search',delta(self.start))
 		self.handle_options()
 		if verbose:print('options',delta(self.start))
@@ -82,8 +83,10 @@ class SearchView:
 	def get_date_range(self):
 		years = [x.year for x in self.instances]
 		years = [x for x in years if x]
-		self.earliest_date = min(years)
-		self.latest_date = max(years)
+		earliest_date = min(years)
+		latest_date = max(years)
+		self.earliest_date, self.latest_date = earliest_date, latest_date
+		self.date_range = {'earliest_date':earliest_date,'latest_date':latest_date}
 
 	def make_var(self):
 		self.var = {'page_name':self.view_type.replace('_',' '),
@@ -106,8 +109,9 @@ class SearchView:
 			'id_dict':self.id_dict,
 			'filter_active_dict':self.filter_active_dict,
 			'us':self.user_search,
-			'earliest_date':self.earliest_date
-			'latest_date':self.latest_date
+			'date_range':self.date_range,
+			'earliest_date':self.earliest_date,
+			'latest_date':self.latest_date,
 		}
 
 	@property

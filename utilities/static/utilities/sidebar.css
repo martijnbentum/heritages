@@ -58,21 +58,16 @@ hr {
 .indent {
 	margin-left: 15px;
 }
+.right-indent {
+	margin-right: 15px;
+}
+
 
 .sidebar a:hover {
 	color: black;
 }
 
 
-.sorting {
-	font-size:20px;
-	color:black;
-	margin-left:15px;
-}
-.sorting:hover {
-	text-decoration:none;
-	color: black;
-}
 	
 
 .togglebtn {
@@ -92,5 +87,84 @@ hr {
 	color: black;
 }
 
+/* noUi slider css ----------------------------------
+ */
+
+.date-slider {
+	margin-left:25px;
+	margin-right:25px;
+	margin-top:3px;
+	margin-bottom:12px;
+}
+
+.date_year {
+  margin-left: 15px;
+  font-size: 14px;
+  color:#585e66;
+}
+
+.date_years {
+  margin-bottom: 10px;
+}
+
+.right-align {
+  margin-left: 130px;
+}
+
+
+/* no box around tooltip (numbers above the handles);
+ */
+.noUi-tooltip {
+  border: 0px;
+  padding: 0px;
+  /*margin-left:15px;*/
+  display:none;
+}
+
+/* style handles;
+ */
+.noUi-handle {
+    border: 1px solid black;
+    border-radius: 5px;
+    background: black;
+    box-shadow:none;
+	width: 15px !important;
+	height:15px !important;
+	right: -5px !important;
+	font-size: 9px;
+}
+/* make handel white on hover
+*/
+.noUi-handle:hover{
+	background:black;
+}
+
+/* Handle stripes;(remove them)
+ */
+.noUi-handle:before,
+.noUi-handle:after {
+  width: 0px;
+}
+
+/* remove blue outline on pressed handle
+ */
+.noUi-handle:focus {
+	outline:none;
+}
+
+.noUi-active {
+  box-shadow: none;
+}
+
+/* connect bar color  */
+.noUi-connect {
+	background:black;
+}
+
+.noUi-horizontal, .noUi-vertical {
+    background: lightgrey;
+	height:2px;
+	border:0px solid grey;
+ }
 
 

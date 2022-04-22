@@ -1,4 +1,5 @@
 var us= JSON.parse(document.getElementById('usjs').textContent);
+var date_range= JSON.parse(document.getElementById('date_range').textContent);
 var found_tiles = document.getElementsByClassName('tile-item');
 var found_rows = document.getElementsByClassName('row-item');
 var count_dict = {};
@@ -436,4 +437,81 @@ window.addEventListener('DOMContentLoaded', function () {
 		console.log('filters',filters,selected_filters)
 	}
 })
+
+
+
+//-----------------------------------------
+
+// date slider
+// Multi slider for Date range
+var start = date_range['earliest_date'];
+var end = date_range['latest_date'];
+var multi_slider = document.getElementById('years');
+var dateValues = [
+		document.getElementById('event-start'),
+		document.getElementById('event-end')
+];
+noUiSlider.create(multi_slider, {
+	start: [start, end],
+	connect: true,
+	range: {'min':date_range['earliest_date'],'max':date_range['latest_date']},
+	steps: 50,
+	//tooltips: true,
+	format: {to: function (value) {return Math.floor(value)},
+		from: function (value) {return Math.floor(value)}},
+});
+
+
+function check_overlap(low,high){
+	//compare start and end date of a figure with start end date of the year slider
+	if (!low) { return false;} //figure should always have start date to be visible
+	if (!high) { // if end dat is not available check whether start date is after start
+		if (low >= start && low <= end) { return true;}
+		return false
+	}
+	if (low <= start && high >= start){ return true;}
+	if (low >= start && high <= end){ return true;}
+	if (low <= end && high >= start){ return true;}
+	return false;
+}
+
+function date_filter_installations() {
+	// updates a list of installations ids that are outside the range of the date slider
+	// updates the displayed installations and the counts
+	/*
+	for (i = 0; i< city_active_installation_ids.length; i++) {
+		installation_id = city_active_installation_ids[i];
+		installation = document.getElementById(installation_id)
+		if (!installation) { continue;}
+		var low = parseInt(installation.getAttribute('data_map_start_date'))
+		var high = parseInt(installation.getAttribute('data_map_end_date'))
+		var overlap = check_overlap(low,high);
+		if ( overlap ) {
+			if (date_exclude_installation_ids.includes(installation_id) ) { 
+				var index = date_exclude_installation_ids.indexOf(installation_id);
+				date_exclude_installation_ids.splice(index,1);
+			}
+		} else { 
+			if (!date_exclude_installation_ids.includes(installation_id) ) {
+				date_exclude_installation_ids.push(installation_id); 
+			}	
+		}
+	}
+	hide_show_elements();
+	*/
+}
+
+multi_slider.noUiSlider.on('change',handleYearSlider);
+
+function handleYearSlider(values,handle) {
+	//set start and end values based on the year slider, 
+	//this is used to determine which
+	//figures are shown
+	start= values[0];
+	end= values[1];
+	dateValues[handle].innerHTML = values[handle];
+	//show_layers();
+	//date_filter_installations();
+}
+//-----------------------
 
