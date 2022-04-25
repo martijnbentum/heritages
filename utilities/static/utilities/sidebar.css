@@ -91,24 +91,28 @@ hr {
  */
 
 .date-slider {
-	margin-left:25px;
-	margin-right:25px;
-	margin-top:3px;
+	margin-left:5px;
+	margin-right:5px;
+	margin-top:9px;
 	margin-bottom:12px;
 }
 
-.date_year {
-  margin-left: 15px;
+.date-year {
+  margin-left: 0px;
   font-size: 14px;
   color:#585e66;
 }
 
-.date_years {
+.date-years {
   margin-bottom: 10px;
+  margin-left:15px;
+  margin-right:10px;
 }
 
 .right-align {
-  margin-left: 130px;
+  position: absolute;
+  left:188px;
+  margin-top:3px;
 }
 
 
@@ -125,10 +129,10 @@ hr {
  */
 .noUi-handle {
     border: 1px solid black;
-    border-radius: 5px;
+    border-radius: 4px;
     background: black;
     box-shadow:none;
-	width: 15px !important;
+	width: 10px !important;
 	height:15px !important;
 	right: -5px !important;
 	font-size: 9px;
