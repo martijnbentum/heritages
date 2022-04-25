@@ -173,6 +173,7 @@ function set_filter_active_dict(active=NaN, inactive=NaN,category_name=NaN) {
 	//there are one or more (but not all) filters active in a category
 	//category is inactive
 	else {filter_active_dict[category_name] = 'inactive'; }
+	update_date_slider_to_century_filter();
 }
 
 function update_count_dict() {
@@ -441,20 +442,46 @@ window.addEventListener('DOMContentLoaded', function () {
 
 
 //-----------------------------------------
+function _make_nouirange(start,end) {
+	// defines a range dictionary for the nouislider
+	var span = end - start;
+	console.log(span)
+	var range = {'min':start,'max':end}
+	// if the spanned time is short return a linear slider
+	if (span <= 100) {return range;}
+	// if the spanned time is longer return a non linear slider
+	// allocating less space to earlier times
+	var fp = start+30;
+	if (fp < 1800) {fp = 1800}
+	if (span <= 200) {
+		range['15%']= fp
+		return range
+	}
+	var sp = start+100;
+	if (sp < 1900) {sp =1900}
+	range['5%']= fp
+	range['40%']= sp
+	return range
+}
 
 // date slider
 // Multi slider for Date range
 var start = date_range['earliest_date'];
 var end = date_range['latest_date'];
+if (start === end) {start -=1; end += 1;}
+var range = _make_nouirange(start,end)
+console.log(range);
 var multi_slider = document.getElementById('years');
 var dateValues = [
 		document.getElementById('event-start'),
 		document.getElementById('event-end')
 ];
+var start_range = 1700;
+if (start < start_range) {start_range = start;}
 noUiSlider.create(multi_slider, {
 	start: [start, end],
 	connect: true,
-	range: {'min':date_range['earliest_date'],'max':date_range['latest_date']},
+	range: range, //{'min':start_range,'15%':1800,'max':end},
 	steps: 50,
 	//tooltips: true,
 	format: {to: function (value) {return Math.floor(value)},
@@ -501,17 +528,56 @@ function date_filter_installations() {
 	*/
 }
 
-multi_slider.noUiSlider.on('change',handleYearSlider);
 
-function handleYearSlider(values,handle) {
+function update_date_slider_to_century_filter() {
+	if (filter_active_dict['century'] == 'active') {
+		reset_year_slider();
+		return;
+	}
+	var fad_keys = Object.keys(filter_active_dict);
+	var centuries = []
+	for (let i=0;i<fad_keys.length;i++) {
+		var key = fad_keys[i];
+		if (filter_active_dict[key] == 'inactive') { continue;}
+		if (key.includes('century')) {
+			var name = key.split(',')
+			if (name.length == 2) {
+				name = name[1];
+				centuries.push(parseInt(name.substring(0,2)))
+			}
+		}
+	}
+	var start_century = Math.min(...centuries)
+	var end_century = Math.max(...centuries)
+	var start_year = start_century * 100 - 100
+	var end_year = end_century * 100 - 1
+	console.log(centuries, start_year, end_year);
+	set_year_slider(start_year,end_year)
+}
+
+multi_slider.noUiSlider.on('slide',handleYearSliderValues);
+multi_slider.noUiSlider.on('set',handleYearSlider);
+function handleYearSliderValues(values,handle) {
 	//set start and end values based on the year slider, 
-	//this is used to determine which
-	//figures are shown
 	start= values[0];
 	end= values[1];
 	dateValues[handle].innerHTML = values[handle];
-	//show_layers();
-	//date_filter_installations();
+}
+
+function handleYearSlider(values,handle) {
+	//set start and end values based on the year slider, 
+	start= values[0];
+	end= values[1];
+	dateValues[handle].innerHTML = values[handle];
+	//code to filter instances
+}
+
+function set_year_slider(start,end) {
+	multi_slider.noUiSlider.set([start,end])
+}
+
+function reset_year_slider() {
+	multi_slider.noUiSlider.reset()
 }
 //-----------------------
 
