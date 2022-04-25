@@ -66,11 +66,11 @@
 		</a>
 		<div id = 'date-filters'>
 			<hr>
-			<div class="date_years">
-				<span id='event-start' class="date_year">{{earliest_date}}</span>
-				<span id='event-end' class="date_year right-align">{{latest_date}}</span>
+			<div class="date-years">
+				<span id='event-start' class="date-year">{{earliest_date}}</span>
+				<span id='event-end' class="date-year right-align">{{latest_date}}</span>
+				<div id="years" class="date-slider"></div>
 			</div>
-			<div id="years" class="date-slider"></div>
 			{% for key, value in century_counts.items %}
 				<a 
 					class='indent'
