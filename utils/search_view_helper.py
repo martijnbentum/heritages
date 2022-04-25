@@ -83,8 +83,10 @@ class SearchView:
 	def get_date_range(self):
 		years = [x.year for x in self.instances]
 		years = [x for x in years if x]
-		earliest_date = min(years)
-		latest_date = max(years)
+		if years:
+			earliest_date = min(years)
+			latest_date = max(years)
+		else: earliest_date,latest_date = '',''
 		self.earliest_date, self.latest_date = earliest_date, latest_date
 		self.date_range = {'earliest_date':earliest_date,'latest_date':latest_date}
 
