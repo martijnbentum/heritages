@@ -80,7 +80,6 @@ function _update_instances(items) {
 			item.style.display = "none"
 		}
 	}
-	// console.log('cais',current_active_ids);
 }
 
 function toggle_filters_visibile(name) {
@@ -125,7 +124,6 @@ function update_sidebar() {
 			}
 			filter_btn.innerText= t.replace(/\(.*\)/,r);
 		}
-		//console.log(key,selected_filters,333, filter_btn)
 		// mark selected filters with a dot
 		var t = filter_btn.innerText;
 		if (selected_filters.includes(key)) {
@@ -170,7 +168,6 @@ function set_filter_active_dict(active=NaN, inactive=NaN,category_name=NaN) {
 	var d_keys = Object.keys(filter_active_dict);
 	var active_count=0 
 	var inactive_count=0 ;
-	console.log('a',active_count,'ia',inactive,'cn',category_name)
 	for (let i=0;i<d_keys.length;i++) {
 		var key = d_keys[i];
 		if (key.includes(active)) {
@@ -187,10 +184,8 @@ function set_filter_active_dict(active=NaN, inactive=NaN,category_name=NaN) {
 	}
 	//if there are no inactive filters in an category, the category is active
 	if (inactive_count == 0){ 
-		console.log('completely active',category_name, selected_filters)
 		filter_active_dict[category_name] = 'active'; 
 		remove_selected_filters_from_category(category_name)
-		console.log('completely active',category_name, selected_filters)
 	}
 	else if (active_count == 0) {
 		//if there are no active filters, the last active filters is turned off
@@ -279,9 +274,7 @@ function update_selected_filters(name) {
 
 function toggle_filter(name) {
 	//handles clicking a filter in the sidebar
-	console.log('sf',selected_filters)
 	update_selected_filters(name);
-	console.log('sf',selected_filters)
 	var [category_name,filter_name] = name.split(',');
 	if (filter_active_dict[category_name] == 'active') {
 		//first filter term in a category is activated,
@@ -661,7 +654,6 @@ function update_date_slider_to_century_filter() {
 	var end_century = Math.max(...centuries)
 	var start_year = start_century * 100 - 100
 	var end_year = end_century * 100 - 1
-	console.log(centuries, start_year, end_year);
 	set_year_slider(start_year,end_year)
 }
 
