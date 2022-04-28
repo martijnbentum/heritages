@@ -165,8 +165,8 @@ class Person(models.Model, info):
 		if lower and higher: yr = [lower,higher]
 		elif lower: yr = [lower,lower]
 		elif higher: yr = [higher,higher]
-		else: yr=''
-		self._year_range = ','.join(map(str,yr))
+		else: yr=None
+		self._year_range = yr
 		return self._year_range
 	
 		
