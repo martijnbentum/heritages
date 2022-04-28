@@ -4,7 +4,9 @@ var found_tiles = document.getElementsByClassName('tile-item');
 var found_rows = document.getElementsByClassName('row-item');
 var count_dict = {};
 var id_dict= JSON.parse(document.getElementById('id-dict').textContent);
+var id_year_range_dict= JSON.parse(document.getElementById('id-year-range-dict').textContent);
 var active_ids = id_dict['all']
+var date_slider_active_ids = Object.keys(id_year_range_dict)
 var temp =document.getElementById('filter-active-dict').textContent;
 var filter_active_dict = JSON.parse(temp);
 var sidebar_state = 'closed';
@@ -14,6 +16,8 @@ var combine = document.getElementById('combine')
 var exact = document.getElementById('exact')
 var selected_filters = [];
 var new_query = 'false';
+var century_set_date_slider = false;
+var current_active_ids_set = id_dict['all']
 	
 toggle_sidebar();
 window.onbeforeunload = function(){send_data();};
@@ -63,14 +67,18 @@ function update_hide_show_instances() {
 
 function _update_instances(items) {
 	// helper function to hide & show instances for both tile and row view
+	if (items.length == 0) {return}
+	current_active_ids_set = [];
 	for (let i=0;i<items.length;i++) {
 		item = items[i]
-		if (active_ids.includes(item.id)) {
+		if (active_ids.includes(item.id) && date_slider_active_ids.includes(item.id)) {
 			item.style.display = "";
+			current_active_ids_set.push(item.id);
 		} else {
 			item.style.display = "none"
 		}
 	}
+	console.log('cais',current_active_ids_set);
 }
 
 function toggle_filters_visibile(name) {
@@ -95,6 +103,7 @@ function update_sidebar() {
 		if (!filter_btn) {continue;}
 		var [category_name,filter_name] = key.split(',');
 		var updated = false
+		var display_active = count_dict[key]['display_active']
 		var active = count_dict[key]['active']
 		var inactive = count_dict[key]['inactive']
 		var filtered_inactive = count_dict[key]['filtered_inactive']
@@ -107,7 +116,7 @@ function update_sidebar() {
 					filter_btn.style.display='none';
 			}
 			else { 
-				r = '('+active+')';
+				r = '('+display_active+')';
 				filter_btn.style.color='black'; 
 				updated = true;
 				filter_btn.style.display='';
@@ -129,7 +138,7 @@ function update_sidebar() {
 
 		var t = filter_btn.innerText;
 		if (filter_active_dict[key] == 'active' && filter_btn) {
-			r = '('+active+')';
+			r = '('+display_active+')';
 			filter_btn.style.color='black';
 		}
 		if (filter_active_dict[key] == 'inactive' && filter_btn) {
@@ -185,8 +194,9 @@ function update_count_dict() {
 		key = keys[i]	
 		var [category_name,filter_name] = key.split(',');
 		if (category_name && filter_name) {
-			var [active,inactive,f_inactive]=count_instances(category_name,filter_name);
+			var [da, active,inactive,f_inactive]=count_instances(category_name,filter_name);
 			count_dict[key] =  {}
+			count_dict[key]['display_active'] = da;
 			count_dict[key]['active'] = active;
 			count_dict[key]['inactive'] = inactive;
 			count_dict[key]['filtered_inactive'] = f_inactive;
@@ -254,9 +264,9 @@ function toggle_filter(name) {
 	}
 	update_selected_filters(name);
 	update_active_ids();
+	update_hide_show_instances()
 	update_count_dict();
 	update_sidebar();
-	update_hide_show_instances()
 	set_nentries();
 }
 
@@ -299,11 +309,12 @@ function make_ids_omiting_one_category(category) {
 function count_instances(category_name,filter_name) {
 	//count number of active and inactive instances in a category
 	var identifiers = id_dict[category_name][filter_name];
+	var display_active= count_array_overlap(current_active_ids_set,identifiers);
 	var active= count_array_overlap(active_ids,identifiers);
 	var inactive = identifiers.length - active;
 	var ids = make_ids_omiting_one_category(category_name);
 	var filtered_inactive = count_array_overlap(ids,identifiers);
-	return [active, inactive,filtered_inactive]
+	return [display_active, active, inactive,filtered_inactive]
 }
 
 
@@ -330,7 +341,7 @@ function count_array_overlap(a1,a2) {
 
 function set_nentries() { 
 	var nentries = document.getElementById('nentries');
-	nentries.innerText = '# Entries ' + active_ids.length;
+	nentries.innerText = '# Entries ' + current_active_ids_set.length;
 }
 
 function toggle_sidebar() {
@@ -529,6 +540,43 @@ function date_filter_installations() {
 }
 
 
+
+multi_slider.noUiSlider.on('slide',handleYearSliderValues);
+multi_slider.noUiSlider.on('set',handleYearSlider);
+function handleYearSliderValues(values,handle) {
+	//set start and end values based on the year slider, 
+	console.log('setting values')
+	start= values[0];
+	end= values[1];
+	dateValues[handle].innerHTML = values[handle];
+}
+
+function handleYearSlider(values,handle) {
+	//set start and end values based on the year slider, 
+	console.log('setting slider')
+	start= values[0];
+	end= values[1];
+	dateValues[handle].innerHTML = values[handle];
+	//code to filter instances
+	if (!century_set_date_slider) {
+		update_date_slider_active_ids();
+	}
+}
+
+function set_year_slider(start,end) {
+	console.log('set year',start,end)
+	century_set_date_slider = true;
+	multi_slider.noUiSlider.set([start,end])
+	century_set_date_slider = false;
+	update_date_slider_active_ids();
+}
+
+function reset_year_slider() {
+	multi_slider.noUiSlider.reset()
+}
+//-----------------------
+// date filtering
+
 function update_date_slider_to_century_filter() {
 	if (filter_active_dict['century'] == 'active') {
 		reset_year_slider();
@@ -555,29 +603,23 @@ function update_date_slider_to_century_filter() {
 	set_year_slider(start_year,end_year)
 }
 
-multi_slider.noUiSlider.on('slide',handleYearSliderValues);
-multi_slider.noUiSlider.on('set',handleYearSlider);
-function handleYearSliderValues(values,handle) {
-	//set start and end values based on the year slider, 
-	start= values[0];
-	end= values[1];
-	dateValues[handle].innerHTML = values[handle];
+function update_date_slider_active_ids() {
+	date_slider_active_ids = [];
+	var keys = Object.keys(id_year_range_dict);
+	for (let i=0;i<keys.length;i++) {
+		var key = keys[i];
+		var year_range = id_year_range_dict[key];
+		if (!year_range) { continue;}
+		var [low,high] = year_range;
+		if (check_overlap(...year_range)) {
+			date_slider_active_ids.push(key)
+		}
+	}
+	console.log('dsai',date_slider_active_ids)
+	update_hide_show_instances();
+	update_count_dict();
+	update_sidebar();
+	set_nentries();
 }
 
-function handleYearSlider(values,handle) {
-	//set start and end values based on the year slider, 
-	start= values[0];
-	end= values[1];
-	dateValues[handle].innerHTML = values[handle];
-	//code to filter instances
-}
-
-function set_year_slider(start,end) {
-	multi_slider.noUiSlider.set([start,end])
-}
-
-function reset_year_slider() {
-	multi_slider.noUiSlider.reset()
-}
-//-----------------------
-
+//---------------------------------------------------------------------------------------
