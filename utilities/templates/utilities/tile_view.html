@@ -10,7 +10,9 @@
 {% include 'utilities/sidebar.html' %}
 
 {% for instance in instances %}
-	<div class="tile tile-item" id='{{instance.identifier}}'>
+	<div class="tile tile-item" 
+		 id='{{instance.identifier}}' 
+		 data-date_range={{instance.year}}>
 		{% if instance.thumbnail %}
 		<img id='{{instance.identifier}}-img' class="tile-img" 
 			src="{{instance.thumbnail.url}}" alt="" 
