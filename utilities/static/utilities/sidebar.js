@@ -5,7 +5,7 @@ var found_rows = document.getElementsByClassName('row-item');
 var count_dict = {};
 var id_dict= JSON.parse(document.getElementById('id-dict').textContent);
 var id_year_range_dict= JSON.parse(document.getElementById('id-year-range-dict').textContent);
-var active_ids = id_dict['all']
+var filter_active_ids = id_dict['all']
 var date_slider_active_ids = Object.keys(id_year_range_dict)
 var temp =document.getElementById('filter-active-dict').textContent;
 var filter_active_dict = JSON.parse(temp);
@@ -17,7 +17,7 @@ var exact = document.getElementById('exact')
 var selected_filters = [];
 var new_query = 'false';
 var century_set_date_slider = false;
-var current_active_ids_set = id_dict['all']
+var current_active_ids= id_dict['all']
 	
 toggle_sidebar();
 window.onbeforeunload = function(){send_data();};
@@ -38,8 +38,10 @@ function set_new_view_type() {
 function send_data() {
 	const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
 	var output = {};
-	output['active_ids']=active_ids
+	output['active_ids']=current_active_ids
 	output['filters']=selected_filters
+	output['date_start'] = start;
+	output['date_end'] = end;
 	output['query'] = get_query();
 	output['time'] = Date.now()/1000;
 	output['sorting_direction'] = get_sorting_direction();
@@ -60,7 +62,7 @@ function send_data() {
 
 
 function update_hide_show_instances() {
-	// hide or show instances based on active_ids array
+	// hide or show instances based on current_active_ids array
 	_update_instances(found_tiles);
 	_update_instances(found_rows);
 }
@@ -68,17 +70,17 @@ function update_hide_show_instances() {
 function _update_instances(items) {
 	// helper function to hide & show instances for both tile and row view
 	if (items.length == 0) {return}
-	current_active_ids_set = [];
+	current_active_ids= [];
 	for (let i=0;i<items.length;i++) {
 		item = items[i]
-		if (active_ids.includes(item.id) && date_slider_active_ids.includes(item.id)) {
+		if (filter_active_ids.includes(item.id) && date_slider_active_ids.includes(item.id)) {
 			item.style.display = "";
-			current_active_ids_set.push(item.id);
+			current_active_ids.push(item.id);
 		} else {
 			item.style.display = "none"
 		}
 	}
-	console.log('cais',current_active_ids_set);
+	// console.log('cais',current_active_ids);
 }
 
 function toggle_filters_visibile(name) {
@@ -152,11 +154,23 @@ function update_sidebar() {
 	}
 }
 
+function remove_selected_filters_from_category(category_name) {
+	var temp = []
+	for (let i=0;i<selected_filters.length;i++) {
+		var filter_name = selected_filters[i];
+		if (filter_name.includes(category_name)) {
+			continue
+		}
+		else { temp.push(filter_name) }
+	}
+	selected_filters = temp;
+}
 
 function set_filter_active_dict(active=NaN, inactive=NaN,category_name=NaN) {
 	var d_keys = Object.keys(filter_active_dict);
 	var active_count=0 
 	var inactive_count=0 ;
+	console.log('a',active_count,'ia',inactive,'cn',category_name)
 	for (let i=0;i<d_keys.length;i++) {
 		var key = d_keys[i];
 		if (key.includes(active)) {
@@ -172,7 +186,12 @@ function set_filter_active_dict(active=NaN, inactive=NaN,category_name=NaN) {
 		}
 	}
 	//if there are no inactive filters in an category, the category is active
-	if (inactive_count == 0){ filter_active_dict[category_name] = 'active'; }
+	if (inactive_count == 0){ 
+		console.log('completely active',category_name, selected_filters)
+		filter_active_dict[category_name] = 'active'; 
+		remove_selected_filters_from_category(category_name)
+		console.log('completely active',category_name, selected_filters)
+	}
 	else if (active_count == 0) {
 		//if there are no active filters, the last active filters is turned off
 		//all filters in the category should be turned on
@@ -182,7 +201,9 @@ function set_filter_active_dict(active=NaN, inactive=NaN,category_name=NaN) {
 	//there are one or more (but not all) filters active in a category
 	//category is inactive
 	else {filter_active_dict[category_name] = 'inactive'; }
-	update_date_slider_to_century_filter();
+	if (category_name == 'century') {
+		update_date_slider_to_century_filter();
+	}
 }
 
 function update_count_dict() {
@@ -204,6 +225,18 @@ function update_count_dict() {
 	}
 }
 
+function filter_on_date_slide_active_ids(ids) {
+	// filter out ids that are not in date_slider_active_ids array
+	var output = [];
+	for (let i=0;i<ids.length;i++) {
+		var identifier = ids[i];
+		if (date_slider_active_ids.includes(identifier)) {
+			output.push(identifier);
+		}
+	}
+	return output
+}
+
 function get_ids_from_selected_filters_in_category(category) {
 	//get all ids from selected filters in a category
 	var category_ids = [];
@@ -220,7 +253,7 @@ function get_ids_from_selected_filters_in_category(category) {
 function update_active_ids() {
 	var temp = [];
 	if (selected_filters.length == 0) {
-		active_ids = id_dict['all']
+		filter_active_ids = id_dict['all']
 		return
 	}
 	category_names = Object.keys(id_dict);
@@ -231,8 +264,8 @@ function update_active_ids() {
 		if (identifiers.length == 0) { continue; }
 		temp.push(identifiers);
 	}
-	if (temp.length == 1) { active_ids = Array.from(...temp);}
-	else {active_ids = intersection(temp);}
+	if (temp.length == 1) { filter_active_ids = Array.from(...temp);}
+	else {filter_active_ids = intersection(temp);}
 }
 
 function update_selected_filters(name) {
@@ -246,7 +279,10 @@ function update_selected_filters(name) {
 
 function toggle_filter(name) {
 	//handles clicking a filter in the sidebar
-	[category_name,filter_name] = name.split(',');
+	console.log('sf',selected_filters)
+	update_selected_filters(name);
+	console.log('sf',selected_filters)
+	var [category_name,filter_name] = name.split(',');
 	if (filter_active_dict[category_name] == 'active') {
 		//first filter term in a category is activated,
 		//set all other terms 
@@ -262,7 +298,6 @@ function toggle_filter(name) {
 		//current filter name is inactive, activate it and linked instances.
 		set_filter_active_dict(active=name,inactive=NaN,category_name=category_name);
 	}
-	update_selected_filters(name);
 	update_active_ids();
 	update_hide_show_instances()
 	update_count_dict();
@@ -309,8 +344,11 @@ function make_ids_omiting_one_category(category) {
 function count_instances(category_name,filter_name) {
 	//count number of active and inactive instances in a category
 	var identifiers = id_dict[category_name][filter_name];
-	var display_active= count_array_overlap(current_active_ids_set,identifiers);
-	var active= count_array_overlap(active_ids,identifiers);
+	if (category_name != 'century') {
+		identifiers = filter_on_date_slide_active_ids(identifiers);
+	}
+	var display_active= count_array_overlap(current_active_ids,identifiers);
+	var active= count_array_overlap(filter_active_ids,identifiers);
 	var inactive = identifiers.length - active;
 	var ids = make_ids_omiting_one_category(category_name);
 	var filtered_inactive = count_array_overlap(ids,identifiers);
@@ -341,7 +379,7 @@ function count_array_overlap(a1,a2) {
 
 function set_nentries() { 
 	var nentries = document.getElementById('nentries');
-	nentries.innerText = '# Entries ' + current_active_ids_set.length;
+	nentries.innerText = '# Entries ' + current_active_ids.length;
 }
 
 function toggle_sidebar() {
@@ -447,6 +485,16 @@ window.addEventListener('DOMContentLoaded', function () {
 			toggle_filter(filter)
 		}
 		console.log('filters',filters,selected_filters)
+	}
+	if (us && us.date_start && us.date_end) {
+		console.log(us.date_start, us.date_end)
+		if (us.date_start != start || us.date_end != end) {
+			console.log(us.date_start,start, us.date_end,end)
+			set_year_slider(us.date_start,us.date_end)
+			set_century_filter_to_inactive();
+			update_count_dict();
+			update_sidebar();
+		}
 	}
 })
 
@@ -559,8 +607,14 @@ function handleYearSlider(values,handle) {
 	dateValues[handle].innerHTML = values[handle];
 	//code to filter instances
 	if (!century_set_date_slider) {
+		// date slider handles are moved by user
+		set_century_filter_to_inactive()
 		update_date_slider_active_ids();
 	}
+	if (start == date_range['earliest_date'] && end == date_range['latest_date']) {
+		set_century_filters_to_active();
+	}
+		
 }
 
 function set_year_slider(start,end) {
@@ -572,14 +626,21 @@ function set_year_slider(start,end) {
 }
 
 function reset_year_slider() {
+	century_set_date_slider = true;
 	multi_slider.noUiSlider.reset()
+	century_set_date_slider = false;
 }
 //-----------------------
 // date filtering
 
 function update_date_slider_to_century_filter() {
+	// set the date slider start and end handles to correspond to the
+	// currently active century filters
 	if (filter_active_dict['century'] == 'active') {
+		// if century (category) is active no century filters are selected
+		// last century filter is toggled off set date slider to maximum range
 		reset_year_slider();
+		date_slider_active_ids = id_dict['all']
 		return;
 	}
 	var fad_keys = Object.keys(filter_active_dict);
@@ -595,6 +656,7 @@ function update_date_slider_to_century_filter() {
 			}
 		}
 	}
+	// set date slider to start and dates of selected century filters
 	var start_century = Math.min(...centuries)
 	var end_century = Math.max(...centuries)
 	var start_year = start_century * 100 - 100
@@ -604,6 +666,9 @@ function update_date_slider_to_century_filter() {
 }
 
 function update_date_slider_active_ids() {
+	//fill date_slider_active_ids array with ids of instances that fall within
+	// the current date slider start and end dates
+	// update the shown instances
 	date_slider_active_ids = [];
 	var keys = Object.keys(id_year_range_dict);
 	for (let i=0;i<keys.length;i++) {
@@ -615,11 +680,45 @@ function update_date_slider_active_ids() {
 			date_slider_active_ids.push(key)
 		}
 	}
-	console.log('dsai',date_slider_active_ids)
 	update_hide_show_instances();
 	update_count_dict();
 	update_sidebar();
 	set_nentries();
+}
+
+function set_century_filter_to_inactive() {
+	// remove all selected century filters when setting date slider manually
+	// set the century filters to inactive (grey color)
+	// this shows that the date slider is the controlling filter
+	// also shows the correct number instances to be shown when a century filter
+	// is clicked
+	console.log('set century filter to inactive')
+	var keys = Object.keys(filter_active_dict);
+	for (let i=0;i<keys.length;i++) {
+		var key = keys[i];
+		if (key.includes('century')) {
+			filter_active_dict[key] = 'inactive'
+			if (selected_filters.includes(key)) {
+				selected_filters.splice(selected_filters.indexOf(key),1);
+			}
+		}
+	}
+}
+
+function set_century_filters_to_active() {
+	// if the date slider is set to maximum range make the century filters active
+	// this shows them in the dark color updating counts based on other behaviors
+	// also shows that the date slider is not filtering anything
+	console.log('set century filter to active')
+	var keys = Object.keys(filter_active_dict);
+	for (let i=0;i<keys.length;i++) {
+		var key = keys[i];
+		if (key.includes('century')) {
+			filter_active_dict[key] = 'active'
+		}
+	}
+	update_count_dict();
+	update_sidebar();
 }
 
 //---------------------------------------------------------------------------------------
