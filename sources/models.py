@@ -196,10 +196,10 @@ class Source(models.Model):
 		if self.date_created: dates.append(self.date_created.year)
 		if self.date_released: dates.append( self.date_released.year )
 
-		if len(dates) == 0: yr = ''
+		if len(dates) == 0: yr = None
 		elif len(dates) == 1: yr = dates * 2
 		else: yr = sorted(dates)
-		self._year_range = ','.join(map(str,yr))
+		self._year_range = yr
 		return self._year_range
 
 	@property
