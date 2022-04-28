@@ -11,7 +11,9 @@
 
 {% for instance in instances %}
 
-	<div class="grid-container row row-item" id='{{instance.identifier}}'>
+	<div class="grid-container row row-item" 
+		 id='{{instance.identifier}}'
+	     data-date_range={{instance.year}}>
 		<div class="grid-item icon">
 			<i class="{{instance.icon}} fa-lg" aria-hidden="true"></i> 
 		</div>
