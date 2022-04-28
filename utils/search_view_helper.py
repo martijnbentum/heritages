@@ -114,6 +114,7 @@ class SearchView:
 			'date_range':self.date_range,
 			'earliest_date':self.earliest_date,
 			'latest_date':self.latest_date,
+			'id_year_range_dict':self.id_year_range_dict,
 		}
 
 	@property
@@ -144,6 +145,15 @@ class SearchView:
 				if key == 'all' or key == 'other': continue
 				o[category_key+','+key] = 'active'
 		return o
+
+	@property
+	def id_year_range_dict(self):
+		if hasattr(self,'_id_year_range_dict'): return self._id_year_range_dict
+		self._id_year_range_dict = {}
+		for instance in self.instances:
+			self._id_year_range_dict[instance.identifier] = instance.year,instance.year
+		return self._id_year_range_dict
+		
 
 
 
