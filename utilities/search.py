@@ -492,7 +492,7 @@ def filter_on_list(instance_dict, filter_list):
 	instances = []
 	for key,inst in instance_dict.items():
 		if key in filter_list:
-			for instance in insts:
+			for instance in inst:
 				if instance not in instances: instances.append(instance)
 	return instances
 
