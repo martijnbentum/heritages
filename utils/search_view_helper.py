@@ -177,9 +177,12 @@ class UserSearch:
 		self.wait_attemps = 0
 		if self.wait_for_ready: self.wait_for_data()
 		if os.path.isfile(self.filename): self.set_info()
-		if not self.dict or self.to_old: self.useable = False
+		if not self.dict or self.to_old or self.index == None: self.useable = False
 		else: self.useable = True
 		if self.dict is not None: self.dict['useable'] = self.useable
+		if not self.useable or self.nactive_ids == 1 or self.index == None:
+			self.iterating_possible = False
+		else: self.iterating_possible = True
 		print(self)
 
 	def __repr__(self):
@@ -271,24 +274,18 @@ class UserSearch:
 
 	@property
 	def next_instance(self):
-		if not self._iterating_possible: return None
+		if not self.iterating_possible: return None
 		if self.index == self.nactive_ids -1: identifier = self.active_ids[0]
 		else: identifier = self.active_ids[self.index+1]
 		return identifier2instance(identifier)
 
 	@property
 	def previous_instance(self):
-		if not self._iterating_possible: return None
+		if not self.iterating_possible: return None
 		identifier = self.active_ids[self.index-1]
 		return identifier2instance(identifier)
 		
 
-	def _iterating_possible(self):
-		if not self.useable or not hasattr(self,'current_instance'): return False
-		if self.nactive_ids == 1: return False
-		if self.index == None: return False
-		return True
-		
 
 
 def to_json(search_view_helper, filename = None):
