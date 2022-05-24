@@ -1,27 +1,29 @@
 {{us.dict|json_script:"usjs"}}
-<div class="d-flex">
-	<div id="left_sidebar" class="left-sidebar sidebar bg-light">
-		<a 
-			href="{% url us.previous_instance.detail_url us.previous_instance.pk %}"
-			id='left_sidebar_button'
-			>
-			<i class="fa fa-arrow-left fa-2x"></i>
-		</a>
+{%  if us.iterating_possible %}
+	<div class="d-flex">
+		<div id="left_sidebar" class="left-sidebar sidebar bg-light">
+			<a 
+				href="{% url us.previous_instance.detail_url us.previous_instance.pk %}"
+				id='left_sidebar_button'
+				>
+				<i class="fa fa-arrow-left fa-2x"></i>
+			</a>
+		</div>
+		
 	</div>
-	
-</div>
 
-<div class="d-flex">
-	<div id="right_sidebar" class="right-sidebar sidebar bg-light">
-		<a 
-			href="{% url us.next_instance.detail_url us.next_instance.pk %}"
-			id='right_sidebar_button'
-			>
-			<i class="fa fa-arrow-right fa-2x"></i>
-		</a>
-		<p id="i_of_n" class="instance-counter">30 / 300</p>
+	<div class="d-flex">
+		<div id="right_sidebar" class="right-sidebar sidebar bg-light">
+			<a 
+				href="{% url us.next_instance.detail_url us.next_instance.pk %}"
+				id='right_sidebar_button'
+				>
+				<i class="fa fa-arrow-right fa-2x"></i>
+			</a>
+			<p id="i_of_n" class="instance-counter">30 / 300</p>
+		</div>
 	</div>
-</div>
+{% endif %}
 
 <style>
 .left-sidebar{
