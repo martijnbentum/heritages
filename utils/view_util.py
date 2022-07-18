@@ -333,13 +333,15 @@ class Event:
 				
 
 class Change:
-	def __init__(self,user,time,field_name,state,related_name,related_instance = None):
+	def __init__(self,user,time,field_name,state,related_name,
+		related_instance = None):
 		self.username = user
 		self.time = time
-		self.field= related_name + ' | ' + field_name if related_name else field_name
+		self.field=related_name + ' | ' + field_name if related_name else field_name
 		self.old_state = state[0]
-		if not related_instance or not related_name: self.new_state = state[1]
-		else: self.new_state = state[1] + ' (' + related_instance.__str__() +')'
+		if len(state) > 1:
+			if not related_instance or not related_name: self.new_state = state[1]
+			else: self.new_state = state[1] + ' (' + related_instance.__str__() +')'
 			
 		self.related_name = related_name
 
