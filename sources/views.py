@@ -17,8 +17,8 @@ from .models import Recordedspeech, Videogame, Artefact, Infographic
 from utils import search_view_helper
 import time
 
-def index(request):
-	return HttpResponse('hello world')
+def home(request):
+	return render(request,'sources/home.html')
 
 def make_fname(name):
 	o = name[0]
