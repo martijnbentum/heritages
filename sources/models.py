@@ -652,6 +652,7 @@ class Memorialsite(Source,info):
 		if self.image_file2: o.update({'image 2':self.image_file2.url})
 		if self.image_file3: o.update({'image 3':self.image_file3.url})
 		if self.video_link: o.update({'video':self.video_link})
+		if self.source_link: o.update({'source':self.source_link})
 		if o: return o
 		return ''
 
