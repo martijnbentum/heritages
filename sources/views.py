@@ -15,10 +15,13 @@ from persons.forms import PersonForm
 from .models import Image, Film, Music, Text, PictureStory, Memorialsite
 from .models import Recordedspeech, Videogame, Artefact, Infographic
 from utils import search_view_helper
+from utils.model_util import get_random_image_urls
 import time
 
 def home(request):
-	return render(request,'sources/home.html')
+	image_urls = get_random_image_urls(n=5,flagged=False)
+	args = {'image_urls':image_urls}
+	return render(request,'sources/home.html',args)
 
 def make_fname(name):
 	o = name[0]

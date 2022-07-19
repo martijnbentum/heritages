@@ -9,7 +9,17 @@
 
 {% block content %}
 
+
 <div class="lower-half">
+
+<div class="images">
+	{% for image_url in image_urls %}
+		<img id='big-image' class="big-img" 
+			src="{{image_url}}">  
+	{% endfor %}
+</div>
+
+
 <div class="col-11 intro">
 
 
@@ -60,6 +70,7 @@
 		<small>project number NWA.1160.18.197</small>.
 	</p>
 
+</div>
 </div>
 
 {% endblock %}
