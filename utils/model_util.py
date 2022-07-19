@@ -182,14 +182,32 @@ def get_all_models(model_names=''):
 			if model._meta.model_name == model_name: models.append(model)
 	return models
 
-def get_all_instances(model_names = '',flag_filter_person = True):
+def get_all_instances(model_names = '',flag_filter_person = True, 
+	exclude_persons = False):
 	models = get_all_models(model_names=model_names)
 	instances = []
 	for x in models:
-		if x._meta.model_name == 'person' and flag_filter_person: 
-			instances.extend(x.objects.filter(flag = True))
+		if x._meta.model_name == 'person': 
+			if exclude_persons: continue
+			if flag_filter_person: 
+				instances.extend(x.objects.filter(flag = True))
 		else:instances.extend(x.objects.all())
 	return instances
+
+def get_all_flagged_instances(exclude_persons = True):
+	if exclude_persons:
+		n = 'Image,PictureStory,Infographic,Film,Music,Text,Videogame'
+		n += ',Recordedspeech,Memorialsite,Artefact'
+		model_names = n.split(',')
+	else: model_names = ''
+	models = get_all_models(model_names=model_names)
+	instances = []
+	for x in models:
+		i = x.objects.filter(flag = True)
+		if i.count() > 0:
+			instances.extend(i)
+	return instances
+		
 
 def instance2image_urls(instance):
 	'''returns all urls of an instance to all attached images (i.e. ImageFields).'''
@@ -200,6 +218,24 @@ def instance2image_urls(instance):
 			if x.name:
 				o.append(x.url)
 	return ','.join(o)
+
+def get_all_image_urls(flagged = True, exclude_persons = True, 
+	exclude_thumbnails = True):
+	if flagged: instances = get_all_flagged_instances(exclude_persons)
+	else: instances = get_all_instances(exclude_persons = exclude_persons)
+	output = []
+	for instance in instances:
+		urls = instance2image_urls(instance)
+		for url in urls.split(','):
+			if not url: continue
+			if 'thumbnail' in url: continue
+			else: output.append(url)
+	return output
+		
+def get_random_image_urls(n = 1, flagged = True, exclude_persons = True,
+	exclude_thumbnails = True):
+	urls = get_all_image_urls(flagged, exclude_persons, exclude_thumbnails)
+	return random.sample(urls,n)
 
 def instances2country_counts(instances):
 	'''names and counts of countries that are linked to a list of instance.'''
