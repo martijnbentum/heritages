@@ -22,8 +22,10 @@ def get_output(name):
 def _mkdir(name, verbose = False):
 	'''Create a directory in the remote directory HOHrepositoryfiles
 	name 		name of the directory e.g. media/text
-	the function assumes that only the lowest most directory does not exists
-	If name == media/text the media directory should exists, otherwise use 
+	the function assumes that only the lowest most directory does 
+	not exists
+	If name == media/text the media directory should exists, 
+	otherwise use 
 	create_path
 	'''
 	if ' ' in name or len(name) == 0: return False
