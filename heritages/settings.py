@@ -152,8 +152,8 @@ STATIC_URL = '/static/'
 SELECT2BOOTSTRAP = True
 SELECT2_CACHE_BACKEND = 'select2'
 
-LOGIN_REDIRECT_URL = '/sources/add_film/'
-LOGOUT_REDIRECT_URL = '/sources/add_film/'
+LOGIN_REDIRECT_URL = '/home'
+LOGOUT_REDIRECT_URL = 'login'
 
 TEMPLATE_STRING_IF_INVALID = ''
 
