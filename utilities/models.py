@@ -65,20 +65,20 @@ class UserSearch(models.Model, info):
     nactive_ids= models.PositiveIntegerField(null = True, blank = True)
     usable= models.BooleanField(default=False)
 
-    def update(self, request)
+    def update(self, request):
         if self.session_key != request.session.session_key:
             print(request.session.session_key, self.session_key,'different!')
             return
         self.time = time.time()
-        active_ids = 
+        active_ids = 1
 
-	def set_current_instance(self, identifier):
-		if self.identifier_part_of_search_results(identifier):
-			self.current_instance = identifier
-			self.save()
-			print('current instance:',identifier, 'saved to file:',self.filename)
-		else:
-			print(identifier,'not in active_ids doing nothing')
+    def set_current_instance(self, identifier):
+        if self.identifier_part_of_search_results(identifier):
+            self.current_instance = identifier
+            self.save()
+            print('current instance:',identifier, 'saved to file:',self.filename)
+        else:
+            print(identifier,'not in active_ids doing nothing')
 
     def set_active_ids(self, active_ids):
         self.active_ids = ','.join(active_ids)
