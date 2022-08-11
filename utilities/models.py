@@ -1,7 +1,11 @@
 from django.apps import apps
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 from utils.model_util import id_generator, info, instance2names,instance2name
+from utils.model_util import identifier2instance
+import json
+import time
 
 class SimpleModel(models.Model):
     name = models.CharField(max_length=300,default='',unique=True)
@@ -32,25 +36,18 @@ class Protocol(models.Model, info):
     def __str__(self):
         return self.app_name + ' ' + self.model_name + ' ' + self.field_name
 
-class SearchViewHelper(models.Model, info):
-    '''
-    self.start = time.time()
-    self.request = request
-    self.user_search = UserSearch(request)
-    self.view_type = view_type
-    self.query = query
-    self.combine = combine
-    self.exact = exact
-    self.direction = direction
-    self.sorting_option = sorting_option
-    self.special_terms = [self.combine,self.exact]
-    '''
 
 class UserSearch(models.Model, info):
+    '''
+    stores state information for search queries. 
+    linked to user via request.session.session_key (functional cookie)
+    '''
     session_key = models.CharField(max_length = 60, default = '',unique = True) 
+    user = models.OneToOneField(User, on_delete = models.CASCADE,
+        blank=True,null=True)
     time = models.FloatField(null=True, blank=True)
-    active_ids = models.TextField(default = '')
-    filters = models.TextField(default = '')
+    _active_ids = models.TextField(default = '')
+    _filters = models.TextField(default = '')
     date_start = models.PositiveIntegerField(null=True,blank=True)
     date_end = models.PositiveIntegerField(null=True,blank=True)
     query = models.CharField(max_length = 300, default = '')
@@ -58,62 +55,183 @@ class UserSearch(models.Model, info):
     sorting_category= models.CharField(max_length = 100, default = '')
     current_instance = models.CharField(max_length = 100, default = '')
     view_type= models.CharField(max_length = 100, default = '')
-    filter_active_dict = models.TextField(default = '')
-    new_query = models.BooleanField(default=False)
-    index = models.PositiveIntegerField(null = True, blank = True)
-    number = models.PositiveIntegerField(null = True, blank = True)
-    nactive_ids= models.PositiveIntegerField(null = True, blank = True)
-    usable= models.BooleanField(default=False)
+    _filter_active_dict = models.TextField(default = '')
+    new_query = models.CharField(max_length = 30, default = '')
+    keys = models.CharField(max_length = 300, default = '')
 
-    def update(self, request):
+    def __repr__(self):
+        m = 'session: ' + self.session_key + ' | '
+        if self.user:
+            m += 'user: ' + self.user.username+ ' | '
+        m += 'nactive ids: ' + str(self.nactive_ids)+ ' | '
+        m += 'delta time: ' + str(self.delta_time)+ ' | '
+        m += 'useable: ' + str(self.useable)+ ' | '
+        return m
+
+    def __str__(self):
+        m = 'session:'.ljust(15) + self.session_key + '\n'
+        if self.user:
+            m += 'user:'.ljust(15) + self.user.username+ '\n'
+        m += 'nactive ids:'.ljust(15) + str(self.nactive_ids)+ '\n'
+        m += 'delta time:'.ljust(15) + str(self.delta_time)+ '\n'
+        m += 'useable:'.ljust(15) + str(self.useable)+ '\n'
+        return m
+
+    def update(self, request, json_string):
+        '''update the state information with a json string that can be converted to
+        dictionary.
+        request object is used to check the session_key and optionally set the user
+        (if user is logged in)
+        '''
         if self.session_key != request.session.session_key:
-            print(request.session.session_key, self.session_key,'different!')
+            print(request.session.session_key,self.session_key,'different doing nothing')
+            return
+        try: d = json.loads(json_string)
+        except json.JSONDecodeError:
+            print(json_string, 'cannot be handled by json library, doing nothing')
             return
         self.time = time.time()
-        active_ids = 1
+        self._set_user(request.user, save = False)
+        self._update_search_state_information_with_dict(d, save = False)
+        self.save() 
 
-    def set_current_instance(self, identifier):
+    def to_json(self):
+        '''create a json string of the dict with state information used by search template
+        javascript code to set used search parameters.
+        '''
+        keys = self._get_json_value('keys')
+        d = {}
+        for key in keys:
+            d[key] = getattr(self,key)
+        d['index'] = self.index
+        d['number'] = self.number
+        d['nactive_ids'] = self.nactive_ids
+        d['useable'] = self.useable
+        return json.dumps(d)
+
+    def _update_search_state_information_with_dict(self, d, save = True):
+        '''update the search parameters with current settings.
+        update is done based on dictionary extracted from json string
+        '''
+        for name in d.keys():
+            if name in 'time,index,number,nactive_ids,usable'.split(','):continue
+            if name in 'active_ids,filters'.split(','):
+                self._set_list(d[name], '_' + name,save = False)
+            elif name == 'current_instance':
+                self.set_current_instance(d['current_instance'], save = False)
+            elif name == 'filter_active_dict':
+                self._set_fad(d['filter_active_dict'], save = False)
+            else: setattr(self,name,d[name])
+        self._set_list(list(d.keys()),'keys', save = False)
+        if save: self.save()
+
+    def _set_user(self,user, save = True):
+        '''if user is present set it.
+        if another usersearch instance is linked to the user delete it
+        only usersearch should exist per user and a new instance is made for
+        each session key
+        '''
+        if not user or not user.username: return
+        if user.usersearch != self: user.usersearch.delete()
+        self.user = user
+        if save: self.save()
+
+    def set_current_instance(self, identifier, save = True):
+        '''the current instance is shown in the detail view.
+        it is possible to iterate over the set of active identifiers so current
+        instance needs to be updatable
+        '''
         if self.identifier_part_of_search_results(identifier):
             self.current_instance = identifier
-            self.save()
-            print('current instance:',identifier, 'saved to file:',self.filename)
+            if save: self.save()
+            print('current instance:',identifier)
         else:
             print(identifier,'not in active_ids doing nothing')
 
-    def set_active_ids(self, active_ids):
-        self.active_ids = ','.join(active_ids)
+    def _set_fad(self,filter_active_dict, save = True):
+        '''the filter active contains state information about the search filters.'''
+        if not type(filter_active_dict) == dict:
+            print(filter_active_dict,type(filter_active_dict), 
+                'is not a dict, doing nothing')
+            return
+        self._filter_active_dict = json.dumps(filter_active_dict)
+        if save: self.save()
+
+    def _set_list(self,value,attr_name, save = True):
+        '''general method to store a list (value) on a specific textfield (attr_name)
+        the list is stored as a json string
+        '''
+        if not type(value) == list:
+            print(value,type(value), 'is not a list, doing nothing')
+            return
+        setattr(self,attr_name,json.dumps(value))
         self.save()
 
-    @property
-    def get_active_ids(self):
-        if active_ids: return active_ids.split(',')
+    def _get_json_value(self, attr_name):
+        '''retrieve an object stored as a json string in a text field as the correct
+        object (e.g. list or dictionary)
+        '''
+        value = getattr(self,attr_name)
+        if value: 
+            try: output = json.loads(value)
+            except json.JSONDecodeError:
+                print(value, 'cannot be handled by json library, doing nothing')
+                return
+            else: return output
         return []
 
+    def identifier_part_of_search_results(self,identifier):
+        '''check whether the identifier is part of the list of active_ids.'''
+        return hasattr(self,'current_instance') and identifier in self.active_ids
+
+    @property
+    def active_ids(self):
+        return self._get_json_value('_active_ids')
+
+    @property
+    def filters(self):
+        return self._get_json_value('_filters')
+
+    @property
+    def filter_active_dict(self):
+        return self._get_json_value('_filter_active_dict')
+
+    @property
+    def index(self):
+        if hasattr(self,'current_instance') and self.current_instance in self.active_ids:
+            return self.active_ids.index(self.current_instance)
+        else: return None
+
+    @property
+    def number(self):
+        index = self.index
+        if index: return index + 1
+        return None
+
+    @property
+    def nactive_ids(self):
+        return len(self.active_ids)
+
+    @property
+    def delta_time(self):
+        if self.time: return time.time() - self.time
+        return None
+
+    @property
+    def to_old(self):
+        if not self.time: return True
+        return self.delta_time > 3600 * 4
            
-    '''
-    self.request = request
-    self.wait_for_ready = False
-    if request and 'HTTP_REFERER' in self.request.META.keys(): 
-        if 'search_view' in request.META['HTTP_REFERER']: self.wait_for_ready
-    self.time_out = False
-    if user: self.user = user
-    if request: self.user = request.user.username
-    self.directory = 'user_search_requests/' + self.user +'/'
-    self.filename = self.directory + 'search'
-    self.dict = None
-    self.start = time.time()
-    self.wait_attemps = 0
-    if self.wait_for_ready: self.wait_for_data()
-    if os.path.isfile(self.filename): self.set_info()
-    if not self.dict or self.to_old or self.index == None: self.useable = False
-    else: self.useable = True
-    if self.dict is not None: self.dict['useable'] = self.useable
-    if not self.useable or self.nactive_ids == 1 or self.index == None:
-        self.iterating_possible = False
-    else: self.iterating_possible = True
-    '''
+    @property
+    def useable(self):
+        d = self.filter_active_dict
+        if not d or self.to_old or self.index == None: return False
+        else: return True
 
-
+    @property
+    def instance(self):
+        try: return identifier2instance(self.current_instance)
+        except: return None
 
 
 def expose_m2m(instance, field_name,attr):
