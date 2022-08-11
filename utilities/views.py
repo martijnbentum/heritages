@@ -16,7 +16,7 @@ from utils.get_totals import get_gender
 from utils.search_view_helper import SearchView, UserSearch
 # from .models import copy_complete
 from utilities.search import Search, SearchAll
-from .models import Protocol
+from .models import Protocol, UserSearch
 from .forms import ProtocolForm
 import os
 import time
@@ -73,13 +73,25 @@ def search_view(request, view_type = '', query = ' ', combine = ' ',
     else:
         return render(request,'utilities/row_view.html',s.var)
 
+def get_user_search(session_key):
+    try: return UserSearch.objects.get(session_key = session_key)
+    except UserSearch.DoesNotExist:
+        us = UserSearch(session_key = session_key)
+        us.save()
+        return us
+
 def get_user_search_requests(request):
+    us = get_user_search(request.session.session_key)
+    print('us',us)
     directory = 'user_search_requests/' + request.user.username +'/'
     if not os.path.isdir(directory): os.mkdir(directory)
     # print(list(request.FILES['file'].chunks())[0].decode('utf-8'),'<----')
     print('  user req received\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
     o = list(request.FILES['file'].chunks())[0].decode('utf-8')
-    print('json file o:',o)
+    us.update(request,o)
+    print('us after update',us)
+    print('us json file',us.to_json())
+    print('json file o:',o,type(o))
     with open(directory + 'search','w') as fout:
         fout.write(o)
     print('  file written\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
