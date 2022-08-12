@@ -1,4 +1,5 @@
 from utilities.search import SearchAll
+# from utilities.models import UserSearch, get_user_search
 from utils.general import remove_keys_from_dict
 from utils.model_util import identifier2instance
 import copy
@@ -19,6 +20,7 @@ class SearchView:
         '''
         self.start = time.time()
         self.request = request
+        # self.user_search = get_user_search(request.session.session_key)
         self.user_search = UserSearch(request)
         self.view_type = view_type
         self.query = query
@@ -58,7 +60,8 @@ class SearchView:
             self.query = self.user_search.query
         if hasattr(self.user_search, 'sorting_category') and usu:
             self.sorting_option = self.user_search.sorting_category
-        if not self.direction and hasattr(self.user_search, 'sorting_direction') and usu: 
+        has_sorting_d = hasattr(self.user_search, 'sorting_direction')
+        if not self.direction and has_sorting_d and usu: 
             self.direction = self.user_search.sorting_direction
         else: self.direction = 'ascending'
         if not self.view_type and hasattr(self.user_search,'view_type') and usu: 
@@ -66,10 +69,11 @@ class SearchView:
         else: self.view_type = 'tile_view'
 
     def handle_options(self):
-        if self.direction == 'ascending':self.sorting_icon = 'fas fa-sort-alpha-down'
+        if self.direction == 'ascending':
+            self.sorting_icon = 'fas fa-sort-alpha-down'
         else:self.sorting_icon = 'fas fa-sort-alpha-up'
-        self.d = {'title - name':'t','chronological':'c','famine':'f','category':'ca'}
-        self.d.update({'location':'l'})
+        self.d = {'title - name':'t','chronological':'c','famine':'f'}
+        self.d.update({'location':'l','category':'ca'})
         if self.sorting_option in self.d.keys(): 
             self.select_sorting_option = self.d[self.sorting_option]
         else: self.select_sorting_option = 't'
@@ -151,7 +155,8 @@ class SearchView:
         if hasattr(self,'_id_year_range_dict'): return self._id_year_range_dict
         self._id_year_range_dict = {}
         for instance in self.instances:
-            self._id_year_range_dict[instance.identifier] = instance.year,instance.year
+            year_range =instance.year,instance.year
+            self._id_year_range_dict[instance.identifier] = year_range
         return self._id_year_range_dict
         
 
