@@ -14,6 +14,7 @@ var btn = document.getElementById("togglebtn")
 document.getElementById("content").style.marginLeft = "25px";
 var combine = document.getElementById('combine')
 var exact = document.getElementById('exact')
+var json_info= document.getElementById('json_info')
 var selected_filters = [];
 var new_query = 'false';
 var century_set_date_slider = false;
@@ -52,6 +53,7 @@ function send_data() {
 	output['new_query'] = new_query;
 	var d = new FormData();
 	var blob = new Blob([JSON.stringify(output)],{type:'application/json'})
+    json_info.value = blob
 	d.append('file',blob,'active_ids.txt')
 	var client = new XMLHttpRequest();
 	client.open('post','/utilities/get_user_search_requests/');
