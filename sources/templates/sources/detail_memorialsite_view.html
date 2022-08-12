@@ -10,28 +10,44 @@
 <div class="grid-container"> 
 {% with i=instance  %}
 	<div class="image-container wide"> 
-		{% if i.image_file1 %}
-			<div class="grid-item">
-				<img id='big-image' class="" 
-					src="{{i.image_file1.url}}">  
-			</div>
-		{% endif %}
-		{% if i.image_file2 %}
-			<div class="grid-item">
-				<img id='big-image' class="" 
-					src="{{i.image_file2.url}}">  
-			</div>
-		{% endif %}
-		{% if i.image_file3 %}
-			<div class="grid-item">
-				<img id='big-image' class="" 
-					src="{{i.image_file3.url}}">  
-			</div>
-		{% endif %}
-		{% if i.image_count == 0 %}
-			<img id='big-image' class="sml-img op"
-				 src="media/no_image_available.png">
-		{% endif %}
+        {% if instance.has_permission or perms.utilities.generic %}
+            {% if i.image_file1 %}
+                <div class="grid-item">
+                    <img id='big-image' class="" 
+                        src="{{i.image_file1.url}}">  
+                </div>
+            {% endif %}
+            {% if i.image_file2 %}
+                <div class="grid-item">
+                    <img id='big-image' class="" 
+                        src="{{i.image_file2.url}}">  
+                </div>
+            {% endif %}
+            {% if i.image_file3 %}
+                <div class="grid-item">
+                    <img id='big-image' class="" 
+                        src="{{i.image_file3.url}}">  
+                </div>
+            {% endif %}
+            {% if i.image_count == 0 %}
+                <img id='big-image' class="sml-img op"
+                     src="media/no_image_available.png">
+            {% endif %}
+
+            {% if instance.image_file or instance.thumbnail %}
+                {% if not instance.has_permission %}
+                    <p>
+                        <small>
+                            End users cannot see these pictures, current
+                            permission setting does not allow it
+                        </small>    
+                    </p>
+                {% endif %}
+            {% endif %}
+
+        {% elif instance.image_file or instance.thumbnail %}
+            <p> No permission to share this image</p>
+        {% endif %}
 {% endwith %}
 	<div class="grid-item wide">
 		<h3>{{instance.title_original}} 

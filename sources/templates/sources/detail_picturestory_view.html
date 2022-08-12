@@ -9,16 +9,35 @@
 
 <div class="grid-container"> 
 	<div class="grid-item">
-		{% if instance.image_file %}
-			<img id='big-image' class="big-img" 
-				src="{{instance.image_file.url}}">  
-		{% elif instance.thumbnail %}
-			<img id='sml-image' class="sml-img" 
-				src="{{instance.thumbnail.url}}">  
-		{% else %}
-			<img id='sml-image' class="sml-img op"
-				 src="media/no_image_available.png">
-		{% endif %}
+
+        {% if instance.has_permission or perms.utilities.generic %}
+
+            {% if instance.image_file %}
+                <img id='big-image' class="big-img" 
+                    src="{{instance.image_file.url}}">  
+            {% elif instance.thumbnail %}
+                <img id='sml-image' class="sml-img" 
+                    src="{{instance.thumbnail.url}}">  
+            {% else %}
+                <img id='sml-image' class="sml-img op"
+                     src="media/no_image_available.png">
+            {% endif %}
+
+            {% if instance.image_file or instance.thumbnail %}
+                {% if not instance.has_permission %}
+                    <p>
+                        <small>
+                            End users cannot see this picture, current
+                            permission setting does not allow it
+                        </small>    
+                    </p>
+                {% endif %}
+            {% endif %}
+
+        {% elif instance.image_file or instance.thumbnail %}
+            <p> No permission to share this image</p>
+        {% endif %}
+
 	</div>
 	<div class="grid-item wide">
 		<h3>{{instance.title_original}} 
@@ -77,21 +96,47 @@
 			</div>
 			{% endif %}
 			{% if instance.picture_story%}
-				{% if instance.picture_story.file_type == "text" %}
-				<span class = "info-header center">Text:</span>
-				<div class="text"> 
-					<p>{{instance.picture_story.file| linebreaks}}</p>
-				</div>
-				{% endif %}
+                {% if instance.has_permission or perms.utilities.generic %}
+                    {% if instance.picture_story.file_type == "text" %}
+
+                        {% if not instance.has_permission %}
+                            <p>
+                                <small>
+                                    End users cannot see this text, current
+                                    permission setting does not allow it
+                                </small>    
+                            </p>
+                        {% endif %}
+
+                        <span class = "info-header center">Text:</span>
+                        <div class="text"> 
+                            <p>{{instance.picture_story.file| linebreaks}}</p>
+                        </div>
+
+                    {% endif %}
+                {% endif %}
 			{% endif %}
 		</div>
 		{% endif %}
-		{% if instance.picture_story.file_type == "image" %}
-			<div class="grid-item text-img-div wide">
-				<img id='text-img' class="text-img" 
-					src="{{instance.picture_story.file}}">  
-			</div>
-		{% endif %}
+
+        {% if instance.picture_story%}
+            {% if instance.has_permission or perms.utilities.generic %}
+                {% if instance.picture_story.file_type == "image" %}
+                    {% if not instance.has_permission %}
+                        <p>
+                            <small>
+                                End users cannot see this text, current
+                                permission setting does not allow it
+                            </small>    
+                        </p>
+                    {% endif %}
+                    <div class="grid-item text-img-div wide">
+                        <img id='text-img' class="text-img" 
+                            src="{{instance.picture_story.file}}">  
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% endif %}
 	</div>
 </div>
 

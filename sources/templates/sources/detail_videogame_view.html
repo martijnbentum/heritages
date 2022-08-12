@@ -9,25 +9,57 @@
 
 <div class="grid-container"> 
 	<div class="grid-item">
-		{% if instance.thumbnail %}
-			<img id='big-image' class="big-img" 
-				src="{{instance.thumbnail.url}}">  
-		{% else %}
-			<img id='big-image' class="big-img op"
-				 src="media/no_image_available.png">
-		{% endif %}
+        {% if instance.has_permission or perms.utilities.generic %}
+            {% if instance.thumbnail %}
+                <img id='big-image' class="big-img" 
+                    src="{{instance.thumbnail.url}}">  
+            {% else %}
+                <img id='big-image' class="big-img op"
+                     src="media/no_image_available.png">
+            {% endif %}
+
+            {% if instance.image_file or instance.thumbnail %}
+                {% if not instance.has_permission %}
+                    <p>
+                        <small>
+                            End users cannot see this picture, current
+                            permission setting does not allow it
+                        </small>    
+                    </p>
+                {% endif %}
+            {% endif %}
+
+        {% elif instance.image_file or instance.thumbnail %}
+            <p> No permission to share this image</p>
+        {% endif %}
 	</div>
 	<div class="grid-item">
-		{% if instance.embed_video %}	
-			<iframe width="500" height="300" 
-				src="{{instance.embed_video}}" 
-				title="video player" 
-				frameborder="0" 
-				allow="accelerometer; autoplay; clipboard-write; 
-					encrypted-media; gyroscope; picture-in-picture" 
-				 allowfullscreen>
-			</iframe>
-		{% endif %}
+
+        {% if instance.has_permission or perms.utilities.generic %}
+
+            {% if instance.embed_video %}	
+                <iframe width="500" height="300" 
+                    src="{{instance.embed_video}}" 
+                    title="video player" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; 
+                        encrypted-media; gyroscope; picture-in-picture" 
+                     allowfullscreen>
+                </iframe>
+
+                {% if not instance.has_permission %}
+                    <p>
+                        <small>
+                            End users cannot see this video clip, current
+                            permission setting does not allow it
+                        </small>    
+                    </p>
+                {% endif %}
+
+            {% endif %}
+
+        {% endif %}
+
 	</div>
 	<div class="grid-item wide">
 		<h3>{{instance.title_original}} 
