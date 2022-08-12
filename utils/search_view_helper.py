@@ -171,18 +171,19 @@ class UserSearch:
         self.request = request
         self.wait_for_ready = False
         if request and 'HTTP_REFERER' in self.request.META.keys(): 
-            if 'search_view' in request.META['HTTP_REFERER']: self.wait_for_ready
+            if 'search_view' in request.META['HTTP_REFERER']: 
+                self.wait_for_ready = True
         self.time_out = False
         if user: self.user = user
         if request: self.user = request.user.username
-        self.directory = 'user_search_requests/' + self.user +'/'
+        self.directory = 'user_search_requests/' + request.session.session_key+'/'
         self.filename = self.directory + 'search'
         self.dict = None
         self.start = time.time()
         self.wait_attemps = 0
         if self.wait_for_ready: self.wait_for_data()
         if os.path.isfile(self.filename): self.set_info()
-        if not self.dict or self.to_old or self.index == None: self.useable = False
+        if not self.dict or self.to_old: self.useable = False
         else: self.useable = True
         if self.dict is not None: self.dict['useable'] = self.useable
         if not self.useable or self.nactive_ids == 1 or self.index == None:
