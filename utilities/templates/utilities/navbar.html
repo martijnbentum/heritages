@@ -7,6 +7,7 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
+    {% if perms.utilities.generic %}
 
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" 
@@ -110,6 +111,7 @@
         </div>
       </li>
     </ul>
+    {% endif %}
 
 
 	<ul class = "navbar-nav">
