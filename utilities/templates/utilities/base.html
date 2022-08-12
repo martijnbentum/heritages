@@ -59,42 +59,40 @@
     {% endblock %}
 
 
-	{% if user.username == '' %}
-	{% else %}
-		{% block sidebar %}
-		{% endblock %}
+    {% block sidebar %}
+    {% endblock %}
 
-		<div class="row" id="content">
-			<div>
-				{% block left %}
+    <div class="row" id="content">
+        <div>
+            {% block left %}
 
 
-				{% endblock %}
-			</div>
+            {% endblock %}
+        </div>
 
-			<div class="col-12">
-				{% block content %}
+        <div class="col-12">
+            {% block content %}
 
-				{% endblock %}
-			</div>
+            {% endblock %}
+        </div>
 
-			<div>
-				{% block right %}
-				{% endblock %}
-			</div>
-		</div>
+        <div>
+            {% block right %}
+            {% endblock %}
+        </div>
+    </div>
 
-		</body>
-		{% block afterbody%}
-		{% endblock %}
+</body>
 
-		<footer>
-		<!-- <p>made by: humanities lab, radboud university</p> -->
-		{% block footer %}
-		{% endblock %}
-		</footer>
+{% block afterbody%}
+{% endblock %}
 
-	{% endif %}
+<footer>
+    <!-- <p>made by: humanities lab, radboud university</p> -->
+    {% block footer %}
+    {% endblock %}
+</footer>
+
 
 <script>
     $(document).ready(function(){
