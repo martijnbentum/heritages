@@ -6,6 +6,7 @@ from utils.model_util import id_generator, info, instance2names,instance2name
 from utils.model_util import identifier2instance
 import json
 import time
+import os
 
 class SimpleModel(models.Model):
     name = models.CharField(max_length=300,default='',unique=True)
@@ -84,7 +85,8 @@ class UserSearch(models.Model, info):
         (if user is logged in)
         '''
         if self.session_key != request.session.session_key:
-            print(request.session.session_key,self.session_key,'different doing nothing')
+            print(request.session.session_key,self.session_key,
+                'different doing nothing')
             return
         try: d = json.loads(json_string)
         except json.JSONDecodeError:
@@ -95,10 +97,9 @@ class UserSearch(models.Model, info):
         self._update_search_state_information_with_dict(d, save = False)
         self.save() 
 
-    def to_json(self):
-        '''create a json string of the dict with state information used by search template
-        javascript code to set used search parameters.
-        '''
+    @property
+    def dict(self):
+        if hasattr(self,'_dict'): return self._dict
         keys = self._get_json_value('keys')
         d = {}
         for key in keys:
@@ -107,7 +108,15 @@ class UserSearch(models.Model, info):
         d['number'] = self.number
         d['nactive_ids'] = self.nactive_ids
         d['useable'] = self.useable
-        return json.dumps(d)
+        self._dict = d
+        return self._dict
+
+    def to_json(self):
+        '''create a json string of the dict with state information used by 
+        search template
+        javascript code to set used search parameters.
+        '''
+        return json.dumps(self.dict)
 
     def _update_search_state_information_with_dict(self, d, save = True):
         '''update the search parameters with current settings.
@@ -233,6 +242,13 @@ class UserSearch(models.Model, info):
         try: return identifier2instance(self.current_instance)
         except: return None
 
+
+def get_user_search(session_key):
+    try: return UserSearch.objects.get(session_key = session_key)
+    except UserSearch.DoesNotExist:
+        us = UserSearch(session_key = session_key)
+        us.save()
+        return us
 
 def expose_m2m(instance, field_name,attr):
     ''' return a comma seperated string of attr from m2m linked model. '''
