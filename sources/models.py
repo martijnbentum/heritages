@@ -118,7 +118,9 @@ class Source(models.Model):
 
     @property
     def has_permission(self):
-        pass
+        if self.permission == None: return False
+        return self.permission.name == 'yes'
+        
 
     @property
     def pop_up(self):
