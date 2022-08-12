@@ -77,16 +77,17 @@ def search_view(request, view_type = '', query = ' ', combine = ' ',
 
 
 def get_user_search_requests(request):
-    us = get_user_search(request.session.session_key)
-    print('us',us)
-    directory = 'user_search_requests/' + request.user.username +'/'
+    # us = get_user_search(request.session.session_key)
+    # print('us',us)
+    # directory = 'user_search_requests/' + request.user.username +'/'
+    directory = 'user_search_requests/' + request.session.session_key+'/'
     if not os.path.isdir(directory): os.mkdir(directory)
     # print(list(request.FILES['file'].chunks())[0].decode('utf-8'),'<----')
     print(request.POST,request.FILES,'search view')
     print('  user req received\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
     o = list(request.FILES['file'].chunks())[0].decode('utf-8')
-    us.update(request,o)
-    print('us after update',us)
+    # us.update(request,o)
+    # print('us after update',us)
     with open(directory + 'search','w') as fout:
         fout.write(o)
     print('  file written\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
