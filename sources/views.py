@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from utilities.views import edit_model, add_simple_model, list_view, delete_model
+# from utilities.models import get_user_search
 from .forms import MusicForm, MusicTypeForm, FilmTypeForm, FilmForm
 from .forms import FilmCompanyForm, CollectionForm, TextForm, TextTypeForm
 from .forms import InfographicForm, InfographicTypeForm, ImageForm, ImageTypeForm
@@ -50,6 +51,7 @@ def detail_artefact_view(request,pk):
     print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
     instance = Artefact.objects.get(pk = pk)
     us = search_view_helper.UserSearch(request)
+    # us = get_user_search(request.session.session_key)
     us.set_current_instance(instance.identifier)
     creators= instance.creators.all()
     locations= instance.locations.all()
