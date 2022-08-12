@@ -28,14 +28,14 @@ function next_prev_picture(direction) {
 	if (!in_modal_state) {return}
 	i = find_identifier_index(current_identifier);
 	if (direction == 'back' || direction == 'prev') {
-		if (i == 0) {i = active_ids.length -1;}
+		if (i == 0) {i = current_active_ids.length -1;}
 		else { i -= 1;}
 	}
 	if (direction == 'forward' || direction == 'next') {
-		if (i == active_ids.length -1) { i = 0; }
+		if (i == current_active_ids.length -1) { i = 0; }
 		else { i += 1;}
 	}
-	display_large_image(active_ids[i]);
+	display_large_image(current_active_ids[i]);
 }
 
 
@@ -45,8 +45,8 @@ for ( i =0; i < tiles.length; i++ ){
 }
 
 function find_identifier_index(identifier) {
-	for ( i =0; i < active_ids.length; i++ ){
-		active_id= active_ids[i];
+	for ( i =0; i < current_active_ids.length; i++ ){
+		active_id= current_active_ids[i];
 		if (active_id == identifier) {return i;}
 	}
 }
