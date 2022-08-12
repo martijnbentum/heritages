@@ -16,7 +16,7 @@ from utils.get_totals import get_gender
 from utils.search_view_helper import SearchView, UserSearch
 # from .models import copy_complete
 from utilities.search import Search, SearchAll
-from .models import Protocol, UserSearch
+from .models import Protocol, UserSearch, get_user_search
 from .forms import ProtocolForm
 import os
 import time
@@ -67,18 +67,14 @@ def search_view(request, view_type = '', query = ' ', combine = ' ',
     exact = 'contains', direction = '', sorting_option = 'title - name'):
     print('  search start\n','\033[91m'+time.strftime("%H:%M:%S"))
     print(str(time.time()).split('.')[-1]+' ' +'\033[0m')
-    s = SearchView(request, view_type, query, combine, exact, direction, sorting_option)
+    print(request.POST,request.FILES,'search view')
+    s = SearchView(request, view_type, query, combine, exact, direction, 
+        sorting_option)
     if s.view_type == 'tile_view':
         return render(request,'utilities/tile_view.html',s.var)
     else:
         return render(request,'utilities/row_view.html',s.var)
 
-def get_user_search(session_key):
-    try: return UserSearch.objects.get(session_key = session_key)
-    except UserSearch.DoesNotExist:
-        us = UserSearch(session_key = session_key)
-        us.save()
-        return us
 
 def get_user_search_requests(request):
     us = get_user_search(request.session.session_key)
@@ -86,12 +82,11 @@ def get_user_search_requests(request):
     directory = 'user_search_requests/' + request.user.username +'/'
     if not os.path.isdir(directory): os.mkdir(directory)
     # print(list(request.FILES['file'].chunks())[0].decode('utf-8'),'<----')
+    print(request.POST,request.FILES,'search view')
     print('  user req received\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
     o = list(request.FILES['file'].chunks())[0].decode('utf-8')
     us.update(request,o)
     print('us after update',us)
-    print('us json file',us.to_json())
-    print('json file o:',o,type(o))
     with open(directory + 'search','w') as fout:
         fout.write(o)
     print('  file written\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
