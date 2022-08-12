@@ -119,7 +119,7 @@ def list_view(request, model_name, app_name,html_name='',field_names = '',
 def timer(start):
     return time.time() -start
 
-@permission_required('utilities.delete_generic')
+@permission_required('utilities.add_generic')
 def edit_model(request, name_space, model_name, app_name, instance_id = None, 
     formset_names='', focus='', view ='complete'):
     '''edit view generalized over models.
