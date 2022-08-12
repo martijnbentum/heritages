@@ -63,6 +63,7 @@ def sidebar(request):
     var = {'page_name':'sidebar'}
     return render(request,'utilities/sidebar.html',var)
 
+@permission_required('utilities.view_generic')
 def search_view(request, view_type = '', query = ' ', combine = ' ',
     exact = 'contains', direction = '', sorting_option = 'title - name'):
     print('  search start\n','\033[91m'+time.strftime("%H:%M:%S"))
@@ -88,6 +89,7 @@ def get_user_search_requests(request):
         pass
     return HttpResponse('done', content_type='text/plain')
 
+@permission_required('utilities.view_generic')
 def list_view(request, model_name, app_name,html_name='',field_names = '',
     max_entries=200):
     '''list view of a model.'''
@@ -117,7 +119,7 @@ def list_view(request, model_name, app_name,html_name='',field_names = '',
 def timer(start):
     return time.time() -start
 
-@permission_required('utilities.add_generic')
+@permission_required('utilities.delete_generic')
 def edit_model(request, name_space, model_name, app_name, instance_id = None, 
     formset_names='', focus='', view ='complete'):
     '''edit view generalized over models.
