@@ -12,12 +12,14 @@
 
 <div class="lower-half">
 
+{% if perms.utilities.generic %}
 <div class="images">
-	{% for image_url in image_urls %}
-		<img id='big-image' class="big-img" 
-			src="{{image_url}}">  
-	{% endfor %}
+        {% for image_url in image_urls %}
+            <img id='big-image' class="big-img" 
+                src="{{image_url}}">  
+        {% endfor %}
 </div>
+{% endif %}
 
 
 <div class="col-11 intro">
