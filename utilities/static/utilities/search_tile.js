@@ -77,9 +77,11 @@ var modal_permission= document.getElementById('permission');
 
 function _handle_image_urls(d) {
 	// d contains field image_urls, a sting of comma seperated image urls
-	// creates an array with image urls and excludes the thumbnail url from the list
+	// creates an array with image urls and excludes the 
+    //thumbnail url from the list
 	var image_urls = d.image_urls.split(',')
-	if ( image_urls.length == 1 && typeof(image_urls[0]) == 'string') {return []}
+	if ( image_urls.length == 1 && image_urls[0].length == 0) {return []}
+    //remove thumbnail if it is part of image_urls
 	var thumbnail = d.thumbnail
 	var index = image_urls.indexOf(thumbnail)
 	if ( index == -1 ) { return image_urls }
@@ -138,7 +140,6 @@ async function display_large_image(identifier) {
     } else { 
         modal_img.src = image_url
     }
-    console.log(modal_img.src, image_url,'image_url')
 	modal_edit.href = "/" +d['detail_url'].replace(':','/') + "/" + d['pk'] 
 	modal.style.display = "block";
     var perm = d['has_permission'] == 'True'
