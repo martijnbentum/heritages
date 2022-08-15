@@ -153,6 +153,10 @@
 	object-fit:contain;
 }
 
+.not-allowed {
+    background-color: yellow;
+}
+
 img {
 	border-radius:8px;
 	width:240px;
