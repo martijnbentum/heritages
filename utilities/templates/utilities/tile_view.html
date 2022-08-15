@@ -23,7 +23,11 @@
                 class="tile-img" 
                 src="{{instance.thumbnail.url}}" 
             {% else %}
-                class="tile-img op small-img not-allowed" 
+                {% if instance.image_file %}
+                    class="tile-img op small-img not-allowed" 
+                {% else %}
+                    class="tile-img op small-img" 
+                {% endif %}
                 src="{{instance.icon_svg}}" 
             {% endif %}
             alt = ""
