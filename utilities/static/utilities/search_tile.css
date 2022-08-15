@@ -46,6 +46,11 @@
 	float:right;
 	padding-right:50px;
 }
+.permission {
+	color: white;
+	float:left;
+	padding-left:50px;
+}
 
 /* The Close Button */
 .close {
@@ -154,7 +159,7 @@
 }
 
 .not-allowed {
-    background-color: yellow;
+    background-color: #f0edc2;
 }
 
 img {
