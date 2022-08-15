@@ -68,7 +68,7 @@
 			</div>
 			{% endif %}
 			{% if instance.text%}
-                {% if instance.has_permission or perms.utilities.generic %}
+                {% if instance.has_permission or perms.utilities.view_generic %}
                     {% if instance.text.file_type == "text" %}
 
                         {% if not instance.has_permission %}
@@ -90,7 +90,7 @@
 		</div>
 		{% endif %}
         {% if instance.text%}
-            {% if instance.has_permission or perms.utilities.generic %}
+            {% if instance.has_permission or perms.utilities.view_generic %}
                 {% if instance.text.file_type == "image" %}
                     <div class="grid-item text-img-div wide">
                         {% if not instance.has_permission %}

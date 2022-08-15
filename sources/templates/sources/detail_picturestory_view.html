@@ -10,7 +10,7 @@
 <div class="grid-container"> 
 	<div class="grid-item">
 
-        {% if instance.has_permission or perms.utilities.generic %}
+        {% if instance.has_permission or perms.utilities.view_generic %}
 
             {% if instance.image_file %}
                 <img id='big-image' class="big-img" 
@@ -35,7 +35,7 @@
             {% endif %}
 
         {% elif instance.image_file or instance.thumbnail %}
-            <p> No permission to share this image</p>
+            <p> No permission to view this image</p>
         {% endif %}
 
 	</div>
@@ -96,7 +96,7 @@
 			</div>
 			{% endif %}
 			{% if instance.picture_story%}
-                {% if instance.has_permission or perms.utilities.generic %}
+                {% if instance.has_permission or perms.utilities.view_generic %}
                     {% if instance.picture_story.file_type == "text" %}
 
                         {% if not instance.has_permission %}
@@ -120,7 +120,7 @@
 		{% endif %}
 
         {% if instance.picture_story%}
-            {% if instance.has_permission or perms.utilities.generic %}
+            {% if instance.has_permission or perms.utilities.view_generic %}
                 {% if instance.picture_story.file_type == "image" %}
                     {% if not instance.has_permission %}
                         <p>

@@ -9,7 +9,7 @@
 
 <div class="grid-container"> 
 	<div class="grid-item">
-        {% if instance.has_permission or perms.utilities.generic %}
+        {% if instance.has_permission or perms.utilities.view_generic %}
 
             {% if instance.thumbnail %}
                 <img id='big-image' class="big-img" 
@@ -31,12 +31,12 @@
             {% endif %}
 
         {% elif instance.image_file or instance.thumbnail %}
-            <p> No permission to share this image</p>
+            <p> No permission to view this image</p>
         {% endif %}
 	</div>
 	<div class="grid-item">
 
-        {% if instance.has_permission or perms.utilities.generic %}
+        {% if instance.has_permission or perms.utilities.view_generic %}
 
             {% if instance.embed_video %}	
                 <iframe width="500" height="300" 
