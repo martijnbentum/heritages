@@ -92,9 +92,7 @@ function _get_image_url(image_urls,d) {
     // allowed to view images with out use permission
     //has permission is a flag to distinguish images that can 
     //shown to all or only to logged in users
-    if (!generic_permission && d['has_permission'] == 'False') {
-        image_url = '';
-    } else if (image_urls.length > 0) {
+    if (image_urls.length > 0) {
 		var image_url = '/media/' +image_urls[0];
 	} else if (d['thumbnail']) { 
 		var image_url = '/media/' + d['thumbnail'];
@@ -135,7 +133,12 @@ async function display_large_image(identifier) {
 	modal_date.innerText = d['date'];
 	var image_urls = _handle_image_urls(d);
 	var image_url = _get_image_url(image_urls,d)
-	modal_img.src = image_url
+    if (!generic_permission && d['has_permission'] == 'False') {
+        modal_img.src = ''; 
+    } else { 
+        modal_img.src = image_url
+    }
+    console.log(modal_img.src, image_url,'image_url')
 	modal_edit.href = "/" +d['detail_url'].replace(':','/') + "/" + d['pk'] 
 	modal.style.display = "block";
     var perm = d['has_permission'] == 'True'
@@ -144,11 +147,11 @@ async function display_large_image(identifier) {
 			setTimeout(switch_images,2100,image_urls,image_urls[0],identifier)
 			image_reel_on = true;
 	}
-    if (d['has_permission'] == 'False') {
+    if (d['has_permission'] == 'False' && image_url != '') {
         if (generic_permission) {
             var temp = 'Not visible for end user (no permission)';
         }
-        else if (image_urls.length > 0) {
+        else {
             var temp = 'No permission to view image';
         }
         modal_permission.innerText = temp;
