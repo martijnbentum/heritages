@@ -36,7 +36,9 @@
 			<i class="{{instance.icon}} fa-lg" aria-hidden="true"></i>
 			<a 
                 {% if not instance.has_permission %}
-                    class="not-allowed" 
+                    {% if instance.thumbnail or instance.image_file %}
+                        class="not-allowed" 
+                    {% endif %}
                 {% endif %}
 				{% if instance.detail_url %}
 					href = "{% url instance.detail_url instance.pk %}"
