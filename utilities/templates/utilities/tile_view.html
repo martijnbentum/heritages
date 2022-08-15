@@ -13,15 +13,23 @@
 	<div class="tile tile-item" 
 		 id='{{instance.identifier}}' 
 		 data-date_range={{instance.year}}>
-		{% if instance.thumbnail %}
-		<img id='{{instance.identifier}}-img' class="tile-img" 
-			src="{{instance.thumbnail.url}}" alt="" 
-			onclick="display_large_image('{{instance.identifier}}')"> 
-		{% else %}
-		<img id='{{instance.identifier}}-img' class="tile-img op small-img" 
-			src="{{instance.icon_svg}}" alt="" 
-			onclick="display_large_image('{{instance.identifier}}')"> 
-		{% endif %}
+        <img id='{{instance.identifier}}-img' 
+            {% if not instance.thumbnail %}
+                class="tile-img op small-img" 
+                src="{{instance.icon_svg}}" 
+            {% elif instance.has_permission or perms.utilities.generic %}
+                {% if not instance.has_permission %}
+                    class="tile-img not-allowed" 
+                {% else %}
+                    class="tile-img" 
+                {% endif %}
+                src="{{instance.thumbnail.url}}" 
+            {% else %}
+                class="tile-img op small-img not-allowed" 
+                src="{{instance.icon_svg}}" 
+            {% endif %}
+            alt = ""
+            onclick="display_large_image('{{instance.identifier}}')"> 
 		<p class="p-title">
 			<i class="{{instance.icon}} fa-lg" aria-hidden="true"></i>
 			<a 
