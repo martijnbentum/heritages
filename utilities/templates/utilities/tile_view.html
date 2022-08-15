@@ -6,6 +6,8 @@
 {% endblock %}
 
 {% block content %}
+
+{{perms.utilities.view_generic|json_script:"perm"}}
  
 {% include 'utilities/sidebar.html' %}
 
@@ -17,12 +19,8 @@
             {% if not instance.thumbnail %}
                 class="tile-img op small-img" 
                 src="{{instance.icon_svg}}" 
-            {% elif instance.has_permission or perms.utilities.generic %}
-                {% if not instance.has_permission %}
-                    class="tile-img not-allowed" 
-                {% else %}
-                    class="tile-img" 
-                {% endif %}
+            {% elif instance.has_permission or perms.utilities.view_generic %}
+                class="tile-img" 
                 src="{{instance.thumbnail.url}}" 
             {% else %}
                 class="tile-img op small-img not-allowed" 
@@ -33,6 +31,9 @@
 		<p class="p-title">
 			<i class="{{instance.icon}} fa-lg" aria-hidden="true"></i>
 			<a 
+                {% if not instance.has_permission %}
+                    class="not-allowed" 
+                {% endif %}
 				{% if instance.detail_url %}
 					href = "{% url instance.detail_url instance.pk %}"
 				{% else %}
@@ -90,6 +91,11 @@
 	<!-- <i class="fas fa-circle" style="color:white;"></i> -->
 	<p id="one_of_x" class = 'one_of_x'></p>
   </div>
+
+    <div>
+        <p id="permission" class = "permission"></p>
+    </div>
+
 
 </div>
 
