@@ -67,7 +67,7 @@ def sidebar(request):
 def search_view(request, view_type = '', query = ' ', combine = ' ',
     exact = 'contains', direction = '', sorting_option = 'title - name'):
     print(request.session)
-    if not request.session or request.session.session_key:
+    if not request.session or not request.session.session_key:
         request.session.save()
     print(request.session, request.session.session_key)
     print(request.session.get_expiry_age())
