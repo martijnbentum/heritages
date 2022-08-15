@@ -19,6 +19,7 @@ var selected_filters = [];
 var new_query = 'false';
 var century_set_date_slider = false;
 var current_active_ids= id_dict['all']
+console.log(us)
 	
 toggle_sidebar();
 window.onbeforeunload = function(){send_data();};
@@ -471,7 +472,7 @@ function get_query() {
 }
 
 window.addEventListener('DOMContentLoaded', function () {
-	console.log(us,us.useable)
+	console.log(us)
 	if (us && us.useable) {
 		var filters = us.filters;
 		for (let i=0;i<filters.length;i++) {
