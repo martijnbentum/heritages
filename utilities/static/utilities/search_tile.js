@@ -148,7 +148,7 @@ async function display_large_image(identifier) {
         if (generic_permission) {
             var temp = 'Not visible for end user (no permission)';
         }
-        else {
+        else if (image_urls.length > 0) {
             var temp = 'No permission to view image';
         }
         modal_permission.innerText = temp;
