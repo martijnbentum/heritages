@@ -1,3 +1,6 @@
+
+var generic_permission= JSON.parse(document.getElementById('perm').textContent);
+
 document.onkeydown = checkKey;
 
 var clicked_instance = '';
@@ -70,6 +73,7 @@ var prev_modal= document.getElementById("prev_modal");
 var next_modal= document.getElementById("next_modal");
 var image_reel_on = false;
 var one_of_x = document.getElementById('one_of_x');
+var modal_permission= document.getElementById('permission');
 
 function _handle_image_urls(d) {
 	// d contains field image_urls, a sting of comma seperated image urls
@@ -84,7 +88,13 @@ function _handle_image_urls(d) {
 }
 
 function _get_image_url(image_urls,d) {
-	if (image_urls.length > 0) {
+    //generic permission checks whether user is logged in and
+    // allowed to view images with out use permission
+    //has permission is a flag to distinguish images that can 
+    //shown to all or only to logged in users
+    if (!generic_permission && d['has_permission'] == 'False') {
+        image_url = '';
+    } else if (image_urls.length > 0) {
 		var image_url = '/media/' +image_urls[0];
 	} else if (d['thumbnail']) { 
 		var image_url = '/media/' + d['thumbnail'];
@@ -98,7 +108,8 @@ async function get_instance_info(identifier,fields= false) {
 	//gets information of an instance, instance is loaded based on 
 	//the identifier field
 	//fields 	the field names the info should be gathered from
-	//		false or 'all' returns the dict of the instance (not property values)
+	//		false or 'all' returns the dict of the instance 
+    // (not property values)
 	//returns a dictionary of field name field info or a json representation 
 	//		of the instance
 	var url = '/utilities/ajax_instance_info/' + identifier 
@@ -113,7 +124,9 @@ async function display_large_image(identifier) {
 	//displays large image of a given instance (identified with identifier)
 	image_reel_on = false;
 	one_of_x.innerText= '';
+	modal_permission.innerText= '';
 	fields = 'thumbnail,edit_url,title,pk,date,icon,image_urls,detail_url'
+	fields += ',has_permission'
 	var d  = await get_instance_info(identifier,fields)
 	in_modal_state = true;
 	current_identifier = identifier;
@@ -125,11 +138,21 @@ async function display_large_image(identifier) {
 	modal_img.src = image_url
 	modal_edit.href = "/" +d['detail_url'].replace(':','/') + "/" + d['pk'] 
 	modal.style.display = "block";
-	if (image_urls.length > 1) {
+    var perm = d['has_permission'] == 'True'
+	if (image_urls.length > 1 && (perm || generic_permission)) {
 			one_of_x.innerText= 1 + '/' + image_urls.length;
 			setTimeout(switch_images,2100,image_urls,image_urls[0],identifier)
 			image_reel_on = true;
 	}
+    if (d['has_permission'] == 'False') {
+        if (generic_permission) {
+            var temp = 'Not visible for end user (no permission)';
+        }
+        else {
+            var temp = 'No permission to view image';
+        }
+        modal_permission.innerText = temp;
+    }
 }
 
 
