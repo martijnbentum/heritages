@@ -129,6 +129,8 @@ CACHES = {"default": {
     }
 } 
 
+# SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -171,3 +173,6 @@ MESSAGE_TAGS = {
 	
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 CSRF_TRUSTED_ORIGINS = ['https://heritagesofhunger.cls.ru.nl']
+
+SESSION_SAVE_EVERY_REQUEST = True
+
