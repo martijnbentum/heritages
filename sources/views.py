@@ -20,7 +20,10 @@ from utils.model_util import get_random_image_urls
 import time
 
 def home(request):
-    print(request.session.session_key)
+    if not request.session or request.session.session_key:
+        print('pre save',  request.session, request.session.session_key)
+        request.session.save()
+        print('saved',  request.session, request.session.session_key)
     image_urls = get_random_image_urls(n=5,flagged=False)
     args = {'image_urls':image_urls}
     return render(request,'sources/home.html',args)
