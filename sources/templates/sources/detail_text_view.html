@@ -10,9 +10,12 @@
 <div class="grid-container"> 
 	<div class="grid-item wide">
 		<h3>{{instance.title_original}} 
+        {% if perms.utilities.add_generic %}
 			<a class="btn btn-link btn-sm ml-auto"
 				href = "{% url instance.edit_url instance.pk %}"
-				role="button"><i class="far fa-edit text-secondary"></i></a>
+				role="button"><i class="far fa-edit text-secondary"></i>
+            </a>
+        {% endif %}
 		</h3>
 
 	{% with instance as i %}
