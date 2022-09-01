@@ -12,11 +12,15 @@
         {% if instance.has_permission or perms.utilities.view_generic %}
 
             {% if instance.image_file %}
-                <img id='big-image' class="big-img" 
-                    src="{{instance.image_file.url}}">  
+                <a href="{% url 'download_image' instance.image_file.url %}">
+                    <img id='big-image' class="big-img" 
+                        src="{{instance.image_file.url}}">  
+                </a>
             {% elif instance.thumbnail%}
-                <img id='big-image' class="sml-img"
-                     src="{{instance.thumbnail.url}}">
+                <a href="{% url 'download_image' instance.thumbnail.url %}">
+                    <img id='big-image' class="sml-img"
+                         src="{{instance.thumbnail.url}}">
+                </a>
             {% else %}
                 <img id='big-image' class="sml-img op"
                      src="media/no_image_available.png">
