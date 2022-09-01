@@ -48,8 +48,10 @@ def download_image(request, filename):
     """
     # Construct full path and base name
     if filename.startswith('/media/'):  
-        print('ok')
         filename = filename[len('/media/'):]
+        print(filename,'ok')
+    if filename.startswith('media/'):  
+        filename = filename[len('media/'):]
         print(filename,'ok')
     full_path = os.path.join(settings.MEDIA_ROOT, filename)
     base_name = os.path.basename(filename)
