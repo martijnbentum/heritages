@@ -29,6 +29,8 @@ urlpatterns = [
 	path('persons/',include('persons.urls')),
 	path('sources/',include('sources.urls')),
 	path('utilities/',include('utilities.urls')),
+    re_path('download_image/(?P<filename>.*)$',views.download_image,
+        name='download_image'),
 	re_path(r'^select2/',include('django_select2.urls')),
 ]
 if settings.DEBUG:
