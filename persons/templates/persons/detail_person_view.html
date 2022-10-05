@@ -34,6 +34,7 @@
 {% with i='utilities/detail_info_single.html' %}
 {% with il='utilities/detail_info_loop.html' %}
 
+{% include i with name='biography:' info=instance.biography_link %}
 {% include il with name='occupation:' others=instance.occupations unk='true' link='no'%}
 {% include i with name='keywords:' info=instance.keyword_names%}
 {% include 'utilities/show_info_links.html' %}
