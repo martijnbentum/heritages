@@ -220,13 +220,17 @@ def instance2image_urls(instance):
     return ','.join(o)
 
 def get_all_image_urls(flagged = True, exclude_persons = True, 
-    exclude_thumbnails = True, only_with_permission = False):
+    exclude_thumbnails = True, only_with_permission = False,
+    only_images_and_monuments = False):
     if flagged: instances = get_all_flagged_instances(exclude_persons)
     else: instances = get_all_instances(exclude_persons = exclude_persons)
     output = []
     for instance in instances:
-        if only_with_permission and instance.has_permission: 
+        if only_with_permission and not instance.has_permission: 
             continue
+        if only_images_and_monuments:
+            if instance._meta.model_name not in ['memorialsite','image']:
+                continue
         urls = instance2image_urls(instance)
         for url in urls.split(','):
             if not url: continue
@@ -235,9 +239,10 @@ def get_all_image_urls(flagged = True, exclude_persons = True,
     return output
         
 def get_random_image_urls(n = 1, flagged = True, exclude_persons = True,
-    exclude_thumbnails = True, only_with_permission=True):
+    exclude_thumbnails = True, only_with_permission=True, 
+    only_images_and_monuments = True):
     urls = get_all_image_urls(flagged, exclude_persons, exclude_thumbnails,
-        only_with_permission)
+        only_with_permission, only_images_and_monuments)
     return random.sample(urls,n)
 
 def instances2country_counts(instances):
