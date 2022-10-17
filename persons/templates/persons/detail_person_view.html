@@ -32,6 +32,20 @@
 {% with i='utilities/detail_info_single.html' %}
 {% with il='utilities/detail_info_loop.html' %}
 
+
+    {% if instance.biography_link %}
+        <div class = "one-line">
+            <span class = "info-header">biography link:</span>
+            <a 
+                class="link-color"
+                target="_blank"
+                href="{{instance.biography_link}}"
+                role="button">{{instance.biography_link}}
+            </a>
+        </div>
+        <br>
+    {% endif %}
+
 {% include il with name='occupation:' others=instance.occupations unk='true' link='no'%}
 {% include i with name='keywords:' info=instance.keyword_names%}
 {% include 'utilities/show_info_links.html' %}
