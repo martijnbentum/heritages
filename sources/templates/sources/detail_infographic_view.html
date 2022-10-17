@@ -11,15 +11,11 @@
 	<div class="grid-item">
         {% if instance.has_permission or perms.utilities.view_generic %}
             {% if instance.image_file %}
-                <a href="{% url 'download_image' instance.image_file.url %}">
-                    <img id='big-image' class="big-img" 
-                        src="{{instance.image_file.url}}">  
-                </a>
+                <img id='big-image' class="big-img" 
+                    src="{{instance.image_file.url}}">  
             {% elif instance.thumbnail%}
-                <a href="{% url 'download_image' instance.thumbnail.url %}">
-                    <img id='big-image' class="sml-img"
-                         src="{{instance.thumbnail.url}}">
-                </a>
+                <img id='big-image' class="sml-img"
+                     src="{{instance.thumbnail.url}}">
             {% else %}
                 <img id='big-image' class="sml-img op"
                      src="media/no_image_available.png">

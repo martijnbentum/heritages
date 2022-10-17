@@ -13,26 +13,20 @@
         {% if instance.has_permission or perms.utilities.view_generic %}
             {% if i.image_file1 %}
                 <div class="grid-item">
-                    <a href="{% url 'download_image' instance.image_file1.url %}">
-                        <img id='big-image' class="" 
-                            src="{{i.image_file1.url}}">  
-                    </a>
+                    <img id='big-image' class="" 
+                        src="{{i.image_file1.url}}">  
                 </div>
             {% endif %}
             {% if i.image_file2 %}
                 <div class="grid-item">
-                    <a href="{% url 'download_image' instance.image_file2.url %}">
-                        <img id='big-image' class="" 
-                            src="{{i.image_file2.url}}">  
-                    </a>
+                    <img id='big-image' class="" 
+                        src="{{i.image_file2.url}}">  
                 </div>
             {% endif %}
             {% if i.image_file3 %}
                 <div class="grid-item">
-                    <a href="{% url 'download_image' instance.image_file3.url %}">
-                        <img id='big-image' class="" 
-                            src="{{i.image_file3.url}}">  
-                    </a>
+                    <img id='big-image' class="" 
+                        src="{{i.image_file3.url}}">  
                 </div>
             {% endif %}
             {% if i.image_count == 0 %}

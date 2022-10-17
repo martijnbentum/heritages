@@ -12,10 +12,8 @@
         {% if instance.has_permission or perms.utilities.view_generic %}
 
             {% if instance.thumbnail %}
-                <a href="{% url 'download_image' instance.thumbnail.url %}">
-                    <img id='big-image' class="big-img" 
-                        src="{{instance.thumbnail.url}}">  
-                </a>
+                <img id='big-image' class="big-img" 
+                    src="{{instance.thumbnail.url}}">  
             {% else %}
                 <img id='big-image' class="big-img op"
                      src="media/no_image_available.png">
