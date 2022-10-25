@@ -243,6 +243,7 @@ def get_random_image_urls(n = 1, flagged = True, exclude_persons = True,
     only_images_and_monuments = True):
     urls = get_all_image_urls(flagged, exclude_persons, exclude_thumbnails,
         only_with_permission, only_images_and_monuments)
+    if len(urls) < n: return urls
     return random.sample(urls,n)
 
 def instances2country_counts(instances):
