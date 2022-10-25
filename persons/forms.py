@@ -73,7 +73,7 @@ class PersonForm(ModelForm):
 
 	class Meta:
 		model = Person
-		fields = 'name,gender,nationality,location_of_birth,location_of_birth'
+		fields = 'name,gender,nationality,location_of_birth,location_of_death'
 		fields += ',occupation,affiliation,biography_link,comments,keywords'
 		fields += ',date_of_birth,date_of_death,description,flag,thumbnail,pseudonyms'
 		fields += ',pseudonym_precedent,viaf,famines'
