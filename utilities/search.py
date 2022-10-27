@@ -455,13 +455,13 @@ def get_field_typesdict():
 	
 
 def get_foreign_keydict():
-	m = 'film:title_original,music:title_original,image:title_original'
-	m += ',text:title_original'
-	m += ',infographic:title_original,picturestory:title_original,person:name'
+	m = 'film:title_english,music:title_english,image:title_english'
+	m += ',text:title_english'
+	m += ',infographic:title_english,picturestory:title_english,person:name'
 	m += ',famine:names,famines:names__name'
-	m += ',location:name,keyword:name,videogame:title_original'
-	m += ',recordedspeech:title_original'
-	m += ',memorialsite:title_original,artefact:title_original'
+	m += ',location:name,keyword:name,videogame:title_english'
+	m += ',recordedspeech:title_english'
+	m += ',memorialsite:title_english,artefact:title_original'
 	return make_dict(m)
 
 def link2name():
