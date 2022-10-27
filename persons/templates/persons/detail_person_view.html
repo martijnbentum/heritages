@@ -10,10 +10,8 @@
 <div class="grid-container"> 
 	<div class="grid-item">
 		{% if instance.thumbnail%}
-            <a href="{% url 'download_image' instance.thumbnail.url %}">
-                <img id='big-image' class="sml-img"
-                     src="{{instance.thumbnail.url}}">
-            </a>
+            <img id='big-image' class="sml-img"
+                 src="{{instance.thumbnail.url}}">
 		{% endif %}
 	</div>
 	<div class="grid-item wide">
