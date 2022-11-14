@@ -195,6 +195,7 @@ def detail_film_view(request,pk):
     us.set_current_instance(instance.identifier)
     directors = instance.directors.all()
     writers= instance.writers.all()
+    film_companies= instance.film_companies.all()
     creators = instance.creators.all()
     locations_shot= instance.locations_shot.all()
     settings= instance.setting.all()
@@ -203,6 +204,7 @@ def detail_film_view(request,pk):
     subtitles= instance.languages_subtitle.all().order_by('name')
     args = {'instance':instance, 'page_name':instance.title,'creators':creators}
     args.update({'loc_shot':locations_shot, 'settings':settings})
+    args.update({'film_companies':film_companies})
     args.update({'famines':famines, 'writers':writers, 'directors':directors})
     args.update({'languages':languages, 'subtitles':subtitles, 'us':us})
     return render(request,'sources/detail_film_view.html',args)
