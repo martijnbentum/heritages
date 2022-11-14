@@ -64,7 +64,7 @@
 
 {% include i with name='Image type:' info=instance.image_type %}
 
-{% include il with name=instance.creator_occupation_name others=creators unk='true' link='yes'%}
+{% include il with name='Creator(s):' others=creators unk='true' link='yes'%}
 {% include il with name='Famine:' others=famines unk='true' link='yes'%}
 {% include il with name='Location:' others=locations unk='false' link='loc'%}
 {% include il with name='Setting:' others=settings unk='true' link='loc'%}
