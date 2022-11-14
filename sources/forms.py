@@ -65,7 +65,7 @@ class SourceForm(ModelForm):
 		widget=FaminesWidget(**dselect2),
 		required=False)
 	title_original = forms.CharField(**dchar_required)
-	title_english = forms.CharField(**dchar)
+	title_english = forms.CharField(**dchar_required)
 	collection = forms.ModelChoiceField(
 		queryset=Collection.objects.all(),
 		widget= CollectionWidget(**dselect2),
