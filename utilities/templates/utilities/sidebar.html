@@ -141,6 +141,7 @@ href="{% url 'utilities:search_view' %}"
 	role="button">
 			<i class="{{view_type_icon}}" aria-hidden="true"></i>
 	</a>
+
  
 
 	<div class="col-11">
@@ -150,11 +151,17 @@ href="{% url 'utilities:search_view' %}"
 				class="col-9 mb-1" 
 				style="border-width:0;border-bottom-width:1px;" 
 				value="{{query}}">
-			<button class="text-dark btn btn-link" type="submit"
+			<button id= 'search_button' class="text-dark btn btn-link" type="submit"
 				onclick="set_new_query()"
 				>
 				<i class="fas fa-search"></i>
 			</button>
+            <a href="javascript:void(0)" 
+                id="clear_all" 
+                class="btn btn-sm clear_all" onclick="clear_all()">
+                clear all
+            </a>
+
 			<input type="hidden" name="order" id="order" value="{{order}}" />
 			<input type="hidden" name="json_info" id="json_info" 
                 value='' />
