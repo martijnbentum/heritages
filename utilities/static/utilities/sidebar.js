@@ -1,5 +1,5 @@
 var us= JSON.parse(document.getElementById('usjs').textContent);
-var date_range= JSON.parse(document.getElementById('date_range').textContent);
+var date_range= JSON.parse(document.getElementById('date_range').textContent); 
 var found_tiles = document.getElementsByClassName('tile-item');
 var found_rows = document.getElementsByClassName('row-item');
 var count_dict = {};
@@ -17,6 +17,7 @@ var exact = document.getElementById('exact')
 var json_info= document.getElementById('json_info')
 var selected_filters = [];
 var new_query = 'false';
+var ignore = 'false';
 var century_set_date_slider = false;
 var current_active_ids= id_dict['all']
 console.log(us)
@@ -24,6 +25,33 @@ console.log(us)
 toggle_sidebar();
 window.onbeforeunload = function(){send_data();};
 
+function clear_filters() {
+    // clear all search settings (query and filters)
+	var fad_keys = Object.keys(filter_active_dict);
+	for (let i=0;i<fad_keys.length;i++) {
+		var key = fad_keys[i];
+        filter_active_dict[key] = 'active'
+    }
+    selected_filters = [];
+    update_date_slider_to_century_filter() 
+	update_active_ids();
+	update_hide_show_instances();
+	update_count_dict();
+	update_sidebar();
+	set_nentries();
+}
+
+function clear_all() {
+	var query = document.getElementById('exampleFormControlInput1');
+    console.log(query)
+    if (query.value !== ' ') {
+        query.value = ''
+        ignore = 'true';
+        var search_button = document.getElementById('search_button');
+        search_button.click();
+    }
+    clear_filters();
+}
 
 function set_new_query() {
 	new_query = 'true';
@@ -52,6 +80,7 @@ function send_data() {
 	output['view_type'] = view_type;
 	output['filter_active_dict'] = filter_active_dict;
 	output['new_query'] = new_query;
+    output['ignore'] = ignore;
 	var d = new FormData();
 	var blob = new Blob([JSON.stringify(output)],{type:'application/json'})
     json_info.value = blob
@@ -472,7 +501,12 @@ function get_query() {
 }
 
 window.addEventListener('DOMContentLoaded', function () {
+    // using user_search info to set filter and date range settings
 	console.log(us)
+    if (us.ignore === 'true') {
+        console.log('not setting date range or applying filters, because of clear all')
+        return
+    }
 	if (us && us.useable) {
 		var filters = us.filters;
 		for (let i=0;i<filters.length;i++) {
@@ -524,6 +558,7 @@ function _make_nouirange(start,end) {
 var start = date_range['earliest_date'];
 var end = date_range['latest_date'];
 if (start === end) {start -=1; end += 1;}
+if (start < 0) {start = 0;}
 var range = _make_nouirange(start,end)
 console.log(range);
 var multi_slider = document.getElementById('years');
