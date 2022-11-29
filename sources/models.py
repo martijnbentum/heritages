@@ -84,14 +84,13 @@ class Source(models.Model):
             super(Source,self).save(*args,**kwargs)
 
     def __str__(self):
-        if self.title_original:
-            return self.title_original
-        else: return self.title_english
+        if self.title_original: return self.title_original
+        return self.title_english
 
     @property
     def title(self):
-        if self.title_original: return self.title_original
-        return self.title_english
+        if self.title_english: return self.title_english
+        return self.title_original
 
     @property
     def _pop_up(self):
