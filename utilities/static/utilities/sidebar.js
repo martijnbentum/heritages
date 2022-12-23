@@ -7,6 +7,9 @@ var id_dict= JSON.parse(document.getElementById('id-dict').textContent);
 var id_year_range_dict= JSON.parse(document.getElementById('id-year-range-dict').textContent);
 var filter_active_ids = id_dict['all']
 var date_slider_active_ids = Object.keys(id_year_range_dict)
+var view_type =document.getElementById('view_type').textContent;
+//view type sometimes get ", this removes those
+view_type = view_type.replace(/["]+/g,'');
 var temp =document.getElementById('filter-active-dict').textContent;
 var filter_active_dict = JSON.parse(temp);
 var sidebar_state = 'closed';
@@ -20,10 +23,13 @@ var new_query = 'false';
 var ignore = 'false';
 var century_set_date_slider = false;
 var current_active_ids= id_dict['all']
+var clicked_instance = '';
 console.log(us)
+console.log(view_type)
 	
 toggle_sidebar();
 window.onbeforeunload = function(){send_data();};
+
 
 function clear_filters() {
     // clear all search settings (query and filters)
@@ -57,13 +63,11 @@ function set_new_query() {
 	new_query = 'true';
 }
 
-function set_new_view_type() {
-	if (view_type == 'tile_view') {
-		view_type = 'row_view'
-	} else {
-		view_type = 'tile_view'
-	}
+
+function set_new_view_type(type) {
+    view_type = type;
 }
+
 
 function send_data() {
 	const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
@@ -750,5 +754,16 @@ function set_century_filters_to_active() {
 	update_count_dict();
 	update_sidebar();
 }
+
+function set_view_type_button() {
+    var btn = document.getElementById(view_type);
+    console.log(btn)
+    btn.classList.remove('text-dark')
+    btn.href = "#";
+}
+
+window.addEventListener('load', function () {
+    set_view_type_button();
+})
 
 //---------------------------------------------------------------------------------------
