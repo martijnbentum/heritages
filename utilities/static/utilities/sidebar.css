@@ -3,6 +3,11 @@ hr {
 	margin-bottom:3px;
 }
 
+.view_mode {
+    padding-left:3px;
+    padding-right:3px;
+}
+
 
 .search_button {
 	border: none;
