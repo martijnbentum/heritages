@@ -74,8 +74,11 @@ def search_view(request, view_type = '', query = ' ', combine = ' ',
     print(request.POST,request.FILES,'search view')
     s = SearchView(request, view_type, query, combine, exact, direction, 
         sorting_option)
+    print(s.view_type)
     if s.view_type == 'tile_view':
         return render(request,'utilities/tile_view.html',s.var)
+    elif s.view_type == 'map_view':
+        return render(request,'utilities/map_view.html',s.var)
     else:
         return render(request,'utilities/row_view.html',s.var)
 
