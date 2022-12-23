@@ -9,6 +9,7 @@
 </script>
 	
 
+{{view_type|json_script:"view_type"}}
 {{id_dict|json_script:"id-dict"}}
 {{id_year_range_dict|json_script:"id-year-range-dict"}}
 {{us.dict|json_script:"usjs"}}
@@ -135,11 +136,29 @@
 			<span class="toggle">&#43;</span>
 	</a>
 
-	<a class ="btn btn-link ml-auto mt-2 text-dark " 
-href="{% url 'utilities:search_view' %}"
-	onclick="set_new_view_type()"
-	role="button">
-			<i class="{{view_type_icon}}" aria-hidden="true"></i>
+	<a 
+        class ="btn btn-link ml-auto mt-2 text-dark view_mode" 
+        href="{% url 'utilities:search_view' %}"
+        id="row_view"
+        onclick="set_new_view_type('row_view')"
+        role="button">
+			<i class="fas fa-align-justify fa-lg" aria-hidden="true"></i>
+	</a>
+	<a 
+        class ="btn btn-link ml-auto mt-2 text-dark view_mode" 
+        href="{% url 'utilities:search_view' %}"
+        id="tile_view"
+        onclick="set_new_view_type('tile_view')"
+        role="button">
+            <i class="fas fa-th fa-lg" aria-hidden="true"></i>
+	</a>
+	<a 
+        class ="btn btn-link ml-auto mt-2 text-dark view_mode" 
+        href="{% url 'utilities:search_view' %}"
+        id="map_view"
+        onclick="set_new_view_type('map_view')"
+        role="button">
+            <i class="fa fa-globe" aria-hidden="true"></i>
 	</a>
 
  
