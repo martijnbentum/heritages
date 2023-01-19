@@ -7,6 +7,7 @@
 
 {% block content %}
 
+<!-- checks  whether user has view_generic permission -->
 {{perms.utilities.view_generic|json_script:"perm"}}
  
 {% include 'utilities/sidebar.html' %}

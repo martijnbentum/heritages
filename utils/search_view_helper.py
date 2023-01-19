@@ -77,12 +77,6 @@ class SearchView:
         if self.sorting_option in self.d.keys(): 
             self.select_sorting_option = self.d[self.sorting_option]
         else: self.select_sorting_option = 't'
-        if self.view_type == 'tile_view':
-            self.view_type_link = 'row_view'
-            self.view_type_icon=  'fas fa-align-justify fa-lg'
-        else:
-            self.view_type_link = 'tile_view'
-            self.view_type_icon=  'fas fa-th fa-lg'
 
     def get_date_range(self):
         years = [x.year for x in self.instances]
@@ -96,11 +90,10 @@ class SearchView:
 
     def make_var(self):
         self.var = {'page_name':self.view_type.replace('_',' '),
+            'view_type':self.view_type,
             'instances':self.instances,
             'query':self.query, 
             'nentries':self.nentries,
-            'view_type_icon':self.view_type_icon,
-            'vtl':self.view_type_link,
             'combine':self.combine,
             'direction':self.direction,
             'sorting_icon':self.sorting_icon,

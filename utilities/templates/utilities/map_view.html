@@ -1,0 +1,31 @@
+{% extends "utilities/base.html" %}
+
+{% load static %}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'utilities/search_tile.css' %}" />
+    <link 
+        rel="stylesheet" 
+        href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" 
+        integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" 
+        crossorigin="" />
+    <script 
+        src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" 
+        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" 
+        crossorigin="">
+    </script>
+    <style>
+        #mapid {height: 780px;
+    </style>
+{% endblock %}
+
+{% block content %}
+
+{{perms.utilities.view_generic|json_script:"perm"}}
+ 
+{% include 'utilities/sidebar.html' %}
+<div id="mapid" class="mt-0 map"></div>
+
+<script src="{% static 'utilities/map.js' %}">
+</script>
+
+{% endblock %}
