@@ -1,4 +1,6 @@
-from .model_util import instance2name
+from django.apps import apps
+from .location_to_linked_instances import get_all_linked_instances
+from .model_util import instance2name, instance2names, get_all_instances
 from locations.models import Location
 import random
 
@@ -100,6 +102,83 @@ def perturbe_latlng(latlng):
 	lng+=(random.random() - 0.5) /50 
 	return ','.join(map(str,[lat,lng]))
 
+
 	
+# from region map util
+def _location_ids2location_instances(ids):
+	'''load location instances based on a list of ids'''
+	model = apps.get_model('locations','Location')
+	return model.objects.filter(pk__in = ids)
+
+def get_all_location_ids_dict(instances = None,add_names_gps = False):
+	'''a dictionary with id numbers of location instances as values, 
+    with as keys
+	the modelnames of the instances they are linked to.
+	'''
+	if not instances: instances = get_all_instances()
+	d = {}
+	if add_names_gps: 
+		locations = get_all_locs_linked_to_instances(instances=instances)
+		location_dict = dict([[x.pk,x] for x in locations])
+	for instance in instances:
+		if not instance.loc_ids:continue
+		ids = list(map(int,instance.loc_ids.split(',')))
+		for i in ids:
+			if i not in d.keys(): 
+				d[i] = {'count':0,'model_names':[],'identifiers':[]}
+				if add_names_gps:
+					l = location_dict[i]
+					d[i].update( {'name':l.name,'gps':l.gps, 'pk':l.pk} )
+			app_name, model_name = instance2names(instance)
+			name = app_name + '_' + model_name
+			if name not in d[i].keys():d[i][name] = []
+			d[i][name].append(instance.pk)
+			d[i]['identifiers'].append(instance.identifier)
+			d[i]['count'] += 1
+			if model_name not in d[i]['model_names']:
+				d[i]['model_names'].append(model_name)
+	return d
+
+def get_all_locs_linked_to_instances(ids = None, instances = None):
+	'''get all location instances that are linked to an instance 
+	(e.g. person or text)
+	'''
+	if not ids and not instances: instances = get_all_instances()
+	if not ids:
+		ids = ','.join([x.loc_ids for x in instances if x.loc_ids]).split(',')
+		ids = list(set(ids))
+	return _location_ids2location_instances(ids)
+
+def location2linked_instances(location):
+	return get_all_linked_instances(location)
+
+def get_all_location_ids_dict(instances = None,add_names_gps = False):
+	'''a dictionary with id numbers of location instances as values, 
+    with as keys
+	the modelnames of the instances they are linked to.
+	'''
+	if not instances: instances = get_all_instances()
+	d = {}
+	if add_names_gps: 
+		locations = get_all_locs_linked_to_instances(instances=instances)
+		location_dict = dict([[x.pk,x] for x in locations])
+	for instance in instances:
+		if not instance.loc_ids:continue
+		ids = list(map(int,instance.loc_ids.split(',')))
+		for i in ids:
+			if i not in d.keys(): 
+				d[i] = {'count':0,'model_names':[],'identifiers':[]}
+				if add_names_gps:
+					l = location_dict[i]
+					d[i].update( {'name':l.name,'gps':l.gps, 'pk':l.pk} )
+			app_name, model_name = instance2names(instance)
+			name = app_name + '_' + model_name
+			if name not in d[i].keys():d[i][name] = []
+			d[i][name].append(instance.pk)
+			d[i]['identifiers'].append(instance.identifier)
+			d[i]['count'] += 1
+			if model_name not in d[i]['model_names']:
+				d[i]['model_names'].append(model_name)
+	return d
 	
 		
