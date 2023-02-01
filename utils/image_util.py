@@ -4,6 +4,8 @@ from django.db.models import Q
 from functools import reduce
 from operator import __and__ as AND
 
+import os
+
 
 def get_all_instances_with_images():
 	''' returns all instances from the database with a non empty image field '''
@@ -22,6 +24,18 @@ def get_all_instances_with_images():
 		#we exclude all instances were all image fields are empty
 		instances.extend(model.objects.exclude(qs))
 	return instances
+
+
+def get_size_of_thumbnail(instance):
+    if not instance: return False
+    if not hasattr(instance,'thumbnail'): return False
+    if instance.thumbnail and instance.thumbnail.path:
+        f = instance.thumbnail.path
+    else: return False
+    if not os.path.isfile(f): return False
+    return round(os.path.getsize(f) / 1000_000,2)
+    
+        
 		
 			
 
