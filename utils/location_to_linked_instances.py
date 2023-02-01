@@ -10,8 +10,8 @@ import string
 import json
 from utils.model_util import instance2names
 
-instance_types = 'text,illustration,publication,periodical,movement,publisher'
-instance_types += ',person'
+instance_types = 'film,image,videogame,recordedspeech,memorialsite'
+instance_types += ',famine,text,picturestory,infographic,music'
 instance_types = instance_types.split(',')
 directory = '../location_container_instance_links/'
 
