@@ -59,6 +59,7 @@ class Source(models.Model):
     keyword_category_field = models.CharField(max_length=1000,default='')
     keyword_detail_field = models.CharField(max_length=1000,default='')
     famine_field = models.CharField(max_length=1000,default='')
+    loc_ids = models.CharField(max_length=1000,default='')
 
     class Meta:
         abstract = True
@@ -75,17 +76,27 @@ class Source(models.Model):
         self.date_field = self.date
         old_famine_field = self.famine_field
         self.famine_field = instance2famines(self)
+        old_loc_ids = self.loc_ids
+        self._set_gps()
+        new_loc_ids = old_loc_ids != self.loc_ids
         new_country =old_country_field!= self.country_field 
         new_date = old_date != self.date_field
         new_keyword_c = old_keyword_category_field != self.keyword_category_field
         new_keyword_d = old_keyword_detail_field != self.keyword_detail_field
         new_famine = old_famine_field != self.famine_field
-        if new_country or new_date or new_keyword_c or new_keyword_d or new_famine:
+        new = [new_loc_ids,new_country,new_date,new_keyword_c]
+        new += [new_keyword_d,new_famine]
+        if sum(new) > 0:
             super(Source,self).save(*args,**kwargs)
 
     def __str__(self):
         if self.title_original: return self.title_original
         return self.title_english
+
+    def _set_gps(self):
+        self.loc_ids = ''
+        ids = [location.pk for location in self.setting.all()]
+        if ids: self.loc_ids = ','.join(map(str,ids))
 
     @property
     def title(self):
