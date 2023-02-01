@@ -8,7 +8,7 @@ from django.forms.models import model_to_dict
 from django.forms import modelformset_factory
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from utils import view_util, help_util
+from utils import view_util, help_util, image_util
 from utils.view_util import Crud, Cruds, make_tabs, FormsetFactoryManager
 from utils.model_util import copy_complete, get_all_instances
 from utils.get_totals import get_totals, get_countries, get_types
@@ -137,6 +137,7 @@ def edit_model(request, name_space, model_name, app_name, instance_id = None,
     model = apps.get_model(app_name,model_name)
     modelform = view_util.get_modelform(name_space,model_name+'Form')
     instance= model.objects.get(pk=instance_id) if instance_id else None
+    thumbnail_size = image_util.get_size_of_thumbnail(instance)
     crud = Crud(instance) if instance and model_name != 'Location' else None
     ffm, form = None, None
     print(model,modelform,model_name,app_name,98765)
@@ -172,7 +173,7 @@ def edit_model(request, name_space, model_name, app_name, instance_id = None,
     helper = help_util.Helper(model_name = model_name)
     args = {'form':form,'page_name':page_name,'crud':crud,
         'tabs':tabs, 'view':view,'app_name':app_name,'model_name':model_name,
-        'helper':helper.get_dict()}
+        'helper':helper.get_dict(), 'thumbnail_size':thumbnail_size}
     args.update(ffm.dict)
     return render(request,app_name+'/add_' + model_name.lower() + '.html',args)
         
