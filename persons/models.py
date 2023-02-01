@@ -48,6 +48,7 @@ class Person(models.Model, info):
     keyword_detail_field = models.CharField(max_length=1000,default='')
     date_field = PartialDateField(null=True,blank=True)
     famine_field = models.CharField(max_length=1000,default='')
+    loc_ids= models.CharField(max_length=1000,default='')
 
     def __str__(self):
         return self.title
@@ -64,13 +65,28 @@ class Person(models.Model, info):
         self.famine_field = instance2famines(self)
         old_date= self.date_field
         self.date_field = self._make_date_field()
+        old_loc_ids = self.loc_ids
+        self._set_gps()
+        new_loc_ids = old_loc_ids != self.loc_ids
         new_country =old_country_field!= self.country_field 
         new_date = old_date != self.date_field
         new_keyword_c = old_keyword_category_field != self.keyword_category_field
         new_keyword_d = old_keyword_detail_field != self.keyword_detail_field
         new_famine = old_famine_field != self.famine_field
-        if new_country or new_date or new_keyword_c or new_keyword_d or new_famine:
+        new = [new_loc_ids,new_country,new_date,new_keyword_c]
+        new += [new_keyword_d,new_famine]
+        if sum(new) > 0:
             super(Person,self).save(*args,**kwargs)
+
+    def _set_gps(self):
+        self.loc_ids = ''
+        ids = []
+        if self.location_of_birth: ids.append(self.location_of_birth.pk)
+        if self.location_of_death: 
+            pk = self.location_of_death.pk
+            if pk not in ids:
+                ids.append(pk)
+        if ids: self.loc_ids = ','.join(map(str,ids))
 
     @property
     def has_permission(self):
