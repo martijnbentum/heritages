@@ -70,6 +70,17 @@
 		<td class="col-2">thumbnail</th>
 		<td class="col-9">{{form.thumbnail}} {{form.thumbnail.error}}</td>
 	</tr>
+    {% if thumbnail_size %}
+	<tr class="d-flex">
+        {% if thumbnail_size > .5 %}
+            <td class="col-2 text-danger">thumbnail size</th>
+            <td class="col-9 text-danger">{{thumbnail_size}} MB</td>
+        {% else %}
+            <td class="col-2">thumbnail size</th>
+            <td class="col-9">{{thumbnail_size}} MB</td>
+        {% endif %}
+	</tr>
+    {% endif %}
 
 <script>
 	var description = document.getElementById('id_description'); 
