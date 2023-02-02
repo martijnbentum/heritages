@@ -9,3 +9,10 @@
 {% if 'Edit' in page_name %}
 <button type="submit" name="save" value="delete" class ="btn btn-outline-warning ml-1">Delete</button>
 {% endif %}
+{% if thumbnail_size and thumbnail_size > 0.3 %}
+    <small class='text-danger ml-1 mt-2'> 
+        thumbnail image too large ({{thumbnail_size}} MB)
+        please upload a smaller image
+    </small>
+{% endif %}
+
