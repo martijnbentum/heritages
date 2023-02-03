@@ -8,7 +8,7 @@ from django.forms.models import model_to_dict
 from django.forms import modelformset_factory
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from utils import view_util, help_util, image_util
+from utils import view_util, help_util, image_util, map_util
 from utils.view_util import Crud, Cruds, make_tabs, FormsetFactoryManager
 from utils.model_util import copy_complete, get_all_instances
 from utils.get_totals import get_totals, get_countries, get_types
@@ -78,6 +78,9 @@ def search_view(request, view_type = '', query = ' ', combine = ' ',
     if s.view_type == 'tile_view':
         return render(request,'utilities/tile_view.html',s.var)
     elif s.view_type == 'map_view':
+        d = map_util.get_all_location_ids_dict(instances = s.instances, 
+            add_names_gps = True)
+        s.var['d']=d
         return render(request,'utilities/map_view.html',s.var)
     else:
         return render(request,'utilities/row_view.html',s.var)
