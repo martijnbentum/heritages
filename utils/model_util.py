@@ -1,5 +1,6 @@
 from django.apps import apps
-from django.db.models.fields.files import ImageFileDescriptor, ImageField
+from django.db.models.fields.files import ImageFileDescriptor
+from django.db.models.fields.files import ImageField, FileField
 import random
 import string
 import itertools
@@ -218,6 +219,22 @@ def instance2image_urls(instance):
             if x.name:
                 o.append(x.url)
     return ','.join(o)
+
+def instance2file_urls(instance):
+    '''returns all urls of an instance to all attached images (i.e. ImageFields).'''
+    o = []
+    for field in instance._meta.fields:
+        if type(field) == FileField:
+            x= getattr(instance,field.name)
+            if x.name:
+                o.append(x.url)
+    return ','.join(o)
+
+def instance_has_attached_files(instance):
+	if instance2image_urls(instance): return True
+	if instance2file_urls(instance): return True
+	return False
+	
 
 def get_all_image_urls(flagged = True, exclude_persons = True, 
     exclude_thumbnails = True, only_with_permission = False,
