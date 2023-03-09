@@ -21,6 +21,9 @@ from .forms import ProtocolForm
 import os
 import time
 
+   
+
+
 te = 'title_original,title_english'
 field_names_dict = {
     'person':'name,pseudonyms,gender,location_of_birth',
@@ -63,7 +66,8 @@ def sidebar(request):
     var = {'page_name':'sidebar'}
     return render(request,'utilities/sidebar.html',var)
 
-# @permission_required('utilities.view_generic')
+
+#@permission_required('utilities.view_generic')
 def search_view(request, view_type = '', query = ' ', combine = ' ',
     exact = 'contains', direction = '', sorting_option = 'title - name'):
     if not request.session or not request.session.session_key:
@@ -84,7 +88,6 @@ def search_view(request, view_type = '', query = ' ', combine = ' ',
         return render(request,'utilities/map_view.html',s.var)
     else:
         return render(request,'utilities/row_view.html',s.var)
-
 
 def get_user_search_requests(request):
     directory = 'user_search_requests/' + request.session.session_key+'/'
