@@ -5,7 +5,7 @@ from django.http import Http404, HttpResponse
 from django.contrib.auth.decorators import login_required, permission_required
 
 
-@permission_required('utilities.view_generic')
+# @permission_required('utilities.view_generic')
 def protected_media(request, filename):
     print(filename,'filename')
     """
