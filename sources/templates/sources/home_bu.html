@@ -11,6 +11,7 @@
 
 <div class="lower-half">
 
+{% if perms.utilities.view_generic %}
 <div class="images">
         {% for image_url in image_urls %}
             <img id='big-image' class="big-img" 

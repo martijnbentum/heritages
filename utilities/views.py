@@ -67,7 +67,7 @@ def sidebar(request):
     return render(request,'utilities/sidebar.html',var)
 
 
-@permission_required('utilities.view_generic')
+# @permission_required('utilities.view_generic')
 def search_view(request, view_type = '', query = ' ', combine = ' ',
     exact = 'contains', direction = '', sorting_option = 'title - name'):
     if not request.session or not request.session.session_key:
