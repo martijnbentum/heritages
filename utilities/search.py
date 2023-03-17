@@ -1,7 +1,7 @@
 from django.apps import apps
 from django.db.models.functions import Lower
 from django.db.models import Q
-from utils.model_util import get_all_models, instance2names, instances2country_counts 
+from utils.model_util import get_all_models, instance2names, instances2country_counts
 from utils.model_util import instances2keyword_category_counts, instances2model_counts
 from utils.model_util import instances2century_counts, instances2famine_counts
 
