@@ -4,6 +4,7 @@ from django.db.models import Q
 from utils.model_util import get_all_models, instance2names, instances2country_counts
 from utils.model_util import instances2keyword_category_counts, instances2model_counts
 from utils.model_util import instances2century_counts, instances2famine_counts
+from utils.model_util import instances2rating_counts
 
 class SearchAll:
 	def __init__(self,request = None, models = [], query = None, 
@@ -174,11 +175,10 @@ class SearchAll:
 		if not hasattr(self,'_famine_counts'):self.famine_filter()
 		return self._famine_counts
 
-
-		
-		
-
-			
+	@property
+	def rating_counts(self):
+		if not hasattr(self,'_rating_counts'):self.rating_filter()
+		return self._rating_counts
 
 
 class Search:
