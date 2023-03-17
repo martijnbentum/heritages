@@ -104,6 +104,12 @@ class Source(models.Model):
         return self.title_original
 
     @property
+    def is_explicit(self):
+        if not self.rated: return True
+        if self.rated.name == 'explicit': return True
+        return False
+
+    @property
     def _pop_up(self):
         app_name, model_name = instance2names(self)
         m = ''
