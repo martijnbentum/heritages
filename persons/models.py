@@ -89,8 +89,12 @@ class Person(models.Model, info):
         if ids: self.loc_ids = ','.join(map(str,ids))
 
     @property
-    def has_permission(self):
+    def is_explicit(self):
         return False
+
+    @property
+    def has_permission(self):
+        return True
 
     @property
     def icon(self):
