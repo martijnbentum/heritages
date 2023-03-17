@@ -238,13 +238,14 @@ def instance_has_attached_files(instance):
 
 def get_all_image_urls(flagged = True, exclude_persons = True, 
     exclude_thumbnails = True, only_with_permission = False,
-    only_images_and_monuments = False):
+    only_images_and_monuments = False, not_explicit = False):
     if flagged: instances = get_all_flagged_instances(exclude_persons)
     else: instances = get_all_instances(exclude_persons = exclude_persons)
     output = []
     for instance in instances:
         if only_with_permission and not instance.has_permission: 
             continue
+        if not_explicit and instance.is_explicit:continue
         if only_images_and_monuments:
             if instance._meta.model_name not in ['memorialsite','image']:
                 continue
@@ -257,9 +258,9 @@ def get_all_image_urls(flagged = True, exclude_persons = True,
         
 def get_random_image_urls(n = 1, flagged = True, exclude_persons = True,
     exclude_thumbnails = True, only_with_permission=True, 
-    only_images_and_monuments = True):
+    only_images_and_monuments = True, not_explicit = True):
     urls = get_all_image_urls(flagged, exclude_persons, exclude_thumbnails,
-        only_with_permission, only_images_and_monuments)
+        only_with_permission, only_images_and_monuments, not_explicit)
     if len(urls) < n: return urls
     return random.sample(urls,n)
 
