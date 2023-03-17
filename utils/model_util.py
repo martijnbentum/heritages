@@ -299,6 +299,16 @@ def instances2model_counts(instances):
     count_d = sort_count_dict(count_d)
     return count_d, instances_d
 
+def instances2rating_counts(instances):
+    '''names and counts of ratings that are linked to a list of instance.'''
+    count_d = {}
+    instances_d = {}
+    for instance in instances:
+        name = instance2name(instance)
+        _add_to_count_instance_dict(count_d,instances_d,[name],instance)
+    count_d = sort_count_dict(count_d)
+    return count_d, instances_d
+
 def instances2century_counts(instances):
     count_d = {}
     instances_d = {}
