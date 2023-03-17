@@ -100,6 +100,7 @@ class SearchView:
             'exact':self.exact,
             'sorting_option':self.sorting_option,
             self.select_sorting_option:'selected',
+            'rating_counts':self.search.rating_counts,
             'country_counts':self.search.country_counts,
             'keyword_category_counts':self.search.keyword_category_counts,
             'model_counts':self.search.model_counts,
@@ -118,6 +119,7 @@ class SearchView:
     def id_dict(self):
         if hasattr(self,'_id_dict'): return self._id_dict
         self._id_dict = {
+            'rating':self.search._rating_identifiers,
             'location':self.search._country_identifiers,
             'keyword':self.search._keyword_identifiers,
             'model':self.search._model_identifiers,
@@ -284,8 +286,6 @@ class UserSearch:
         identifier = self.active_ids[self.index-1]
         return identifier2instance(identifier)
         
-
-
 
 def to_json(search_view_helper, filename = None):
     d = _prepare_search_view_helper_dict(search_view_helper)
