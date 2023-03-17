@@ -108,6 +108,16 @@ class SearchAll:
 			instances = filter_on_list(self._keyword_category_instances, keywords)
 			return instances
 
+	def rating_filter(self, rating_names = []):
+		if not hasattr(self,'instances'): self.filter()
+		if not hasattr(self,'_rating_counts'):
+			c,i = instances2rating_counts(self._instances)
+			self._rating_counts, self._rating_instances = c,i
+			self._rating_identifiers=_instance2identifier_dict(i)
+		if rating_names:
+			instances = filter_on_list(self._rating_instances, rating_names)
+			return instances
+
 	def model_filter(self, model_names = []):
 		if not hasattr(self,'instances'): self.filter()
 		if not hasattr(self,'_model_counts'):
