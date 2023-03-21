@@ -105,7 +105,7 @@ class Source(models.Model):
 
     @property
     def is_explicit(self):
-        if not self.rated: return True
+        if not self.rated: return False
         if self.rated.name == 'explicit': return True
         return False
 
