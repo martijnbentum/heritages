@@ -304,7 +304,9 @@ def instances2rating_counts(instances):
     count_d = {}
     instances_d = {}
     for instance in instances:
-        name = instance2name(instance)
+        if not hasattr(instance,'rated'): name = 'general'
+        elif not instance.rated: name = 'general'
+        else: name = instance.rated.name
         _add_to_count_instance_dict(count_d,instances_d,[name],instance)
     count_d = sort_count_dict(count_d)
     return count_d, instances_d
