@@ -21,6 +21,28 @@
 	<div id="mySidebar" class="sidebar bg-light">
 		<a 
 			href="javascript:void(0)"
+			id='rating-filter'
+			onclick="toggle_filters_visibile('rating')"
+			>
+			Rating
+		</a>
+		<div id = 'catalogue-filters'>
+			<hr>
+			{% for key, value in rating_counts.items %}
+				<a 
+					class='indent'
+					href="javascript:void(0)"
+					id='rating,{{key}}'
+					onclick="toggle_filter('rating,{{key}}')">
+						{{key}} <small>({{value}})</small>
+				</a>
+			{%endfor%}
+		</div>
+		<br>
+
+
+		<a 
+			href="javascript:void(0)"
 			id='catalogue-filter'
 			onclick="toggle_filters_visibile('catalogue')"
 			>
