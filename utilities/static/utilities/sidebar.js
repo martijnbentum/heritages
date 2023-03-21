@@ -56,7 +56,14 @@ function clear_all() {
         var search_button = document.getElementById('search_button');
         search_button.click();
     }
+    var filters = ['rating,general','rating,<14','rating,14+'];
+    var deactivate_explicit = true
+    for (let i=0;i<filters.length;i++) {
+        filter = filters[i];
+        if (!selected_filters.includes(filter)) {deactivate_explicit = false}
+    }
     clear_filters();
+    if (deactivate_explicit) { set_filters(filters); }
 }
 
 function set_new_query() {
@@ -504,22 +511,32 @@ function get_query() {
 	return query.value;
 }
 
+function set_filters(filters) {
+    for (let i=0;i<filters.length;i++) {
+        filter = filters[i];
+        console.log(filter);
+        toggle_filter(filter)
+    }
+    console.log('filters',filters)
+
+}
+
 window.addEventListener('DOMContentLoaded', function () {
     // using user_search info to set filter and date range settings
 	console.log(us)
-    if (us.ignore === 'true') {
+	if (us && us.useable === 'true' && us.ignore != 'true') {
+		var filters = us.filters;
+    } 
+    else {
+		var filters = ['rating,general','rating,<14','rating,14+'];
+    }
+    set_filters(filters);
+    console.log('filters',filters,selected_filters)
+    if (us && us.ignore === 'true') {
         console.log('not setting date range or applying filters, because of clear all')
         return
     }
-	if (us && us.useable) {
-		var filters = us.filters;
-		for (let i=0;i<filters.length;i++) {
-			filter = filters[i];
-			console.log(filter);
-			toggle_filter(filter)
-		}
-		console.log('filters',filters,selected_filters)
-	}
+
 	if (us && us.date_start && us.date_end) {
 		console.log(us.date_start, us.date_end)
 		if (us.date_start != start || us.date_end != end) {
