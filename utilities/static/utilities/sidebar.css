@@ -3,6 +3,14 @@ hr {
 	margin-bottom:3px;
 }
 
+.question_search {
+    margin-top: 3px;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
 .view_mode {
     padding-left:3px;
     padding-right:3px;

@@ -30,6 +30,17 @@ console.log(view_type)
 toggle_sidebar();
 window.onbeforeunload = function(){send_data();};
 
+function show_explanation() {
+    var help_text = 'The more words you enter in this search field,';
+    help_text += ' the more results you get. Use this field'
+    help_text += ' for basic queries and narrow down the'
+    help_text += ' results with the filters in the left-hand side menu.'
+    tippy('#explanation' ,{content: help_text,allowHTML:true,});
+}
+show_explanation();
+
+
+
 
 function clear_filters() {
     // clear all search settings (query and filters)
