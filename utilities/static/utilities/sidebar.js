@@ -39,6 +39,12 @@ function show_explanation() {
 }
 show_explanation();
 
+function submit_query_form() {
+    set_new_query();
+	var query_form = document.getElementById('query_form');
+    query_form.submit();
+}
+
 
 
 
@@ -502,6 +508,7 @@ function toggle_sorting() {
 		direction.value = 'ascending'
 		sorting_direction = 'ascending'
 	}
+    submit_query_form();
 		
 }
 

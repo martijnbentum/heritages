@@ -16,7 +16,7 @@
 {{date_range|json_script:"date_range"}}
 {{filter_active_dict|json_script:"filter-active-dict"}}
 {% csrf_token %}
-<form>
+<form id="query_form">
 <div class="d-flex">
 	<div id="mySidebar" class="sidebar bg-light">
 		<a 
@@ -236,7 +236,9 @@
 				<select class="small sorting_option" 
 					id="sorting_option" 
 					name="sorting_option"
-					value="category">
+					value="category"
+                    onchange="submit_query_form()"
+                    >
 		<!-- the {} variable contains selected or '' to set selected value -->
 					<option value="title - name" {{t}}>title - name</option>
 					<option value="chronological" {{c}}>chronological</option>
