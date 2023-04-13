@@ -26,9 +26,11 @@
 {% include 'utilities/sidebar.html' %}
 <div id="mapid" class="mt-0 map"></div>
 
+<!--
 <script src="{% static 'utilities/cluster.js' %}">
 </script>
-<script src="{% static 'utilities/map.js' %}">
+-->
+<script type="module" src="{% static 'utilities/map.js' %}">
 </script>
 
 {% endblock %}

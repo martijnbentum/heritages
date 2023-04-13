@@ -132,7 +132,7 @@ function _combine_clusters(clusters,cluster_dict) {
 		var temp = []
 		for (let j = 0; j < indices[i].length; j++) {
 			var index = indices[i][j]
-			elements = clusters[indices[i][j]]
+			var elements = clusters[indices[i][j]]
 			for (let k = 0; k < elements.length; k++) {
 				var el = elements[k]
 				if ( !(temp.includes(el)) ) { temp.push(el) }
@@ -153,7 +153,7 @@ function cluster(arr, radius = 4) {
 		if ( o.length > 1 ) { 
 			clusters.push(o); 
 			for (let j = 0; j < o.length; j++) {
-				el = o[j]
+				var el = o[j]
 				if ( !(clustered_element_indices.includes(el.options.index)) ) {
 					clustered_element_indices.push(el.options.index)
 				}
@@ -166,12 +166,12 @@ function cluster(arr, radius = 4) {
 		}
 	}
 	clusters = _combine_clusters(clusters,cluster_dict);
-	clustered_elements_dict = make_clustered_elements_dict(clusters);
+	var clustered_elements_dict = make_clustered_elements_dict(clusters);
 	return [clustered_elements_dict, clustered_element_indices]
 }
 
 function make_clustered_elements_dict(clustered_elements) {
-	clustered_elements_dict= {}
+	var clustered_elements_dict= {}
 	for (var i = 0; i< clustered_elements.length; i++) {
 		var d = {}
 		var elements = clustered_elements[i];
@@ -179,7 +179,7 @@ function make_clustered_elements_dict(clustered_elements) {
 		d['center_element'] = find_center_element(elements);
 		d['plotted'] = false;
 		for (var j = 0; j < elements.length; j++) {
-			el = elements[j]
+			var el = elements[j]
 			clustered_elements_dict[el.options.index] = d
 		}
 	}
@@ -200,4 +200,4 @@ var d = [17,8,9];
 var e = [117,80,19];
 var f = [a,b,d,e];
 
-
+export {cluster, sort_on_x};

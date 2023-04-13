@@ -1,3 +1,4 @@
+import {cluster, sort_on_x} from './cluster.js';
 
 // leaflet map setup
 var mymap = L.map('mapid').setView([52.0055328,4.67565177],5);
@@ -114,14 +115,14 @@ function update_markers() {
 	// show markers on map;
 	//apply clustering to markers (cluster overlapping markers together
 	//filter out markers without any active ids
-	show_markers(active_markers, make_point = true);
+	show_markers(active_markers, true);
 	[clustered_marker_dict, clustered_marker_indices] = cluster(active_markers)
-	show_markers(active_markers, make_point = false);
+	show_markers(active_markers, false);
 }
 
 function make_circle_marker(loc,i) {
 	//create a marker a circle
-	latlng = loc2latlng(loc);
+	var latlng = loc2latlng(loc);
 	if (latlng == false) { return false;}
 	name = loc.name
 	var marker=L.circleMarker(latlng,{color:marker_color,weight:2,
@@ -137,8 +138,8 @@ function make_circle_marker(loc,i) {
 
 function loc2latlng(loc) {
 	//extract latitude and longitude form loc object
-	try { latlng = loc.gps.split(',').map(Number); }
-	catch {latlng = [] }
+	try { var latlng = loc.gps.split(',').map(Number); }
+	catch {var latlng = [] }
 	if (latlng.length != 2) {
 		return false
 	}
@@ -153,7 +154,7 @@ function collect_active_markers() {
 }
 
 var names = 'circle,other'.split(',');
-layerDict = {}
+var layerDict = {}
 for (var i = 0; i<names.length; i++) {
 	layerDict[names[i]] = []
 }
