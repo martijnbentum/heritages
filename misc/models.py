@@ -63,6 +63,8 @@ class Keyword(models.Model, info):
 
 class Famine(models.Model, info):
     dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
+    filter_name = models.CharField(max_length=1000,default='')
+    filter_location_name = models.CharField(max_length=1000,default='')
     names = models.ManyToManyField(FamineName, blank=True)
     start_year= 1
     end_year= 1

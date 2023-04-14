@@ -48,10 +48,12 @@ class FamineForm(ModelForm):
 		queryset=Keyword.objects.all(),
 		widget=KeywordsWidget(**dselect2),
 		required=False)
+	filter_name = forms.CharField(**dchar_required)
+	filter_location_name = forms.CharField(**dchar_required)
 
 	class Meta:
 		model = Famine
-		fields = 'names,locations,estimated_excess_mortality,causal_triggers,description,comments'
+		fields = 'names,locations,estimated_excess_mortality,causal_triggers,description,comments,filter_name,filter_location_name'
 		fields += ',keywords,excess_mortality_description'
 		fields = fields.split(',')
 

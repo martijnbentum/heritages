@@ -76,6 +76,15 @@
 			href = "{% url 'misc:add_keyword' %}"
 			role="button"><i class="fa fa-plus"></i></a></td>
 	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Filter name</th>
+		<td class="col-9">
+		{{form.filter_name}} {{form.filter_name.error}}</td>
+	<tr class="d-flex">
+		<td class="col-2">Filter location</th>
+		<td class="col-9">
+		{{form.filter_location_name}} {{form.filter_location_name.error}}</td>
+	</table>
 	</table>
 		<div class="col-md-12 d-flex">
 		<div class="col-2"></div>
