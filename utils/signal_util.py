@@ -105,8 +105,9 @@ def make_file_backup_postsave_receiver(app_name,model_name):
 		print(sys.exc_info())
 		print('-'*90)
 
+mr = settings.MEDIA_ROOT
 
-if not settings.MEDIA_ROOT.startswith('/Users/u050158/'):
+if not mr.startswith('/Users/u050158/') and not mr.startswith('/home/mb/'):
 	d = make_models_image_file_dict()
 	for k in d:
 		print('setting',k)
