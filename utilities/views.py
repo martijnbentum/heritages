@@ -36,6 +36,7 @@ field_names_dict = {
     'videogame':te+',game_type','recordedspeech':te+',recordedspeech_type',
     'memorialsite':te+',memorial_type',
     'artefact':te+',artefact_type',
+    'license':'name',
     }
 
 
