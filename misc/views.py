@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .forms import FamineForm,FamineNameForm,LanguageForm
+from .forms import FamineForm,FamineNameForm,LanguageForm,LicenseForm
 from .forms import CausalTriggerForm,KeywordForm, keywordkeyword_formset
 from .models import Famine
 from utilities.views import edit_model, add_simple_model, list_view, delete_model
@@ -20,6 +20,10 @@ names = 'CausalTrigger,FamineName,Location,Language'
 for name in names.split(','):
 	create_simple_view(name)
 
+def edit_license(request,pk=None,focus='',view='complete'):
+	print(pk,focus,view,123456,request)
+	return edit_model(request,__name__,'License','misc',pk,focus=focus,view=view)
+		
 
 def edit_keyword(request,pk=None,focus='',view='complete'):
 	names = 'keywordkeyword_formset'
