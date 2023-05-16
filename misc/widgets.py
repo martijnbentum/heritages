@@ -1,6 +1,6 @@
 from django_select2.forms import ModelSelect2Widget, ModelSelect2MultipleWidget
 from .models import Famine, FamineName, CausalTrigger, Keyword
-from .models import Language
+from .models import Language, License
 
 class SimpleBaseWidget(ModelSelect2Widget):
 	search_fields = ['name__icontains']
@@ -12,6 +12,11 @@ class SimpleBasesWidget(ModelSelect2MultipleWidget):
 	def label_from_instance(self,obj):
 		return obj.name
 
+
+class LicenseWidget(SimpleBaseWidget):
+	model = License
+	def get_queryset(self):
+		return License.objects.all().order_by('name')
 
 class FamineWidget(SimpleBaseWidget):
 	model = Famine
