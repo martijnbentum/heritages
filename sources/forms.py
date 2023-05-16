@@ -59,7 +59,7 @@ source_fields = 'famines,title_english,title_original,collection,publishing_outl
 source_fields += ',available,permission,rated,keywords,description'
 source_fields += ',comments,commissioned_by,source_link,flag,thumbnail'
 source_fields += ',date_created,date_released,setting,release_date_precedent'
-source_fields += ',license,reference'
+source_fields += ',license_image,license_thumbnail,reference'
 
 class SourceForm(ModelForm):
 	famines = forms.ModelMultipleChoiceField(
@@ -105,7 +105,11 @@ class SourceForm(ModelForm):
 		queryset=Location.objects.all(),
 		widget = LocationsWidget(**dselect2n2),
 		required=False)
-	license= forms.ModelChoiceField(
+	license_image= forms.ModelChoiceField(
+		queryset=License.objects.all(),
+		widget = LicenseWidget(**dselect2),
+		required=False)
+	license_thumbnail= forms.ModelChoiceField(
 		queryset=License.objects.all(),
 		widget = LicenseWidget(**dselect2),
 		required=False)

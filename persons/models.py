@@ -49,7 +49,10 @@ class Person(models.Model, info):
     date_field = PartialDateField(null=True,blank=True)
     famine_field = models.CharField(max_length=1000,default='')
     loc_ids= models.CharField(max_length=1000,default='')
-    license = models.ForeignKey(License, **dargs)
+    license_imag =models.ForeignKey(License, related_name='license_image',
+        **dargs)
+    license_thumbnail=models.ForeignKey(License,related_name='license_thumbnail',
+        **dargs)
     reference= models.TextField(default='')
 
     def __str__(self):

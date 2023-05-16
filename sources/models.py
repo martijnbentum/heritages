@@ -60,7 +60,12 @@ class Source(models.Model):
     keyword_detail_field = models.CharField(max_length=1000,default='')
     famine_field = models.CharField(max_length=1000,default='')
     loc_ids = models.CharField(max_length=1000,default='')
-    license = models.ForeignKey(License, **dargs)
+    license_image = models.ForeignKey(License, 
+        related_name='%(app_label)s_%(class)s_license_image',
+        **dargs)
+    license_thumbnail= models.ForeignKey(License, 
+        related_name='%(app_label)s_%(class)s_license_thumbnail',
+        **dargs)
     reference= models.TextField(default='')
 
     class Meta:
