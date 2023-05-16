@@ -1,0 +1,57 @@
+{% extends "utilities/base.html" %}
+
+{% block head %}
+	{{form.media.css}}
+	<title>{{page_name}}</title>
+{% endblock %}
+
+{% block content %}
+<form method="post">
+	{% csrf_token %}
+	<div class="col-md-12 d-flex">
+	<h4 class="col-2 ml-0 pl-0">{{page_name}}</h4>
+	{% include 'utilities/save.html' %}
+
+		<a class = "btn btn-link btn-sm ml-auto" style="color:#cad2de" 
+			href="{% url 'utilities:add_protocol' app_name model_name %}"
+			target="_blank"
+			>
+			<i class="fas fa-question-circle"></i>
+		</a>
+
+	</div>
+	<hr>
+	{% if 'Edit' in page_name and 'unknown' not in crud.last_update %}
+		{% include 'utilities/change_log.html' %}
+		{% else %} <p class="mb-4"></p>
+	{% endif %}
+
+
+
+	<table class="table table-borderless table-sm" id = "form_table">
+	<tr class="d-flex">
+		<td class="col-2">Name</th>
+		<td class="col-9">{{form.name}} {{form.name.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Url</th>
+		<td class="col-9">{{form.url}} {{form.url.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Description</th>
+		<td class="col-9">{{form.description}} {{form.description.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">Comments</th>
+		<td class="col-9">{{form.comments}} {{form.comments.error}}</td>
+	</tr>
+	</table>
+		<div class="col-md-12 d-flex">
+		<div class="col-2"></div>
+		{% include 'utilities/save.html' %}
+		</div>
+</form>
+<br>
+{{form.media.js}}
+{% include 'utilities/helper.html' %}
+{% endblock %}
