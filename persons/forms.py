@@ -5,8 +5,9 @@ from .widgets import GenderWidget, OccupationWidget,OccupationsWidget
 from .widgets import AffiliationWidget, NationalityWidget 
 from locations.models import Location
 from locations.widgets import LocationWidget, LocationsWidget
-from misc.models import Famine, Language, Keyword
+from misc.models import Famine, Language, Keyword, License
 from misc.widgets import FaminesWidget, LanguagesWidget, KeywordsWidget
+from misc.widgets import LicenseWidget
 from utilities.forms import make_select2_attr
 
 dattr = {'attrs':{'style':'width:100%'}}
@@ -70,12 +71,17 @@ class PersonForm(ModelForm):
 		queryset=Famine.objects.all(),
 		widget=FaminesWidget(**dselect2),
 		required=False)
+	license= forms.ModelChoiceField(
+		queryset=License.objects.all(),
+		widget = LicenseWidget(**dselect2),
+		required=False)
+	reference= forms.CharField(**dtext)
 
 	class Meta:
 		model = Person
 		fields = 'name,gender,nationality,location_of_birth,location_of_death'
 		fields += ',occupation,affiliation,biography_link,comments,keywords'
 		fields += ',date_of_birth,date_of_death,description,flag,thumbnail,pseudonyms'
-		fields += ',pseudonym_precedent,viaf,famines'
+		fields += ',pseudonym_precedent,viaf,famines,reference,license'
 		fields = fields.split(',')
 

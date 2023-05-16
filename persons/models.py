@@ -3,7 +3,7 @@ from utilities.models import SimpleModel
 from utils.model_util import info, instance2keyword_categories, instance2keyword_detail
 from utils.model_util import instance2famines
 from utils.instance2countries import instance2countries
-from misc.models import Keyword, Famine
+from misc.models import Keyword, Famine,License
 from locations.models import Location
 from utils.map_util import instance2related_locations, field2locations
 from utilities.models import instance2name, instance2color, instance2map_buttons
@@ -49,6 +49,8 @@ class Person(models.Model, info):
     date_field = PartialDateField(null=True,blank=True)
     famine_field = models.CharField(max_length=1000,default='')
     loc_ids= models.CharField(max_length=1000,default='')
+    license = models.ForeignKey(License, **dargs)
+    reference= models.TextField(default='')
 
     def __str__(self):
         return self.title
