@@ -19,8 +19,9 @@ from .widgets import RecordedspeechTypeWidget,BroadcastingStationWidget
 from .widgets import MemorialTypeWidget
 from locations.models import Location
 from locations.widgets import LocationWidget, LocationsWidget
-from misc.models import Famine, Language, Keyword
+from misc.models import Famine, Language, Keyword, License
 from misc.widgets import FaminesWidget, LanguagesWidget, KeywordsWidget
+from misc.widgets import LicenseWidget
 from persons.models import Person
 from persons.widgets import PersonWidget, PersonsWidget
 from utilities.forms import make_select2_attr
@@ -58,6 +59,7 @@ source_fields = 'famines,title_english,title_original,collection,publishing_outl
 source_fields += ',available,permission,rated,keywords,description'
 source_fields += ',comments,commissioned_by,source_link,flag,thumbnail'
 source_fields += ',date_created,date_released,setting,release_date_precedent'
+source_fields += ',license,reference'
 
 class SourceForm(ModelForm):
 	famines = forms.ModelMultipleChoiceField(
@@ -103,6 +105,12 @@ class SourceForm(ModelForm):
 		queryset=Location.objects.all(),
 		widget = LocationsWidget(**dselect2n2),
 		required=False)
+	license= forms.ModelChoiceField(
+		queryset=License.objects.all(),
+		widget = LicenseWidget(**dselect2),
+		required=False)
+	reference= forms.CharField(**dtext)
+
 
 	class Meta:
 		model = Source

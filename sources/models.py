@@ -6,7 +6,7 @@ from utils.model_util import info, instance2keyword_categories
 from utils.model_util import instance2keyword_detail
 from utils.model_util import instance2famines
 from utils.map_util import instance2related_locations, field2locations
-from misc.models import Keyword, Language,Famine
+from misc.models import Keyword, Language,Famine,License
 from locations.models import Location
 from utilities.models import instance2name, instance2color, instance2icon 
 from utilities.models import instance2map_buttons
@@ -60,6 +60,8 @@ class Source(models.Model):
     keyword_detail_field = models.CharField(max_length=1000,default='')
     famine_field = models.CharField(max_length=1000,default='')
     loc_ids = models.CharField(max_length=1000,default='')
+    license = models.ForeignKey(License, **dargs)
+    reference= models.TextField(default='')
 
     class Meta:
         abstract = True
