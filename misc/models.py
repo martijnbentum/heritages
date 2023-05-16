@@ -18,6 +18,12 @@ names = names.split(',')
 for name in names:
     make_simple_model(name)
 
+class License(models.Model, info):
+    name = models.CharField(max_length=300,default='',unique=True)
+
+    def __str__(self):
+        return self.name
+
 class Keyword(models.Model, info):
     dargs = {'on_delete':models.SET_NULL,'blank':True,'null':True}
     name = models.CharField(max_length=300,default='',unique=True)
