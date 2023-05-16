@@ -20,6 +20,9 @@ for name in names:
 
 class License(models.Model, info):
     name = models.CharField(max_length=300,default='',unique=True)
+    url= models.CharField(max_length=1000, default = '')
+    description = models.TextField(default='')
+    comments = models.TextField(default='')
 
     def __str__(self):
         return self.name
