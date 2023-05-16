@@ -45,6 +45,9 @@
 			"{% url 'utilities:list_view' 'Famine' 'misc' %}">
 				famine</a>
           <a class="dropdown-item" href=
+			"{% url 'utilities:list_view' 'License' 'misc' %}">
+				license</a>
+          <a class="dropdown-item" href=
 			"{% url 'utilities:list_view' 'Location' 'locations' 50 %}">
 				location</a>
           <a class="dropdown-item" href=
@@ -102,6 +105,8 @@
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href=
 			"{% url 'misc:add_famine' %}">famine</a>
+          <a class="dropdown-item" href=
+			"{% url 'misc:add_license' %}">license</a>
           <a class="dropdown-item" href=
 			"{% url 'locations:add_location' %}">location</a>
           <a class="dropdown-item" href=
