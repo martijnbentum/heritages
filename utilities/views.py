@@ -316,4 +316,7 @@ def edit_protocol(request, app_name, model_name, field_name = None):
     return render(request, 'utilities/add_protocol.html',var)
 
 
+def show_edit_screen(request, instance):
+    from sources import views
+    return views.edit_image(request, instance.pk)
 
