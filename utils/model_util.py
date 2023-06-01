@@ -6,6 +6,9 @@ import string
 import itertools
 from utils.general import sort_count_dict, make_century_dict, sort_dict_on_keys
 
+n = 'Image,PictureStory,Infographic,Film,Music,Text,Videogame'
+n += ',Recordedspeech,Memorialsite,Artefact,Person'
+all_model_names = n.split(',')
 
 
 class info():
@@ -171,9 +174,7 @@ def make_models_image_file_dict(only_image_fields=False):
     return d
 
 def get_all_models(model_names=''):
-    n = 'Image,PictureStory,Infographic,Film,Music,Text,Videogame'
-    n += ',Recordedspeech,Memorialsite,Artefact,Person'
-    if not model_names: model_names = n.split(',')
+    if not model_names: model_names = all_model_names
     model_names.sort()
     model_names = [n.lower() for n in model_names]
     all_models = apps.get_models()
