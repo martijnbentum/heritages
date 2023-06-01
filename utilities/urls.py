@@ -10,7 +10,7 @@ search_path_complete +='<str:sorting_option>/'
 
 urlpatterns = [
 	path('close/',views.close,name='close'),
-    path('show_edit_screen/',views.show_edit_screen,name='show_edit_screen')
+    path('add_info/',views.add_info,name='add_info'),
 	path('list_view/<str:model_name>/<str:app_name>/',
 		views.list_view,name='list_view'),
 	path('list_view/<str:model_name>/<str:app_name>/<int:max_entries>/',

@@ -18,6 +18,7 @@ from utils.search_view_helper import SearchView, UserSearch
 from utilities.search import Search, SearchAll
 from .models import Protocol
 from .forms import ProtocolForm
+from .forms import AddInfoForm
 import os
 import time
 
@@ -139,6 +140,7 @@ def edit_model(request, name_space, model_name, app_name, instance_id = None,
     assumes a 'add_{{model_name}}.html template and edit_{{model_name}} function
     and {{model_name}}Form
     '''
+    print('focus',[focus])
     start = time.time()
     names = formset_names
     model = apps.get_model(app_name,model_name)
@@ -150,6 +152,7 @@ def edit_model(request, name_space, model_name, app_name, instance_id = None,
     print(model,modelform,model_name,app_name,98765)
     if request.method == 'POST':
         focus, button = getfocus(request), getbutton(request)
+        print('focus',[focus])
         if button in 'delete,cancel,confirm_delete': 
             return delete_model(request,name_space,model_name,app_name,instance_id)
         if button == 'saveas' and instance: instance = copy_complete(instance)
@@ -316,7 +319,19 @@ def edit_protocol(request, app_name, model_name, field_name = None):
     return render(request, 'utilities/add_protocol.html',var)
 
 
-def show_edit_screen(request, instance):
+def show_edit_screen(request):
     from sources import views
+    from sources import models
+    instance = models.Image.objects.all()[3]
     return views.edit_image(request, instance.pk)
+
+def add_info(request):
+    n_instances = len(get_all_instances())
+    form = None
+    if request.method == 'POST':
+        form = AddInfoForm(request.POST)
+        if form.is_valid(): print(form.cleaned_data)
+    if not form: form = AddInfoForm()
+    var = {'form':form,'n_instances':n_instances}
+    return render(request, 'utilities/add_info.html', var)
 

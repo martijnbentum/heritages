@@ -1,0 +1,38 @@
+{% extends "utilities/base.html" %}
+{% block head %}
+	{{form.media.css}}
+	<title>{{page_name}}</title>
+{% endblock %}
+
+
+
+{% block content %}
+
+<p>Number of items in the database: {{n_instances}}</p>
+<p>Number of items visited: {{n_visited}}</p>
+<p>Number of items without reference or license information: {{n_empty}}</p>
+
+<hr>
+<form method="post" enctype="multipart/form-data" id = "form">
+	{% csrf_token %}
+	<table class="table table-borderless table-sm" id="form_table">
+	<tr class="d-flex">
+		<td class="col-2">model</th>
+		<td class="col-9">{{form.model}} {{form.model.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">check empty</th>
+		<td class="col-9">{{form.check_empty}} {{form.check_empty.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2">skip visited</th>
+		<td class="col-9">{{form.skip_visited}} {{form.skip_visited.error}}</td>
+	</tr>
+	</table>
+    <button type="submit">Submit</button>
+</form>
+
+{{form.media.js}}
+
+{% endblock %}
+
