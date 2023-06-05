@@ -10,7 +10,8 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from utils import view_util, help_util, image_util, map_util
 from utils.view_util import Crud, Cruds, make_tabs, FormsetFactoryManager
-from utils.model_util import copy_complete, get_all_instances
+from utils.model_util import copy_complete, get_all_instances 
+from utils.model_util import get_instances_without_license_or_reference
 from utils.get_totals import get_totals, get_countries, get_types
 from utils.get_totals import get_gender
 from utils.search_view_helper import SearchView, UserSearch
@@ -288,7 +289,6 @@ def ajax_instance_info(request,identifier,fields = 'all'):
             d[field] = attr
         else: d[field] = ''
     return JsonResponse(d)
-        
 
 def edit_protocol(request, app_name, model_name, field_name = None):
     print(app_name,model_name,field_name,1111,222)
@@ -318,20 +318,32 @@ def edit_protocol(request, app_name, model_name, field_name = None):
     var = {'formset':formset,'page_name':page_name,'note':note}
     return render(request, 'utilities/add_protocol.html',var)
 
-
 def show_edit_screen(request):
-    from sources import views
-    from sources import models
-    instance = models.Image.objects.all()[3]
-    return views.edit_image(request, instance.pk)
+    d = request.session.get('add_info_form')
+    index = request.session.get('add_info_index')
+    incomplete_instances = get_instances_without_license_or_reference(d['check_empty'])
+    if index >= len(incomplete_instances): return add_info(request)
+    instance = incomplete_instances[index]
+    request.session['add_info_index'] = index + 1
+    var = {'pk':instance.pk, 'focus':'add_info'}
+    url = reverse(instance.edit_url, kwargs = var)
+    print('url',url)
+    return HttpResponseRedirect(url)
 
 def add_info(request):
-    n_instances = len(get_all_instances())
+    n_all_instances = len(get_all_instances())
+    n_incomplete_instances = len(get_instances_without_license_or_reference())
     form = None
     if request.method == 'POST':
         form = AddInfoForm(request.POST)
-        if form.is_valid(): print(form.cleaned_data)
+        if form.is_valid(): 
+            request.session['add_info_form'] = form.cleaned_data
+            request.session['add_info_index'] = 0
+            print(form.cleaned_data)
+            # return handle_add_info_instances(request,form.cleaned_data)
+            return show_edit_screen(request)
     if not form: form = AddInfoForm()
-    var = {'form':form,'n_instances':n_instances}
+    var = {'form':form,'n_all_instances':n_all_instances,
+        'n_incomplete_instances':n_incomplete_instances}
     return render(request, 'utilities/add_info.html', var)
 
