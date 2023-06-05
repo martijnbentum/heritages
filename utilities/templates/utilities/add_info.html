@@ -8,9 +8,9 @@
 
 {% block content %}
 
-<p>Number of items in the database: {{n_instances}}</p>
+<p>Number of items in the database: {{n_all_instances}}</p>
 <p>Number of items visited: {{n_visited}}</p>
-<p>Number of items without reference or license information: {{n_empty}}</p>
+<p>Number of items without reference or license information: {{n_incomplete_instances}}</p>
 
 <hr>
 <form method="post" enctype="multipart/form-data" id = "form">
