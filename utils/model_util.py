@@ -389,5 +389,27 @@ def update_all_instances(remove_cruds = False):
     if remove_cruds:
         from utilities.management.commands import clean_db
         clean_db.remove_crud_events_without_changes()
-    
+
+def check_license_and_reference_field(instance, check_type = 'reference & license'):
+    field_names = 'license_image,license_thumbnail,reference'.split(',')
+    if check_type == 'reference': field_names = ['reference']
+    elif check_type == 'license': field_names.pop(field_names.index('reference'))
+    values = []
+    for name in field_names:
+        if not hasattr(instance,name): continue
+        values.append(bool(getattr(instance,name)))
+    if sum(values) == 0: return 'empty'
+    if len(values) == sum(values): return 'complete'
+    return 'partial'
+        
+def get_instances_without_license_or_reference(check_type = 'reference & license'):
+    instances = get_all_instances()
+    output = []
+    for instance in instances:
+        status = check_license_and_reference_field(instance, check_type)
+        if status == 'complete': continue
+        output.append(instance)
+    return output
+        
+        
     
