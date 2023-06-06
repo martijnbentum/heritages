@@ -173,7 +173,7 @@ def make_models_image_file_dict(only_image_fields=False):
             d[app_name, model_name] = file_field_names
     return d
 
-def get_all_models(model_names=''):
+def get_all_models(model_names=[]):
     if not model_names: model_names = all_model_names
     model_names.sort()
     model_names = [n.lower() for n in model_names]
@@ -184,7 +184,7 @@ def get_all_models(model_names=''):
             if model._meta.model_name == model_name: models.append(model)
     return models
 
-def get_all_instances(model_names = '',flag_filter_person = True, 
+def get_all_instances(model_names = [],flag_filter_person = True, 
     exclude_persons = False):
     models = get_all_models(model_names=model_names)
     instances = []
@@ -390,7 +390,8 @@ def update_all_instances(remove_cruds = False):
         from utilities.management.commands import clean_db
         clean_db.remove_crud_events_without_changes()
 
-def check_license_and_reference_field(instance, check_type = 'reference & license'):
+def check_license_and_reference_field(instance, 
+    check_type = 'reference & license'):
     field_names = 'license_image,license_thumbnail,reference'.split(',')
     if check_type == 'reference': field_names = ['reference']
     elif check_type == 'license': field_names.pop(field_names.index('reference'))
@@ -402,8 +403,13 @@ def check_license_and_reference_field(instance, check_type = 'reference & licens
     if len(values) == sum(values): return 'complete'
     return 'partial'
         
-def get_instances_without_license_or_reference(check_type = 'reference & license'):
-    instances = get_all_instances()
+def get_instances_without_license_or_reference(
+    check_type = 'reference & license', model = 'all', add_info_form = None):
+    if add_info_form:
+        check_type = add_info_form['check_empty']
+        model = add_info_form['model'].lower()
+    if model == 'all': instances = get_all_instances()
+    else: instances = get_all_instances(model_names = [model])
     output = []
     for instance in instances:
         status = check_license_and_reference_field(instance, check_type)
