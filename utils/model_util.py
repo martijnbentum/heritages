@@ -148,6 +148,16 @@ def simple_copy(instance, commit = True,add_copy_suffix = True):
         copy.save()
     return copy
 
+
+def model_image_field_names(model, only_image_fields = False):
+    fields = model._meta.get_fields()
+    file_field_names = []
+    for field in fields:
+        if field.get_internal_type() == 'FileField':
+            if only_image_fields and type(field) != ImageField: continue
+            file_field_names.append(field.name)
+            temp = field
+    return file_field_names
         
 def make_models_image_file_dict(only_image_fields=False):
     '''
@@ -161,13 +171,7 @@ def make_models_image_file_dict(only_image_fields=False):
     selected_models = get_selected_models()
     d = {}
     for model in selected_models:
-        fields = model._meta.get_fields()
-        file_field_names = []
-        for field in fields:
-            if field.get_internal_type() == 'FileField':
-                if only_image_fields and type(field) != ImageField: continue
-                file_field_names.append(field.name)
-                temp = field
+        file_field_names = model_image_field_names(model, only_image_fields)
         if file_field_names: 
             app_name, model_name = instance2names(model)
             d[app_name, model_name] = file_field_names
@@ -390,6 +394,17 @@ def update_all_instances(remove_cruds = False):
         from utilities.management.commands import clean_db
         clean_db.remove_crud_events_without_changes()
 
+def instance_has_thumbnail(instance):
+    return bool(instance.thumbnail)
+
+def instance_has_image_file(instance):
+    image_field_names = model_image_field_names(instance)
+    image_field_names.pop(image_field_names.index('thumbnail'))
+    values = []
+    for name in image_field_names:
+        values.append(bool(getattr(instance,name)))
+    return bool(sum(values))
+
 def check_license_and_reference_field(instance, 
     check_type = 'reference & license'):
     field_names = 'license_image,license_thumbnail,reference'.split(',')
@@ -398,7 +413,12 @@ def check_license_and_reference_field(instance,
     values = []
     for name in field_names:
         if not hasattr(instance,name): continue
+        if name == 'license_thumbnail' and not instance_has_thumbnail(instance): 
+            continue
+        if name == 'license_image' and not instance_has_image_file(instance):
+            continue
         values.append(bool(getattr(instance,name)))
+    if len(values) == 0: return 'complete'
     if sum(values) == 0: return 'empty'
     if len(values) == sum(values): return 'complete'
     return 'partial'
