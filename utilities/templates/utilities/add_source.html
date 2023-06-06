@@ -81,6 +81,69 @@
         {% endif %}
 	</tr>
     {% endif %}
+    {% if focus == 'add_info' %}
+	<tr class="d-flex">
+        <td class="col-2" style="background-color: #00ff03;">
+            image | thumbnail
+        </th>
+        <td class="col-4">
+            {% if form.instance.image_file %}
+                <img src="{{form.instance.image_file.url}}" 
+                    style="height: 150px;">
+            {% else %}
+                no image 
+            {% endif %}
+        </td>
+        <td class = "col-4">
+            {% if form.instance.thumbnail %}
+                <img src="{{form.instance.thumbnail.url}}" 
+                    style="height: 150px;">
+            {% else %}
+                no thumbnail
+            {% endif %}
+        </td>
+    </tr>
+	<tr class="d-flex">
+        <td class="col-2" style="background-color: #00ff03;">title:</th>
+        <td class = "col-9" style="background-color: #00ff03;">
+            {{form.instance.title_english}}</td>
+        </td>
+    </tr>
+    {% if form.instance.source_link %}
+	<tr class="d-flex">
+        <td class="col-2" style="background-color: #00ff03;">link:</th>
+        <td class="col-9" style="background-color: #00ff03;">
+            <a 
+                class="btn btn-link btn-sm ml-auto text-dark" 
+                target="_blank"
+                href="{{form.instance.source_link}}"
+                role="button">
+                    {{form.instance.source_link}}
+            </a>
+        </td>
+    </tr>
+    {% endif %}
+	<tr class="d-flex">
+		<td class="col-2" style="background-color: #00ff00;">Reference</th>
+		<td class="col-9">{{form.reference}} {{form.reference.error}}</td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2" style="background-color: #00ff00;">License image</th>
+		<td class="col-9">
+            {{form.license_image}} {{form.license_image.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'misc:add_license' 'inline'%}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+	<tr class="d-flex">
+		<td class="col-2" style="background-color: #00ff00;">License thumbnail</th>
+		<td class="col-9">
+            {{form.license_thumbnail}} {{form.license_thumbnail.error}}</td>
+		<td><a class = "btn btn-link btn-sm ml-auto text-dark" target = "_blank"
+			href = "{% url 'misc:add_license' 'inline'%}"
+			role="button"><i class="fa fa-plus"></i></a></td>
+	</tr>
+        {% else %}
 	<tr class="d-flex">
 		<td class="col-2">Reference</th>
 		<td class="col-9">{{form.reference}} {{form.reference.error}}</td>
@@ -101,6 +164,7 @@
 			href = "{% url 'misc:add_license' 'inline'%}"
 			role="button"><i class="fa fa-plus"></i></a></td>
 	</tr>
+        {% endif %}
 
 
 
