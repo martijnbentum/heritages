@@ -142,6 +142,7 @@ def edit_model(request, name_space, model_name, app_name, instance_id = None,
     and {{model_name}}Form
     '''
     print('focus',[focus])
+    parameter_focus = focus
     start = time.time()
     names = formset_names
     model = apps.get_model(app_name,model_name)
@@ -157,6 +158,7 @@ def edit_model(request, name_space, model_name, app_name, instance_id = None,
         if button in 'delete,cancel,confirm_delete': 
             return delete_model(request,name_space,model_name,app_name,instance_id)
         if button == 'saveas' and instance: instance = copy_complete(instance)
+        if button == 'skip': return show_edit_screen(request)
         form = modelform(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             print('form is valid: ',form.cleaned_data,type(form))
@@ -169,6 +171,7 @@ def edit_model(request, name_space, model_name, app_name, instance_id = None,
                     show_messages(request,button, model_name)
                     if button== 'add_another':
                         return HttpResponseRedirect(reverse(app_name+':add_'+model_name.lower()))
+                    if parameter_focus == 'add_info': return show_edit_screen(request)
                     return HttpResponseRedirect(reverse(
                         app_name+':edit_'+model_name.lower(), 
                         kwargs={'pk':instance.pk,'focus':focus}))
@@ -184,7 +187,8 @@ def edit_model(request, name_space, model_name, app_name, instance_id = None,
     helper = help_util.Helper(model_name = model_name)
     args = {'form':form,'page_name':page_name,'crud':crud,
         'tabs':tabs, 'view':view,'app_name':app_name,'model_name':model_name,
-        'helper':helper.get_dict(), 'thumbnail_size':thumbnail_size}
+        'helper':helper.get_dict(), 'thumbnail_size':thumbnail_size,
+        'focus':focus}
     args.update(ffm.dict)
     return render(request,app_name+'/add_' + model_name.lower() + '.html',args)
         
@@ -321,7 +325,8 @@ def edit_protocol(request, app_name, model_name, field_name = None):
 def show_edit_screen(request):
     d = request.session.get('add_info_form')
     index = request.session.get('add_info_index')
-    incomplete_instances = get_instances_without_license_or_reference(d['check_empty'])
+    incomplete_instances = get_instances_without_license_or_reference(
+        add_info_form = d)
     if index >= len(incomplete_instances): return add_info(request)
     instance = incomplete_instances[index]
     request.session['add_info_index'] = index + 1
