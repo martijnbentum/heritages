@@ -2,11 +2,14 @@
 {% if view == "inline" %} 
 	 <a type="reset" value="Cancel" class ="btn btn-light"
 	 href="{% url 'utilities:close' %}">Cancel</a>
+{% elif focus == "add_info" %}
+	<button type="submit" name="save" value="skip" 
+	class ="btn btn-outline-secondary ml-1">Skip</button>
 {% else %}
 	<button type="submit" name="save" value="add_another" 
 	class ="btn btn-outline-secondary ml-1">Save | add another</button>
 {% endif %}
-{% if 'Edit' in page_name %}
+{% if 'Edit' in page_name and focus != "add_info" %}
 <button type="submit" name="save" value="delete" class ="btn btn-outline-warning ml-1">Delete</button>
 {% endif %}
 {% if thumbnail_size and thumbnail_size > 0.3 %}
@@ -14,5 +17,15 @@
         thumbnail image too large ({{thumbnail_size}} MB)
         please upload a smaller image
     </small>
+{% endif %}
+<script>
+    console.log('test')
+</script>
+{% if focus == "add_info" %}
+    <script>
+        // Scroll to the bottom of the webpage
+        console.log('hello')
+        window.scrollTo(0, document.documentElement.scrollHeight || document.body.scrollHeight);
+    </script>
 {% endif %}
 
