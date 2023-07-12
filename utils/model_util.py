@@ -1,4 +1,5 @@
 from django.apps import apps
+from django.db import models
 from django.db.models.fields.files import ImageFileDescriptor
 from django.db.models.fields.files import ImageField, FileField
 import random
@@ -46,7 +47,8 @@ class info():
 
 
 def id_generator(id_type= 'letters', length = 9):
-    '''probably obsolete, generate a random identifier string for an isntance.'''
+    '''probably obsolete, generate a random identifier string for an 
+    instance.'''
     if id_type == 'letters':
         return ''.join(random.sample(string.ascii_letters*length,length))
     if id_type == 'numbers':
@@ -54,13 +56,15 @@ def id_generator(id_type= 'letters', length = 9):
 
 
 def compare_model_dicts(sd,od):
-    '''Compare model class dictionary to compare the similarity of two model instances.
+    '''Compare model class dictionary to compare the similarity of two model 
+    instances. 
     helper function of compare_instances
     '''
     equal,similar = True, True
     ntotal,nsame,nsimilar = len(sd.keys())-2, 0, 0
     for k in sd.keys():
-        if k in ['id','_state']:continue # skip fields that are different by definition
+        # skip fields that are different by definition
+        if k in ['id','_state']:continue 
         if sd[k] == od[k]: 
             nsame +=1
             nsimilar +=1
@@ -76,7 +80,8 @@ def compare_instances(self,other):
     '''Compare two instances.
     If each field for the two instances are identical returns equal true
 
-    If fields for the instances only differs  whereby one has default empty value (i.e. none or '')
+    If fields for the instances only differs  whereby one has default empty 
+    value (i.e. none or '')
     return similar true
 
     Also returns percentage for both equal and similar
@@ -92,7 +97,8 @@ def compare_queryset(qs):
     determines the equality / similarity of the pair. (see compare_ instances)
     '''
     equal_list,similar_list,complete_list = [],[],[]
-    for a,b in itertools.combinations(qs,2): #create all unordered paired combinations in the qs
+    #create all unordered paired combinations in the qs
+    for a,b in itertools.combinations(qs,2): 
         equal,pe,similar,ps = compare_instances(a,b)
         line = [a,b,equal,pe,similar,ps]
         if equal: equal_list.append(line)
@@ -104,7 +110,8 @@ def compare_queryset(qs):
 def instance2names(instance):
     # s = str(type(instance)).split("'")[-2]
     # app_name,_,model_name = s.split('.')
-    app_name,model_name = instance._meta.app_label, instance._meta.model_name.capitalize()
+    app_name= instance._meta.app_label
+    model_name = instance._meta.model_name.capitalize()
     if model_name == 'Picturestory': model_name = 'PictureStory'
     return app_name, model_name
 
@@ -149,6 +156,54 @@ def simple_copy(instance, commit = True,add_copy_suffix = True):
     return copy
 
 
+def model_text_field_names(model, include_char_fields = True,
+    exclude_fields = True):
+    if exclude_fields == True: 
+        exclude_names = 'link,field,loc_ids,comments,filename'.split(',')
+    else: exclude_names= []
+    output = []
+    for field in model._meta.fields:
+        name = field.name
+        if len([exclude for exclude in exclude_names if exclude in name])>0:
+            continue
+        if isinstance(field,models.CharField) and include_char_fields:
+            output.append(field.name)
+        if isinstance(field,models.TextField):
+            output.append(field.name)
+    return output
+
+def make_text_field_name_dict(include_char_fields = True, 
+    exclude_fields = True):
+    models = get_all_models()
+    d = {}
+    for model in models:
+        field_names = model_text_field_names(model,include_char_fields,
+            exclude_fields)
+        d[model._meta.model_name] = field_names
+    return d
+
+def instance_to_text(instance):
+    field_names = model_text_field_names(instance._meta.model)
+    output = []
+    for name in field_names:
+        text = getattr(instance,name)
+        if text:output.append(text)
+    return ' '.join(output)
+    
+def all_instances_to_text():
+    instances = get_all_instances()
+    output = []
+    for instance in instances:
+        text = instance_to_text(instance)
+        if text:output.append(text)
+    return ' '.join(output)
+        
+        
+            
+        
+        
+
+
 def model_image_field_names(model, only_image_fields = False):
     fields = model._meta.get_fields()
     file_field_names = []
@@ -158,6 +213,7 @@ def model_image_field_names(model, only_image_fields = False):
             file_field_names.append(field.name)
             temp = field
     return file_field_names
+
         
 def make_models_image_file_dict(only_image_fields=False):
     '''
@@ -216,7 +272,8 @@ def get_all_flagged_instances(exclude_persons = True):
         
 
 def instance2image_urls(instance):
-    '''returns all urls of an instance to all attached images (i.e. ImageFields).'''
+    '''returns all urls of an instance to all attached images 
+    (i.e. ImageFields).'''
     o = []
     for field in instance._meta.fields:
         if type(field) == ImageField:
@@ -226,7 +283,8 @@ def instance2image_urls(instance):
     return ','.join(o)
 
 def instance2file_urls(instance):
-    '''returns all urls of an instance to all attached images (i.e. ImageFields).'''
+    '''returns all urls of an instance to all attached images 
+    (i.e. ImageFields).'''
     o = []
     for field in instance._meta.fields:
         if type(field) == FileField:
@@ -281,7 +339,8 @@ def instances2country_counts(instances):
     return count_d, instances_d
 
 def instances2keyword_category_counts(instances):
-    '''names and counts of category keywords that are linked to a list of instance.'''
+    '''names and counts of category keywords that are linked to a list of 
+    instance.'''
     count_d = {}
     instances_d = {}
     for instance in instances:
@@ -295,7 +354,8 @@ def instances2model_counts(instances):
     '''names and counts of models that are linked to a list of instance.'''
     count_d = {}
     instances_d = {}
-    map_names = {'Recordedspeech':'Recorded speech','Memorialsite':'Memorial site'}
+    map_names = {'Recordedspeech':'Recorded speech',
+        'Memorialsite':'Memorial site'}
     map_names.update({'PictureStory':'Picture story'})
     for instance in instances:
         name = instance2name(instance)
@@ -354,7 +414,8 @@ def instance2keyword_categories(instance):
     return ','.join(o)
         
 def instance2keyword_detail(instance):
-    '''return all non category keywords linked to a given instance in csv format.'''
+    '''return all non category keywords linked to a given instance in 
+    csv format.'''
     kws = instance.keywords.all()
     o = []
     for kw in kws:
@@ -409,11 +470,12 @@ def check_license_and_reference_field(instance,
     check_type = 'reference & license'):
     field_names = 'license_image,license_thumbnail,reference'.split(',')
     if check_type == 'reference': field_names = ['reference']
-    elif check_type == 'license': field_names.pop(field_names.index('reference'))
+    elif check_type == 'license': 
+        field_names.pop(field_names.index('reference'))
     values = []
     for name in field_names:
         if not hasattr(instance,name): continue
-        if name == 'license_thumbnail' and not instance_has_thumbnail(instance): 
+        if name=='license_thumbnail' and not instance_has_thumbnail(instance): 
             continue
         if name == 'license_image' and not instance_has_image_file(instance):
             continue
