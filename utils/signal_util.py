@@ -106,8 +106,12 @@ def make_file_backup_postsave_receiver(app_name,model_name):
 		print('-'*90)
 
 mr = settings.MEDIA_ROOT
-
-if not mr.startswith('/Users/u050158/') and not mr.startswith('/home/mb/'):
+exclude_from_backup = ['/Users/martijn.bentum/','/home/mb/']
+do_backup = True
+for path in exclude_from_backup:
+    if mr.startswith(path): do_backup = False
+    
+if do_backup:
 	d = make_models_image_file_dict()
 	for k in d:
 		print('setting',k)
