@@ -18,6 +18,10 @@ dchar= {'widget':forms.TextInput(**dattr),'required':False}
 dtext= {'widget':forms.Textarea(
 	attrs={'style':'width:100%; font-size:80%','rows':6}),'required':False}
 
+class NewsearchForm(forms.Form):
+    query = forms.CharField(initial = 'country', required = False)
+    
+
 class ProtocolForm(ModelForm):
 	model_name= forms.CharField(**dchar)
 	field_name= forms.CharField(**dchar)
