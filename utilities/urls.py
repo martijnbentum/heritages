@@ -20,6 +20,7 @@ urlpatterns = [
 	path('list_view_general/<str:model_name>/<str:app_name>/<str:field_names>/',
 		views.list_view,name='list_view_general'),
 	path('sidebar/',views.sidebar,name='sidebar'),
+	path('new_search',views.new_search,name='new_search'),
 	path('search_view',views.search_view,name='search_view'),
 	path('search_view/<str:view_type>/',
 		views.search_view,name='search_view'),
