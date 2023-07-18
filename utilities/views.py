@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.core import serializers
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.forms.models import model_to_dict
-from django.forms import modelformset_factory
+from django.forms import modelformset_factory, Form
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from utils import view_util, help_util, image_util, map_util
@@ -16,10 +16,11 @@ from utils.model_util import get_instances_without_license_or_reference
 from utils.get_totals import get_totals, get_countries, get_types
 from utils.get_totals import get_gender
 from utils.search_view_helper import SearchView, UserSearch
+from utils import query_hints
 # from .models import copy_complete
 from utilities.search import Search, SearchAll
 from .models import Protocol
-from .forms import ProtocolForm
+from .forms import ProtocolForm, NewsearchForm
 from .forms import AddInfoForm
 import os
 import time
@@ -70,6 +71,20 @@ def sidebar(request):
     var = {'page_name':'sidebar'}
     return render(request,'utilities/sidebar.html',var)
 
+@permission_required('utilities.view_generic')
+def new_search(request):
+    print('new search')
+    if request.method == 'POST':
+        form = NewsearchForm(request.POST)
+        if form.is_valid():
+            print('form is valid: ',form.cleaned_data,type(form))
+        else:
+            print('not valid: ', form, request.POST)
+    else:
+        form = NewsearchForm()
+    query_terms = query_hints.get_queryterms()
+    var = {'form':form, 'query_terms':query_terms}
+    return render(request,'utilities/new_search.html',var)
 
 @permission_required('utilities.view_generic')
 def search_view(request, view_type = '', query = ' ', combine = ' ',
