@@ -19,7 +19,7 @@ dtext= {'widget':forms.Textarea(
 	attrs={'style':'width:100%; font-size:80%','rows':6}),'required':False}
 
 class NewsearchForm(forms.Form):
-    query = forms.CharField(initial = 'country', required = False)
+    query = forms.CharField(initial = '', required = False)
     
 
 class ProtocolForm(ModelForm):
