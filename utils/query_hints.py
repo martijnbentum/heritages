@@ -73,5 +73,10 @@ def update_queryterms(terms):
         else: added += 1
     print('already_present:',already_present,'added:',added)
     
+def get_queryterms():
+    qh = Queryterm.objects.all()
+    terms = [x.term for x in qh]
+    return sorted(terms)
+
             
     
