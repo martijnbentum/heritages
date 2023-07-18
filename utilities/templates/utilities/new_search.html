@@ -1,0 +1,30 @@
+{% extends "utilities/base.html" %}
+{%load static %}
+{% block head %}
+	{{form.media.css}}
+	<title>{{page_name}}</title>
+
+    <link rel="stylesheet" href="{% static 'utilities/new_search.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+{{query_terms|json_script:"query-terms"}}
+
+<h2>search hints</h2>
+<form autocomplete="off" method="post" 
+    enctype="multipart/form-data" id="form">
+	{% csrf_token %}
+    <div class="autocomplete" style="width:300px;">
+        {{form.query}}
+    </div>
+    <input type="submit">
+</form>
+
+{{ form.query.id}}
+
+
+{{form.media.js}}
+
+<script src="{% static 'utilities/new_search.js' %}"></script>
+{% endblock %}
