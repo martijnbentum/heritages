@@ -19,7 +19,7 @@ from utils.search_view_helper import SearchView, UserSearch
 from utils import query_hints
 # from .models import copy_complete
 from utilities.search import Search, SearchAll
-from .models import Protocol
+from .models import Protocol, Visitedinstance
 from .forms import ProtocolForm, NewsearchForm
 from .forms import AddInfoForm
 import os
@@ -177,7 +177,9 @@ def edit_model(request, name_space, model_name, app_name,
                 app_name,instance_id)
         if button == 'saveas' and instance: 
             instance = copy_complete(instance)
-        if button == 'skip': return show_edit_screen(request)
+        if button == 'skip': 
+            _add_visit(request,instance)
+            return show_edit_screen(request)
         form = modelform(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             print('form is valid: ',form.cleaned_data,type(form))
@@ -192,6 +194,7 @@ def edit_model(request, name_space, model_name, app_name,
                         m =app_name+':add_'+model_name.lower()
                         return HttpResponseRedirect(reverse(m))
                     if parameter_focus == 'add_info': 
+                        _add_visit(request,instance)
                         return show_edit_screen(request)
                     return HttpResponseRedirect(reverse(
                         app_name+':edit_'+model_name.lower(), 
@@ -367,6 +370,7 @@ def show_edit_screen(request):
     index = request.session.get('add_info_index')
     incomplete_instances = get_instances_without_license_or_reference(
         add_info_form = d)
+    incomplete_instances = _exclude_visited(incomplete_instances,request)
     if index >= len(incomplete_instances): return add_info(request)
     instance = incomplete_instances[index]
     request.session['add_info_index'] = index + 1
@@ -378,7 +382,10 @@ def show_edit_screen(request):
 def add_info(request):
     n_all_instances = len(get_all_instances())
     n_incomplete_instances=len(get_instances_without_license_or_reference())
+    n_instances_visited=_get_nvisited_instances(request.user)
     form = None
+    print(request.user,'user')
+        
     if request.method == 'POST':
         form = AddInfoForm(request.POST)
         if form.is_valid(): 
@@ -389,6 +396,37 @@ def add_info(request):
             return show_edit_screen(request)
     if not form: form = AddInfoForm()
     var = {'form':form,'n_all_instances':n_all_instances,
-        'n_incomplete_instances':n_incomplete_instances}
+        'n_incomplete_instances':n_incomplete_instances,
+        'n_instances_visited':n_instances_visited}
     return render(request, 'utilities/add_info.html', var)
 
+def _get_nvisited_instances(user):
+    return Visitedinstance.objects.filter(user= user).count()
+
+def _exclude_visited(instances, request):
+    if not request.session['add_info_form']['skip_visited']: 
+        print('not skipping visited, returning all instances')
+        return instances
+    print('skipping visited, ninstances before',len(instances))
+    visited = Visitedinstance.objects.filter(user = request.user)
+    instance_ids = [x.instance_identifier for x in visited]
+    output = []
+    for instance in instances:
+        if instance.identifier in instance_ids: continue
+        output.append(instance)
+    print('skipping visited, ninstances after',len(output))
+    return output
+
+def _add_visit(request,instance):
+    print('instance',instance, 'add_info', 'add_visit')
+    try: visited = Visitedinstance.objects.get(user = request.user, 
+        instance_identifier = instance.identifier)
+    except Visitedinstance.DoesNotExist:
+        visited = Visitedinstance(user = request.user, 
+            instance_identifier = instance.identifier)
+        visited.save()
+    print(visited,'visited')
+
+    
+
+    
