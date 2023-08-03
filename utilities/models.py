@@ -25,6 +25,17 @@ class SimpleModel(models.Model):
 class generic(models.Model):
     pass
 
+class Visitedinstance(models.Model, info):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    instance_identifier = models.CharField(max_length = 300, default = '')
+
+    def __str__(self):
+        return self.user.__str__() + ' ' + self.instance_identifier
+
+    class Meta:
+        unique_together = [['user', 'instance_identifier']]
+
+
 class Queryterm(models.Model, info):
     term = models.CharField(max_length = 1000, unique = True)
 
