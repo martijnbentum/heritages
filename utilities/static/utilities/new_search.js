@@ -1,4 +1,5 @@
 var terms= JSON.parse(document.getElementById('query-terms').textContent);
+console.log(terms);
 
 function autocomplete(inp, arr) {
   /*the autocomplete function takes two arguments,

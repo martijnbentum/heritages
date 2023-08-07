@@ -15,8 +15,11 @@
 {{us.dict|json_script:"usjs"}}
 {{date_range|json_script:"date_range"}}
 {{filter_active_dict|json_script:"filter-active-dict"}}
-{% csrf_token %}
+{{query_terms|json_script:"query-terms"}}
+
+
 <form id="query_form">
+{% csrf_token %}
 <div class="d-flex">
 	<div id="mySidebar" class="sidebar bg-light">
 		<a 
