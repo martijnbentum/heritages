@@ -21,12 +21,12 @@ class SearchView:
                         query in the request
         '''
         self.start = time.time()
+        self.query = query
         self.request = request
-        self.make_query_from(request)
+        self.make_query_form(request)
         # self.user_search = get_user_search(request.session.session_key)
         self.user_search = UserSearch(request)
         self.view_type = view_type
-        self.query = query
         self.combine = combine
         self.exact = exact
         self.direction = direction
@@ -43,7 +43,7 @@ class SearchView:
         self.make_var()
         if verbose:print('var',delta(self.start))
 
-    def make_query_from(self,request):
+    def make_query_form(self,request):
         '''Create a form to handle user query and query hints.'''
         if request.method == 'POST':
             self.query_form = NewsearchForm(request.POST)
@@ -228,6 +228,7 @@ class UserSearch:
         self.dict['index'] = self.index
         self.dict['number'] = self.number
         self.dict['nactive_ids'] = self.nactive_ids
+        if 'query' not in self.dict.keys(): self.query = ' '
         
 
     def wait_for_data(self):
