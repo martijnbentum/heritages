@@ -65,7 +65,7 @@ function clear_filters() {
 }
 
 function clear_all() {
-	var query = document.getElementById('exampleFormControlInput1');
+	var query = document.getElementById('id_query');
     console.log(query)
     if (query.value !== ' ') {
         query.value = ''
@@ -525,7 +525,7 @@ function get_sorting_category() {
 }
 
 function get_query() {
-	var query = document.getElementById('exampleFormControlInput1');
+	var query = document.getElementById('id_query');
 	return query.value;
 }
 
