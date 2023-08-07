@@ -1,7 +1,9 @@
 from utilities.search import SearchAll
+from utilities.forms import NewsearchForm
 # from utilities.models import UserSearch, get_user_search
 from utils.general import remove_keys_from_dict
 from utils.model_util import identifier2instance
+from utils import query_hints
 import copy
 import json
 import time
@@ -20,6 +22,7 @@ class SearchView:
         '''
         self.start = time.time()
         self.request = request
+        self.make_query_from(request)
         # self.user_search = get_user_search(request.session.session_key)
         self.user_search = UserSearch(request)
         self.view_type = view_type
@@ -39,6 +42,13 @@ class SearchView:
         if verbose:print('options',delta(self.start))
         self.make_var()
         if verbose:print('var',delta(self.start))
+
+    def make_query_from(self,request):
+        '''Create a form to handle user query and query hints.'''
+        if request.method == 'POST':
+            self.query_form = NewsearchForm(request.POST)
+        else:
+            self.query_form = NewsearchForm()
 
     def make_search(self):
         self.search = SearchAll(self.request, query = self.query,
@@ -113,6 +123,8 @@ class SearchView:
             'earliest_date':self.earliest_date,
             'latest_date':self.latest_date,
             'id_year_range_dict':self.id_year_range_dict,
+            'query_terms':query_hints.get_queryterms(),
+            'query_form':self.query_form,
         }
 
     @property
