@@ -4,6 +4,7 @@
 	  integrity=""
 		crossorigin=""/>
 <link rel="stylesheet" href="{% static 'utilities/sidebar.css' %}" />
+<link rel="stylesheet" href="{% static 'utilities/new_search.css' %}" />
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js">
 </script>
@@ -18,8 +19,10 @@
 {{query_terms|json_script:"query-terms"}}
 
 
-<form id="query_form">
+<form id="query_form" autocomplete="off">
 {% csrf_token %}
+
+
 <div class="d-flex">
 	<div id="mySidebar" class="sidebar bg-light">
 		<a 
@@ -190,11 +193,14 @@
 
 	<div class="col-11">
 		<div class="d-flex">
-			<input id="exampleFormControlInput1" type="text" 
-				name="query" placeholder=Search
-				class="col-9 mb-1" 
+
+            <div class="autocomplete col-9 mb-1"
 				style="border-width:0;border-bottom-width:1px;" 
-				value="{{query}}">
+                id="exampleFormControlInput1" 
+                 >
+                {{query_form.query}}
+            </div>
+
 			<button id= 'search_button' class="text-dark btn btn-link" type="submit"
 				onclick="set_new_query()"
 				>
@@ -255,6 +261,7 @@
 </form>
 
 <script src="{% static 'utilities/sidebar.js' %}"></script>
+<script src="{% static 'utilities/new_search.js' %}"></script>
 
 
 
