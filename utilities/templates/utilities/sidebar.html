@@ -19,7 +19,7 @@
 {{query_terms|json_script:"query-terms"}}
 
 
-<form id="query_form" autocomplete="off">
+<form id="query_form" autocomplete="off" method="post">
 {% csrf_token %}
 
 
@@ -198,7 +198,7 @@
 				style="border-width:0;border-bottom-width:1px;" 
                 id="exampleFormControlInput1" 
                  >
-                {{query_form.query}}
+                {{new_search_form.query}}
             </div>
 
 			<button id= 'search_button' class="text-dark btn btn-link" type="submit"
