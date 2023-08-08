@@ -24,6 +24,8 @@ var ignore = 'false';
 var century_set_date_slider = false;
 var current_active_ids= id_dict['all']
 var clicked_instance = '';
+var user_change_year_slider = false;
+
 console.log(us)
 console.log(view_type)
 	
@@ -100,6 +102,7 @@ function send_data() {
 	output['filters']=selected_filters
 	output['date_start'] = start;
 	output['date_end'] = end;
+    output['user_change_year_slider'] = user_change_year_slider;
 	output['query'] = get_query();
 	output['time'] = Date.now()/1000;
 	output['sorting_direction'] = get_sorting_direction();
@@ -300,7 +303,9 @@ function get_ids_from_selected_filters_in_category(category) {
 		var [category_name,filter_name] = name.split(',');
 		if (category != category_name) { continue; }
 		var identifiers = id_dict[category_name][filter_name];
-		category_ids.push(...identifiers);
+        if (identifiers) {
+            category_ids.push(...identifiers);
+        }
 	}
 	return category_ids	
 }
@@ -556,14 +561,16 @@ window.addEventListener('DOMContentLoaded', function () {
     }
 
 	if (us && us.date_start && us.date_end) {
-		console.log(us.date_start, us.date_end)
-		if (us.date_start != start || us.date_end != end) {
-			console.log(us.date_start,start, us.date_end,end)
-			set_year_slider(us.date_start,us.date_end)
-			set_century_filter_to_inactive();
-			update_count_dict();
-			update_sidebar();
-		}
+		console.log(us.date_start, us.date_end, us)
+        if (us.user_change_year_slider) {
+            if (us.date_start != start || us.date_end != end) {
+                console.log(us.date_start,start, us.date_end,end)
+                set_year_slider(us.date_start,us.date_end)
+                set_century_filter_to_inactive();
+                update_count_dict();
+                update_sidebar();
+            }
+        }
 	}
 })
 
@@ -664,6 +671,7 @@ multi_slider.noUiSlider.on('set',handleYearSlider);
 function handleYearSliderValues(values,handle) {
 	//set start and end values based on the year slider, 
 	console.log('setting values')
+    user_change_year_slider = true;
 	start= values[0];
 	end= values[1];
 	dateValues[handle].innerHTML = values[handle];
