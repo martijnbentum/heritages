@@ -23,9 +23,9 @@ class SearchView:
         self.start = time.time()
         self.query = query
         self.request = request
-        self.make_query_form(request)
         # self.user_search = get_user_search(request.session.session_key)
         self.user_search = UserSearch(request)
+        self.make_new_search_form(request)
         self.view_type = view_type
         self.combine = combine
         self.exact = exact
@@ -43,15 +43,17 @@ class SearchView:
         self.make_var()
         if verbose:print('var',delta(self.start))
 
-    def make_query_form(self,request):
+    def make_new_search_form(self,request):
         '''Create a form to handle user query and query hints.'''
         if request.method == 'POST':
-            self.query_form = NewsearchForm(request.POST)
+            self.new_search_form = NewsearchForm(request.POST)
         else:
-            self.query_form = NewsearchForm()
+            initial = {'query': self.user_search.query}
+            print(initial,'initial')
+            self.new_search_form = NewsearchForm(initial = initial)
 
     def make_search(self):
-        self.search = SearchAll(self.request, query = self.query,
+        self.search = SearchAll(self.request, query = self.user_search.query,
             direction = self.direction,special_terms = self.special_terms,
             sorting_option = self.sorting_option)
         self.instances= self.search.filter()
@@ -124,7 +126,7 @@ class SearchView:
             'latest_date':self.latest_date,
             'id_year_range_dict':self.id_year_range_dict,
             'query_terms':query_hints.get_queryterms(),
-            'query_form':self.query_form,
+            'new_search_form':self.new_search_form,
         }
 
     @property
@@ -331,6 +333,18 @@ def _get_all_non_dict_values_from_dict(d, values = [], unique = True):
     if unique: values = list(set(values))
     return values
 
+class dummy:
+    '''empty dummy object'''
+    pass
 
+def make_dummy_request_for_user_search(session_key = '',username = 'mb'):
+    '''create a dummy request object for UserSearch to load user search data.'''
+    r = dummy()
+    r.session = dummy()
+    r.user= dummy()
+    r.user.username = username
+    r.session.session_key = session_key
+    r.META = {}
+    return r
 
 
