@@ -48,7 +48,10 @@ class SearchView:
         if request.method == 'POST':
             self.new_search_form = NewsearchForm(request.POST)
         else:
-            initial = {'query': self.user_search.query}
+            if hasattr(self.user_search,'query'): 
+                initial = {'query': self.user_search.query}
+            else:
+                initial = {'query': ' '}
             print(initial,'initial')
             self.new_search_form = NewsearchForm(initial = initial)
 
@@ -177,6 +180,7 @@ class UserSearch:
     corresponding to the search
     '''
     def __init__(self,request = None, user = ''):
+        self.query = ' '
         self.request = request
         self.wait_for_ready = False
         if request and 'HTTP_REFERER' in self.request.META.keys(): 
@@ -230,7 +234,6 @@ class UserSearch:
         self.dict['index'] = self.index
         self.dict['number'] = self.number
         self.dict['nactive_ids'] = self.nactive_ids
-        if 'query' not in self.dict.keys(): self.query = ' '
         
 
     def wait_for_data(self):
