@@ -130,6 +130,12 @@
 			href = "{% url 'misc:add_license' 'inline'%}"
 			role="button"><i class="fa fa-plus"></i></a></td>
 	</tr>
+    {% if 'Edit' in page_name %}
+        <tr class="d-flex">
+            <td class="col-2">Identifier </td>
+            <td class="col-9">{{form.instance.identifier}}</td>
+        </tr>
+    {% endif %}
 
 	</table>
 		<div class="col-md-12 d-flex">

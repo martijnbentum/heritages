@@ -16,7 +16,6 @@
 			{% include 'utilities/list_button.html' %}
 		</div>
 
-
 			{% include 'utilities/protocol_view_link.html' %}
 			{% include 'utilities/detail_view_link.html' %}
 			{% include 'utilities/flag.html' %}
@@ -69,6 +68,12 @@
 			role="button"><i class="fa fa-plus"></i></a></td>
 	</tr>
 	{% include 'utilities/add_source.html' %}
+    {% if 'Edit' in page_name %}
+        <tr class="d-flex">
+            <td class="col-2">Identifier </td>
+            <td class="col-9">{{form.instance.identifier}}</td>
+        </tr>
+    {% endif %}
 	</table>
 		<div class="col-md-12 d-flex">
 			<div class="col-2"></div>
