@@ -49,9 +49,11 @@ class SearchView:
             self.new_search_form = NewsearchForm(request.POST)
         else:
             if hasattr(self.user_search,'query'): 
+                if self.user_search.query == ' ':
+                    self.user_search.query = ''
                 initial = {'query': self.user_search.query}
             else:
-                initial = {'query': ' '}
+                initial = {'query': ''}
             print(initial,'initial')
             self.new_search_form = NewsearchForm(initial = initial)
 
