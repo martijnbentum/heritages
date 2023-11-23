@@ -104,6 +104,7 @@ class SearchView:
         self.date_range = {'earliest_date':earliest_date,'latest_date':latest_date}
 
     def make_var(self):
+        if self.query == ' ': self.query = ''
         self.var = {'page_name':self.view_type.replace('_',' '),
             'view_type':self.view_type,
             'instances':self.instances,
