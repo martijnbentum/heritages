@@ -233,8 +233,9 @@ def make_models_image_file_dict(only_image_fields=False):
             d[app_name, model_name] = file_field_names
     return d
 
-def get_all_models(model_names=[]):
+def get_all_models(model_names=[], add_famine = False):
     if not model_names: model_names = all_model_names
+    if add_famine: model_names.append('Famine')
     model_names.sort()
     model_names = [n.lower() for n in model_names]
     all_models = apps.get_models()
