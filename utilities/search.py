@@ -36,8 +36,8 @@ class SearchAll:
         enforce_per...  only show persons that are flagged
         '''
                             
-        # if not models: models = get_all_models(add_famine = True)
-        if not models: models = get_all_models()
+        if not models: models = get_all_models(add_famine = True)
+        # if not models: models = get_all_models()
         self.models = models
         self.query =query
         self.special_terms = special_terms
@@ -87,6 +87,8 @@ class SearchAll:
             if self.sorting_option == 'location': name = 'country_field'
             if self.sorting_option == 'chronological': name = 'date_field'
             if self.sorting_option == 'famine': name = 'famine_names'
+            print(model_name,name)
+            value = list(set(list(value))) # avoid duplicate instances
             instances.extend([[i, getattr(i,name)] for i in value])
         if self.sorting_option in ['location','chronological','famine']:
             instances = [x for x in instances if x[1]]
