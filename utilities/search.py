@@ -182,6 +182,20 @@ class SearchAll:
         return self._famine_counts
 
     @property
+    def famine_name_to_detail_view(self):
+        model = apps.get_model('misc','Famine')
+        if hasattr(self,'_famine_name_to_detail_view'):
+            return self._famine_name_to_detail_view
+        temp = {}
+        for famine_name in self.famine_counts.keys():
+            try:famine = model.objects.get(names__name = famine_name)
+            except: famine = None
+            if not famine: temp[famine_name] = '#'
+            temp[famine_name] = [famine.detail_url,  famine.pk]
+        self._famine_name_to_detail_view = temp
+        return self._famine_name_to_detail_view
+
+    @property
     def rating_counts(self):
         if not hasattr(self,'_rating_counts'):self.rating_filter()
         return self._rating_counts
