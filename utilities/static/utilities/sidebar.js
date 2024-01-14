@@ -166,6 +166,10 @@ function update_sidebar() {
 		var filter_btn= document.getElementById(key)
 		if (!filter_btn) {continue;}
 		var [category_name,filter_name] = key.split(',');
+        var info_button = false;
+        if (category_name == 'famine') {
+            info_button = document.getElementById(key+'-info');
+        }
 		var updated = false
 		var display_active = count_dict[key]['display_active']
 		var active = count_dict[key]['active']
@@ -178,12 +182,14 @@ function update_sidebar() {
 					updated = true;
 					r = '(0)';
 					filter_btn.style.display='none';
+                    if (info_button) {info_button.style.display='none';}
 			}
 			else { 
 				r = '('+display_active+')';
 				filter_btn.style.color='black'; 
 				updated = true;
 				filter_btn.style.display='';
+                if (info_button) {info_button.style.display='';}
 			}
 			filter_btn.innerText= t.replace(/\(.*\)/,r);
 		}
@@ -208,8 +214,14 @@ function update_sidebar() {
 			//this should take into account filters from other categories
 			r = '('+filtered_inactive+')';
 			filter_btn.style.color='#bec4cf';
-			if (filtered_inactive == 0) {filter_btn.style.display='none';}
-			else {filter_btn.style.display='';}
+			if (filtered_inactive == 0) {
+                filter_btn.style.display='none';
+                if (info_button) {info_button.style.display='none';}
+            } else {
+                filter_btn.style.display='';
+                if (info_button) {info_button.style.display='';}
+            }
+			
 		}
 		filter_btn.innerText= t.replace(/\(.*\)/,r);
 	}
