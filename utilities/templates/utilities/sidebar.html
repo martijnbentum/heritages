@@ -77,6 +77,7 @@
 		<div id = 'famines-filters'>
 			<hr>
 			{% for key, value in famine_counts.items %}
+                <div class="d-flex">
 				<a 
 					class='indent'
 					href="javascript:void(0)"
@@ -84,6 +85,17 @@
 					onclick="toggle_filter('famine,{{key}}')">
 						{{key}} <small>({{value}})</small>
 				</a>
+                <a 
+                    {% for ik, iv in famine_name_to_detail_view.items %}
+                        {% if ik == key %}
+                            href='{% url iv.0 iv.1%}' 
+                        {% endif %}
+                    {%endfor%}
+                    class="text-right"
+					id='famine,{{key}}-info'>
+                    <i class="fas fa-info-circle" aria-hidden="true"></i>
+                </a>
+                </div>
 			{%endfor%}
 		</div>
 		<br>
