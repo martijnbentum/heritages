@@ -76,12 +76,14 @@ class SearchAll:
         if verbose:self.searches[0].n
         return self._instances
 
+
     def _order(self):
         instances = []
         for key, value in self._instances.items():
             app_name, model_name = key
             if self.sorting_option == 'title - name':
                 name = get_foreign_keydict()[model_name.lower()]
+                if model_name == 'Famine': name = 'names_str'
             if self.sorting_option == 'location': name = 'country_field'
             if self.sorting_option == 'chronological': name = 'date_field'
             if self.sorting_option == 'famine': name = 'famine_names'
