@@ -350,6 +350,8 @@ def make_dummy_request_for_user_search(session_key = '',username = 'mb'):
     r.user= dummy()
     r.user.username = username
     r.session.session_key = session_key
+    r.method = ''
+    r.GET = {}
     r.META = {}
     return r
 
