@@ -90,6 +90,9 @@ class Famine(models.Model, info):
     thumbnail = models.ImageField(upload_to='media/',blank=True,null=True)
     country_field = models.CharField(max_length=1000,default='')
     loc_ids = models.CharField(max_length=1000,default='')
+    #dummy fields to show famine instance in search view
+    year = models.IntegerField(blank=True,null=True,default=None)
+    keyword_category_field= models.CharField(max_length=1,default='')
 
     def __str__(self):
         return self.names_str
@@ -112,6 +115,7 @@ class Famine(models.Model, info):
         if ids: self.loc_ids = ','.join(map(str,ids))
     
 
+    @property
     def identifier(self):
         return self._meta.app_label+'_'+self._meta.model_name+'_'+str( self.pk )
 
