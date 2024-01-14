@@ -1,3 +1,4 @@
+import copy
 from django.apps import apps
 from django.db import models
 from django.db.models.fields.files import ImageFileDescriptor
@@ -234,7 +235,7 @@ def make_models_image_file_dict(only_image_fields=False):
     return d
 
 def get_all_models(model_names=[], add_famine = False):
-    if not model_names: model_names = all_model_names
+    if not model_names: model_names=copy.deepcopy( all_model_names )
     if add_famine: model_names.append('Famine')
     model_names.sort()
     model_names = [n.lower() for n in model_names]
@@ -382,7 +383,8 @@ def instances2century_counts(instances):
     instances_d = {}
     century_dict = make_century_dict()
     for instance in instances:
-        if not instance.date_field: continue
+        if not hasattr(instance,'date_field') or not instance.date_field: 
+            continue
         name = century_dict[int(instance.date_field.year/100)]
         _add_to_count_instance_dict(count_d,instances_d,[name],instance)
     count_d = sort_dict_on_keys(count_d)
@@ -392,7 +394,7 @@ def instances2famine_counts(instances):
     count_d = {}
     instances_d = {}
     for instance in instances:
-        if instance.famine_field:
+        if hasattr(instance,'famine_field') and instance.famine_field:
             famines = instance.famine_field.split(',')
             _add_to_count_instance_dict(count_d,instances_d,famines,instance)
     count_d = sort_count_dict(count_d)
