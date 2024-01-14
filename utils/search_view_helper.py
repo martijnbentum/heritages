@@ -124,6 +124,7 @@ class SearchView:
             'model_counts':self.search.model_counts,
             'century_counts':self.search.century_counts,
             'famine_counts':self.search.famine_counts,
+            'famine_name_to_detail_view':self.search.famine_name_to_detail_view,
             'id_dict':self.id_dict,
             'filter_active_dict':self.filter_active_dict,
             'us':self.user_search,
