@@ -61,6 +61,7 @@ hr {
 }
 
 
+
 .sidebar a {
 	text-decoration: none;
 	color: #585e66;
@@ -121,6 +122,10 @@ hr {
   margin-bottom: 10px;
   margin-left:15px;
   margin-right:10px;
+}
+
+.text-right {
+    margin-left: auto;
 }
 
 .right-align {
