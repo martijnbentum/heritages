@@ -373,10 +373,11 @@ def show_edit_screen(request):
         add_info_form = d)
     incomplete_instances = _exclude_visited(incomplete_instances,request)
     print('incomplete instances',len(incomplete_instances),'index',index)
-    if incomplete_instances == 0: 
+    print(request.POST,'post')
+    if len(incomplete_instances) == 0 or index >= len(incomplete_instances): 
         request.method = 'GET'
+        print(request.method,'method',request.user,'user') 
         return add_info(request)
-    if index >= len(incomplete_instances): return add_info(request)
     instance = incomplete_instances[index]
     request.session['add_info_index'] = index + 1
     var = {'pk':instance.pk, 'focus':'add_info'}
@@ -390,6 +391,7 @@ def add_info(request):
     n_instances_visited=_get_nvisited_instances(request.user)
     form = None
     print(request.user,'user')
+    print(request.method,'method')
         
     if request.method == 'POST':
         form = AddInfoForm(request.POST)
