@@ -372,7 +372,8 @@ def show_edit_screen(request):
     incomplete_instances = get_instances_without_license_or_reference(
         add_info_form = d)
     incomplete_instances = _exclude_visited(incomplete_instances,request)
-    if index >= len(incomplete_instances): return add_info(request)
+    print('incomplete instances',len(incomplete_instances),'index',index)
+   if index >= len(incomplete_instances): return add_info(request)
     instance = incomplete_instances[index]
     request.session['add_info_index'] = index + 1
     var = {'pk':instance.pk, 'focus':'add_info'}
