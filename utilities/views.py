@@ -373,7 +373,9 @@ def show_edit_screen(request):
         add_info_form = d)
     incomplete_instances = _exclude_visited(incomplete_instances,request)
     print('incomplete instances',len(incomplete_instances),'index',index)
-    if incomplete_instances == 0: return add_info(request)
+    if incomplete_instances == 0: 
+        request.method = 'GET'
+        return add_info(request)
     if index >= len(incomplete_instances): return add_info(request)
     instance = incomplete_instances[index]
     request.session['add_info_index'] = index + 1
