@@ -107,6 +107,8 @@ def compare_queryset(qs):
         complete_list.append(line)
     return equal_list, similar_list, complete_list
         
+def instance2model(instance):
+    return instance._meta.model
 
 def instance2names(instance):
     # s = str(type(instance)).split("'")[-2]
