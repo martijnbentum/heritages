@@ -155,6 +155,12 @@ class Person(models.Model, info):
         return self._meta.app_label + ':edit_' + self._meta.model_name 
 
     @property
+    def edit_url_complete(self):
+        url = 'https://heritagesofhunger.cls.ru.nl/persons/edit_' 
+        url += self._meta.model_name + '/' + str(self.pk)
+        return url
+
+    @property
     def detail_url(self):
         return self._meta.app_label+':detail_'+self._meta.model_name+'_view' 
     
