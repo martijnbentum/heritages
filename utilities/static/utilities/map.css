@@ -1,0 +1,25 @@
+.map-height {
+    height: 75vh;
+}
+
+
+.grey-background {
+    background-color: #ECEFF1;
+}
+
+.left-side {
+    width: 70%;
+    float: left;
+}
+
+.right-side {
+    width: 30%;
+    float: right;
+    overflow-y: auto;
+}
+
+.city-label {
+    text-align: center;
+    margin: 0px;
+    padding: 0px;
+}
