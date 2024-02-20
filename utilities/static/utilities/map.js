@@ -22,6 +22,38 @@ var last_activated = false;
 var last_deactivated = false;
 var entries = [];
 
+function show_info(index) {
+    // shows general information about a location
+    var label = document.getElementById('city_label');
+    if (clustered_marker_indices.includes(index)) {
+        // multiple locations are clustered together
+        var elements = clustered_marker_dict[index].elements;
+        var html = ''
+        for (let i=0; i < elements.length; i++) {
+            info = d[elements[i].options.index]; 
+            html += info.name
+            html += '<small> (' + info.count + ')</small>'
+            if (html.length > 140) {
+                html += '<small> [...] + ' + (elements.length -1 -i)
+                html += ' locations</small>'
+                break;
+            }
+            if ( i != elements.length -1) {
+                html += ', '
+            }
+        }
+    } else {
+        var info = d[index];
+        var html = info.name
+        html += '<small> (' + info.count + ' entries) ';
+        for (let x of info.model_names) {
+            if (x) { html += x.toLowerCase() + ' ' }
+        }
+        html += '</small>'
+    }
+    label.innerHTML = html;
+}
+
 function on_marker_hover(e) {
 	//show info and change color of an element on the map when hovered
 	deactivate_marker(last_activated);
