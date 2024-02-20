@@ -2,7 +2,7 @@
 
 {% load static %}
 {% block head %}
-	<link rel="stylesheet" href="{% static 'utilities/search_tile.css' %}" />
+	<link rel="stylesheet" href="{% static 'utilities/map.css' %}" />
     <link 
         rel="stylesheet" 
         href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" 
@@ -13,9 +13,6 @@
         integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" 
         crossorigin="">
     </script>
-    <style>
-        #mapid {height: 780px;
-    </style>
 {% endblock %}
 
 {% block content %}
@@ -24,7 +21,13 @@
 {{d|json_script:'d'}}
  
 {% include 'utilities/sidebar.html' %}
-<div id="mapid" class="mt-0 map"></div>
+<div id="info" class="grey-background info">
+    <p id="city_label", class="city-label">&nbsp;</p>
+</div>
+<div id="mapid" class="mt-0 left-side map map-height grey-background">
+</div>
+<div id="information" class="right-side map-height grey-background">
+</div>
 
 <!--
 <script src="{% static 'utilities/cluster.js' %}">
