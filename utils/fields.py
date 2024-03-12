@@ -6,6 +6,7 @@ from persons.models import Person
 from openpyxl import Workbook
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
+from . import model_util
 
 class Fields:
     def __init__(self):
@@ -146,6 +147,25 @@ def add_cell_value(sheet, row, column, value, hyperlink = ''):
         cell.style = 'Hyperlink'
     return cell
 
+def _get_url(identifier):
+    instance = model_util.identifier2instance(identifier)
+    return instance.edit_url_complete
+
+def add_hyperlink(identifier,sheet, row, column =5):
+    try:
+        url = _get_url(identifier)
+        add_cell_value(sheet, row, column, 'link', url)
+    except: print(identifier, 'not an identifier')
+
+def handle_licence_excel_file():
+    filename = 'data/overzicht_entries_licenties.xlsx'
+    output_filename = filename.replace('.xlsx', '_url.xlsx')
+    wb = load_workbook(filename = filename)
+    for sheet in wb.worksheets[1:]:
+        for x in sheet['d']:
+            add_hyperlink(x.value, sheet, x.row)
+    wb.save(output_filename)
+    return wb
 
 
 all_categories = 'description,famines,keywords,links,rated,license_image'
