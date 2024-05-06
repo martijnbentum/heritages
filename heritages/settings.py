@@ -172,7 +172,7 @@ MESSAGE_TAGS = {
 }
 	
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-CSRF_TRUSTED_ORIGINS = ['https://heritagesofhunger.cls.ru.nl']
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', cast = Csv())
 
 SESSION_SAVE_EVERY_REQUEST = True
 
