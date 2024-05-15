@@ -29,6 +29,9 @@ def home(request):
     args = {'image_urls':image_urls}
     return render(request,'sources/home.html',args)
 
+def acknowledgements(request):
+    return render(request,'sources/acknowledgements.html')
+
 def make_fname(name):
     o = name[0]
     for c in name[1:]:
