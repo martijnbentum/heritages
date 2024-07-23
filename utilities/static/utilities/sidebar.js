@@ -559,11 +559,13 @@ function set_filters(filters) {
 window.addEventListener('DOMContentLoaded', function () {
     // using user_search info to set filter and date range settings
 	console.log(us)
-	if (us && us.useable === 'true' && us.ignore != 'true') {
+	if (us && us.useable === true && us.ignore != true) {
 		var filters = us.filters;
+        console.log('setting filters:',filters,us.filters)
     } 
     else {
 		var filters = ['rating,general','rating,<14','rating,14+'];
+        console.log('setting default filters:',filters)
     }
     set_filters(filters);
     console.log('filters',filters,selected_filters)
