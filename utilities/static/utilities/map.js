@@ -117,8 +117,7 @@ function add_marker_behavior(marker) {
 
 
 function show_markers(markers, make_point = true) {
-	//var controlLayers;
-	hide_markers(layerDict['circle']);
+	hide_markers();
 	for (i = 0; i<markers.length; i++) {
 		var marker = markers[i];
 		if (make_point) {
@@ -135,21 +134,21 @@ function show_markers(markers, make_point = true) {
 	}
 }
 
-function hide_markers(markers) {
+function hide_markers() {
 	//remove markers from map
-	for (i = 0; i<markers.length; i++) {
-		var marker = markers[i];
+	for (i = 0; i<all_markers.length; i++) {
+		var marker = all_markers[i];
 		marker.remove();
 	}
 }
 
-function update_markers() {
+function update_markers(markers) {
 	// show markers on map;
 	//apply clustering to markers (cluster overlapping markers together
 	//filter out markers without any active ids
-	show_markers(active_markers, true);
-	[clustered_marker_dict, clustered_marker_indices] = cluster(active_markers)
-	show_markers(active_markers, false);
+	show_markers(markers, true);
+	[clustered_marker_dict, clustered_marker_indices]=cluster(markers)
+	show_markers(markers, false);
 }
 
 function make_circle_marker(loc,i) {
@@ -163,7 +162,7 @@ function make_circle_marker(loc,i) {
 	var radius = 4;
 	marker.setRadius(radius)
 	add_marker_behavior(marker);
-	layerDict['circle'].push(marker)
+	all_markers.push(marker)
 	//marker.addTo(mymap);
 	return marker;
 }
@@ -181,37 +180,83 @@ function loc2latlng(loc) {
 	return latlng
 	}
 
-function collect_active_markers() {
 
+
+function update_d() {
+    console.log(filter_active_ids,'filter active ids')
+    for (var i = 0; i<d.length; i++) {
+        var item = d[i];
+        console.log(item)
+        item.active_identifiers = [];
+        for (var j = 0; j<item.identifiers.length; j++) {
+            console.log(item.identifiers[j], filter_active_ids.includes(item.identifiers[j]))
+            if (filter_active_ids.includes(item.identifiers[j])) {
+                item.active_identifiers.push(item.identifiers[j]);
+            }
+        }
+        item.active_count = item.active_identifiers.length;
+        if (item.active_count == 0) {
+            console.log(item, d[i], 'not active')
+        }
+    }
 }
 
-var names = 'circle,other'.split(',');
-var layerDict = {}
-for (var i = 0; i<names.length; i++) {
-	layerDict[names[i]] = []
+function update_active_markers() {
+    // update the active markers based on the active ids
+    active_markers = [];
+	for (var i = 0; i< all_markers.length; i++) {
+		var marker = all_markers[i];
+        var index = marker.options.index;
+        if (d[index].active_count > 0) {
+            active_markers.push(marker);
+            console.log(d[index].active_count,'active')
+        }
+        console.log(d[index],marker,'updating',d[index].active_count)
+    }
+    window.active_markers = active_markers;
+}
+
+function update_map() {
+    update_d();
+    update_active_markers();
+    show_markers(active_markers);
+    active_markers.sort(sort_on_x);
+    update_markers(active_markers);
+    console.log('updated map')
 }
 
 // the d element contains all information linking locations to instances
 var d= JSON.parse(document.getElementById('d').textContent);
 var d = Object.values(d)
-for (i = 0; i<d.length; i++) {
+var all_markers = [];
+for (var i = 0; i<d.length; i++) {
 	make_circle_marker(d[i],i);
 	//make_marker(d[i],i);
 }
-
+var active_markers = all_markers.slice();
 var controlLayers;
 var overlayMarkers= {};
 var clustered_markers = [];
 var clustered_marker_indices = [];
 var clustered_marker_dict = {};
-var active_markers = [];
-var active_markers = [...layerDict['circle']];
 show_markers(active_markers);
 active_markers.sort(sort_on_x);
 update_markers(active_markers);
 
+console.log(all_markers,'markers')
+window.all_markers = all_markers;
+window.active_markers = active_markers;
+window.d = d;
+window.clustered_marker_indices = clustered_marker_indices;
+window.clustered_marker_dict = clustered_marker_dict;
+console.log(current_active_ids,'current active ids')
+console.log(clustered_marker_dict,'clustered marker dict')
+console.log(clustered_marker_indices,'clustered marker indices')
+
+document.addEventListener('active_ids_update_event', update_map); 
+
 mymap.on('zoomend', function() {
 	// update the clustering after zooming in or out
 	console.log('zoomed')
-	update_markers();
+	update_map();
 });
