@@ -186,17 +186,16 @@ function update_d() {
     console.log(filter_active_ids,'filter active ids')
     for (var i = 0; i<d.length; i++) {
         var item = d[i];
-        console.log(item)
+        //console.log(item)
         item.active_identifiers = [];
         for (var j = 0; j<item.identifiers.length; j++) {
-            console.log(item.identifiers[j], filter_active_ids.includes(item.identifiers[j]))
             if (filter_active_ids.includes(item.identifiers[j])) {
                 item.active_identifiers.push(item.identifiers[j]);
             }
         }
         item.active_count = item.active_identifiers.length;
         if (item.active_count == 0) {
-            console.log(item, d[i], 'not active')
+            //console.log(item, d[i], 'not active')
         }
     }
 }
@@ -209,9 +208,9 @@ function update_active_markers() {
         var index = marker.options.index;
         if (d[index].active_count > 0) {
             active_markers.push(marker);
-            console.log(d[index].active_count,'active')
+            //console.log(d[index].active_count,'active')
         }
-        console.log(d[index],marker,'updating',d[index].active_count)
+        //console.log(d[index],marker,'updating',d[index].active_count)
     }
     window.active_markers = active_markers;
 }
