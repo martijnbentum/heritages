@@ -25,6 +25,7 @@ var century_set_date_slider = false;
 var current_active_ids= id_dict['all']
 var clicked_instance = '';
 var user_change_year_slider = false;
+const active_ids_update_event = new CustomEvent('active_ids_update_event');
 
 console.log(us)
 console.log(view_type)
@@ -338,6 +339,7 @@ function update_active_ids() {
 	}
 	if (temp.length == 1) { filter_active_ids = Array.from(...temp);}
 	else {filter_active_ids = intersection(temp);}
+    document.dispatchEvent(active_ids_update_event);
 }
 
 function update_selected_filters(name) {
@@ -585,6 +587,7 @@ window.addEventListener('DOMContentLoaded', function () {
                 update_sidebar();
             }
         }
+    document.dispatchEvent(active_ids_update_event);
 	}
 })
 
