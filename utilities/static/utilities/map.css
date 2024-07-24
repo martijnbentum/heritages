@@ -23,3 +23,41 @@
     margin: 0px;
     padding: 0px;
 }
+
+.city-header {
+    color:#4287f9;
+    font-size:20px;
+    margin-left:10px;
+    margin-bottom: 0px;
+    margin-top: 10px;
+}
+
+.category-header {
+    color:#2f3030;
+    font-size:18px;
+    margin-left:20px;
+    margin-bottom: 0px;
+    margin-top: 10px;
+    text-transform: capitalize;
+}
+
+.category-header:hover {
+    color:black;
+}
+
+.instance-line-div {
+    display: flex;
+    margin:6px;
+    margin-left:25px;
+    flex-direction: row;
+    background-color: #dfe5e6;
+}
+
+.title-link {
+    margin:0px;
+    padding-left:3px;
+}
+
+.small-text {
+    font-size:14px;
+}
