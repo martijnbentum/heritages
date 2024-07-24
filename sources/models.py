@@ -1,3 +1,4 @@
+from django import urls
 from django.db import models
 from django.db.models.fields.files import ImageField
 from persons.models import Person
@@ -256,6 +257,14 @@ class Source(models.Model):
             self.thumbnail or n):
             return True
         else: False
+
+    @property
+    def sidebar_info(self):
+        d = {}
+        d['detail_url'] = urls.reverse_lazy(self.detail_url, 
+            args = [self.pk])
+        d['name'] = self.title
+        return d
     
 
 

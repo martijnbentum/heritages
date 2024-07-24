@@ -1,3 +1,4 @@
+from django import urls
 from django.db import models
 from utilities.models import SimpleModel
 from utils.model_util import info, instance2keyword_categories, instance2keyword_detail
@@ -247,7 +248,13 @@ class Person(models.Model, info):
                     if instance not in d[name]: d[name].append(instance)
         return d
             
-        
+    @property
+    def sidebar_info(self):
+        d = {}
+        d['detail_url'] = urls.reverse_lazy(self.detail_url, 
+            args = [self.pk])
+        d['name'] = self.name
+        return d
 
         
 
