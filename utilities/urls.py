@@ -27,6 +27,8 @@ urlpatterns = [
 	path('search_view/<str:view_type>/<str:query>/',
 		views.search_view,name='search_view'),
 	path(search_path_complete,views.search_view,name='search_view'),
+    path('ajax_instance/<str:app_name>/<str:model_name>/<int:pk>',
+        views.ajax_instance, name='ajax_instance'),
 	path('ajax_instance_info/<str:identifier>/',views.ajax_instance_info, 
 		name='ajax_instance_info'),
 	path('ajax_instance_info/<str:identifier>/<str:fields>/',

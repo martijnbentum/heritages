@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from django import urls
 from django.apps import apps
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
@@ -317,6 +318,12 @@ def close(request):
     '''page that closes itself for on the fly creation of model instances 
     (loaded in a new tab).'''
     return render(request,'utilities/close.html')
+
+def ajax_instance(request, app_name, model_name, pk):
+    '''returns a json response with the instance data.'''
+    model = apps.get_model(app_name,model_name)
+    instance = model.objects.get(pk=pk)
+    return JsonResponse(instance.sidebar_info)
 
 def ajax_instance_info(request,identifier,fields = 'all'):
     app_name, model_name, pk = identifier.split('_')
