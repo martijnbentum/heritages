@@ -11,10 +11,15 @@
 
 	{% if not typemaster or request.user|has_group:"typemaster"%}
 	<!-- only add new instance if no typemaster is needed or user is typemaster -->
-		{% with app_name|add:":add_"|add:name as add_instance%}
-			<a class ="btn btn-link ml-auto text-dark " href="{% url add_instance  %}"
-				role="button"><strong>Add {{name}}</strong></a>
-		{% endwith %}
+    
+        {% if perms.utilities.add_generic %}
+        
+            {% with app_name|add:":add_"|add:name as add_instance%}
+                <a class ="btn btn-link ml-auto text-dark " href="{% url add_instance  %}"
+                    role="button"><strong>Add {{name}}</strong></a>
+            {% endwith %}
+
+        {% endif %}
 	{% endif %}
 </div>
 
@@ -36,19 +41,29 @@
 				{% endfor %}
 				{% if not typemaster or request.user|has_group:"typemaster"%}
 <!-- only edit/delete instance if no typemaster is needed or user is typemaster -->
+                    {% if perms.utilities.delete_generic %}
+                        <td style="white-space:nowrap;">
+                            <a class="btn btn-link btn-sm ml-auto"
+                                href = "{% url delete item.pk name|title %}"
+                                role="button">
+                                    <i class="fa fa-trash text-secondary"></i>
+                            </a>
+                        </td>
+                    {% endif %}
+                    {% if perms.utilities.change_generic %}
+                        <td style="white-space:nowrap;">
+                            <a class="btn btn-link btn-sm ml-auto"
+                                href = "{% url edit item.pk %}"
+                                role="button">
+                                    <i class="far fa-edit text-secondary"></i>
+                            </a>
+                        </td>
+                    {% endif %}
 					<td style="white-space:nowrap;">
-						<a class="btn btn-link btn-sm ml-auto"
-							href = "{% url delete item.pk name|title %}"
-							role="button">
-								<i class="fa fa-trash text-secondary"></i>
-						</a>
-					</td>
-					<td style="white-space:nowrap;">
-						<a class="btn btn-link btn-sm ml-auto"
-							href = "{% url edit item.pk %}"
-							role="button">
-								<i class="far fa-edit text-secondary"></i>
-						</a>
+                        <a class="btn btn-link btn-sm ml-auto" style="color:#cad2de" 
+                            href="{% url item.detail_url item.pk %}">
+                            <i class="fas fa-eye"></i>
+                        </a>
 					</td>
 				{% endif %}
 			</tr>
