@@ -44,6 +44,7 @@
           <a class="dropdown-item" href=
 			"{% url 'utilities:list_view' 'Famine' 'misc' %}">
 				famine</a>
+        {% if perms.utilities.add_generic %}
           <a class="dropdown-item" href=
 			"{% url 'utilities:list_view' 'License' 'misc' %}">
 				license</a>
@@ -54,28 +55,25 @@
 			"{% url 'utilities:list_view' 'Person' 'persons' %}">person</a>
           <a class="dropdown-item" href=
 			"{% url 'utilities:list_view' 'Keyword' 'misc' 'typemaster'%}">keyword</a>
+        {% endif %}
 			<div class="dropdown-divider"></div> 
           <a class="dropdown-item" href=
 			"{% url 'sources:acknowledgements'  %}">acknowledgements</a>
           <a class="dropdown-item" href=
-			"{% url 'utilities:search_view' 'tile_view' %}">tiles</a>
-          <a class="dropdown-item" href=
-			"{% url 'utilities:search_view' 'row_view' %}">rows</a>
-          <a class="dropdown-item" href=
 			"{% url 'utilities:new_search'  %}">search</a>
-          <a class="dropdown-item" href=
-			"{% url 'locations:map' %}">map</a>
-			<div class="dropdown-divider"></div> 
-			<a class="dropdown-item" href=
-				"{% url 'accounts:log_view' %}">log</a>
-			<a class="dropdown-item" href=
-				"{% url 'accounts:logs_view' %}">logs</a>
+        {% if perms.utilities.add_generic %}
+                <div class="dropdown-divider"></div> 
+                <a class="dropdown-item" href=
+                    "{% url 'accounts:log_view' %}">log</a>
+                <a class="dropdown-item" href=
+                    "{% url 'accounts:logs_view' %}">logs</a>
+        {% endif %}
 			<a class="dropdown-item" href=
 				"{% url 'utilities:overview' %}">overview</a>
+        {% endif %}
 			
         </div>
       </li>
-    {% endif %}
     {% if perms.utilities.add_generic %}
 
       <li class="nav-item dropdown">
