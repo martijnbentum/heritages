@@ -319,7 +319,7 @@ def get_all_image_urls(flagged = True, exclude_persons = True,
         urls = instance2image_urls(instance)
         for url in urls.split(','):
             if not url: continue
-            if 'thumbnail' in url: continue
+            if exclude_thumbnails and 'thumbnail' in url: continue
             else: output.append(url)
     return output
         
