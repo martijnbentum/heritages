@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.utils.crypto import get_random_string
 
 def create_user_account(username, password, first_name, 
@@ -44,7 +44,7 @@ def make_password(length = 9):
     password = get_random_string(length)
     return password
 
-def make_accounts(n = 10, base_name = 'user'):
+def make_accounts(n = 10, base_name = 'user', add_view_group = True):
     '''Create multiple user accounts with random usernames and passwords.
     '''
     users = []
@@ -55,6 +55,7 @@ def make_accounts(n = 10, base_name = 'user'):
         first_name = f"First-{i}"
         last_name = f"Last-{i}"
         user = create_user_account(username, password, first_name, last_name)
+        if add_view_group:add_view_group_to_user(user)
         users.append(user)
         name_passwords.append(username + '\t' + password)
         print(username,'\t',password)
@@ -67,5 +68,19 @@ def delete_accounts(n = 10, base_name = 'user'):
         username = f"{base_name}-{i}"
         print(username,delete_user_by_username(username))
 
+def get_view_group():
+    '''view group give basic view access to the users
+    '''
+    return Group.objects.get(name='view')
+
+def add_view_group_to_user(user):
+    '''adds to view group to a user to give basic view access
+    '''
+    view_group = get_view_group()
+    user.groups.add(view_group)
+
+def add_view_group_to_users(users):
+    for user in users:
+        add_view_group_to_user(user)
 
 
