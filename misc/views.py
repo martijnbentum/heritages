@@ -56,3 +56,5 @@ def detail_famine_view(request,pk):
 	args = {'instance':instance, 'page_name':instance.names_str,'us':us}
 	return render(request,'misc/detail_famine_view.html',args)
 
+def mooc_home(request):
+    return render(request,'misc/mooc_home.html')
