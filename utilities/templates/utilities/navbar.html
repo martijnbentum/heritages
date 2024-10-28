@@ -46,6 +46,9 @@
 				famine</a>
         {% if perms.utilities.add_generic %}
           <a class="dropdown-item" href=
+			"{% url 'misc:mooc_home' %}">
+				mooc</a>
+          <a class="dropdown-item" href=
 			"{% url 'utilities:list_view' 'License' 'misc' %}">
 				license</a>
           <a class="dropdown-item" href=
