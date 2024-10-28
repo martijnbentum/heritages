@@ -5,6 +5,7 @@ from . import views
 app_name = 'misc'
 urlpatterns = [
 	path('',views.edit_famine, name='index'),
+	path('mooc_home/',views.mooc_home, name='mooc_home'),
 	path('add_famine/',views.edit_famine, name='add_famine'),
 	path('add_famine/<str:view>',views.edit_famine, name='add_famine'),
 	path('edit_famine/<int:pk>/',views.edit_famine, name='edit_famine'),
