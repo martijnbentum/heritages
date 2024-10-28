@@ -1,0 +1,42 @@
+/* Container to center and limit width */
+.container {
+    max-width: 900px; /* Adjust width as desired */
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+
+/* Style for h3 tags */
+h3 {
+    margin-top: 40px; /* Adds space above each h3 tag */
+    color: #333;
+}
+
+/* Style for h4 tags */
+h4 {
+    margin-top: 40px; /* Adds space above each h4 tag */
+    padding-left: 20px;
+    font-size: 1.5em;
+    color: #333;
+}
+
+/* Style for links */
+a {
+    display: block;
+    margin-top: 10px;
+    padding-left: 60px;
+    padding-right: 60px;
+    text-decoration: none;
+    color: #0066cc;
+    font-size: 1.1em;
+}
+
+/* Style for images within links */
+a img {
+    display: block;
+    width: auto;
+    height: auto;
+    max-height: 300px;
+    height: auto;
+    margin-bottom: 5px; /* Space between image and link text */
+}
