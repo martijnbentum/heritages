@@ -39,7 +39,7 @@ def make_fname(name):
         else: o += c
     return o.lower()
 
-def detail_infographic_view(request,pk):
+def detail_infographic_view(request,pk, only_return_args = False):
     print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
     instance = Infographic.objects.get(pk = pk)
     us = search_view_helper.UserSearch(request)
@@ -52,9 +52,10 @@ def detail_infographic_view(request,pk):
     args = {'instance':instance, 'page_name':instance.title}
     args.update({'creators':creators, 'settings':settings,'famines':famines})
     args.update({'locations':locations, 'languages':languages,'us':us})
+    if only_return_args: return args
     return render(request,'sources/detail_infographic_view.html',args)
 
-def detail_artefact_view(request,pk):
+def detail_artefact_view(request,pk, only_return_args = False):
     print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
     instance = Artefact.objects.get(pk = pk)
     us = search_view_helper.UserSearch(request)
@@ -67,9 +68,10 @@ def detail_artefact_view(request,pk):
     args = {'instance':instance, 'page_name':instance.title}
     args.update({'creators':creators, 'settings':settings,'famines':famines})
     args.update({'locations':locations, 'us':us})
+    if only_return_args: return args
     return render(request,'sources/detail_artefact_view.html',args)
 
-def detail_videogame_view(request,pk):
+def detail_videogame_view(request,pk, only_return_args = False):
     print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
     instance = Videogame.objects.get(pk = pk)
     us = search_view_helper.UserSearch(request)
@@ -81,9 +83,10 @@ def detail_videogame_view(request,pk):
     subtitles= instance.languages_subtitle.all().order_by('name')
     args = {'instance':instance, 'page_name':instance.title,'studios':studios}
     args.update({'subtitles':subtitles, 'settings':settings,'famines':famines,'us':us})
+    if only_return_args: return args
     return render(request,'sources/detail_videogame_view.html',args)
 
-def detail_image_view(request,pk):
+def detail_image_view(request,pk, only_return_args = False):
     print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
     instance = Image.objects.get(pk = pk)
     us = search_view_helper.UserSearch(request)
@@ -94,9 +97,10 @@ def detail_image_view(request,pk):
     famines = instance.famines.all()
     args = {'instance':instance, 'page_name':instance.title,'creators':creators}
     args.update({'locations':locations, 'settings':settings,'famines':famines,'us':us})
+    if only_return_args: return args
     return render(request,'sources/detail_image_view.html',args)
 
-def detail_memorialsite_view(request,pk):
+def detail_memorialsite_view(request,pk, only_return_args = False):
     print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
     instance = Memorialsite.objects.get(pk = pk)
     us = search_view_helper.UserSearch(request)
@@ -117,9 +121,10 @@ def detail_memorialsite_view(request,pk):
     args.update({'donors':donors, 'commissioners':commissioners,'artists':artists})
     args.update({'locations':locations, 'settings':settings,'famines':famines,'us':us})
     args.update({'languages':languages})
+    if only_return_args: return args
     return render(request,'sources/detail_memorialsite_view.html',args)
 
-def detail_music_view(request,pk):
+def detail_music_view(request,pk, only_return_args = False):
     print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
     instance = Music.objects.get(pk = pk)
     us = search_view_helper.UserSearch(request)
@@ -131,9 +136,10 @@ def detail_music_view(request,pk):
     args = {'instance':instance, 'page_name':instance.title}
     args.update({'composers':composers})
     args.update({'settings':settings,'famines':famines,'languages':languages,'us':us})
+    if only_return_args: return args
     return render(request,'sources/detail_music_view.html',args)
 
-def detail_recordedspeech_view(request,pk):
+def detail_recordedspeech_view(request,pk, only_return_args = False):
     print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
     instance = Recordedspeech.objects.get(pk = pk)
     us = search_view_helper.UserSearch(request)
@@ -148,9 +154,10 @@ def detail_recordedspeech_view(request,pk):
     args.update({'settings':settings,'famines':famines,'languages':languages,'us':us})
     args.update({'creators':creators,'locations':locations})
     args.update({'speakers':speakers})
+    if only_return_args: return args
     return render(request,'sources/detail_recordedspeech_view.html',args)
 
-def detail_picturestory_view(request,pk):
+def detail_picturestory_view(request,pk, only_return_args = False):
     print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
     instance = PictureStory.objects.get(pk = pk)
     us = search_view_helper.UserSearch(request)
@@ -189,9 +196,10 @@ def detail_text_view(request,pk):
     args.update({'org_lang':org_lang,'authors':authors})
     args.update({'editors':editors,'publishers':publishers})
     args.update({'locations':locations,'translators':translators,'us':us})
+    if only_return_args: return args
     return render(request,'sources/detail_text_view.html',args)
 
-def detail_film_view(request,pk):
+def detail_film_view(request,pk, only_return_args = False):
     print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
     instance = Film.objects.get(pk = pk)
     us = search_view_helper.UserSearch(request)
@@ -210,6 +218,7 @@ def detail_film_view(request,pk):
     args.update({'film_companies':film_companies})
     args.update({'famines':famines, 'writers':writers, 'directors':directors})
     args.update({'languages':languages, 'subtitles':subtitles, 'us':us})
+    if only_return_args: return args
     return render(request,'sources/detail_film_view.html',args)
 
 def create_simple_view(name):
