@@ -249,14 +249,15 @@ def get_all_models(model_names=[], add_famine = False):
     return models
 
 def get_all_instances(model_names = [],flag_filter_person = True, 
-    exclude_persons = False):
-    models = get_all_models(model_names=model_names)
+    exclude_persons = False, add_famine = False):
+    models = get_all_models(model_names=model_names, add_famine = add_famine)
     instances = []
     for x in models:
         if x._meta.model_name == 'person': 
             if exclude_persons: continue
             if flag_filter_person: 
                 instances.extend(x.objects.filter(flag = True))
+            else:instances.extend(x.objects.all())
         else:instances.extend(x.objects.all())
     return instances
 
