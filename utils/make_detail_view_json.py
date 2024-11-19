@@ -42,7 +42,7 @@ def get_image_filenames(instance, image_dir):
     
 
 def instance_to_json(instance, 
-    image_dir = '../rdr_hoh/'):
+    image_dir = 'rdr_hoh/'):
     d = secondary_instance_to_json(instance)
     fields = ['title_original', 'title_english', 'date_field', 'description']
     fields += ['source_link', f'{instance._meta.model_name}_type']
@@ -74,7 +74,7 @@ def args_to_json(args, instance = None):
     return d
 
 def make_all_detail_views(save = False, 
-    output_dir = '../rdr_hoh/'):
+    output_dir = 'rdr_hoh/'):
     instances = mu.get_all_instances(flag_filter_person = False,
         add_famine = True)
     output = {}

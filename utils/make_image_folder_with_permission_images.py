@@ -13,7 +13,7 @@ def get_all_image_urls():
         only_images_and_monuments = False, not_explicit = False)
     return urls
 
-def copy_images_to_folder(urls, folder = '../images_with_permission/'):
+def copy_images_to_folder(urls, folder = 'rdr_hoh/images/'):
     ''' copy images from the media to the share folder
     '''
     os.makedirs(folder, exist_ok=True)
