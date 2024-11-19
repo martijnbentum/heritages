@@ -175,7 +175,7 @@ def detail_picturestory_view(request,pk, only_return_args = False):
     args.update({'locations':locations,'artists':artists,'us':us})
     return render(request,'sources/detail_picturestory_view.html',args)
 
-def detail_text_view(request,pk):
+def detail_text_view(request,pk, only_return_args = False):
     print('  detail view start\n','\033[91m'+time.strftime("%H:%M:%S")+' '+str(time.time()).split('.')[-1]+'\033[0m')
     instance = Text.objects.get(pk = pk)
     us = search_view_helper.UserSearch(request)
