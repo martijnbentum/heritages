@@ -131,7 +131,11 @@
 	<ul class = "navbar-nav">
 	</ul>
 
+
+
 	<ul class = "navbar-nav navbar-right">
+        <img src="https://cls.ru.nl/RU_logo.svg"
+            alt="RU logo" style="height: 40px;margin-right:20px">
         {% if user.is_staff %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'admin:index' %}">
@@ -145,7 +149,6 @@
 			<i class="fas fa-search"></i>
 		</a>
       </li>
-
 		<li class ="nav-item">
 		  {% if user.username == '' %}
 			<a class="nav-link" href="{% url 'login' %}">
@@ -155,8 +158,6 @@
 			{{user.username}}<span class="sr-only">(current)</span></a>
 		  {% endif %}
 		</li>
-	</ul>
-	<ul class = "navbar-nav navbar-right">
 		<li class ="nav-item">
 		  {% if user.username == '' %}
 		  {% else %}
