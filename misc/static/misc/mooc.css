@@ -1,3 +1,9 @@
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
 /* Container to center and limit width */
 .container {
     max-width: 900px; /* Adjust width as desired */
