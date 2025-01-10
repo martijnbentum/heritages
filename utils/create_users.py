@@ -44,12 +44,13 @@ def make_password(length = 9):
     password = get_random_string(length)
     return password
 
-def make_accounts(n = 10, base_name = 'user', add_view_group = True):
+def make_accounts(n = 10, base_name = 'user', add_view_group = True,
+	start_number = 1):
     '''Create multiple user accounts with random usernames and passwords.
     '''
     users = []
     name_passwords = []
-    for i in range(1,n+1):
+    for i in range(start_number,n+start_number):
         username = f"{base_name}-{i}"
         password = make_password()
         first_name = f"First-{i}"
