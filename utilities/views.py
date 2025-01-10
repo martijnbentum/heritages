@@ -87,7 +87,6 @@ def new_search(request):
     var = {'form':form, 'query_terms':query_terms}
     return render(request,'utilities/new_search.html',var)
 
-@permission_required('utilities.view_generic')
 def search_view(request, view_type = '', query = ' ', combine = ' ',
     exact = 'contains', direction = '', sorting_option = 'title - name'):
     if not request.session or not request.session.session_key:
@@ -120,7 +119,6 @@ def get_user_search_requests(request):
         pass
     return HttpResponse('done', content_type='text/plain')
 
-@permission_required('utilities.view_generic')
 def list_view(request, model_name, app_name,html_name='',field_names = '',
     max_entries=200):
     '''list view of a model.'''
