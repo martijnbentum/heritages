@@ -120,7 +120,7 @@ def get_user_search_requests(request):
     return HttpResponse('done', content_type='text/plain')
 
 def list_view(request, model_name, app_name,html_name='',field_names = '',
-    max_entries=200):
+    max_entries=999):
     '''list view of a model.'''
     print(max_entries, html_name,app_name)
     if field_names == '': field_names = field_names_dict[model_name.lower()]
