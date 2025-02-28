@@ -1,8 +1,13 @@
 from django.urls import reverse
 import json
+from sources import models as sources_models
 from utils import search_view_helper as svh
 from utils import model_util as mu
+from utils import view_util as vu
 from pathlib import Path
+
+exclude_names = ['location', 'language'] + sources_models.names
+exclude_names = [x.lower() for x in exclude_names]
 
 def detail_args(instance):
     model_name = instance._meta.model_name
@@ -18,13 +23,27 @@ def secondary_instance_to_json(instance):
     d = {}
     if type(instance) == str:
         d['name'] = instance
-        d['pk'] = None
+        d['identifier'] = None
         d['model_name'] = None
+        d['url'] = None
         return d
+    model_name = instance._meta.model_name
+    print(f'{model_name} {instance.pk} {instance}')
     d['name'] = str(instance)
-    d['pk'] = instance.pk
-    d['model_name'] = instance._meta.model_name
+    if model_name.lower() in exclude_names: 
+        d['identifier'] = None
+        d['url'] = None
+    else:    
+        d['identifier'] = instance.identifier
+        d['url'] = get_url(instance)
+    d['model_name'] = model_name
     return d
+
+def contributer_list(instance):
+    c = vu.Crud(instance)
+    cl = c.contributer_list
+    return [x for x in cl if x != '' and x != 'mb']
+    
 
 def get_image_filenames(instance, image_dir):
     urls = mu.instance2image_urls(instance)
@@ -42,6 +61,7 @@ def get_image_filenames(instance, image_dir):
     return o
 
 def get_url(instance, base_url = 'hunger.rich.ru.nl'):
+    if instance._meta.model_name in exclude_names: return ''
     url = reverse(instance.detail_url, kwargs = {'pk': instance.pk})
     return f'{base_url}{url}'
     
@@ -67,7 +87,7 @@ def instance_to_json(instance,
     if instance._meta.model_name == 'person':
         d['viaf'] = instance.viaf
         d['pseudonyms'] = instance.pseudonyms
-    d['url'] = get_url(instance)
+    d['meta_data_contributer_list'] = contributer_list(instance)
     return d
 
 def args_to_json(args, instance = None):
@@ -80,7 +100,7 @@ def args_to_json(args, instance = None):
     return d
 
 def make_all_detail_views(save = False, 
-    output_dir = 'rdr_hoh/'):
+    output_dir = 'rdr_hoh/', name = 'main_data.json'):
     instances = mu.get_all_instances(flag_filter_person = False,
         add_famine = True)
     output = {}
@@ -92,7 +112,7 @@ def make_all_detail_views(save = False,
         d = args_to_json(args, x)
         output[model_name].append(d)
     if save:
-        with open(f'{output_dir}main_data.json', 'w') as f:
+        with open(f'{output_dir}{name}', 'w') as f:
             json.dump(output, f)
     return output
         
