@@ -112,8 +112,10 @@ def make_all_detail_views(save = False,
         d = args_to_json(args, x)
         output[model_name].append(d)
     if save:
-        with open(f'{output_dir}{name}', 'w') as f:
-            json.dump(output, f)
+        filename = f'{output_dir}{name}'
+        print(f'Saving to {filename}')
+        with open(filename, 'w') as f:
+            json.dump(output, f, indent = 4)
     return output
         
 
