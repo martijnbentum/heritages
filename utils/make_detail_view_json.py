@@ -1,3 +1,4 @@
+from django.urls import reverse
 import json
 from utils import search_view_helper as svh
 from utils import model_util as mu
@@ -39,6 +40,10 @@ def get_image_filenames(instance, image_dir):
         print('adding file:', path)
         o.append(str(path).replace(image_dir, ''))
     return o
+
+def get_url(instance, base_url = 'hunger.rich.ru.nl'):
+    url = reverse(instance.detail_url, kwargs = {'pk': instance.pk})
+    return f'{base_url}{url}'
     
 
 def instance_to_json(instance, 
@@ -62,6 +67,7 @@ def instance_to_json(instance,
     if instance._meta.model_name == 'person':
         d['viaf'] = instance.viaf
         d['pseudonyms'] = instance.pseudonyms
+    d['url'] = get_url(instance)
     return d
 
 def args_to_json(args, instance = None):
