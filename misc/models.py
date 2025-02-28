@@ -179,6 +179,10 @@ class Language(models.Model, info):
 
     def __str__(self):
         return self.name
+
+    @property
+    def identifier(self):
+        return self._meta.app_label+'_'+self._meta.model_name+'_'+str( self.pk )
         
     
 
