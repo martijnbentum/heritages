@@ -1,4 +1,4 @@
-ul {
+.container ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -13,13 +13,13 @@ ul {
 }
 
 /* Style for h3 tags */
-h3 {
+.container h3 {
     margin-top: 40px; /* Adds space above each h3 tag */
     color: #333;
 }
 
 /* Style for h4 tags */
-h4 {
+.container h4 {
     margin-top: 40px; /* Adds space above each h4 tag */
     padding-left: 20px;
     font-size: 1.5em;
@@ -27,7 +27,7 @@ h4 {
 }
 
 /* Style for links */
-a {
+.container a {
     display: block;
     margin-top: 10px;
     padding-left: 60px;
@@ -38,7 +38,7 @@ a {
 }
 
 /* Style for images within links */
-a img {
+.container a img {
     display: block;
     width: auto;
     height: auto;
