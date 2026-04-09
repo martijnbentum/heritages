@@ -1,18 +1,38 @@
 from django.db import IntegrityError
 from collections import Counter
-from nltk.corpus import stopwords
 import string
 from utilities.models import Queryterm
 
 punctuation = string.punctuation + '“”«»’'
 
+ENGLISH_STOPWORDS = {
+    'a', 'an', 'and', 'are', 'as', 'at', 'be', 'been', 'being', 'but', 'by',
+    'for', 'from', 'had', 'has', 'have', 'he', 'her', 'here', 'hers', 'him',
+    'his', 'i', 'if', 'in', 'into', 'is', 'it', 'its', 'me', 'my', 'of', 'on',
+    'or', 'our', 'ours', 'she', 'that', 'the', 'their', 'theirs', 'them',
+    'there', 'these', 'they', 'this', 'those', 'to', 'us', 'was', 'we', 'were',
+    'what', 'when', 'where', 'which', 'who', 'why', 'will', 'with', 'you',
+    'your', 'yours',
+}
+
+DUTCH_STOPWORDS = {
+    'aan', 'af', 'al', 'als', 'bij', 'dan', 'dat', 'de', 'den', 'der', 'deze',
+    'die', 'dit', 'doch', 'door', 'dus', 'een', 'en', 'er', 'ge', 'geen',
+    'haar', 'had', 'heb', 'hebben', 'heeft', 'hem', 'het', 'hier', 'hij', 'hoe',
+    'hun', 'ik', 'in', 'is', 'je', 'kan', 'me', 'men', 'met', 'mij', 'nog',
+    'nu', 'of', 'om', 'onder', 'ons', 'onze', 'ook', 'op', 'te', 'tegen', 'toch',
+    'toen', 'tot', 'u', 'uit', 'uw', 'van', 'veel', 'voor', 'want', 'waren',
+    'was', 'wat', 'we', 'wel', 'werd', 'wezen', 'wie', 'wij', 'worden', 'zal',
+    'ze', 'zei', 'zelf', 'zich', 'zij', 'zijn', 'zo', 'zonder', 'zou',
+}
+
+STOPWORDS = ENGLISH_STOPWORDS | DUTCH_STOPWORDS
+
 def handle_stop_words(words):
-    dutch = stopwords.words('dutch')
-    english = stopwords.words('english')
     output = []
     for word in words:
         w = word.lower()
-        if w in dutch or w in english: continue
+        if w in STOPWORDS: continue
         output.append(word)
     return output
 
