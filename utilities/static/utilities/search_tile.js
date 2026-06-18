@@ -136,9 +136,12 @@ async function display_large_image(identifier) {
 	var image_urls = _handle_image_urls(d);
 	var image_url = _get_image_url(image_urls,d)
     if (!generic_permission && d['has_permission'] == 'False') {
-        modal_img.src = ''; 
-    } else { 
+        modal_img.src = '';
+    } else {
         modal_img.src = image_url
+    }
+    if (image_url == '') {
+        modal_permission.innerText = 'No image available';
     }
 	modal_edit.href = "/" +d['detail_url'].replace(':','/') + "/" + d['pk'] 
 	modal.style.display = "block";
