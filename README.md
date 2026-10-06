@@ -1,6 +1,6 @@
 # heritages
 
-The project targets Django 5.2.16 with Python 3.10–3.12. Keep the existing
+The project targets Django 5.2.17 with Python 3.10–3.12. Keep the existing
 production environment until the upgrade has been tested in a separate one.
 
 ```sh
