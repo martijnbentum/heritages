@@ -82,6 +82,7 @@ class Person(models.Model, info):
         new = [new_loc_ids,new_country,new_date,new_keyword_c]
         new += [new_keyword_d,new_famine]
         if sum(new) > 0:
+            kwargs['force_insert'] = False
             super(Person,self).save(*args,**kwargs)
 
     def _set_gps(self):

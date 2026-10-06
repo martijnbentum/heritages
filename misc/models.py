@@ -45,6 +45,7 @@ class Keyword(models.Model, info):
         old_relations= self.category_relations
         self.category_relations= self._category_relations_str
         if old_category != self.category or old_relations != self.category_relations:
+            kwargs['force_insert'] = False
             super(Keyword,self).save(*args,**kwargs)
         
 
@@ -107,6 +108,7 @@ class Famine(models.Model, info):
         new_country = old_country_field != self.country_field
         new = [new_loc_ids, new_country]
         if sum(new) > 0: 
+            kwargs['force_insert'] = False
             super(Famine,self).save(*args,**kwargs)
 
     def _set_gps(self):

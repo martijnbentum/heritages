@@ -131,7 +131,7 @@ class SourceTestCase(TestCase):
 			
 	def test_keyword_names(self):	
 		h = Helperdata()
-		l = ', '.join([l.name for l in h.instance(Keyword,5)])
+		l = ', '.join(sorted(l.name for l in h.instance(Keyword,5)))
 		m = Music.objects.get(title_original='the song')
 		self.assertEqual(m.keyword_names,l)
 
@@ -153,10 +153,10 @@ class SourceTestCase(TestCase):
 		
 
 
-	def test_title_original_before_title_english(self):
+	def test_title_english_before_title_original(self):
 		o= Music.objects.get(title_english = 'english')
 		e= Music.objects.get(title_english = 'only english')
-		self.assertEqual(o.title, 'original')
+		self.assertEqual(o.title, 'english')
 		self.assertEqual(o.title_english, 'english')
 		self.assertEqual(e.title, 'only english')
 		
