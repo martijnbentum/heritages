@@ -29,7 +29,7 @@ Pillow==12.3.0
 prompt-toolkit==3.0.30
 ptyprocess==0.7.0
 pure-eval==0.2.2
-Pygments==2.15.0
+Pygments==2.21.0
 pyparsing==3.0.9
 python-dateutil==2.8.2
 python-decouple==3.6
