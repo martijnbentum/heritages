@@ -3,6 +3,7 @@ import inspect
 import sys
 from easyaudit.models import CRUDEvent
 from utils import signal_util
+from .audit_util import parse_changed_fields
 from utilities.models import instance2name, instance2names
 
 def get_modelform(namespace,modelform_name):
@@ -239,7 +240,8 @@ class Event:
 		self.related_name = related_name
 		self.related_instance = related_instance
 		self.type = e.get_event_type_display()
-		self.changed = True if e.changed_fields not in ['null',None] else False
+		self.cf_dict = parse_changed_fields(e.changed_fields)
+		self.changed = bool(self.cf_dict)
 		self.username = e.user.username if e.user else ''
 		self.set_time()
 		self.app_name = e.content_type.app_label
@@ -257,9 +259,6 @@ class Event:
 		return self.epoch < other.epoch
 
 	def set_changes(self):
-		try: self.cf_dict = eval(self.event.changed_fields)
-		except: raise ValueError('could not create dict from:',
-			self.event.changed_fields)
 		self.changes = [Change(self.username,self.time_str,k,self.cf_dict[k],
 			self.related_name,self.related_instance) for k in self.cf_dict.keys()]
 
