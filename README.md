@@ -43,5 +43,14 @@ CARTO_BASEMAP_API_KEY=your-new-carto-basemap-key
 
 The key is passed to JavaScript using Django's `json_script` and remains visible
 in browser tile requests. Use a basemap key restricted to the Heritages hostname
-and any development hosts used for testing. Revoke the exposed key; removing it
+and a separate key for localhost development. Revoke the exposed key; removing it
 from the current code does not remove it from Git history.
+
+Map templates load Leaflet 1.9.4 from the CDN. CARTO tile layers explicitly use
+`strict-origin-when-cross-origin` so website restrictions work even when Django
+sets the page's referrer policy to `same-origin`.
+
+After pulling these updates, run `python manage.py collectstatic --noinput` using
+the production environment and restart Django. The utilities map loads its tile
+configuration from static JavaScript, which must be collected for deployment.
+Hard-refresh the browser after deployment.
