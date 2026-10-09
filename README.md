@@ -30,3 +30,18 @@ Before upgrading the remote installation:
 
 Run tests with `manage.py test --nomigrations`; migration verification is
 separate because this option creates test tables directly from the models.
+
+## CARTO basemaps
+
+Maps load `CARTO_BASEMAP_API_KEY` from the environment or the project's ignored
+`.env` file, using `python-decouple`. There is no default key. Add the replacement
+key to `.env` on each deployment before restarting Django:
+
+```dotenv
+CARTO_BASEMAP_API_KEY=your-new-carto-basemap-key
+```
+
+The key is passed to JavaScript using Django's `json_script` and remains visible
+in browser tile requests. Use a basemap key restricted to the Heritages hostname
+and any development hosts used for testing. Revoke the exposed key; removing it
+from the current code does not remove it from Git history.

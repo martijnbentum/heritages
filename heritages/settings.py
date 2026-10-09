@@ -33,6 +33,9 @@ DEBUG = config('DEBUG', cast=bool)
 # ALLOWED_HOSTS = [127.0.0.1]
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast =Csv())
 
+# Basemap key loaded from the environment or the project .env file.
+CARTO_BASEMAP_API_KEY = config('CARTO_BASEMAP_API_KEY')
+
 ADMINS=[('Martijn','bentummartijn@gmail.com')]
 
 # Application definition
@@ -79,6 +82,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'heritages.context_processors.carto_basemap',
             ],
         },
     },
