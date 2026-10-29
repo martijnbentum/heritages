@@ -1,6 +1,6 @@
 from django import urls
 from django.db import models
-from django.db.models.fields.files import ImageField
+from utils.image_field import ImageFileField
 from persons.models import Person
 from utilities.models import SimpleModel
 from utils.model_util import info, instance2keyword_categories 
@@ -51,7 +51,7 @@ class Source(models.Model):
     commissioned_by = models.ForeignKey(Commissioner,**dargs)
     source_link = models.CharField(max_length=1000,default='')
     flag = models.BooleanField(default = False)
-    thumbnail = models.ImageField(upload_to='thumbnail/',blank=True,null=True)
+    thumbnail = ImageFileField(upload_to='thumbnail/',blank=True,null=True)
     setting = models.ManyToManyField(Location,blank=True)
     release_date_precedent = models.BooleanField(default=False)
     location_field = 'setting'
@@ -245,7 +245,7 @@ class Source(models.Model):
         '''returns a string of comma seperated urls to images.'''
         o = []
         for field in self._meta.fields:
-            if type(field) == ImageField:
+            if type(field) == ImageFileField:
                 x= getattr(self,field.name)
                 if x.name:o.append(x.name)
         return ','.join(o)
@@ -367,7 +367,7 @@ class Artefact(Source, info):
         related_name='artefact_locations')
     creators = models.ManyToManyField(Person,blank=True, 
         related_name='artefact_creators_set')
-    image_file = models.ImageField(upload_to='artefact/',blank=True,null=True)
+    image_file = ImageFileField(upload_to='artefact/',blank=True,null=True)
     location_field = 'locations'
     image_filename = models.CharField(max_length=500,default='',blank=True,
         null=True)
@@ -400,7 +400,7 @@ class Image(Source, info):
         related_name='image_locations')
     creators = models.ManyToManyField(Person,blank=True, 
         related_name='image_creators_set')
-    image_file = models.ImageField(upload_to='image/',blank=True,null=True)
+    image_file = ImageFileField(upload_to='image/',blank=True,null=True)
     location_field = 'locations'
     image_filename = models.CharField(max_length=500,default='',
         blank=True,null=True)
@@ -455,7 +455,7 @@ class Infographic(Source,info):
     infographic_type = models.ForeignKey(InfographicType,**dargs)
     creators = models.ManyToManyField(Person,blank=True, 
         related_name='infographic_creators_set')
-    image_file = models.ImageField(upload_to='infographic/',blank=True,null=True)
+    image_file = ImageFileField(upload_to='infographic/',blank=True,null=True)
     languages = models.ManyToManyField(Language, blank=True)
     locations = models.ManyToManyField(Location,blank=True, 
         related_name='infographic_locations')
@@ -497,7 +497,7 @@ class PictureStory(Source,info):
     publishers = models.ManyToManyField(Publisher,blank=True,
         related_name='picture_story_publisher_set')
     languages = models.ManyToManyField(Language, blank=True)
-    image_file = models.ImageField(upload_to='picturestory/',blank=True,
+    image_file = ImageFileField(upload_to='picturestory/',blank=True,
         null=True)
     excerpt_file = models.FileField(upload_to='picturestory/',blank=True,
         null=True)
@@ -662,11 +662,11 @@ class Memorialsite(Source,info):
         related_name='memorialsite_creators_set')
     artists= models.ManyToManyField(Person,blank=True,
         related_name='memorialsite_artists_set')
-    image_file1 = models.ImageField(upload_to='memorialsite/',blank=True,
+    image_file1 = ImageFileField(upload_to='memorialsite/',blank=True,
         null=True)
-    image_file2 = models.ImageField(upload_to='memorialsite/',blank=True,
+    image_file2 = ImageFileField(upload_to='memorialsite/',blank=True,
         null=True)
-    image_file3 = models.ImageField(upload_to='memorialsite/',blank=True,
+    image_file3 = ImageFileField(upload_to='memorialsite/',blank=True,
         null=True)
     donor_persons= models.ManyToManyField(Person,blank=True,
         related_name='memorialsite_person_donors_set')

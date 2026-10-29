@@ -4,6 +4,7 @@ from utilities.models import SimpleModel
 from utils.model_util import info, instance2keyword_categories, instance2keyword_detail
 from utils.model_util import instance2famines
 from utils.instance2countries import instance2countries
+from utils.image_field import ImageFileField
 from misc.models import Keyword, Famine,License
 from locations.models import Location
 from utils.map_util import instance2related_locations, field2locations
@@ -41,7 +42,7 @@ class Person(models.Model, info):
     keywords= models.ManyToManyField(Keyword,blank=True)
     location_field = 'location_of_birth'
     flag = models.BooleanField(default = False)
-    thumbnail = models.ImageField(upload_to='thumbnail/',blank=True,null=True)
+    thumbnail = ImageFileField(upload_to='thumbnail/',blank=True,null=True)
     viaf = models.CharField(max_length=1000,default='')
     famines = models.ManyToManyField(Famine, blank=True)
     country_field = models.CharField(max_length=1000,default='')

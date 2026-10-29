@@ -1,8 +1,8 @@
 import copy
 from django.apps import apps
 from django.db import models
-from django.db.models.fields.files import ImageFileDescriptor
-from django.db.models.fields.files import ImageField, FileField
+from django.db.models.fields.files import FileField
+from utils.image_field import ImageFileField
 import random
 import string
 import itertools
@@ -212,7 +212,7 @@ def model_image_field_names(model, only_image_fields = False):
     file_field_names = []
     for field in fields:
         if field.get_internal_type() == 'FileField':
-            if only_image_fields and type(field) != ImageField: continue
+            if only_image_fields and type(field) != ImageFileField: continue
             file_field_names.append(field.name)
             temp = field
     return file_field_names
@@ -281,7 +281,7 @@ def instance2image_urls(instance):
     (i.e. ImageFields).'''
     o = []
     for field in instance._meta.fields:
-        if type(field) == ImageField:
+        if type(field) == ImageFileField:
             x= getattr(instance,field.name)
             if x.name:
                 o.append(x.url)
